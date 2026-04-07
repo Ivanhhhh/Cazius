@@ -1,53 +1,71 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
-    public Transform cameraTransform;
+    [SerializeField] private Transform _cameraTransform;
+    [SerializeField] private Transform _cameraTarget;
 
-    [Header("Settings")]
-    public float moveSpeed = 5f;
-    public float rotationSpeed = 10f;
-    public float mouseSensitivity = 2f;
+    [Header("Movement")]
+    [SerializeField] private float _moveSpeed = 10f;
 
-    private PlayerControls controls;
-    private Vector2 moveInput;
-    private Vector2 lookInput;
+    [Header("Camera")]
+    [SerializeField] private float _mouseSensitivity = 0.15f;
+    [SerializeField] private float _minPitch = -40f;
+    [SerializeField] private float _maxPitch = 40f;
 
-    private float cameraPitch = 0f;
+    [Header("Aim Settings")]
+    [SerializeField] private float _normalFOV = 60f;
+    [SerializeField] private float _aimFOV = 40f;
+    [SerializeField] private float _fovSpeed = 10f;
+
+    private PlayerControls _controls;
+    private Vector2 _moveInput;
+    private Vector2 _lookInput;
+    private float _cameraPitch = 0f;
+    private bool _isAiming;
 
     private void Awake()
     {
-        controls = new PlayerControls();
+        _controls = new PlayerControls();
 
-        controls.Player.Move.performed += callbackContext => moveInput = callbackContext.ReadValue<Vector2>();
-        controls.Player.Move.canceled += _ => moveInput = Vector2.zero;
+        _controls.Player.Move.performed += callbackContext => _moveInput = callbackContext.ReadValue<Vector2>();
+        _controls.Player.Move.canceled += _ => _moveInput = Vector2.zero;
 
-        controls.Player.Look.performed += callbackContext => lookInput = callbackContext.ReadValue<Vector2>();
-        controls.Player.Look.canceled += _ => lookInput = Vector2.zero;
+        _controls.Player.Look.performed += callbackContext => _lookInput = callbackContext.ReadValue<Vector2>();
+        _controls.Player.Look.canceled += _ => _lookInput = Vector2.zero;
+
+        _controls.Player.Aim.performed += _ => _isAiming = true;
+        _controls.Player.Aim.canceled += _ => _isAiming = false;
     }
 
-    private void OnEnable() => controls.Enable();
-    private void OnDisable() => controls.Disable();
+    private void OnEnable() => _controls.Enable();
+    private void OnDisable() => _controls.Disable();
 
     private void Update()
     {
         HandleLook();
         HandleMovement();
+        HandleAim();
+    }
+
+    void LateUpdate()
+    {
+        // So that the camera doesn't override it's rotation every frame
+        _cameraTransform.rotation = _cameraTarget.rotation;
     }
 
     void HandleLook()
     {
-        float mouseX = lookInput.x * mouseSensitivity;
-        float mouseY = lookInput.y * mouseSensitivity;
+        float mouseX = _lookInput.x * _mouseSensitivity;
+        float mouseY = _lookInput.y * _mouseSensitivity;
 
         transform.Rotate(Vector3.up * mouseX);
-       
-        cameraPitch -= mouseY;
-        cameraPitch = Mathf.Clamp(cameraPitch, -70f, 70f);
 
-        cameraTransform.localRotation = Quaternion.Euler(cameraPitch, 0f, 0f);
+        _cameraPitch -= mouseY;
+        _cameraPitch = Mathf.Clamp(_cameraPitch, _minPitch, _maxPitch);
+
+        _cameraTarget.localRotation = Quaternion.Euler(_cameraPitch, 0f, 0f);
     }
 
     void HandleMovement()
@@ -55,15 +73,16 @@ public class PlayerMovement : MonoBehaviour
         Vector3 forward = transform.forward;
         Vector3 right = transform.right;
 
-        Vector3 move = forward * moveInput.y + right * moveInput.x;
+        Vector3 move = forward * _moveInput.y + right * _moveInput.x;
 
-        if (move.magnitude > 0.1f)
-        {
-           
-            Quaternion targetRotation = Quaternion.LookRotation(move);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
+        transform.position += move.normalized * _moveSpeed * Time.deltaTime;
+    }
 
-        transform.position += move.normalized * moveSpeed * Time.deltaTime;
+    void HandleAim()
+    {
+        float targetFOV = _isAiming ? _aimFOV : _normalFOV;
+
+        Camera cam = _cameraTransform.GetComponent<Camera>();
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFOV, Time.deltaTime * _fovSpeed);
     }
 }
