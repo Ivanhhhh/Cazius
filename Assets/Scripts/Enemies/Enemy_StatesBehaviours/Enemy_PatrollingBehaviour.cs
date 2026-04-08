@@ -1,16 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AI;
+using System.Collections.Generic;
 public class Enemy_PatrollingBehaviour
 {
     private LayerMask _nodes;
     private float _detectionRadius;
     private float _MaximumAmountOfNodes;
-    private float _objectSpeed;
     private Queue<Vector3> _nodesToPatrol;
-    private Transform _objectTransform;
+    private Transform _selfObjectTransform;
+    private NavMeshAgent _agent;
     
+    public Enemy_PatrollingBehaviour(LayerMask nodes,float detectionRadius,
+    float maximumAmountOfNodes,float objectSpeed,Transform objectTransform,NavMeshAgent agent)
+    {
+        _nodes = nodes;
+        _detectionRadius = detectionRadius;
+        _MaximumAmountOfNodes = maximumAmountOfNodes;
+        _selfObjectTransform = objectTransform; 
+        _agent = agent;
+        _agent.speed = objectSpeed;
+        _nodesToPatrol = new Queue<Vector3>();
+    }
     void FindPatrolNodes()
     {
         float currrentRadius = _detectionRadius;
@@ -18,7 +28,7 @@ public class Enemy_PatrollingBehaviour
 
         while(nodesInRange.Length < _MaximumAmountOfNodes)
         {
-            nodesInRange = Physics.OverlapSphere(_objectTransform.position,_detectionRadius,_nodes);
+            nodesInRange = Physics.OverlapSphere(_selfObjectTransform.position,_detectionRadius,_nodes);
             if (nodesInRange.Length < _MaximumAmountOfNodes)
             {
                 currrentRadius += 3;
@@ -36,6 +46,17 @@ public class Enemy_PatrollingBehaviour
     }
     void MoveThroughNodes()
     {
-        
+        if (_nodesToPatrol.Count == 0) return;
+        if (!_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance)
+        {
+            GoToNextNode();
+        }
+    }
+    void GoToNextNode()
+    {
+        if (_nodesToPatrol.Count == 0) return;
+        Vector3 nextNode = _nodesToPatrol.Dequeue();
+        _agent.SetDestination(nextNode);
+        _nodesToPatrol.Enqueue(nextNode);
     }
 }
