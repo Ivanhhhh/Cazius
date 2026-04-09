@@ -15,7 +15,7 @@ public class ChangeToPurgatoryTrigger : MonoBehaviour
     {
         if (other.gameObject == _player)
         {
-            StartCoroutine(WorldChangeManager.Instance.SwapToPurgatory(scenesToLoad));
+            WorldChangeManager.Instance.SwapToPurgatory(scenesToLoad);
         }
     }
 

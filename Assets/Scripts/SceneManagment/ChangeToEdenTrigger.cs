@@ -15,7 +15,7 @@ public class ChangeToEdenTrigger : MonoBehaviour
     {
         if (other.gameObject == _player)
         {
-            StartCoroutine(WorldChangeManager.Instance.SwapToEden(scenesToLoad));
+            WorldChangeManager.Instance.SwapToEden(scenesToLoad);
         }
     }
 

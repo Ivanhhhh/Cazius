@@ -3,11 +3,14 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 public class WorldChangeManager : MonoBehaviour
 {
 
     public static WorldChangeManager Instance;
+
+    public int scenesLoaded = 0;
 
      private  SceneField _edenBaseScene;
      private  SceneField _purgatoryBaseScene;
@@ -36,7 +39,17 @@ public class WorldChangeManager : MonoBehaviour
     public void AddSceneToList(SceneField scene)
     {
         LoadedScenes.Add(scene);
-        Debug.Log(LoadedScenes);
+        scenesLoaded++;
+    }
+
+    public void SwapToEden(SceneField[] scenes)
+    {
+        StartCoroutine(SwapToEdenCoroutine(scenes));
+    }
+
+    public void SwapToPurgatory(SceneField[] scenes)
+    {
+        StartCoroutine(SwapToPurgatoryCoroutine(scenes));
     }
 
     public void LoadSceneAsync(SceneField sceneToLoad)
@@ -47,9 +60,9 @@ public class WorldChangeManager : MonoBehaviour
         LoadedScenes.Add(sceneToLoad);
     }
 
-    public IEnumerator SwapToEden(SceneField[] scenesToLoad)
+    private IEnumerator SwapToEdenCoroutine(SceneField[] scenesToLoad)
     {
-        Debug.Log("To Eden!");
+        //Debug.Log("To Eden!");
         List<AsyncOperation> _operationsToBeDone = new List<AsyncOperation>();
 
         _operationsToBeDone.Add(SceneManager.UnloadSceneAsync(_purgatoryBaseScene));
@@ -57,44 +70,44 @@ public class WorldChangeManager : MonoBehaviour
         foreach (SceneField scene in LoadedScenes)
         {
             _operationsToBeDone.Add(SceneManager.UnloadSceneAsync(scene));
-            //yield return null;
+            yield return null;
         }
-        /*
+        
         foreach (AsyncOperation operation in _operationsToBeDone)
         {
             while (!operation.isDone)
             {
                 yield return null;
             }
-        }*/
+        }
 
         LoadedScenes.Clear();
         _operationsToBeDone.Clear();
 
         _operationsToBeDone.Add(SceneManager.LoadSceneAsync(_edenBaseScene, LoadSceneMode.Additive));
 
+        yield return null;
 
         foreach (SceneField scen in scenesToLoad)
         {
             _operationsToBeDone.Add(SceneManager.LoadSceneAsync(scen, LoadSceneMode.Additive));
-            LoadedScenes.Add(scen);
-            //yield return null;
+            AddSceneToList(scen);
+            yield return null;
         }
-        /*
+        
         foreach (AsyncOperation operation in _operationsToBeDone)
         {
             while (!operation.isDone)
             {
                 yield return null;
             }
-        }*/
-
-        yield break;
+        }
+        //Debug.Log("End of Load!");
     }
     
-    public IEnumerator SwapToPurgatory(SceneField[] scenesToLoad)
+    private IEnumerator SwapToPurgatoryCoroutine(SceneField[] scenesToLoad)
     {
-        Debug.Log("To Eden!");
+        //Debug.Log("To Purgatory!");
         List<AsyncOperation> _operationsToBeDone = new List<AsyncOperation>();
 
         _operationsToBeDone.Add(SceneManager.UnloadSceneAsync(_edenBaseScene));
@@ -102,38 +115,42 @@ public class WorldChangeManager : MonoBehaviour
         foreach (SceneField scene in LoadedScenes)
         {
             _operationsToBeDone.Add(SceneManager.UnloadSceneAsync(scene));
-            //yield return null;
+            yield return null;
         }
-        /*
+        
         foreach (AsyncOperation operation in _operationsToBeDone)
         {
             while (!operation.isDone)
             {
                 yield return null;
             }
-        }*/
+        }
 
         LoadedScenes.Clear();
         _operationsToBeDone.Clear();
 
         _operationsToBeDone.Add(SceneManager.LoadSceneAsync(_purgatoryBaseScene, LoadSceneMode.Additive));
 
+        yield return null;
 
         foreach (SceneField scen in scenesToLoad)
         {
             _operationsToBeDone.Add(SceneManager.LoadSceneAsync(scen, LoadSceneMode.Additive));
-            LoadedScenes.Add(scen);
-            //yield return null;
+            AddSceneToList(scen);
+            yield return null;
         }
-        /*
+        
         foreach (AsyncOperation operation in _operationsToBeDone)
         {
-            while (!operation.isDone)
+            if (operation != null)
             {
-                yield return null;
-            }
-        }*/
+                while (!operation.isDone)
+                {
+                    yield return null;
+                }
 
-        yield break;
+            }
+        }
+        //Debug.Log("End of load!");
     }
 }
