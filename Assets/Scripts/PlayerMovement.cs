@@ -19,7 +19,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _aimFOV = 40f;
     [SerializeField] private float _fovSpeed = 10f;
 
+    private Rigidbody _rb;
+    private Camera _camera;
     private PlayerControls _controls;
+    private Quaternion _targetRotation;
     private Vector2 _moveInput;
     private Vector2 _lookInput;
     private float _cameraPitch = 0f;
@@ -27,7 +30,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        _rb = GetComponent<Rigidbody>();
+        _camera = _cameraTransform.GetComponent<Camera>();
         _controls = new PlayerControls();
+        _targetRotation = _rb.rotation;
 
         _controls.Player.Move.performed += callbackContext => _moveInput = callbackContext.ReadValue<Vector2>();
         _controls.Player.Move.canceled += _ => _moveInput = Vector2.zero;
@@ -45,8 +51,13 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         HandleLook();
-        HandleMovement();
         HandleAim();
+    }
+
+    private void FixedUpdate()
+    {
+        ApplyRotation();
+        HandleMovement();
     }
 
     void LateUpdate()
@@ -60,29 +71,32 @@ public class PlayerMovement : MonoBehaviour
         float mouseX = _lookInput.x * _mouseSensitivity;
         float mouseY = _lookInput.y * _mouseSensitivity;
 
-        transform.Rotate(Vector3.up * mouseX);
+        _targetRotation = _rb.rotation * Quaternion.Euler(0f, mouseX, 0f);
 
         _cameraPitch -= mouseY;
         _cameraPitch = Mathf.Clamp(_cameraPitch, _minPitch, _maxPitch);
-
         _cameraTarget.localRotation = Quaternion.Euler(_cameraPitch, 0f, 0f);
     }
 
     void HandleMovement()
     {
-        Vector3 forward = transform.forward;
-        Vector3 right = transform.right;
+        Vector3 move = transform.forward * _moveInput.y + transform.right * _moveInput.x;
+        if (move.sqrMagnitude > 1f) move.Normalize();
 
-        Vector3 move = forward * _moveInput.y + right * _moveInput.x;
-
-        transform.position += move.normalized * _moveSpeed * Time.deltaTime;
+        Vector3 targetVelocity = move * _moveSpeed;
+        targetVelocity.y = _rb.linearVelocity.y;
+        _rb.linearVelocity = targetVelocity;
     }
 
     void HandleAim()
     {
         float targetFOV = _isAiming ? _aimFOV : _normalFOV;
 
-        Camera cam = _cameraTransform.GetComponent<Camera>();
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFOV, Time.deltaTime * _fovSpeed);
+        _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, targetFOV, Time.deltaTime * _fovSpeed);
+    }
+
+    void ApplyRotation()
+    {
+        _rb.MoveRotation(_targetRotation);
     }
 }
