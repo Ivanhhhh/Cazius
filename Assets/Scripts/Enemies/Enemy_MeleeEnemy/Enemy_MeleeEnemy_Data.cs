@@ -47,15 +47,16 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
     public Enemy_SecondAttackBehaviour _secondAttack { get; private set; }
     void Awake()
     {
-       InitializeBhaviours(); 
+       InitializeBehaviours(); 
+       _playerTransform = FindObjectOfType<PlayerMovement>().transform;
     }
-    void InitializeBhaviours()
+    void InitializeBehaviours()
     {
         _patrolling = new Enemy_PatrollingBehaviour(_nodes,_detectionRadius,_MaximumAmountOfNodes,_patrolSpeed,_selfObjectTransform,_agent);
         _chasing = new Enemy_ChasingBehaviour(_playerTransform,_attackRadius,_agent,_selfObjectTransform,_chaseSpeed);
         _fieldOfView = new Enemy_FieldOfViewBehaviour(_playerTransform,_radiusVision,_selfObjectTransform, _angleVision, _lineOfSightLayerMask);
         _firstAttack = new Enemy_FIrstAttackBehaviour(_chargeSpeed,_firsAttackPreparationTime, _playerTransform,_agent);
-        _secondAttack= new Enemy_SecondAttackBehaviour(_spinSpeed,_objectSpeedWhileSpinning,_secondAttackPreparationTime, _spinSpeed,_playerTransform,_selfObjectTransform,_agent);
+        _secondAttack= new Enemy_SecondAttackBehaviour(_spinSpeed,_objectSpeedWhileSpinning,_secondAttackPreparationTime, _spinTime,_playerTransform,_selfObjectTransform,_agent);
     }
 
         private void OnDrawGizmos()

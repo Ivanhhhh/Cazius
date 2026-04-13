@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform _cameraTarget;
 
     [Header("Movement")]
-    [SerializeField] private float _moveSpeed = 10f;
+    [SerializeField] public float _moveSpeed = 10f;
 
     [Header("Camera")]
     [SerializeField] private float _mouseSensitivity = 0.15f;
@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _aimFOV = 40f;
     [SerializeField] private float _fovSpeed = 10f;
 
-    private PlayerControls _controls;
+    public PlayerControls _controls;
     private Vector2 _moveInput;
     private Vector2 _lookInput;
     private float _cameraPitch = 0f;
