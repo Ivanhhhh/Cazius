@@ -12,14 +12,20 @@ public class Enemy_MeleeEnemy_PatrollingState : Enemy_MeleeEnemy_Interface_State
     }
     public void OnEnter()
     {
-        
+        _data._patrolling.FindPatrolNodes();
+        _data._patrolling.EnterPatrol();
     }
     public void OnExit()
     {
-        
+
     }
     public void OnUpdate()
     {
-        
+        if (_data._fieldOfView.CanseePlayer())
+        {
+            Debug.Log("Player Encontrado");
+            _stateMachine.ChangeState(Enemy_MeleeEnemy_States.Chasing);
+        }
+        _data._patrolling.Tick();
     }
 }

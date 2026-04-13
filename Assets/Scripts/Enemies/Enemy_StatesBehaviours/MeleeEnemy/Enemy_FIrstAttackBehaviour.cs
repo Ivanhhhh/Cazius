@@ -8,7 +8,6 @@ public class Enemy_FIrstAttackBehaviour
     private float _currentPreparationTime;
     private Transform _playerTransform;
     private NavMeshAgent _agent;
-    private float _previousSpeed;
     private enum AttackPhase{ Preparing,Charging,Done}
     private AttackPhase _currentPhase = AttackPhase.Preparing;
     public bool IsDone => _currentPhase == AttackPhase.Done;
@@ -19,9 +18,8 @@ public class Enemy_FIrstAttackBehaviour
         _currentPreparationTime = preparationTime;
         _playerTransform = playerTransform;
         _agent = agent;
-        _previousSpeed = _agent.speed;
     }
-    void Tick()
+    public void Tick()
     {
         switch (_currentPhase)
         {
@@ -44,12 +42,11 @@ public class Enemy_FIrstAttackBehaviour
     {
         if (!_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance)
         {
-            _agent.speed = _previousSpeed;
             _currentPhase = AttackPhase.Done;
         }
     }
 
-    void Reset() 
+    public void Reset() 
     {
         _currentPreparationTime = _preparationTime;
         _currentPhase = AttackPhase.Preparing;

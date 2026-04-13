@@ -16,16 +16,16 @@ public class Enemy_FieldOfViewBehaviour
         _lineOfSightLayerMask = lineOfSightLayerMask;
     }
 
-    bool CanseePlayer()
+    public bool CanseePlayer()
     {
         if (_playerTransform == null) return false;
         return InFieldOfView(_playerTransform.position);
     }
     bool InFieldOfView(Vector3 endPos)
     {
-        Vector3 dir = endPos - _playerTransform.position;
+        Vector3 dir = endPos - _objectTransform.position;
         if (dir.magnitude > _radiusVision) return false;
-        if (Vector3.Angle(_objectTransform.position, dir) > _angleVision / 2) return false;
+        if (Vector3.Angle(_objectTransform.forward, dir) > _angleVision / 2) return false;
         if (!InLineOfSight(_objectTransform.position, endPos)) return false;
         return true;
     }

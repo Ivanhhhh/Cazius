@@ -16,10 +16,15 @@ public class Enemy_MeleeEnemy_DoingFirstAttackState: Enemy_MeleeEnemy_Interface_
     }
     public void OnExit()
     {
-        
+        _data._firstAttack.Reset();
+        Debug.Log("Changin to Chasing");
     }
     public void OnUpdate()
     {
-        
+        _data._firstAttack.Tick();        
+        if (_data._firstAttack.IsDone)
+        {
+            _stateMachine.ChangeState(Enemy_MeleeEnemy_States.Chasing);
+        }
     }
 }
