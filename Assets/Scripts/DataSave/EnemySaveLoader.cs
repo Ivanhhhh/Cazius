@@ -12,7 +12,7 @@ public class EnemySaveLoader : MonoBehaviour
     public int EnemyHealth => enemyHealth;
     public bool IsDead => isDead;
 
-    private void Start()
+    private void Awake()
     {
         LoadMyData();
     }
