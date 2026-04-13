@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] private float _moveSpeed = 10f;
+    [SerializeField] private float _groundCheckDistance = 3f;
 
     [Header("Camera")]
     [SerializeField] private float _mouseSensitivity = 0.15f;
@@ -83,9 +84,19 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = transform.forward * _moveInput.y + transform.right * _moveInput.x;
         if (move.sqrMagnitude > 1f) move.Normalize();
 
-        Vector3 targetVelocity = move * _moveSpeed;
-        targetVelocity.y = _rb.linearVelocity.y;
-        _rb.linearVelocity = targetVelocity;
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, _groundCheckDistance))
+        {
+            // Follow the terrain
+            move = Vector3.ProjectOnPlane(move, hit.normal).normalized * move.magnitude;
+            _rb.linearVelocity = move * _moveSpeed;
+        }
+        else
+        {
+            // In the air, preserve gravity
+            Vector3 targetVelocity = move * _moveSpeed;
+            targetVelocity.y = _rb.linearVelocity.y;
+            _rb.linearVelocity = targetVelocity;
+        }
     }
 
     void HandleAim()
