@@ -47,8 +47,8 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
     public Enemy_SecondAttackBehaviour _secondAttack { get; private set; }
     void Awake()
     {
-       InitializeBehaviours(); 
        _playerTransform = FindObjectOfType<PlayerMovement>().transform;
+       InitializeBehaviours(); 
     }
     void InitializeBehaviours()
     {
