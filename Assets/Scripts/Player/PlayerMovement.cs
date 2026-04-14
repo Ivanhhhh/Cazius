@@ -30,6 +30,8 @@ public class PlayerMovement : MonoBehaviour
     private float _cameraPitch = 0f;
     private bool _isAiming;
 
+    private float _yaw;
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -74,7 +76,8 @@ public class PlayerMovement : MonoBehaviour
         float mouseX = _lookInput.x * _mouseSensitivityX;
         float mouseY = _lookInput.y * _mouseSensitivityY;
 
-        _targetRotation = _rb.rotation * Quaternion.Euler(0f, mouseX, 0f);
+        //_targetRotation = _rb.rotation * Quaternion.Euler(0f, mouseX, 0f);
+        _yaw += mouseX;
 
         _cameraPitch -= mouseY;
         _cameraPitch = Mathf.Clamp(_cameraPitch, _minPitch, _maxPitch);
@@ -110,6 +113,7 @@ public class PlayerMovement : MonoBehaviour
 
     void ApplyRotation()
     {
-        _rb.MoveRotation(_targetRotation);
+        //_rb.MoveRotation(_targetRotation);
+        _rb.MoveRotation(Quaternion.Euler(0f, _yaw, 0f));
     }
 }
