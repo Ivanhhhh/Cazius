@@ -13,6 +13,7 @@ public class PauseNonRb : IPause<MonoBehaviour>
         foreach (var element in ElementsToPause)
         {
             element.enabled = false;
+            Debug.Log("Se Hizo");
           //element.isKinematic = true;
                 // is kinematic == true
         }
