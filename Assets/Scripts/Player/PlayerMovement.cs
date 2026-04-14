@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform _cameraTarget;
 
     [Header("Movement")]
-    [SerializeField] private float _moveSpeed = 10f;
+    [SerializeField] public float _moveSpeed = 10f;
     [SerializeField] private float _groundCheckDistance = 2f;
 
     [Header("Camera")]
@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody _rb;
     private Camera _camera;
-    private PlayerControls _controls;
+    public PlayerControls _controls;
     private Quaternion _targetRotation;
     private Vector2 _moveInput;
     private Vector2 _lookInput;
