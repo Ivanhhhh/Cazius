@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] private float _moveSpeed = 10f;
-    [SerializeField] private float _groundCheckDistance = 3f;
+    [SerializeField] private float _groundCheckDistance = 2f;
 
     [Header("Camera")]
     [SerializeField] private float _mouseSensitivity = 0.15f;
