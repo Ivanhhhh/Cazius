@@ -301,6 +301,7 @@ GameObject:
   - component: {fileID: 7499502484473894369}
   - component: {fileID: 7436610461006387000}
   - component: {fileID: 3564048592477410900}
+  - component: {fileID: 3915939884766231080}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -398,6 +399,21 @@ CapsuleCollider:
   m_Height: 3.73
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3915939884766231080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6030904365159062577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a291a96c052dba4599ed4dd4907b6dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player_AimAndShoot
+  _playerCamera: {fileID: 651653032407350410}
+  _movement: {fileID: 7436610461006387000}
+  _crossHair: {fileID: 0}
 --- !u!1 &6158739908765658823
 GameObject:
   m_ObjectHideFlags: 0
