@@ -1,7 +1,7 @@
 using UnityEngine;
 using Patterns.Observer.EventManager_Delegates;
 
-public class ChangeStateUI1 : MonoBehaviour
+public class ChangeStateUI : MonoBehaviour
 {
    
     public void PauseGame()

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UnableCanvas
 {
-    public void DisableCanvas(Canvas canvas)
+    public void UnableCanvasMethod(Canvas canvas)
     {
         canvas.enabled = false; 
     }

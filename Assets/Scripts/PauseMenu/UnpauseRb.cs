@@ -12,8 +12,11 @@ public class UnPauseRb :IUnpause<Rigidbody>
 
         foreach (var element in ElementsToPause)
         {
-          element.isKinematic = false;
-                // is kinematic == true
+            if (element != null)
+            {
+                element.isKinematic = false;
+            }
+            // is kinematic == true
         }
     }
 }
