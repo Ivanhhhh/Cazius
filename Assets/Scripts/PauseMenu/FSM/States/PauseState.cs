@@ -27,5 +27,11 @@ public class PauseState : IState
         //Debug.Log("OnUpdate de Dead");
     }
 
+    public void ResumeState()
+    {
+        _fsm.ChangeState(AgentStates.Unpause);
+
+    }
+
 }
 

@@ -34,10 +34,10 @@ public class FSM<TKey>
 
 public enum AgentStates
 {
-    Pause, Unpause, Quit
+    Pause, Unpause
 }
 public enum LizardStates
 {
-    LPauseState, LUnpauseState, LQuitState
+    LPauseState, LUnpauseState
 }
 

@@ -4,10 +4,13 @@ using System.Collections.Generic;
 
 public class SubscribeToEvent : MonoBehaviour
 {
+    [SerializeField] Canvas canvas;
+
     private PauseRb _pauseRb;
     private PauseNonRb _pauseNonRb;
     private UnPauseRb _unPauseRb;
     private UnPauseNonRb _unPauseNonRb;
+    private UnableCanvas _UnableCanvas;
 
     private List<Rigidbody> _rigidbodies;
     private List<MonoBehaviour> _monoBehaviours;
@@ -23,6 +26,7 @@ public class SubscribeToEvent : MonoBehaviour
         _pauseNonRb = new PauseNonRb();  // cambiarlo a dip
         _unPauseRb = new UnPauseRb();  // cambiarlo a dip
         _unPauseNonRb = new UnPauseNonRb();  // cambiarlo a dip
+        _UnableCanvas = new UnableCanvas();
 
 
         // se llenan las listas con los rigidbpdys y scripts de la escena
@@ -34,10 +38,15 @@ public class SubscribeToEvent : MonoBehaviour
     {
         EventManager.SubscribeToEvent(EventsType.Event_PauseGame, (parameters) => _pauseRb.PauseHandler(_rigidbodies));
         EventManager.SubscribeToEvent(EventsType.Event_PauseGame, (parameters) => _pauseNonRb.PauseHandler(_monoBehaviours));
+        EventManager.SubscribeToEvent(EventsType.Event_UnableCanvas, (parameters) => _UnableCanvas.DisableCanvas(canvas));
+
+
 
         // =========================
         // 🟢 RESUME
         EventManager.SubscribeToEvent(EventsType.Event_ResumeGame, (parameters) => _unPauseRb.UnPauseHandler(_rigidbodies));
         EventManager.SubscribeToEvent(EventsType.Event_ResumeGame, (parameters) => _unPauseNonRb.UnPauseHandler(_monoBehaviours));
+       
+
     }
 }

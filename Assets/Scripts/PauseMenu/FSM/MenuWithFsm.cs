@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using Unity.IO.LowLevel.Unsafe;
+using UnityEditor;
 using UnityEngine;
 
 public class MenuWithFSM : MonoBehaviour
 {
     FSM<AgentStates> _fsm;
+
 
     void Awake()
     {
@@ -14,13 +16,10 @@ public class MenuWithFSM : MonoBehaviour
 
         _fsm.AddState(AgentStates.Pause, new PauseState(_fsm));
         _fsm.AddState(AgentStates.Unpause, new UnPauseState(_fsm));
-        _fsm.AddState(AgentStates.Quit, new QuitState(_fsm));
 
-        _fsm.ChangeState(AgentStates.Pause);
+        _fsm.ChangeState(AgentStates.Unpause);
     }
 
 
     void Update() => _fsm.ArtificialUpdate();
-
-
 }
