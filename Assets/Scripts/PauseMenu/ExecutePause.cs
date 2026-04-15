@@ -18,7 +18,7 @@ public class ExecutePause : MonoBehaviour
         // EventManager.TriggerEvent(EventsType.Event_PauseGame);
         // }
 
-       
+        EventManager.TriggerEvent(EventsType.Event_PauseGame);
 
     }
 

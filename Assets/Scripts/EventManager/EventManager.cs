@@ -5,7 +5,8 @@ namespace Patterns.Observer.EventManager_Delegates
     public enum EventsType
     {
         Event_PauseGame,
-        Event_ResumeGame
+        Event_ResumeGame,
+        Event_Quit
 
     }
 
