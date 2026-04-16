@@ -7,7 +7,6 @@ public class FSM<TKey>
 {
     IState _currentState;
     Dictionary<TKey, IState> _allStates = new Dictionary<TKey, IState>(); // TKey es el enum o lo que pongamos 
-    //Dictionary<AgentStates,IState> _allStates = new (); Lo mismo
 
     public void AddState(TKey newState, IState state)
     {

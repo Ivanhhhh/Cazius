@@ -3,22 +3,27 @@ using Patterns.Observer.EventManager_Delegates;
 
 public class ChangeStateUI : MonoBehaviour
 {
-   
+    FSM<AgentStates> _fsm;
+
+    //[SerializeField] FSM<AgentStates>fsm;
+
     public void PauseGame()
     {
-      EventManager.TriggerEvent(EventsType.Event_PauseGame);
+        //_fsm.ChangeState(AgentStates.Pause);
+        EventManager.TriggerEvent(EventsType.Event_PauseGame);
     }
 
 
     public void UnPauseGame()
     {
-        EventManager.TriggerEvent(EventsType.Event_ResumeGame);
+        _fsm.ChangeState(AgentStates.Unpause);
+       // EventManager.TriggerEvent(EventsType.Event_ResumeGame);
     }
 
 
 
     public void CanvasDisable()
     {
-        EventManager.TriggerEvent(EventsType.Event_UnableCanvas);
+        //EventManager.TriggerEvent(EventsType.Event_EnableCanvas);
     }
 }

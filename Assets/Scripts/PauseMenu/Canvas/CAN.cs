@@ -5,9 +5,10 @@ using UnityEngine.InputSystem;
 public class CAN : MonoBehaviour
 {
     [SerializeField] InputActionReference reference;
-    [SerializeField] Canvas canvas;
+    //[SerializeField] Canvas canvas;
+    //[SerializeField] SubscribeToEvent CanvasReference;
 
-    DisableCanvas disableCanvas = new DisableCanvas();
+  //  DisableCanvas disableCanvas = new DisableCanvas();
 
     void OnEnable()
     {
@@ -23,7 +24,9 @@ public class CAN : MonoBehaviour
     {
         if (reference.action.triggered)
         {
-            EventManager.TriggerEvent(EventsType.Event_DisableCanvas,canvas);
+            // EventManager.TriggerEvent(EventsType.Event_EnableCanvas,CanvasReference.PauseMenu);
+            EventManager.TriggerEvent(EventsType.Event_PauseGame);
+
             print("jfff");
         }
     }
