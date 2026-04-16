@@ -26,6 +26,9 @@ public class CAN : MonoBehaviour
         {
             // EventManager.TriggerEvent(EventsType.Event_EnableCanvas,CanvasReference.PauseMenu);
             EventManager.TriggerEvent(EventsType.Event_PauseGame);
+            //EventManager.TriggerEvent(EventsType.Event_EnableCanvas);
+
+
 
             print("jfff");
         }

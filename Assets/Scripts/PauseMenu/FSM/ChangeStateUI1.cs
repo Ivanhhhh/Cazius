@@ -16,8 +16,8 @@ public class ChangeStateUI : MonoBehaviour
 
     public void UnPauseGame()
     {
-        _fsm.ChangeState(AgentStates.Unpause);
-       // EventManager.TriggerEvent(EventsType.Event_ResumeGame);
+        //_fsm.ChangeState(AgentStates.Unpause);
+        EventManager.TriggerEvent(EventsType.Event_ResumeGame);
     }
 
 
