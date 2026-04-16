@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class MenuWithFSM : MonoBehaviour
 {
-    FSM<AgentStates> _fsm;
+    public FSM<AgentStates> _fsm;
 
 
     void Awake()

@@ -5,14 +5,13 @@ using UnityEngine.InputSystem;
 public class CAN : MonoBehaviour
 {
     [SerializeField] InputActionReference reference;
-    //[SerializeField] Canvas canvas;
-    //[SerializeField] SubscribeToEvent CanvasReference;
 
-  //  DisableCanvas disableCanvas = new DisableCanvas();
+    FSM<AgentStates> _fsm;
 
     void OnEnable()
     {
         reference.action.Enable();
+       
     }
 
     void OnDisable()
@@ -22,13 +21,12 @@ public class CAN : MonoBehaviour
 
     void Update()
     {
+
         if (reference.action.triggered)
         {
-            // EventManager.TriggerEvent(EventsType.Event_EnableCanvas,CanvasReference.PauseMenu);
             EventManager.TriggerEvent(EventsType.Event_PauseGame);
-            //EventManager.TriggerEvent(EventsType.Event_EnableCanvas);
 
-
+           //_fsm.ChangeState(AgentStates.Pause);
 
             print("jfff");
         }
