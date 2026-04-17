@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _camera = _cameraTransform.GetComponent<Camera>();
         _controls = new PlayerControls();
-        Cursor.lockState = CursorLockMode.Locked;
+       // Cursor.lockState = CursorLockMode.Locked;
         _targetRotation = _rb.rotation;
 
         _controls.Player.Move.performed += callbackContext => _moveInput = callbackContext.ReadValue<Vector2>();

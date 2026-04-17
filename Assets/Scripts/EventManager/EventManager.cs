@@ -6,8 +6,7 @@ namespace Patterns.Observer.EventManager_Delegates
     {
         Event_PauseGame,
         Event_ResumeGame,
-        
-
+       
     }
 
     public class EventManager

@@ -2,7 +2,7 @@ using Patterns.Observer.EventManager_Delegates;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CAN : MonoBehaviour
+public class ESCcanvas : MonoBehaviour
 {
     [SerializeField] InputActionReference reference;
 
