@@ -18,7 +18,14 @@ public class WorldChangeManager : MonoBehaviour
     [SerializeField] private SceneField edenBaseScene;
     [SerializeField] private SceneField purgatoryBaseScene;
 
-    public List<SceneField> LoadedScenes { get; private set; } = new List<SceneField>(); 
+    public List<SceneField> LoadedScenes { get; private set; } = new List<SceneField>();
+
+
+    //Visual Refs
+    [SerializeField] Material _purgatorySwapFullscreenShader;
+    [SerializeField] Material _edenSwapFullscreenShader;
+    [SerializeField] float _shaderTransitionLength = 0.5f;
+    [SerializeField] float _waitForStartLoad = 1;
 
     private void Awake()
     {
@@ -34,6 +41,9 @@ public class WorldChangeManager : MonoBehaviour
 
         _edenBaseScene = edenBaseScene;
         _purgatoryBaseScene = purgatoryBaseScene;
+
+        _edenSwapFullscreenShader.SetFloat("_Intensity", 0f);
+        _purgatorySwapFullscreenShader.SetFloat("_Intensity", 0f);
     }
 
     public void AddSceneToList(SceneField scene)
@@ -63,16 +73,23 @@ public class WorldChangeManager : MonoBehaviour
     private IEnumerator SwapToEdenCoroutine(SceneField[] scenesToLoad)
     {
         //Debug.Log("To Eden!");
+
+        yield return StartCoroutine(FadeShader(_edenSwapFullscreenShader, "_Intensity", 0f, 1f, _shaderTransitionLength));
+
         List<AsyncOperation> _operationsToBeDone = new List<AsyncOperation>();
 
-        _operationsToBeDone.Add(SceneManager.UnloadSceneAsync(_purgatoryBaseScene));
+        //_operationsToBeDone.Add(SceneManager.UnloadSceneAsync(_purgatoryBaseScene));
+        if (IsSceneLoaded(_purgatoryBaseScene))
+        {
+            _operationsToBeDone.Add(SceneManager.UnloadSceneAsync(_purgatoryBaseScene));
+        }
 
         foreach (SceneField scene in LoadedScenes)
         {
             _operationsToBeDone.Add(SceneManager.UnloadSceneAsync(scene));
             yield return null;
         }
-        
+
         foreach (AsyncOperation operation in _operationsToBeDone)
         {
             while (!operation.isDone)
@@ -94,7 +111,7 @@ public class WorldChangeManager : MonoBehaviour
             AddSceneToList(scen);
             yield return null;
         }
-        
+
         foreach (AsyncOperation operation in _operationsToBeDone)
         {
             while (!operation.isDone)
@@ -102,15 +119,28 @@ public class WorldChangeManager : MonoBehaviour
                 yield return null;
             }
         }
+
+        yield return new WaitForSeconds(_waitForStartLoad);
+
+        yield return StartCoroutine(FadeShader(_edenSwapFullscreenShader, "_Intensity", 1f, 0f, _shaderTransitionLength));
+        _edenSwapFullscreenShader.SetFloat("_Intensity", 0f);
+
         //Debug.Log("End of Load!");
     }
-    
+
     private IEnumerator SwapToPurgatoryCoroutine(SceneField[] scenesToLoad)
     {
         //Debug.Log("To Purgatory!");
+
+        yield return StartCoroutine(FadeShader(_purgatorySwapFullscreenShader, "_Intensity", 0f, 1f, _shaderTransitionLength));
+
         List<AsyncOperation> _operationsToBeDone = new List<AsyncOperation>();
 
-        _operationsToBeDone.Add(SceneManager.UnloadSceneAsync(_edenBaseScene));
+        //_operationsToBeDone.Add(SceneManager.UnloadSceneAsync(_edenBaseScene));
+        if (IsSceneLoaded(_edenBaseScene))
+        {
+            _operationsToBeDone.Add(SceneManager.UnloadSceneAsync(_edenBaseScene));
+        }
 
         foreach (SceneField scene in LoadedScenes)
         {
@@ -151,6 +181,35 @@ public class WorldChangeManager : MonoBehaviour
 
             }
         }
+
+        yield return new WaitForSeconds(_waitForStartLoad);
+
+        yield return StartCoroutine(FadeShader(_purgatorySwapFullscreenShader, "_Intensity", 1f, 0f, _shaderTransitionLength));
+        _purgatorySwapFullscreenShader.SetFloat("_Intensity", 0f);
         //Debug.Log("End of load!");
+    }
+
+    private bool IsSceneLoaded(SceneField sceneField)
+    {
+        Scene scene = SceneManager.GetSceneByName(sceneField.SceneName);
+        return scene.IsValid() && scene.isLoaded;
+    }
+
+    private IEnumerator FadeShader(Material mat, string property, float start, float end, float duration)
+    {
+        Debug.Log("FadeShaderStart");
+        float elapsed = 0f;
+        mat.SetFloat(property, start);
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float value = Mathf.Lerp(start, end, elapsed / duration);
+            mat.SetFloat(property, value);
+            yield return null;
+        }
+
+        mat.SetFloat(property, end);
+        Debug.Log("FadeShaderEnd");
     }
 }

@@ -11,7 +11,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _groundCheckDistance = 2f;
 
     [Header("Camera")]
-    [SerializeField] private float _mouseSensitivity = 0.15f;
+    [SerializeField] private float _mouseSensitivityY = 0.15f;
+    [SerializeField] private float _mouseSensitivityX = 0.75f;
     [SerializeField] private float _minPitch = -40f;
     [SerializeField] private float _maxPitch = 40f;
 
@@ -29,11 +30,14 @@ public class PlayerMovement : MonoBehaviour
     private float _cameraPitch = 0f;
     private bool _isAiming;
 
+    private float _yaw;
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         _camera = _cameraTransform.GetComponent<Camera>();
         _controls = new PlayerControls();
+        Cursor.lockState = CursorLockMode.Locked;
         _targetRotation = _rb.rotation;
 
         _controls.Player.Move.performed += callbackContext => _moveInput = callbackContext.ReadValue<Vector2>();
@@ -69,10 +73,11 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleLook()
     {
-        float mouseX = _lookInput.x * _mouseSensitivity;
-        float mouseY = _lookInput.y * _mouseSensitivity;
+        float mouseX = _lookInput.x * _mouseSensitivityX;
+        float mouseY = _lookInput.y * _mouseSensitivityY;
 
-        _targetRotation = _rb.rotation * Quaternion.Euler(0f, mouseX, 0f);
+        //_targetRotation = _rb.rotation * Quaternion.Euler(0f, mouseX, 0f);
+        _yaw += mouseX;
 
         _cameraPitch -= mouseY;
         _cameraPitch = Mathf.Clamp(_cameraPitch, _minPitch, _maxPitch);
@@ -108,6 +113,7 @@ public class PlayerMovement : MonoBehaviour
 
     void ApplyRotation()
     {
-        _rb.MoveRotation(_targetRotation);
+        //_rb.MoveRotation(_targetRotation);
+        _rb.MoveRotation(Quaternion.Euler(0f, _yaw, 0f));
     }
 }

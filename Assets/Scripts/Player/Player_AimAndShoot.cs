@@ -9,6 +9,7 @@ public class Player_AimAndShoot : MonoBehaviour
     [SerializeField] Camera _playerCamera;
     [SerializeField] PlayerMovement _movement;
     [SerializeField] Image _crossHair;
+    [SerializeField] private ParticleSystem _hitParticle;
     void Start()
     {
         _crossHair.enabled = false;
@@ -46,6 +47,16 @@ public class Player_AimAndShoot : MonoBehaviour
         RaycastHit weaponHit;
         if (Physics.Raycast(transform.position, direction, out weaponHit, 100f))
         {
+
+            // Particle Spawn
+            if (_hitParticle != null)
+            {
+                Instantiate(
+                    _hitParticle,
+                    weaponHit.point,
+                    Quaternion.LookRotation(weaponHit.normal)
+                );
+            }
             if (hit.collider.TryGetComponent<Enemy_HealthSystem>(out var enemy))
             {
                 Destroy(hit.collider.gameObject);
