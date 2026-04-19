@@ -12,6 +12,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _groundCheckDistance = 0.1f;
 
     [Header("Camera")]
+    [SerializeField] private float _cameraDistance = 1f;
+    [SerializeField] private float _cameraXOffset = 0.4f;
+    [SerializeField] private float _cameraYOffset = 0.4f;
+    [SerializeField] private float _cameraCollisionRadius = 0.2f;
+    [SerializeField] private LayerMask _cameraCollisionMask;
     [SerializeField] private float _mouseSensitivityY = 0.15f;
     [SerializeField] private float _mouseSensitivityX = 0.75f;
     [SerializeField] private float _minPitch = -40f;
@@ -68,8 +73,20 @@ public class PlayerMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        // So that the camera doesn't override it's rotation every frame
         _cameraTransform.rotation = _cameraTarget.rotation;
+
+        Vector3 desiredPosition = _cameraTarget.position
+            + _cameraTarget.forward * -_cameraDistance
+            + _cameraTarget.right * _cameraXOffset
+            + _cameraTarget.up * _cameraYOffset;
+
+        Vector3 direction = desiredPosition - transform.position;
+        float distance = direction.magnitude;
+
+        if (Physics.Raycast(transform.position, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
+            _cameraTransform.position = Vector3.Lerp(_cameraTransform.position, hit.point, Time.deltaTime * _fovSpeed);
+        else
+            _cameraTransform.position = Vector3.Lerp(_cameraTransform.position, desiredPosition, Time.deltaTime * _fovSpeed);
     }
 
     void HandleLook()
@@ -107,5 +124,33 @@ public class PlayerMovement : MonoBehaviour
     {
         //_rb.MoveRotation(_targetRotation);
         _rb.MoveRotation(Quaternion.Euler(0f, _yaw, 0f));
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (_cameraTarget == null) return;
+
+        Vector3 desiredPosition = _cameraTarget.position
+            + _cameraTarget.forward * -_cameraDistance
+            + _cameraTarget.right * _cameraXOffset
+            + _cameraTarget.up * _cameraYOffset;
+
+        Vector3 direction = desiredPosition - transform.position;
+        float distance = direction.magnitude;
+
+        if (Physics.Raycast(transform.position, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, hit.point);
+            Gizmos.DrawWireSphere(hit.point, 0.1f);
+        }
+        else
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, desiredPosition);
+        }
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(desiredPosition, 0.1f);
     }
 }
