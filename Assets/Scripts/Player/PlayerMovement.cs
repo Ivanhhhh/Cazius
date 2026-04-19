@@ -8,7 +8,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] public float _moveSpeed = 10f;
-    [SerializeField] private float _groundCheckDistance = 2f;
+    [SerializeField] private float _groundingForce = 20f;
+    [SerializeField] private float _groundCheckDistance = 0.1f;
 
     [Header("Camera")]
     [SerializeField] private float _mouseSensitivityY = 0.15f;
@@ -89,19 +90,10 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = transform.forward * _moveInput.y + transform.right * _moveInput.x;
         if (move.sqrMagnitude > 1f) move.Normalize();
 
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, _groundCheckDistance))
-        {
-            // Follow the terrain
-            move = Vector3.ProjectOnPlane(move, hit.normal).normalized * move.magnitude;
-            _rb.linearVelocity = move * _moveSpeed;
-        }
-        else
-        {
-            // In the air, preserve gravity
-            Vector3 targetVelocity = move * _moveSpeed;
-            targetVelocity.y = _rb.linearVelocity.y;
-            _rb.linearVelocity = targetVelocity;
-        }
+        bool grounded = Physics.Raycast(transform.position, Vector3.down, _groundCheckDistance);
+
+        _rb.linearVelocity = new Vector3(move.x * _moveSpeed, _rb.linearVelocity.y, move.z * _moveSpeed);
+        _rb.AddForce(Vector3.down * _groundingForce, ForceMode.Force);
     }
 
     void HandleAim()
