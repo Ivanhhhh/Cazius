@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ChangeToPurgatoryTrigger : MonoBehaviour
@@ -5,6 +6,7 @@ public class ChangeToPurgatoryTrigger : MonoBehaviour
 
     private GameObject _player;
     [SerializeField] private SceneField[] scenesToLoad;
+    private bool _swapped = false;
 
     private void Awake()
     {
@@ -13,8 +15,9 @@ public class ChangeToPurgatoryTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == _player)
+        if (other.gameObject == _player && _swapped == false)
         {
+            _swapped = true;
             WorldChangeManager.Instance.SwapToPurgatory(scenesToLoad);
         }
     }

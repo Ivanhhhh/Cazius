@@ -1,7 +1,3 @@
-using JetBrains.Annotations;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime;
-using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -47,7 +43,7 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
     public Enemy_SecondAttackBehaviour _secondAttack { get; private set; }
     void Awake()
     {
-       _playerTransform = FindObjectOfType<PlayerMovement>().transform;
+       _playerTransform = FindFirstObjectByType<PlayerMovement>().transform;
        InitializeBehaviours(); 
     }
     void InitializeBehaviours()
