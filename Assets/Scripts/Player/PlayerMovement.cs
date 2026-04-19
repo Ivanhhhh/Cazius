@@ -84,9 +84,9 @@ public class PlayerMovement : MonoBehaviour
         float distance = direction.magnitude;
 
         if (Physics.Raycast(transform.position, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
-            _cameraTransform.position = Vector3.Lerp(_cameraTransform.position, hit.point, Time.deltaTime * _fovSpeed);
+            _cameraTransform.position = hit.point;
         else
-            _cameraTransform.position = Vector3.Lerp(_cameraTransform.position, desiredPosition, Time.deltaTime * _fovSpeed);
+            _cameraTransform.position = desiredPosition;
     }
 
     void HandleLook()
