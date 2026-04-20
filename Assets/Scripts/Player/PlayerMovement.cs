@@ -8,9 +8,15 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] public float _moveSpeed = 10f;
-    [SerializeField] private float _groundCheckDistance = 2f;
+    [SerializeField] private float _groundingForce = 20f;
+    [SerializeField] private float _groundCheckDistance = 0.1f;
 
     [Header("Camera")]
+    [SerializeField] private float _cameraDistance = 1f;
+    [SerializeField] private float _cameraXOffset = 0.4f;
+    [SerializeField] private float _cameraYOffset = 0.4f;
+    [SerializeField] private float _cameraCollisionRadius = 0.2f;
+    [SerializeField] private LayerMask _cameraCollisionMask;
     [SerializeField] private float _mouseSensitivityY = 0.15f;
     [SerializeField] private float _mouseSensitivityX = 0.75f;
     [SerializeField] private float _minPitch = -40f;
@@ -65,8 +71,20 @@ public class PlayerMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        // So that the camera doesn't override it's rotation every frame
         _cameraTransform.rotation = _cameraTarget.rotation;
+
+        Vector3 desiredPosition = _cameraTarget.position
+            + _cameraTarget.forward * -_cameraDistance
+            + _cameraTarget.right * _cameraXOffset
+            + _cameraTarget.up * _cameraYOffset;
+
+        Vector3 direction = desiredPosition - transform.position;
+        float distance = direction.magnitude;
+
+        if (Physics.Raycast(transform.position, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
+            _cameraTransform.position = hit.point;
+        else
+            _cameraTransform.position = desiredPosition;
     }
 
     void HandleLook()
@@ -86,19 +104,10 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = transform.forward * _moveInput.y + transform.right * _moveInput.x;
         if (move.sqrMagnitude > 1f) move.Normalize();
 
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, _groundCheckDistance))
-        {
-            // Follow the terrain
-            move = Vector3.ProjectOnPlane(move, hit.normal).normalized * move.magnitude;
-            _rb.linearVelocity = move * _moveSpeed;
-        }
-        else
-        {
-            // In the air, preserve gravity
-            Vector3 targetVelocity = move * _moveSpeed;
-            targetVelocity.y = _rb.linearVelocity.y;
-            _rb.linearVelocity = targetVelocity;
-        }
+        bool grounded = Physics.Raycast(transform.position, Vector3.down, _groundCheckDistance);
+
+        _rb.linearVelocity = new Vector3(move.x * _moveSpeed, _rb.linearVelocity.y, move.z * _moveSpeed);
+        _rb.AddForce(Vector3.down * _groundingForce, ForceMode.Force);
     }
 
     void HandleAim()
@@ -111,5 +120,33 @@ public class PlayerMovement : MonoBehaviour
     void ApplyRotation()
     {
         _rb.MoveRotation(_targetRotation);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (_cameraTarget == null) return;
+
+        Vector3 desiredPosition = _cameraTarget.position
+            + _cameraTarget.forward * -_cameraDistance
+            + _cameraTarget.right * _cameraXOffset
+            + _cameraTarget.up * _cameraYOffset;
+
+        Vector3 direction = desiredPosition - transform.position;
+        float distance = direction.magnitude;
+
+        if (Physics.Raycast(transform.position, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, hit.point);
+            Gizmos.DrawWireSphere(hit.point, 0.1f);
+        }
+        else
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, desiredPosition);
+        }
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(desiredPosition, 0.1f);
     }
 }
