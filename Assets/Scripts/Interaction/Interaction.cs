@@ -49,6 +49,7 @@ public class Interaction : MonoBehaviour
             if (!hasKey)
             {
                 interactiveIcon.gameObject.SetActive(true);
+                Debug.DrawRay(origin, direction);
 
                 if (Physics.Raycast(origin, direction, out hit, maxDistance, interactiveLayerMask))
                 {
@@ -57,7 +58,7 @@ public class Interaction : MonoBehaviour
                     interactiveIcon.position = currentObject.transform.position + iconOffset;
                 }
             }
-            if (Input.GetKeyDown(KeyCode.E) && currentObject != null && !isInspecting)
+            if (/*Input.GetKeyDown(KeyCode.E) &&*/ currentObject != null && !isInspecting)
             {
                 hasKey = true;
                 currentObject.transform.SetParent(keyOffset.transform);
@@ -65,11 +66,13 @@ public class Interaction : MonoBehaviour
                 interactiveIcon.gameObject.SetActive(false);
 
             }
-            if (Input.GetKeyDown(KeyCode.F) && IsInsideTrigger && hasKey)
+            if (/*Input.GetKeyDown(KeyCode.F) &&*/ IsInsideTrigger && hasKey)
             {
                 Debug.Log("Unlock");
                 currentObject.gameObject.SetActive(false);
                 doorToUnlock.transform.Rotate(0, -90, 0);
+                Destroy(doorToUnlock);
+                hasKey = false;
             }
         }
 
