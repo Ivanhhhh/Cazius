@@ -2,7 +2,6 @@ using Unity.Jobs;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.iOS;
 
 public class Interaction : MonoBehaviour
@@ -31,15 +30,6 @@ public class Interaction : MonoBehaviour
     [SerializeField] private GameObject keyOffset;
     [SerializeField] private GameObject doorToUnlock;
     [SerializeField] private bool IsInsideTrigger = false;
-    [SerializeField] private GameObject PivotDoor;
-
-
-    [Header("Inputs")]
-    public InputAction pickUp;
-    public InputAction inspection;
-    public InputAction interaction;
-    public InputAction cancel;
-    public InputAction mouse;
 
     void Start()
     {
@@ -48,31 +38,11 @@ public class Interaction : MonoBehaviour
         panelUI.SetActive(false);
     }
 
-    void OnEnable()
-    {
-        pickUp.Enable();
-        inspection.Enable();
-        interaction.Enable();
-        cancel.Enable();
-        mouse.Enable();
-    }
-
-    void OnDisable()
-    {
-        pickUp.Disable();
-        inspection.Disable();
-        interaction.Disable();
-        cancel.Disable();
-        mouse.Disable();
-    }
-
     void Update()
     {
         RaycastHit hit;
         Vector3 origin = transform.position;
         Vector3 direction = transform.forward;
-
-        Debug.DrawRay(origin, direction * maxDistance, Color.red);
 
         if (!isInspecting)
         {
@@ -86,12 +56,8 @@ public class Interaction : MonoBehaviour
                     interactiveIcon.gameObject.SetActive(true);
                     interactiveIcon.position = currentObject.transform.position + iconOffset;
                 }
-                /*else
-                {
-                    currentObject = null;
-                }*/
             }
-            if (pickUp.WasPressedThisFrame() && currentObject != null && !isInspecting)
+            if (Input.GetKeyDown(KeyCode.E) && currentObject != null && !isInspecting)
             {
                 hasKey = true;
                 currentObject.transform.SetParent(keyOffset.transform);
@@ -99,15 +65,15 @@ public class Interaction : MonoBehaviour
                 interactiveIcon.gameObject.SetActive(false);
 
             }
-            if (interaction.WasPressedThisFrame() && IsInsideTrigger && hasKey)
+            if (Input.GetKeyDown(KeyCode.F) && IsInsideTrigger && hasKey)
             {
                 Debug.Log("Unlock");
                 currentObject.gameObject.SetActive(false);
-                PivotDoor.transform.Rotate(0, -90, 0);
+                doorToUnlock.transform.Rotate(0, -90, 0);
             }
         }
 
-        if (inspection.WasPressedThisFrame() && currentObject != null && !isInspecting)
+        if (Input.GetKeyDown(KeyCode.I) && currentObject != null && !isInspecting)
         {
             isInspecting = true;
             currentObject.SetActive(true);
@@ -124,15 +90,14 @@ public class Interaction : MonoBehaviour
 
         if (isInspecting && inspectionInstance != null)
         {
-            Vector2 mouseInput = mouse.ReadValue<Vector2>();
-            float inputX = mouseInput.x * rotateVelocity;
-            float inputY = mouseInput.y * rotateVelocity;
+            float inputX = Input.GetAxis("Mouse X") * rotateVelocity;
+            float inputY = Input.GetAxis("Mouse Y") * rotateVelocity;
 
             inspectionInstance.transform.Rotate(Vector3.up, inputX, Space.World);
             inspectionInstance.transform.Rotate(Vector3.right, -inputY, Space.World);
         }
 
-        if (cancel.WasCompletedThisFrame() && isInspecting)
+        if (Input.GetKeyDown(KeyCode.Escape) && isInspecting)
         {
             isInspecting = false;
 
