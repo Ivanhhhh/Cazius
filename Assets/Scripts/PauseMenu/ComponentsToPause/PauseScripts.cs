@@ -1,12 +1,15 @@
 using NUnit.Framework;
 using Patterns.Observer.EventManager_Delegates;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 
 public class PauseScripts : MonoBehaviour,IPausable
 {
     private List<MonoBehaviour> ScriptsList;
+    //[SerializeField] List<MonoBehaviour> ScriptsException;
     private void Awake()
     {
         ScriptsList = new List<MonoBehaviour>();
@@ -36,7 +39,10 @@ public class PauseScripts : MonoBehaviour,IPausable
         foreach (MonoBehaviour Script in ScriptsList)
         {
            if (Script == this) continue;
-          Script.enabled = false;
+           // if (ScriptsException.Contains continue;
+
+
+            Script.enabled = false;
         }
     }
 
