@@ -6,7 +6,6 @@ using System.Linq;
 
 public class PauseScripts : MonoBehaviour,IPausable
 {
-
     private List<MonoBehaviour> ScriptsList;
     private void Awake()
     {
@@ -20,12 +19,6 @@ public class PauseScripts : MonoBehaviour,IPausable
         ScriptsList = FilterList;
     }
 
-    
-    void Start()
-    {
-        
-    }
-
     void OnEnable ()
     {
         EventManager.SubscribeToEvent(EventsType.Event_PauseGame, Pause);
@@ -36,7 +29,6 @@ public class PauseScripts : MonoBehaviour,IPausable
     {
         EventManager.UnsubscribeToEvent(EventsType.Event_PauseGame, Pause);
         EventManager.UnsubscribeToEvent(EventsType.Event_ResumeGame, UnPause);
-
     }
 
     public void Pause(params object[] param)

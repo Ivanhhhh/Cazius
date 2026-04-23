@@ -6,24 +6,25 @@ public class RbComponent : MonoBehaviour,IPausable
     private Rigidbody _Rb;
     void Start()
     {
-        _Rb = GetComponent<Rigidbody>();
+        
 
         // a ver srp
-        
+
     }
 
 
     void OnEnable()
     {
+        _Rb = GetComponent<Rigidbody>();
         EventManager.SubscribeToEvent(EventsType.Event_PauseGame, Pause);
         EventManager.SubscribeToEvent(EventsType.Event_ResumeGame, UnPause);
+
     }
 
-    void OnDisable()
+    void Disable()
     {
         EventManager.UnsubscribeToEvent(EventsType.Event_PauseGame, Pause);
         EventManager.UnsubscribeToEvent(EventsType.Event_ResumeGame, UnPause);
-
     }
 
 

@@ -11,7 +11,6 @@ public class CanvasManager : MonoBehaviour
         EventManager.SubscribeToEvent(EventsType.Event_ResumeGame, DisableCanvas);
     }
 
-    // Update is called once per frame
     void Update()
     {
         

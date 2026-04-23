@@ -1,16 +1,14 @@
 using UnityEngine;
 using Patterns.Observer.EventManager_Delegates;
+using System.Collections;
 
 public class ChangeStateUI : MonoBehaviour
 {
-    FSM<AgentStates> _fsm;
-
-   
-
-
     public void ResumeGame()
     {
-       // _fsm.ChangeState(AgentStates.Unpause);
-         EventManager.TriggerEvent(EventsType.Event_ResumeGame);
+        // _fsm.ChangeState(AgentStates.Unpause);
+        EventManager.TriggerEvent(EventsType.Event_ResumeGame);
+
+        print("se hizo");
     }  
 }

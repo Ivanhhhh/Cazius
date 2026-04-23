@@ -26,8 +26,6 @@ public class ESCcanvas : MonoBehaviour
         {
             EventManager.TriggerEvent(EventsType.Event_PauseGame);
 
-           //_fsm.ChangeState(AgentStates.Pause);
-
             print("jfff");
         }
     }
