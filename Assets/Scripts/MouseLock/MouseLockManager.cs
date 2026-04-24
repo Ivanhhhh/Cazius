@@ -3,13 +3,18 @@ using UnityEngine;
 
 public class MouseLockManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+     void OnEnable()
+     {
         EventManager.SubscribeToEvent(EventsType.Event_PauseGame, LockMouse);
         EventManager.SubscribeToEvent(EventsType.Event_PauseGame, UnLockMouse);
+     }
 
+    void OnDisable()
+    {
+        EventManager.UnsubscribeToEvent(EventsType.Event_PauseGame, LockMouse);
+        EventManager.UnsubscribeToEvent(EventsType.Event_PauseGame, UnLockMouse);
     }
+
 
     public void LockMouse(params object[] param)
     {
