@@ -1,8 +1,8 @@
 using Unity.Jobs;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.Rendering;
+//using UnityEditor.Experimental.GraphView;
+//using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.InputSystem.iOS;
+//using UnityEngine.InputSystem.iOS;
 
 public class Interaction : MonoBehaviour
 {
