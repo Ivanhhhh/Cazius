@@ -13,6 +13,11 @@ public class ChangeToPurgatoryTrigger : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player");
     }
 
+    private void OnEnable()
+    {
+        _swapped = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject == _player && _swapped == false)
