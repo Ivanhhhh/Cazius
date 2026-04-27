@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _normalFOV = 60f;
     [SerializeField] private float _aimFOV = 40f;
     [SerializeField] private float _fovSpeed = 10f;
-
+    [SerializeField] private Player_CameraRecoil _recoil;
     private Rigidbody _rb;
     private Camera _camera;
     public PlayerControls _controls;
@@ -35,11 +35,12 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 _lookInput;
     private float _cameraPitch = 0f;
     private bool _isAiming;
-
+    private float _aimSpeed;
     private float _yaw;
 
     private void Awake()
     {
+        _aimSpeed = _moveSpeed/2;
         _rb = GetComponent<Rigidbody>();
         _camera = _cameraTransform.GetComponent<Camera>();
         _controls = new PlayerControls();
@@ -73,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        _cameraTransform.rotation = _cameraTarget.rotation;
+        _cameraTransform.rotation = _cameraTarget.rotation * Quaternion.Euler(_recoil.CurrentRotation);
 
         Vector3 desiredPosition = _cameraTarget.position
             + _cameraTarget.forward * -_cameraDistance
@@ -104,19 +105,19 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleMovement()
     {
+        float actualSpeed = _isAiming ? _aimSpeed : _moveSpeed;
         Vector3 move = transform.forward * _moveInput.y + transform.right * _moveInput.x;
         if (move.sqrMagnitude > 1f) move.Normalize();
 
         bool grounded = Physics.Raycast(transform.position, Vector3.down, _groundCheckDistance);
 
-        _rb.linearVelocity = new Vector3(move.x * _moveSpeed, _rb.linearVelocity.y, move.z * _moveSpeed);
+        _rb.linearVelocity = new Vector3(move.x * actualSpeed, _rb.linearVelocity.y, move.z * actualSpeed);
         _rb.AddForce(Vector3.down * _groundingForce, ForceMode.Force);
     }
 
     void HandleAim()
     {
         float targetFOV = _isAiming ? _aimFOV : _normalFOV;
-
         _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, targetFOV, Time.deltaTime * _fovSpeed);
     }
 

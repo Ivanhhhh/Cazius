@@ -12,22 +12,26 @@ public class Player_AimAndShoot : MonoBehaviour
     [SerializeField] PlayerMovement _movement;
     [SerializeField] Image _crossHair;
     [SerializeField] float _maxDistance;
+    [SerializeField] int _totalReserveBullets;
     [SerializeField] private ParticleSystem _hitParticle;
      [SerializeField] int _maxBullets;
     [SerializeField] TextMeshProUGUI _maxBulletsUI;
     [SerializeField] TextMeshProUGUI _pressR;
-    private int _remainingBullets;
+    [SerializeField] private Player_CameraRecoil _recoil;
     [SerializeField] TextMeshProUGUI _remainingBulletsUI;
+    [SerializeField] float _shootDamageAmount;
+    private int _remainingBullets;
+    private int _reserveBullets;    
     public bool _hasBullets => _remainingBullets > 0;
     bool a;
     void Start()
     {
         _crossHair.enabled = false;
         _remainingBullets = _maxBullets;
-        _maxBulletsUI.text = $"{_maxBullets}";
-        _remainingBulletsUI.text = $"{_remainingBullets}";
+        _remainingBullets = _maxBullets;
+        _reserveBullets = _totalReserveBullets;
         _movement._controls.Player.Recharge.started += Recharge;
-
+        UpdateUI();
     }
     void Update()
     {
@@ -46,6 +50,7 @@ public class Player_AimAndShoot : MonoBehaviour
     private void OnShootStarted(InputAction.CallbackContext context)
     {
         if (!_hasBullets) return;
+        _recoil.OnRecoil?.Invoke();
         ManageShoot();
 
         Ray cameraRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
@@ -75,9 +80,9 @@ public class Player_AimAndShoot : MonoBehaviour
                     Quaternion.LookRotation(weaponHit.normal)
                 );
             }
-            if (hit.collider.TryGetComponent<Enemy_HealthSystem>(out var enemy))
+            if (hit.collider.TryGetComponent<Enemy_Interface_Damage>(out var damageable))
             {
-                Destroy(hit.collider.gameObject);
+                damageable.TakeDamage (_shootDamageAmount);
             }
         }
     }
@@ -88,7 +93,18 @@ public class Player_AimAndShoot : MonoBehaviour
     }
     void Recharge(InputAction.CallbackContext context)
     {
-        _remainingBullets = _maxBullets;
+        if (_remainingBullets == _maxBullets) return;
+        if (_reserveBullets <= 0) return;
+        int bulletsNeeded = _maxBullets - _remainingBullets;
+        int bulletsToAdd = Mathf.Min(bulletsNeeded, _reserveBullets);
+        _remainingBullets += bulletsToAdd;
+        _reserveBullets -= bulletsToAdd;
+        UpdateUI();
+    }
+    void UpdateUI()
+    {
         _remainingBulletsUI.text = $"{_remainingBullets}";
+        _maxBulletsUI.text = $"{_reserveBullets}"; // muestra la reserva
+        _pressR.enabled = _remainingBullets < _maxBullets && _reserveBullets > 0;
     }
 }
