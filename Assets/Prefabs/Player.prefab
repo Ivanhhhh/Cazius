@@ -212,6 +212,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2204525472310671810}
+  - component: {fileID: 8989134539119359854}
   m_Layer: 8
   m_Name: Camera Target
   m_TagString: Untagged
@@ -234,6 +235,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6189969909263246771}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8989134539119359854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2991560506274347186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c89c474a14d04664480576cac4d2f323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player_CameraRecoil
+  _recoilX: 6
+  _recoilY: 5
+  _returnSpeed: 5
+  _recoilSpeed: 10
 --- !u!1 &4679212211878153699
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,6 +517,7 @@ MonoBehaviour:
   _normalFOV: 60
   _aimFOV: 40
   _fovSpeed: 10
+  _recoil: {fileID: 8989134539119359854}
 --- !u!136 &3564048592477410900
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -539,11 +557,14 @@ MonoBehaviour:
   _movement: {fileID: 7436610461006387000}
   _crossHair: {fileID: 0}
   _maxDistance: 0
+  _totalReserveBullets: 0
   _hitParticle: {fileID: 0}
   _maxBullets: 0
   _maxBulletsUI: {fileID: 0}
   _pressR: {fileID: 0}
+  _recoil: {fileID: 8989134539119359854}
   _remainingBulletsUI: {fileID: 0}
+  _shootDamageAmount: 15
 --- !u!1 &6042425775577541773
 GameObject:
   m_ObjectHideFlags: 0

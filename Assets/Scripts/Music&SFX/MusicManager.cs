@@ -56,8 +56,10 @@ public class MusicManager : MonoBehaviour
             if (trackClip != null && trackClip.clip != null)
                 musicDict[trackClip.track] = trackClip.clip;
         }
-    }
 
+        PlayTrack(MusicTrack.Eden1);
+    }
+    /*
     void OnEnable()
     {
         // Subscribe to scene load events
@@ -85,6 +87,33 @@ public class MusicManager : MonoBehaviour
                 break;
         }
     }
+    */
+
+    //new code to wok with new WorldChangeManager
+    private void OnEnable()
+    {
+        StartCoroutine(WaitForWorldChangeManager());
+    }
+
+    private IEnumerator WaitForWorldChangeManager()
+    {
+        while (WorldChangeManager.Instance == null)
+            yield return null;
+
+        WorldChangeManager.Instance.SwapToPurgatoryEvent += PlayPurgatoryTrack;
+        WorldChangeManager.Instance.SwapToEdenEvent += PlayEdenTrack;
+    }
+
+    private void OnDisable()
+    {
+        WorldChangeManager.Instance.SwapToPurgatoryEvent -= PlayPurgatoryTrack;
+        WorldChangeManager.Instance.SwapToEdenEvent -= PlayEdenTrack;
+    }
+
+
+    private void PlayPurgatoryTrack() { PlayTrack(MusicTrack.Purgatory1); }
+    private void PlayEdenTrack() { PlayTrack(MusicTrack.Eden1); }
+
 
     // Play specific track by enum
     public void PlayTrack(MusicTrack track)
