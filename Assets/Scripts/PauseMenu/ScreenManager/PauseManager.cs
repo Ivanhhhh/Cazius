@@ -5,7 +5,7 @@ public class PauseManager : MonoBehaviour
 {
     public static PauseManager Instance { get; private set; }
 
-   public bool _isPaused;
+   public bool _IsPaused;
 
     void Awake()
     {
@@ -22,20 +22,20 @@ public class PauseManager : MonoBehaviour
 
     public void Toggle()
     {
-        if (_isPaused == true) Unpause();
+        if (_IsPaused == true) Unpause();
         else Pause();
-        print (_isPaused);
+        print (_IsPaused);
     }
 
    public void Pause()
    {
-        _isPaused = true;
+        _IsPaused = true;
         EventManager.TriggerEvent(EventsType.Event_PauseGame);
    }
 
    public void Unpause()
    {
-        _isPaused = false;
+        _IsPaused = false;
         EventManager.TriggerEvent(EventsType.Event_ResumeGame);
    }
 }

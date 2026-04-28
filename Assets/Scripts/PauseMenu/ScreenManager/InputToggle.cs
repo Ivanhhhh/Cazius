@@ -29,14 +29,21 @@ public class InputToggle : MonoBehaviour
     {
         if (Keyboard.current.tabKey.wasPressedThisFrame)
         {
+            ScreenManager.Instance.RemoveLastScreen();
+
             PauseManager.Instance.Toggle();
-            ScreenManager.Instance.AddNewScreen(_inventoryScreen);
+            if (PauseManager.Instance._IsPaused)
+                ScreenManager.Instance.AddNewScreen(_inventoryScreen);
+            else
+                ScreenManager.Instance.RemoveLastScreen();
         }
 
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
+            ScreenManager.Instance.RemoveLastScreen();
+
             PauseManager.Instance.Toggle();
-            if (PauseManager.Instance._isPaused)
+            if (PauseManager.Instance._IsPaused)
                 ScreenManager.Instance.AddNewScreen(_pauseScreen);
             else
                 ScreenManager.Instance.RemoveLastScreen();

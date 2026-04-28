@@ -11,8 +11,10 @@ public class PauseScreen : MonoBehaviour,IScreen
     }
     void OnDisable()
     {
-       // EventManager.UnsubscribeToEvent(EventsType.Event_PauseGame, Activate);
-       // EventManager.UnsubscribeToEvent(EventsType.Event_ResumeGame, Deactivate);
+        // EventManager.UnsubscribeToEvent(EventsType.Event_PauseGame, Activate);
+        // EventManager.UnsubscribeToEvent(EventsType.Event_ResumeGame, Deactivate);
+
+        UnsubscribeToEvent();
     }
 
 
@@ -30,7 +32,7 @@ public class PauseScreen : MonoBehaviour,IScreen
    public void Deactivate(params object[] X)
    {
      this.gameObject.SetActive(false);
-       // UnsubscribeToEvent();
+        
    }
 
     /// <summary>
