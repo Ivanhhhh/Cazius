@@ -45,7 +45,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79642733a26a38141b3743e501349e86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SFXManager
-  sfxCategories: []
+  sfxCategories:
+  - categoryType: 1
+    sfxCategory: {fileID: 11400000, guid: c5229fa945e4f1143895a85f5c14c22a, type: 2}
+  - categoryType: 2
+    sfxCategory: {fileID: 11400000, guid: eccbc3efd52b4964cb9ef23b92ae066e, type: 2}
+  - categoryType: 0
+    sfxCategory: {fileID: 11400000, guid: 5162e0bbc1c0fb44ca7d13880d6d7176, type: 2}
 --- !u!82 &6263320635698472145
 AudioSource:
   m_ObjectHideFlags: 0
@@ -286,7 +292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MusicManager
   trackClips:
   - track: 0
-    clip: {fileID: 8300000, guid: 58e5d7786cc27514c8b6f83156b607fd, type: 3}
+    clip: {fileID: 8300000, guid: 1c2874d109a61c641afc55aaea3e31af, type: 3}
   - track: 1
     clip: {fileID: 8300000, guid: 31a3e134c7c423441bdd6d68a0433c96, type: 3}
   defaultVolume: 0.3
