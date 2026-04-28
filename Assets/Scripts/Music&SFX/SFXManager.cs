@@ -8,12 +8,9 @@ public class SFXManager : MonoBehaviour
     // SFX categories
     public enum SFXCategoryType
     {
-        GoosetavAttack,
-        GansisScared,
-        CrackEgg,
-        RevengeThreshold,
-        TrokMetalSFX,
-        CoinSound
+        EnemyGruntSFX,
+        PlayerShootingSFX,
+        CriticalHitSFX
         // Add Categories here
     }
 

@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("References")]
     [SerializeField] private Transform _cameraTransform;
     [SerializeField] private Transform _cameraTarget;
+    [SerializeField] private Animator _animator;
 
     [Header("Movement")]
     [SerializeField] public float _moveSpeed = 10f;
@@ -37,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     private bool _isAiming;
     private float _aimSpeed;
     private float _yaw;
+    private Vector2 _smoothedMoveInput;
 
     private void Awake()
     {
@@ -64,6 +66,8 @@ public class PlayerMovement : MonoBehaviour
     {
         HandleLook();
         HandleAim();
+        // anims
+        _smoothedMoveInput = Vector2.Lerp(_smoothedMoveInput, _moveInput, Time.deltaTime * 10f);
     }
 
     private void FixedUpdate()
@@ -113,6 +117,13 @@ public class PlayerMovement : MonoBehaviour
 
         _rb.linearVelocity = new Vector3(move.x * actualSpeed, _rb.linearVelocity.y, move.z * actualSpeed);
         _rb.AddForce(Vector3.down * _groundingForce, ForceMode.Force);
+
+        // Animator
+        bool isMoving = _smoothedMoveInput.sqrMagnitude > 0.01f;
+
+        _animator.SetBool("IsMoving", isMoving);
+        _animator.SetFloat("MoveX", _smoothedMoveInput.y, 0.3f, Time.deltaTime);
+        _animator.SetFloat("MoveZ", _smoothedMoveInput.x, 0.3f, Time.deltaTime);
     }
 
     void HandleAim()

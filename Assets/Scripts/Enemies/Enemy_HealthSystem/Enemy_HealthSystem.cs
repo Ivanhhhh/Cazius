@@ -1,18 +1,19 @@
+using System;
 using UnityEngine;
 
-public class Enemy_HealthSystem : MonoBehaviour,Enemy_Interface_Damage
+public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 {
-   [SerializeField] private float _maxHealth = 100f;
+    [SerializeField] private float _maxHealth = 100f;
     private float _currentHealth;
 
-    public System.Action OnDeath;
-    public System.Action<float> OnDamaged;
+    public Action OnDeath;
+    public Action<float> OnDamaged;
 
     void Start()
     {
         _currentHealth = _maxHealth;
         OnDeath += Death;
-    } 
+    }
 
     public void TakeDamage(float amount)
     {
@@ -22,6 +23,7 @@ public class Enemy_HealthSystem : MonoBehaviour,Enemy_Interface_Damage
     public void TakeDamageFromPart(float amount, BodyPartType part)
     {
         _currentHealth -= amount;
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.EnemyGruntSFX, transform.position);
         OnDamaged?.Invoke(_currentHealth);
 
         // Efecto según la parte
@@ -48,6 +50,7 @@ public class Enemy_HealthSystem : MonoBehaviour,Enemy_Interface_Damage
     void HeadShotEffect()
     {
         Debug.Log("Headshot");
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.CriticalHitSFX, transform.position);
     }
 
     void ArmShotEffect()
