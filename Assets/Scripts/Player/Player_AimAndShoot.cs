@@ -24,8 +24,15 @@ public class Player_AimAndShoot : MonoBehaviour
     private int _reserveBullets;
     public bool _hasBullets => _remainingBullets > 0;
     bool a;
+
+
+    [SerializeField] private float _shootInterval = 0.25f; 
+    private float _shootTimer;
+
+
     void Start()
     {
+        _shootTimer = _shootInterval;
         _crossHair.enabled = false;
         _remainingBullets = _maxBullets;
         _remainingBullets = _maxBullets;
@@ -35,6 +42,8 @@ public class Player_AimAndShoot : MonoBehaviour
     }
     void Update()
     {
+        _shootTimer -= Time.deltaTime;
+
         if (_movement._controls.Player.Aim.IsPressed())
         {
             _crossHair.enabled = true;
@@ -49,6 +58,7 @@ public class Player_AimAndShoot : MonoBehaviour
 
     private void OnShootStarted(InputAction.CallbackContext context)
     {
+        if (_shootTimer > 0f) return;
         if (!_hasBullets) return;
         _recoil.OnRecoil?.Invoke();
         ManageShoot();
@@ -86,6 +96,7 @@ public class Player_AimAndShoot : MonoBehaviour
                 damageable.TakeDamage(_shootDamageAmount);
             }
         }
+        _shootTimer = _shootInterval;
     }
     void ManageShoot()
     {
