@@ -39,10 +39,12 @@ public class PauseScripts : MonoBehaviour,IPausable
         foreach (MonoBehaviour Script in ScriptsList)
         {
            if (Script == this) continue;
-           // if (ScriptsException.Contains continue;
+            //if (Script.GetType().Name == "NombreDelScript") continue;
+
+             // if (ScriptsException.Contains continue;
 
 
-            Script.enabled = false;
+             Script.enabled = false;
         }
     }
 
