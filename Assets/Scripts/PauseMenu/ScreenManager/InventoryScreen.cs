@@ -10,6 +10,7 @@ public class InventoryScreen : MonoBehaviour,IScreen
     }
     void OnDisable()
     {
+        UnsubscribeToEvent();
        // EventManager.UnsubscribeToEvent(EventsType.Event_PauseGame, Activate);
        // EventManager.UnsubscribeToEvent(EventsType.Event_ResumeGame, Deactivate);
     }
@@ -27,8 +28,8 @@ public class InventoryScreen : MonoBehaviour,IScreen
    public void Deactivate(params object[] x)
    {
      this.gameObject.SetActive(false);
-        EventManager.SubscribeToEvent(EventsType.Event_ResumeGame, Deactivate);
-    }
+     EventManager.SubscribeToEvent(EventsType.Event_ResumeGame, Deactivate);
+   }
 
     /// <summary>
     /// Cuando una pantalla va a ser "destruida", ejecutamos este metodo
