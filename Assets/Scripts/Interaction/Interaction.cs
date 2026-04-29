@@ -58,15 +58,16 @@ public class Interaction : MonoBehaviour
                     interactiveIcon.position = currentObject.transform.position + iconOffset;
                 }
             }
-            if (/*Input.GetKeyDown(KeyCode.E) &&*/ currentObject != null && !isInspecting)
+            if (Input.GetKeyDown(KeyCode.E) && currentObject != null && !isInspecting)
             {
                 hasKey = true;
-                currentObject.transform.SetParent(keyOffset.transform);
+                currentObject.gameObject.SetActive(false);
+                //currentObject.transform.SetParent(keyOffset.transform);
                 currentObject.transform.localPosition = Vector3.zero;
                 interactiveIcon.gameObject.SetActive(false);
 
             }
-            if (/*Input.GetKeyDown(KeyCode.F) &&*/ IsInsideTrigger && hasKey)
+            if (Input.GetKeyDown(KeyCode.F) && IsInsideTrigger && hasKey)
             {
                 Debug.Log("Unlock");
                 currentObject.gameObject.SetActive(false);
