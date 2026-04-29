@@ -19,6 +19,8 @@ public enum BodyPartType
 {
     Head,
     Chest,
-    Arms,
-    Legs
+    Left_Arm,
+    Right_Arm,
+    Left_Leg,
+    Right_Leg
 }

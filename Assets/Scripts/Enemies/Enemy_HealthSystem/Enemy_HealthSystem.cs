@@ -35,11 +35,17 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
             case BodyPartType.Chest:
                 ChestShotEffect();
                 break;
-            case BodyPartType.Legs:
-                LegShotEffect();
+            case BodyPartType.Left_Leg:
+                LeftLegShotEffect();
                 break;
-            case BodyPartType.Arms:
-                ArmShotEffect();
+            case BodyPartType.Right_Leg:
+                RightLegShotEffect();
+                break;
+            case BodyPartType.Left_Arm:
+                LeftArmShotEffect();
+                break;
+            case BodyPartType.Right_Arm:
+                RightArmShotEffect();
                 break;
         }
 
@@ -53,19 +59,25 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
         SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.CriticalHitSFX, transform.position);
     }
 
-    void ArmShotEffect()
+    void LeftArmShotEffect()
     {
-        Debug.Log("Arm Shot");
+        Debug.Log("Left Arm Shot");
     }
-
+    void RightArmShotEffect()
+    {
+        Debug.Log("Right Arm Shot");
+    }
     void ChestShotEffect()
     {
         Debug.Log("Chest shot");
     }
-
-    void LegShotEffect()
+    void RightLegShotEffect()
     {
-        Debug.Log("Leg shot");
+        Debug.Log("Right Leg shot");
+    }
+    void LeftLegShotEffect()
+    {
+        Debug.Log("Left Leg shot");
     }
     void Death()
     {
