@@ -1,8 +1,5 @@
-using Unity.Jobs;
-//using UnityEditor.Experimental.GraphView;
-//using UnityEditor.Rendering;
+using TMPro;
 using UnityEngine;
-//using UnityEngine.InputSystem.iOS;
 
 public class Interaction : MonoBehaviour
 {
@@ -19,8 +16,11 @@ public class Interaction : MonoBehaviour
 
     [SerializeField] private GameObject canvasUI;
     [SerializeField] private GameObject panelUI;
+    [SerializeField] private GameObject KeyPanel;
 
     [SerializeField] private Transform interactiveIcon;
+    [SerializeField] private Transform DoorIconLock;
+    [SerializeField] private Transform DoorIconUnlock;
     [SerializeField] private Vector3 iconOffset;
 
     [SerializeField] private Camera mainCamera;
@@ -36,6 +36,9 @@ public class Interaction : MonoBehaviour
         inspectionCamera.enabled = false;
         canvasUI.SetActive(false);
         panelUI.SetActive(false);
+        KeyPanel.SetActive(false);
+        DoorIconLock.gameObject.SetActive(false);
+        DoorIconUnlock.gameObject.SetActive(false);
     }
 
     void Update()
@@ -58,9 +61,10 @@ public class Interaction : MonoBehaviour
                     interactiveIcon.position = currentObject.transform.position + iconOffset;
                 }
             }
-            if (Input.GetKeyDown(KeyCode.E) && currentObject != null && !isInspecting)
+            if (Input.GetKeyDown(KeyCode.F) && currentObject != null && !isInspecting)
             {
                 hasKey = true;
+                KeyPanel.SetActive(true);
                 currentObject.gameObject.SetActive(false);
                 //currentObject.transform.SetParent(keyOffset.transform);
                 currentObject.transform.localPosition = Vector3.zero;
@@ -70,6 +74,8 @@ public class Interaction : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F) && IsInsideTrigger && hasKey)
             {
                 Debug.Log("Unlock");
+                DoorIconUnlock.gameObject.SetActive(false);
+                KeyPanel.SetActive(false); // OPCIONAL
                 currentObject.gameObject.SetActive(false);
                 doorToUnlock.transform.Rotate(0, -90, 0);
                 Destroy(doorToUnlock);
@@ -120,7 +126,15 @@ public class Interaction : MonoBehaviour
         if (other.CompareTag("Door"))
         {
             IsInsideTrigger = true;
-            if (!hasKey) Debug.Log("You need the key");
+            if (!hasKey)
+            {
+                Debug.Log("You need the key");
+                DoorIconLock.gameObject.SetActive(true);
+            }
+            else if (hasKey)
+            {
+                DoorIconUnlock.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -129,6 +143,7 @@ public class Interaction : MonoBehaviour
         if (other.CompareTag("Door"))
         {
             IsInsideTrigger = false;
+            DoorIconLock.gameObject.SetActive(false);
         }
     }
 }
