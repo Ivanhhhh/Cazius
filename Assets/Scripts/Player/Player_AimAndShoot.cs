@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using TMPro;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEngine.VFX;
 
 
 public class Player_AimAndShoot : MonoBehaviour
@@ -20,6 +21,7 @@ public class Player_AimAndShoot : MonoBehaviour
     [SerializeField] private Player_CameraRecoil _recoil;
     [SerializeField] TextMeshProUGUI _remainingBulletsUI;
     [SerializeField] float _shootDamageAmount;
+    [SerializeField] private VisualEffect _shootVFX;
     private int _remainingBullets;
     private int _reserveBullets;
     public bool _hasBullets => _remainingBullets > 0;
@@ -62,7 +64,7 @@ public class Player_AimAndShoot : MonoBehaviour
         if (!_hasBullets) return;
         _recoil.OnRecoil?.Invoke();
         ManageShoot();
-
+        _shootVFX.Play();
         Ray cameraRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
         RaycastHit hit;
