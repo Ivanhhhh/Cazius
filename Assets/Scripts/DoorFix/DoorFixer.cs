@@ -13,62 +13,96 @@ public class DoorFixer : MonoBehaviour
 
     [SerializeField] int SpringObjetiveAmount;
 
+    [SerializeField] Collider StopFreining;
+
     private JointSpring SpringValue;
 
     bool Flag = false;
+
+    bool Stop;
+
+   [SerializeField] DoorStop _DoorStop;
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             _joint.useSpring = false;
+            SpringValue.damper = 0f;
 
-            SpringValue = _joint.spring;
-            SpringValue.spring = SpringAmount*0;
-            _joint.spring = SpringValue;
+            Stop = false;
+
+            // SpringValue = _joint.spring;
+            // SpringValue.spring = SpringAmount*0;
+            // _joint.spring = SpringValue;
+
+           
 
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        //if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
-       // {
-            
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            Stop = true;
 
-       // }
+
+           
+
+        }
     }
     void Start()
     {
        _joint = GetComponent<HingeJoint>(); 
+      // _DoorStop = GetComponentInChildren<DoorStop>();
     }
 
     void Update()
     {
-        float angulo = Mathf.Abs(_joint.angle);
+        //float angulo = Mathf.Abs(_joint.angle);
 
-        if (angulo < 20f)  // 20 grados del centro
+
+        if (_DoorStop.Stop == false && Stop == false && Flag == true)
         {
-            DamperObjetiveAmount = 300;
-            SpringObjetiveAmount = 200;
-
-            if (Flag == true)
-            {
-                StartCoroutine(SpringLerp());
-                StartCoroutine(DamperLerp());
-            }
             Flag = false;
-           
+            //StopAllCoroutines();
+            _joint.useSpring = false;
+            SpringValue.damper = 0f;
+            _joint.spring = SpringValue;
+
+            print("pararon todas las corrutinas");
         }
 
-        if (angulo > 20f)
+
+        if (_DoorStop.Stop == true && Stop == true && Flag == false)
         {
-            StopAllCoroutines();
+            print("entro");
             Flag = true;
 
-            DamperObjetiveAmount = 0;
-            SpringObjetiveAmount = 0;
+            DamperObjetiveAmount = 120;
+            SpringObjetiveAmount = 400;
+
+            StartCoroutine(SpringLerp());
+            StartCoroutine(DamperLerp());
+
+            print("empezaron todas las corrutinas");
+
+
+            /// if (Flag == true)
+            // {
+
+            // }
+            // Flag = false;
+
         }
+
+
+        //  print("el angulo es" + angulo);
+
+        // SpringValue.spring = 0;
+        // SpringValue.spring = SpringAmount * 0;
+
 
     }
 
@@ -80,8 +114,17 @@ public class DoorFixer : MonoBehaviour
             float resultado = Mathf.Lerp(0, SpringObjetiveAmount, t);
             SpringAmount = resultado;
             SpringValue.spring = resultado;
+            _joint.spring = SpringValue;
+
+           
             yield return null;
         }
+        //yield return new WaitForSeconds(2);
+       // _joint.useSpring = false;
+       // StopAllCoroutines();
+        print("Spring Terminado");
+        //SpringValue.targetPosition = 0f;  // atrae hacia el centro
+
     }
 
     private IEnumerator DamperLerp()
@@ -90,18 +133,16 @@ public class DoorFixer : MonoBehaviour
         {
             float resultado = Mathf.Lerp(0, DamperObjetiveAmount, t);
             SpringValue.damper = resultado;
-            _joint.spring = SpringValue; 
+            _joint.spring = SpringValue;
+
+           
             yield return null;
         }
-    }
+        //yield return new WaitForSeconds(2);
 
-    public void StopDoor()
-    {
-        _joint.useSpring = true;
-        StartCoroutine(SpringLerp());
-        SpringValue = _joint.spring;
-        SpringValue.spring = SpringAmount;
-        _joint.spring = SpringValue;
+       // SpringValue.damper = 0f;
+        //StopAllCoroutines();
+
     }
 }
 

@@ -306,6 +306,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.86492157, y: 1.903328, z: 0.1840725}
   m_Center: {x: -0.0025959015, y: -0.008194566, z: 0.0012960434}
+--- !u!65 &58564598 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 2700913478087292124, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+  m_PrefabInstance: {fileID: 1827214224}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &58564599 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 450925528186775375, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+  m_PrefabInstance: {fileID: 1827214224}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2be898a8ed8198b468cb2a67f50414ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorStop
 --- !u!1001 &259585893
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1121,6 +1137,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WoodDoor
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8f2cd56946336e44997782ac69ab2ef6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5917893844142046307, guid: 8f2cd56946336e44997782ac69ab2ef6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -1217,6 +1237,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: cubedoro (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b160f7c6476d3e14eb2669aa75200922, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1284,6 +1308,8 @@ MonoBehaviour:
   LerpDuration: 2
   DamperObjetiveAmount: 0
   SpringObjetiveAmount: 0
+  StopFreining: {fileID: 58564598}
+  _DoorStop: {fileID: 58564599}
 --- !u!1001 &1253521945
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1332,9 +1358,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6952729120858530921, guid: 6986aef266b3b9b4ba0fbd6c208fc416, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8530676213082586217, guid: 6986aef266b3b9b4ba0fbd6c208fc416, type: 3}
       propertyPath: m_Name
       value: Door
+      objectReference: {fileID: 0}
+    - target: {fileID: 8530676213082586217, guid: 6986aef266b3b9b4ba0fbd6c208fc416, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1420,6 +1454,10 @@ PrefabInstance:
     - target: {fileID: 6906577108200009464, guid: 6986aef266b3b9b4ba0fbd6c208fc416, type: 3}
       propertyPath: m_LocalPosition.z
       value: -7.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 6952729120858530921, guid: 6986aef266b3b9b4ba0fbd6c208fc416, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8530676213082586217, guid: 6986aef266b3b9b4ba0fbd6c208fc416, type: 3}
       propertyPath: m_Name
@@ -2104,9 +2142,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1594853482162429867, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 2827495448803513421, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
       propertyPath: m_Size.x
-      value: 0.69969535
+      value: 0.7259754
       objectReference: {fileID: 0}
     - target: {fileID: 2827495448803513421, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
       propertyPath: m_Size.y
@@ -2114,7 +2156,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2827495448803513421, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
       propertyPath: m_Center.x
-      value: -0.03825501
+      value: -0.025114862
       objectReference: {fileID: 0}
     - target: {fileID: 2827495448803513421, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
       propertyPath: m_Center.y
@@ -2122,7 +2164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2827495448803513421, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
       propertyPath: m_Center.z
-      value: 0.0044776816
+      value: 0.0044776793
       objectReference: {fileID: 0}
     - target: {fileID: 3297221255708230129, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2164,9 +2206,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5998190132440304271, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3.4474378
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998190132440304271, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998190132440304271, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 6841638857399537179, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+      propertyPath: m_Name
+      value: Trigger
+      objectReference: {fileID: 0}
+    - target: {fileID: 6841638857399537179, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6967037987625745398, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
       propertyPath: m_MassScale
-      value: 0.03
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6967037987625745398, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+      propertyPath: m_UseLimits
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6967037987625745398, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
       propertyPath: m_UseSpring
@@ -2181,6 +2247,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8520012764948403899, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+      propertyPath: _DoorStop
+      value: 
+      objectReference: {fileID: 58564599}
+    - target: {fileID: 8520012764948403899, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8520012764948403899, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
       propertyPath: LerpDuration
       value: 0.2
       objectReference: {fileID: 0}
@@ -2190,7 +2264,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8520012764948403899, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
       propertyPath: DamperObjetiveAmount
-      value: 300
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 8520012764948403899, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
       propertyPath: SpringObjetiveAmount
