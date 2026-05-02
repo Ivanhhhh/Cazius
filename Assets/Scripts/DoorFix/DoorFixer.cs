@@ -9,6 +9,10 @@ public class DoorFixer : MonoBehaviour
 
     [SerializeField] float LerpDuration;
 
+    [SerializeField] int DamperObjetiveAmount;
+
+    [SerializeField] int SpringObjetiveAmount;
+
     private JointSpring SpringValue;
 
     bool Flag = false;
@@ -17,10 +21,10 @@ public class DoorFixer : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-           // _joint.useSpring = false;
+            _joint.useSpring = false;
 
             SpringValue = _joint.spring;
-           // SpringValue.spring = SpringAmount*0;
+            SpringValue.spring = SpringAmount*0;
             _joint.spring = SpringValue;
 
         }
@@ -45,10 +49,13 @@ public class DoorFixer : MonoBehaviour
 
         if (angulo < 20f)  // 20 grados del centro
         {
+            DamperObjetiveAmount = 300;
+            SpringObjetiveAmount = 200;
+
             if (Flag == true)
             {
-               // StartCoroutine(SpringLerp());
-               // StartCoroutine(DamperLerp());
+                StartCoroutine(SpringLerp());
+                StartCoroutine(DamperLerp());
             }
             Flag = false;
            
@@ -58,6 +65,9 @@ public class DoorFixer : MonoBehaviour
         {
             StopAllCoroutines();
             Flag = true;
+
+            DamperObjetiveAmount = 0;
+            SpringObjetiveAmount = 0;
         }
 
     }
@@ -67,7 +77,7 @@ public class DoorFixer : MonoBehaviour
         for (float t = 0; t < 1; t += Time.deltaTime/LerpDuration)
         {
             _joint.useSpring = true;
-            float resultado = Mathf.Lerp(0, 1000f, t);
+            float resultado = Mathf.Lerp(0, SpringObjetiveAmount, t);
             SpringAmount = resultado;
             SpringValue.spring = resultado;
             yield return null;
@@ -78,8 +88,7 @@ public class DoorFixer : MonoBehaviour
     {
         for (float t = 0; t < 1; t += Time.deltaTime / LerpDuration)
         {
-           // _joint.useSpring = false;
-            float resultado = Mathf.Lerp(0, 300f, t);
+            float resultado = Mathf.Lerp(0, DamperObjetiveAmount, t);
             SpringValue.damper = resultado;
             _joint.spring = SpringValue; 
             yield return null;
