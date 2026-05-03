@@ -29,6 +29,7 @@ public class Interaction : MonoBehaviour
     [SerializeField] private bool hasKey;
     [SerializeField] private GameObject keyOffset;
     [SerializeField] private GameObject doorToUnlock;
+    [SerializeField] private GameObject doorToUnlock2;
     [SerializeField] private bool IsInsideTrigger = false;
 
     void Start()
@@ -79,7 +80,11 @@ public class Interaction : MonoBehaviour
                 currentObject.gameObject.SetActive(false);
                 doorToUnlock.transform.Rotate(0, -90, 0);
                 Destroy(doorToUnlock);
-                hasKey = false;
+                if (doorToUnlock != null)
+                {
+                    Destroy(doorToUnlock2);
+                }
+                //hasKey = false;
             }
         }
 
