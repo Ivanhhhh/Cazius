@@ -1,18 +1,22 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 {
     [SerializeField] private float _maxHealth = 100f;
-    private float _currentHealth;
+    [SerializeField] private float _currentHealth;
 
     public Action OnDeath;
     public Action<float> OnDamaged;
+
+    [SerializeField] private AngelDemonAnim anim;
 
     void Start()
     {
         _currentHealth = _maxHealth;
         OnDeath += Death;
+        anim = GetComponent<AngelDemonAnim>();
     }
 
     public void TakeDamage(float amount)
@@ -56,6 +60,7 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
     void HeadShotEffect()
     {
         Debug.Log("Headshot");
+        anim.HeadshotAnim();
         SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.CriticalHitSFX, transform.position);
     }
 
@@ -81,6 +86,16 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
     }
     void Death()
     {
+        DieCoroutine();
+    }
+
+    IEnumerator DieCoroutine()
+    {
+        //anim.DieAnim();
+
+        // Wait for death animation to finish
+        yield return new WaitForSeconds(3);
+
         Destroy(gameObject);
     }
 }
