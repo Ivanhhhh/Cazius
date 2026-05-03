@@ -91,7 +91,7 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 
     IEnumerator DieCoroutine()
     {
-        anim.DieAnim();
+        //anim.DieAnim();
 
         // Wait for death animation to finish
         yield return new WaitForSeconds(3);

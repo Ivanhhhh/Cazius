@@ -32,7 +32,7 @@ public class AngelDemonAnim : MonoBehaviour
 
     public void DieAnim()
     {
-        animator.SetBool("IsAttacking", true);
+        //animator.SetBool("IsAttacking", true);
     }
 
 }
