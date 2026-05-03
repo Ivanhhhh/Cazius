@@ -27,11 +27,11 @@ public class LoadFirstScene : MonoBehaviour
 
     private void StartGame()
     {
-        _scenesToLoad.Add(SceneManager.LoadSceneAsync(_persistentGameplayScene, LoadSceneMode.Additive));
         _scenesToLoad.Add(SceneManager.LoadSceneAsync(_baseScene, LoadSceneMode.Additive));
         _scenesToLoad.Add(SceneManager.LoadSceneAsync(_firstScene, LoadSceneMode.Additive));
         _scenesToLoad.Add(SceneManager.LoadSceneAsync(_baseScene2, LoadSceneMode.Additive));
         _scenesToLoad.Add(SceneManager.LoadSceneAsync(_firstScene2, LoadSceneMode.Additive));
+        _scenesToLoad.Add(SceneManager.LoadSceneAsync(_persistentGameplayScene, LoadSceneMode.Additive));
         WorldChangeManager.Instance.AddSceneToList(_firstScene);
         WorldChangeManager.Instance.AddSceneToList(_firstScene2);
         StartCoroutine(LoadBar());
