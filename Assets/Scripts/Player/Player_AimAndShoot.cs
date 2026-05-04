@@ -1,127 +1,211 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using TMPro;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine.VFX;
-
+using TMPro;
 
 public class Player_AimAndShoot : MonoBehaviour
 {
-    [SerializeField] private Animator _animator;
-    [SerializeField] Camera _playerCamera;
-    [SerializeField] PlayerMovement _movement;
-    [SerializeField] Image _crossHair;
-    [SerializeField] float _maxDistance;
-    [SerializeField] int _totalReserveBullets;
-    [SerializeField] private ParticleSystem _hitParticle;
-    [SerializeField] int _maxBullets;
-    [SerializeField] TextMeshProUGUI _maxBulletsUI;
-    [SerializeField] TextMeshProUGUI _pressR;
+    [Header("References")]
+    [SerializeField] private Camera _playerCamera;
+    [SerializeField] private PlayerMovement _movement;
     [SerializeField] private Player_CameraRecoil _recoil;
-    [SerializeField] TextMeshProUGUI _remainingBulletsUI;
-    [SerializeField] float _shootDamageAmount;
+
+    [Header("Shoot")]
+    [SerializeField] private float _maxDistance;
+    [SerializeField] private float _shootDamageAmount;
+    [SerializeField] private float _shootInterval;
+    [SerializeField] private float _rayVisibleDuration;
+    [SerializeField] private ParticleSystem _hitParticle;
     [SerializeField] private VisualEffect _shootVFX;
+    [SerializeField] private LineRenderer _shootView;
+
+    [Header("Ammo")]
+    [SerializeField] private int _maxBullets;
+    [SerializeField] private int _totalReserveBullets;
+
+    [Header("Spread")]
+    [SerializeField] private float _minSpread;
+    [SerializeField] private float _maxSpread;
+    [SerializeField] private float _spreadPerShot;
+    [SerializeField] private float _maxSpreadClamp;
+    [SerializeField] private float _spreadIncreaseSpeed;
+    [SerializeField] private float _spreadDecreaseSpeed;
+
+    [Header("Crosshair")]
+    [SerializeField] private Image _crossHair;
+    [SerializeField] private RectTransform _crosshairTop;
+    [SerializeField] private RectTransform _crosshairBottom;
+    [SerializeField] private RectTransform _crosshairLeft;
+    [SerializeField] private RectTransform _crosshairRight;
+    [SerializeField] private float _crosshairBaseOffset;
+
+    [Header("UI")]
+    [SerializeField] private TextMeshProUGUI _remainingBulletsUI;
+    [SerializeField] private TextMeshProUGUI _maxBulletsUI;
+    [SerializeField] private TextMeshProUGUI _pressR;
+
     private int _remainingBullets;
     private int _reserveBullets;
-    public bool _hasBullets => _remainingBullets > 0;
-    bool a;
-
-
-    [SerializeField] private float _shootInterval = 0.25f; 
     private float _shootTimer;
+    public float _currentSpread;
 
+    public bool _hasBullets => _remainingBullets > 0;
 
     void Start()
     {
         _shootTimer = _shootInterval;
-        _crossHair.enabled = false;
-        _remainingBullets = _maxBullets;
         _remainingBullets = _maxBullets;
         _reserveBullets = _totalReserveBullets;
+
+        _crossHair.enabled = false;
+        _shootView.enabled = false;
+        _crosshairTop.gameObject.SetActive(false);
+        _crosshairBottom.gameObject.SetActive(false);
+        _crosshairLeft.gameObject.SetActive(false);
+        _crosshairRight.gameObject.SetActive(false);
+
         _movement._controls.Player.Recharge.started += Recharge;
         UpdateUI();
     }
+
     void Update()
     {
         _shootTimer -= Time.deltaTime;
+        UpdateCrosshairIndicators();
+        HandleAimInput();
+    }
 
+    void HandleAimInput()
+    {
+        // Se suscribe y desuscribe cada frame para evitar disparos fuera del modo apuntado
         if (_movement._controls.Player.Aim.IsPressed())
-        {
-            _crossHair.enabled = true;
             _movement._controls.Player.Shoot.started += OnShootStarted;
-        }
         else
-        {
-            _crossHair.enabled = false;
             _movement._controls.Player.Shoot.started -= OnShootStarted;
-        }
+    }
+
+    void UpdateCrosshairIndicators()
+    {
+        bool isAiming = _movement._controls.Player.Aim.IsPressed();
+
+        // El spread se actualiza siempre aunque no se esté apuntando
+        // para que al volver a apuntar ya refleje la velocidad actual
+        UpdateSpread();
+
+        _crosshairTop.gameObject.SetActive(isAiming);
+        _crosshairBottom.gameObject.SetActive(isAiming);
+        _crosshairLeft.gameObject.SetActive(isAiming);
+        _crosshairRight.gameObject.SetActive(isAiming);
+
+        // El punto central solo aparece cuando el spread es mínimo
+        _crossHair.enabled = isAiming && _currentSpread < 0.1f;
+
+        if (!isAiming) return;
+
+        float offset = _crosshairBaseOffset + _currentSpread * 30f;
+        _crosshairTop.anchoredPosition    = new Vector2(0,  offset);
+        _crosshairBottom.anchoredPosition = new Vector2(0, -offset);
+        _crosshairLeft.anchoredPosition   = new Vector2(-offset, 0);
+        _crosshairRight.anchoredPosition  = new Vector2( offset, 0);
+    }
+
+    void UpdateSpread()
+    {
+        // El 1.2f compensa que la física nunca llega exactamente a _moveSpeed
+        float speedRatio = Mathf.Clamp01(_movement._currentSpeed / _movement._moveSpeed * 1.2f);
+        float targetSpread = Mathf.Lerp(0f, _maxSpread, speedRatio);
+
+        // Velocidad distinta según si el spread está subiendo o bajando
+        float lerpSpeed = _currentSpread > targetSpread ? _spreadDecreaseSpeed : _spreadIncreaseSpeed;
+        _currentSpread = Mathf.MoveTowards(_currentSpread, targetSpread, lerpSpeed * Time.deltaTime);
+
+        // Evita que quede en valores microscópicos por el MoveTowards
+        if (_currentSpread < 0.05f) _currentSpread = 0f;
     }
 
     private void OnShootStarted(InputAction.CallbackContext context)
     {
-        if (_shootTimer > 0f) return;
-        if (!_hasBullets) return;
+        if (_shootTimer > 0f || !_hasBullets) return;
+
         _recoil.OnRecoil?.Invoke();
         ManageShoot();
-        _animator.ResetTrigger("Shoot");
-        _animator.SetTrigger("Shoot");
         _shootVFX.Play();
+
         Ray cameraRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        Vector3 targetPoint = Physics.Raycast(cameraRay, out RaycastHit hit, _maxDistance)
+            ? hit.point
+            : cameraRay.origin + cameraRay.direction * _maxDistance;
 
-        RaycastHit hit;
-
-        Vector3 targetPoint;
-
-        if (Physics.Raycast(cameraRay, out hit, _maxDistance))
-            targetPoint = hit.point;
-        else
-            targetPoint = cameraRay.origin + cameraRay.direction * _maxDistance;
+        // El spread se aplica ANTES de sumarlo para que el primer disparo sea preciso
         Vector3 direction = (targetPoint - transform.position).normalized;
+        direction = Quaternion.Euler(
+            UnityEngine.Random.Range(-_currentSpread, _currentSpread),
+            UnityEngine.Random.Range(-_currentSpread, _currentSpread),
+            0
+        ) * direction;
 
-        Debug.DrawRay(transform.position, direction * _maxDistance, Color.red);
+        _currentSpread = Mathf.Clamp(_currentSpread + _spreadPerShot, 0, _maxSpreadClamp);
 
-        RaycastHit weaponHit;
-        if (Physics.Raycast(transform.position, direction, out weaponHit, _maxDistance))
+        if (Physics.Raycast(transform.position, direction, out RaycastHit weaponHit, _maxDistance))
         {
-
-            // Particle Spawn
-            if (_hitParticle != null)
-            {
-                Instantiate(
-                    _hitParticle,
-                    weaponHit.point,
-                    Quaternion.LookRotation(weaponHit.normal)
-                );
-                SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.PlayerShootingSFX, transform.position);
-            }
-            if (hit.collider.TryGetComponent<Enemy_Interface_Damage>(out var damageable))
-            {
-                damageable.TakeDamage(_shootDamageAmount);
-            }
+            HandleHit(weaponHit);
+            /*_shootView.SetPosition(0, transform.position);
+            _shootView.SetPosition(1, weaponHit.point);*/
         }
+        else
+        {
+           /* _shootView.SetPosition(0, transform.position);
+            _shootView.SetPosition(1, targetPoint);*/
+        }
+
         _shootTimer = _shootInterval;
+        StopCoroutine(nameof(HideRay));
+        StartCoroutine(nameof(HideRay));
     }
+
+    void HandleHit(RaycastHit weaponHit)
+    {
+        if (_hitParticle != null)
+        {
+            Instantiate(_hitParticle, weaponHit.point, Quaternion.LookRotation(weaponHit.normal));
+            SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.PlayerShootingSFX, transform.position);
+        }
+
+        if (weaponHit.collider.TryGetComponent<Enemy_Interface_Damage>(out var damageable))
+            damageable.TakeDamage(_shootDamageAmount);
+    }
+
+    private IEnumerator HideRay()
+    {
+        _shootView.enabled = true;
+        yield return new WaitForSeconds(_rayVisibleDuration);
+        _shootView.enabled = false;
+    }
+
     void ManageShoot()
     {
         _remainingBullets--;
-        _remainingBulletsUI.text = $"{_remainingBullets}";
+        UpdateUI();
     }
+
     void Recharge(InputAction.CallbackContext context)
     {
-        if (_remainingBullets == _maxBullets) return;
-        if (_reserveBullets <= 0) return;
-        int bulletsNeeded = _maxBullets - _remainingBullets;
-        int bulletsToAdd = Mathf.Min(bulletsNeeded, _reserveBullets);
+        if (_remainingBullets == _maxBullets || _reserveBullets <= 0) return;
+
+        // Toma solo las balas necesarias para no exceder el máximo del cargador
+        int bulletsToAdd = Mathf.Min(_maxBullets - _remainingBullets, _reserveBullets);
         _remainingBullets += bulletsToAdd;
         _reserveBullets -= bulletsToAdd;
         UpdateUI();
     }
+
     void UpdateUI()
     {
         _remainingBulletsUI.text = $"{_remainingBullets}";
-        _maxBulletsUI.text = $"{_reserveBullets}"; // muestra la reserva
+        _maxBulletsUI.text = $"{_reserveBullets}";
         _pressR.enabled = _remainingBullets < _maxBullets && _reserveBullets > 0;
     }
 }

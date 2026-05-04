@@ -101,4 +101,19 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
             Mathf.Cos(angleInDegrees * Mathf.Deg2Rad)
         );
     }
+
+    public float GetChaseSpeed()
+    {
+        return _chaseSpeed;
+    }
+
+    public void SetChaseSpeed(float newSpeed)
+    {
+        _chaseSpeed = newSpeed;
+
+        if (_chasing != null)
+        {
+            _chasing.SetChaseSpeed(newSpeed);
+        }
+    }
 }
