@@ -10,10 +10,13 @@ public class AngelDemonAnim : MonoBehaviour
 
     private Enemy_MeleeEnemy_Data _enemyData;
     private Coroutine _slowCoroutine;
+    private float originalSpeed;
+
 
     void Start()
     {
         _enemyData = GetComponent<Enemy_MeleeEnemy_Data>();
+        originalSpeed = _enemyData.GetChaseSpeed();
         //animator = GetComponentInChildren<Animator>();
     }
 
@@ -94,7 +97,6 @@ public class AngelDemonAnim : MonoBehaviour
 
     private IEnumerator SlowChaseSpeedCoroutine()
     {
-        float originalSpeed = _enemyData.GetChaseSpeed();
 
         float slowedSpeed = Mathf.Max(0f, originalSpeed - _slowAmount);
 
