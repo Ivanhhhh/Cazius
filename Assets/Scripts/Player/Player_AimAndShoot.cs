@@ -135,6 +135,7 @@ public class Player_AimAndShoot : MonoBehaviour
         ManageShoot();
         _playerAnimator.SetTrigger("Shoot");
         _shootVFX.Play();
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.PlayerShootingSFX, transform.position);
 
         Ray cameraRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         Vector3 targetPoint = Physics.Raycast(cameraRay, out RaycastHit hit, _maxDistance)
@@ -173,7 +174,6 @@ public class Player_AimAndShoot : MonoBehaviour
         if (_hitParticle != null)
         {
             Instantiate(_hitParticle, weaponHit.point, Quaternion.LookRotation(weaponHit.normal));
-            SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.PlayerShootingSFX, transform.position);
         }
 
         if (weaponHit.collider.TryGetComponent<Enemy_Interface_Damage>(out var damageable))
