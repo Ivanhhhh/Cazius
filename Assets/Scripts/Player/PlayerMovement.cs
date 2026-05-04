@@ -87,11 +87,11 @@ public class PlayerMovement : MonoBehaviour
     void LateUpdate()
     {
         float pitchT = Mathf.InverseLerp(_minPitch, _maxPitch, _cameraPitch);
-        float cameraVertical = Mathf.Lerp(_cameraVerticalTilt, -_cameraVerticalTilt, pitchT);
+        //float cameraVertical = Mathf.Lerp(_cameraVerticalTilt, -_cameraVerticalTilt, pitchT);
 
         Vector3 desiredPosition = transform.position
             + transform.right * _cameraXOffset
-            + Vector3.up * (_cameraYOffset + cameraVertical)
+            + Vector3.up * (_cameraYOffset)
             + transform.forward * -_cameraDistance;
 
         Vector3 direction = desiredPosition - transform.position;
