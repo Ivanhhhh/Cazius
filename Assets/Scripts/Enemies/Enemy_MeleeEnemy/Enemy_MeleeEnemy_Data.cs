@@ -46,6 +46,11 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
        _playerTransform = FindFirstObjectByType<PlayerMovement>().transform;
        InitializeBehaviours(); 
     }
+    private void OnEnable()
+    {
+        if (_playerTransform == null)
+        _playerTransform = FindFirstObjectByType<PlayerMovement>().transform;
+    }
     void InitializeBehaviours()
     {
         _patrolling = new Enemy_PatrollingBehaviour(_nodes,_detectionRadius,_MaximumAmountOfNodes,_patrolSpeed,_selfObjectTransform,_agent);
