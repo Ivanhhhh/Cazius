@@ -152,13 +152,13 @@ public class Player_AimAndShoot : MonoBehaviour
         if (Physics.Raycast(transform.position, direction, out RaycastHit weaponHit, _maxDistance))
         {
             HandleHit(weaponHit);
-            _shootView.SetPosition(0, transform.position);
-            _shootView.SetPosition(1, weaponHit.point);
+            /*_shootView.SetPosition(0, transform.position);
+            _shootView.SetPosition(1, weaponHit.point);*/
         }
         else
         {
-            _shootView.SetPosition(0, transform.position);
-            _shootView.SetPosition(1, targetPoint);
+           /* _shootView.SetPosition(0, transform.position);
+            _shootView.SetPosition(1, targetPoint);*/
         }
 
         _shootTimer = _shootInterval;
