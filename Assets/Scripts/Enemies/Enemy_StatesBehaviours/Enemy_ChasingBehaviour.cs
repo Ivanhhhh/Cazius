@@ -23,7 +23,13 @@ public class Enemy_ChasingBehaviour
     }
     public void Tick()
     {
+        _agent.speed = _chaseSpeed;
         _agent.SetDestination(_playerTransform.position);
+    }
+
+    public void SetChaseSpeed(float newSpeed)
+    {
+        _chaseSpeed = newSpeed;
     }
 }
 
