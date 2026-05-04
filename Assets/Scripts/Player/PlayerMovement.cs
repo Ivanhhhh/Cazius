@@ -47,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 _smoothedMoveInput;
     float _verticalOffset;
 
+    public float _currentSpeed {get;set;}
     private void Awake()
     {
         _aimSpeed = _moveSpeed / 2;
@@ -142,6 +143,8 @@ public class PlayerMovement : MonoBehaviour
         _animator.SetBool("IsMoving", isMoving);
         _animator.SetFloat("MoveX", _smoothedMoveInput.y, 0.3f, Time.deltaTime);
         _animator.SetFloat("MoveZ", _smoothedMoveInput.x, 0.3f, Time.deltaTime);
+
+        _currentSpeed = _rb.linearVelocity.magnitude;
     }
 
     void HandleAim()
