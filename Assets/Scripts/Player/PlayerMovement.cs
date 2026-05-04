@@ -125,7 +125,7 @@ public class PlayerMovement : MonoBehaviour
         localPos.y = _verticalOffset+ _YOffset;
         _cameraTarget.localPosition = localPos;
     }
-
+    /*
     void HandleMovement()
     {
         float actualSpeed = _isAiming ? _aimSpeed : _moveSpeed;
@@ -138,6 +138,41 @@ public class PlayerMovement : MonoBehaviour
         _rb.AddForce(Vector3.down * _groundingForce, ForceMode.Force);
 
         // Animator
+        bool isMoving = _smoothedMoveInput.sqrMagnitude > 0.01f;
+
+        _animator.SetBool("IsMoving", isMoving);
+        _animator.SetFloat("MoveX", _smoothedMoveInput.y, 0.3f, Time.deltaTime);
+        _animator.SetFloat("MoveZ", _smoothedMoveInput.x, 0.3f, Time.deltaTime);
+
+        _currentSpeed = _rb.linearVelocity.magnitude;
+    }*/
+    void HandleMovement()
+    {
+        float actualSpeed = _isAiming ? _aimSpeed : _moveSpeed;
+
+        Vector3 camForward = _cameraTransform.forward;
+        Vector3 camRight = _cameraTransform.right;
+
+        // Remove vertical angle so movement stays flat
+        camForward.y = 0f;
+        camRight.y = 0f;
+
+        camForward.Normalize();
+        camRight.Normalize();
+
+        Vector3 move = camForward * _moveInput.y + camRight * _moveInput.x;
+
+        if (move.sqrMagnitude > 1f)
+            move.Normalize();
+
+        _rb.linearVelocity = new Vector3(
+            move.x * actualSpeed,
+            _rb.linearVelocity.y,
+            move.z * actualSpeed
+        );
+
+        _rb.AddForce(Vector3.down * _groundingForce, ForceMode.Force);
+
         bool isMoving = _smoothedMoveInput.sqrMagnitude > 0.01f;
 
         _animator.SetBool("IsMoving", isMoving);
