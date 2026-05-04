@@ -21,6 +21,8 @@ public class Interaction : MonoBehaviour
     [SerializeField] private Transform interactiveIcon;
     [SerializeField] private Transform DoorIconLock;
     [SerializeField] private Transform DoorIconUnlock;
+    [SerializeField] private Transform DoorIconLock2;
+    [SerializeField] private Transform DoorIconUnlock2;
     [SerializeField] private Vector3 iconOffset;
 
     [SerializeField] private Camera mainCamera;
@@ -40,6 +42,8 @@ public class Interaction : MonoBehaviour
         KeyPanel.SetActive(false);
         DoorIconLock.gameObject.SetActive(false);
         DoorIconUnlock.gameObject.SetActive(false);
+        DoorIconLock2.gameObject.SetActive(false);
+        DoorIconUnlock2.gameObject.SetActive(false);
     }
 
     void Update()
@@ -73,7 +77,7 @@ public class Interaction : MonoBehaviour
 
             }
             if (Input.GetKeyDown(KeyCode.F) && IsInsideTrigger && hasKey)
-            {
+            {/*
                 Debug.Log("Unlock");
                 DoorIconUnlock.gameObject.SetActive(false);
                 KeyPanel.SetActive(false); // OPCIONAL
@@ -83,8 +87,36 @@ public class Interaction : MonoBehaviour
                 if (doorToUnlock != null)
                 {
                     Destroy(doorToUnlock2);
-                }
+                }*/
                 //hasKey = false;
+                Debug.Log("Unlock");
+
+                DoorIconUnlock.gameObject.SetActive(false);
+                DoorIconLock.gameObject.SetActive(false);
+
+                DoorIconUnlock2.gameObject.SetActive(false);
+                DoorIconLock2.gameObject.SetActive(false);
+
+                // DO NOT hide the key panel
+                // KeyPanel.SetActive(false);
+
+
+                if (doorToUnlock == null)
+                {
+                    doorToUnlock2.transform.Rotate(0, -90, 0);
+                    Destroy(doorToUnlock2);
+                }
+
+
+                if (doorToUnlock != null)
+                {
+                    doorToUnlock.transform.Rotate(0, -90, 0);
+                    Destroy(doorToUnlock);
+                }
+
+
+
+
             }
         }
 
@@ -134,11 +166,20 @@ public class Interaction : MonoBehaviour
             if (!hasKey)
             {
                 Debug.Log("You need the key");
+
                 DoorIconLock.gameObject.SetActive(true);
+                DoorIconLock2.gameObject.SetActive(true);
+
+                DoorIconUnlock.gameObject.SetActive(false);
+                DoorIconUnlock2.gameObject.SetActive(false);
             }
             else if (hasKey)
             {
+                DoorIconLock.gameObject.SetActive(false);
+                DoorIconLock2.gameObject.SetActive(false);
+
                 DoorIconUnlock.gameObject.SetActive(true);
+                DoorIconUnlock2.gameObject.SetActive(true);
             }
         }
     }
@@ -149,6 +190,10 @@ public class Interaction : MonoBehaviour
         {
             IsInsideTrigger = false;
             DoorIconLock.gameObject.SetActive(false);
+            DoorIconUnlock.gameObject.SetActive(false);
+
+            DoorIconLock2.gameObject.SetActive(false);
+            DoorIconUnlock2.gameObject.SetActive(false);
         }
     }
 }
