@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
-
+using System.Collections;
 
 public class Enemy_MeleeEnemy_Data : MonoBehaviour
 {
@@ -43,10 +43,27 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
     public Enemy_SecondAttackBehaviour _secondAttack { get; private set; }
     void Awake()
     {
-       _playerTransform = FindFirstObjectByType<PlayerMovement>().transform;
-       InitializeBehaviours(); 
+        //_playerTransform = FindFirstObjectByType<PlayerMovement>().transform;
+        //InitializeBehaviours(); 
+        StartCoroutine(WaitForPlayer());
     }
-    void InitializeBehaviours()
+    private IEnumerator WaitForPlayer()
+    {
+        while (_playerTransform == null)
+        {
+            var player = FindFirstObjectByType<PlayerMovement>();
+            if (player != null)
+            {
+                _playerTransform = player.transform;
+                InitializeBehaviours();
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+        void InitializeBehaviours()
     {
         _patrolling = new Enemy_PatrollingBehaviour(_nodes,_detectionRadius,_MaximumAmountOfNodes,_patrolSpeed,_selfObjectTransform,_agent);
         _chasing = new Enemy_ChasingBehaviour(_playerTransform,_attackRadius,_agent,_selfObjectTransform,_chaseSpeed);
@@ -83,5 +100,20 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
             0,
             Mathf.Cos(angleInDegrees * Mathf.Deg2Rad)
         );
+    }
+
+    public float GetChaseSpeed()
+    {
+        return _chaseSpeed;
+    }
+
+    public void SetChaseSpeed(float newSpeed)
+    {
+        _chaseSpeed = newSpeed;
+
+        if (_chasing != null)
+        {
+            _chasing.SetChaseSpeed(newSpeed);
+        }
     }
 }

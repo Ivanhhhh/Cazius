@@ -12,6 +12,7 @@ public class Player_AimAndShoot : MonoBehaviour
     [SerializeField] private Camera _playerCamera;
     [SerializeField] private PlayerMovement _movement;
     [SerializeField] private Player_CameraRecoil _recoil;
+    [SerializeField] private Animator _playerAnimator;
 
     [Header("Shoot")]
     [SerializeField] private float _maxDistance;
@@ -132,6 +133,7 @@ public class Player_AimAndShoot : MonoBehaviour
 
         _recoil.OnRecoil?.Invoke();
         ManageShoot();
+        _playerAnimator.SetTrigger("Shoot");
         _shootVFX.Play();
 
         Ray cameraRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
