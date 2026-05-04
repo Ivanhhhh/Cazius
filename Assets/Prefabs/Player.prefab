@@ -247,7 +247,7 @@ GameObject:
   m_Layer: 8
   m_Name: Camera Target
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -260,7 +260,7 @@ Transform:
   m_GameObject: {fileID: 2991560506274347186}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.88}
+  m_LocalPosition: {x: 0, y: 1.43, z: 3.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -424,17 +424,21 @@ MonoBehaviour:
   _moveSpeed: 5
   _groundingForce: 20
   _groundCheckDistance: 2
-  _cameraDistance: 2.6
-  _cameraXOffset: 0.75
-  _cameraYOffset: 0.55
+  _cameraDistance: 1
+  _cameraXOffset: 0.93
+  _cameraYOffset: 0.65
   _cameraCollisionRadius: 0.41
   _cameraCollisionMask:
     serializedVersion: 2
     m_Bits: 128
   _mouseSensitivityY: 0.15
-  _mouseSensitivityX: 0.75
-  _minPitch: -40
-  _maxPitch: 40
+  _mouseSensitivityX: 0.15
+  _minPitch: -20
+  _maxPitch: 20
+  _cameraVerticalTilt: -0.33
+  _YOffset: 1.8
+  _minVerticalY: -0.5
+  _maxVerticalY: 3.8
   _normalFOV: 60
   _aimFOV: 40
   _fovSpeed: 10
@@ -623,7 +627,10 @@ MonoBehaviour:
   inspectionPoint: {fileID: 4381912014659877964, guid: 84cad3637d32069449cfb1fc5597eb3e, type: 3}
   canvasUI: {fileID: 6977470758378676992, guid: b0b0ce294728f0e45873a19726d75f87, type: 3}
   panelUI: {fileID: 6971934270448248787, guid: 519953e9b82a792459bf63c507e21c79, type: 3}
+  KeyPanel: {fileID: 0}
   interactiveIcon: {fileID: 6473547253060768766, guid: e7757a77e3cd54e408bfffd5c3f20e71, type: 3}
+  DoorIconLock: {fileID: 0}
+  DoorIconUnlock: {fileID: 0}
   iconOffset: {x: 0, y: 1.5, z: 0}
   mainCamera: {fileID: 651653032407350410}
   inspectionCamera: {fileID: 8162962098298924688, guid: 19edf52444eba774c8936077d50af5ff, type: 3}

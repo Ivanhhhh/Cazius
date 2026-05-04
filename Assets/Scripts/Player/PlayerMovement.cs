@@ -22,6 +22,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _mouseSensitivityX = 0.75f;
     [SerializeField] private float _minPitch = -40f;
     [SerializeField] private float _maxPitch = 40f;
+    [SerializeField] private float _cameraVerticalTilt = 0.3f;
+
+    [Header("Camera Target")]
+    [SerializeField] private float _YOffset = 0.4f;
+    [SerializeField] private float _minVerticalY = -1f;
+    [SerializeField] private float _maxVerticalY = 1f;
 
     [Header("Aim Settings")]
     [SerializeField] private float _normalFOV = 60f;
@@ -39,10 +45,11 @@ public class PlayerMovement : MonoBehaviour
     private float _aimSpeed;
     private float _yaw;
     private Vector2 _smoothedMoveInput;
+    float _verticalOffset;
 
     private void Awake()
     {
-        _aimSpeed = _moveSpeed/2;
+        _aimSpeed = _moveSpeed / 2;
         _rb = GetComponent<Rigidbody>();
         _camera = _cameraTransform.GetComponent<Camera>();
         _controls = new PlayerControls();
@@ -78,12 +85,13 @@ public class PlayerMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        _cameraTransform.rotation = _cameraTarget.rotation * Quaternion.Euler(_recoil.CurrentRotation);
+        float pitchT = Mathf.InverseLerp(_minPitch, _maxPitch, _cameraPitch);
+        float cameraVertical = Mathf.Lerp(_cameraVerticalTilt, -_cameraVerticalTilt, pitchT);
 
-        Vector3 desiredPosition = _cameraTarget.position
-            + _cameraTarget.forward * -_cameraDistance
-            + _cameraTarget.right * _cameraXOffset
-            + _cameraTarget.up * _cameraYOffset;
+        Vector3 desiredPosition = transform.position
+            + transform.right * _cameraXOffset
+            + Vector3.up * (_cameraYOffset + cameraVertical)
+            + transform.forward * -_cameraDistance;
 
         Vector3 direction = desiredPosition - transform.position;
         float distance = direction.magnitude;
@@ -92,6 +100,9 @@ public class PlayerMovement : MonoBehaviour
             _cameraTransform.position = hit.point;
         else
             _cameraTransform.position = desiredPosition;
+
+        _cameraTransform.LookAt(_cameraTarget.position);
+        _cameraTransform.rotation *= Quaternion.Euler(_recoil.CurrentRotation);
     }
 
     void HandleLook()
@@ -99,12 +110,19 @@ public class PlayerMovement : MonoBehaviour
         float mouseX = _lookInput.x * _mouseSensitivityX;
         float mouseY = _lookInput.y * _mouseSensitivityY;
 
+        _verticalOffset -= -mouseY * 2f * Time.deltaTime;
+        _verticalOffset = Mathf.Clamp(_verticalOffset, _minVerticalY, _maxVerticalY);
+
         //_targetRotation = _rb.rotation * Quaternion.Euler(0f, mouseX, 0f);
         _yaw += mouseX;
 
         _cameraPitch -= mouseY;
         _cameraPitch = Mathf.Clamp(_cameraPitch, _minPitch, _maxPitch);
         _cameraTarget.localRotation = Quaternion.Euler(_cameraPitch, 0f, 0f);
+
+        Vector3 localPos = _cameraTarget.localPosition;
+        localPos.y = _verticalOffset+ _YOffset;
+        _cameraTarget.localPosition = localPos;
     }
 
     void HandleMovement()
