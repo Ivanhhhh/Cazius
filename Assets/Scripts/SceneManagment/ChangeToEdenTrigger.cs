@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class ChangeToEdenTrigger : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class ChangeToEdenTrigger : MonoBehaviour
 
     private void Awake()
     {
-        _player = GameObject.FindGameObjectWithTag("Player");
+        StartCoroutine(FindPlayerRoutine());
     }
 
     private void OnEnable()
@@ -23,6 +24,15 @@ public class ChangeToEdenTrigger : MonoBehaviour
         {
             _swapped = true;
             WorldChangeManager.Instance.SwapToEden(scenesToLoad);
+        }
+    }
+
+    private IEnumerator FindPlayerRoutine()
+    {
+        while (_player == null)
+        {
+            _player = GameObject.FindGameObjectWithTag("Player");
+            yield return null;
         }
     }
 

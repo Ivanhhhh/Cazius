@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 
 public class ChangeToPurgatoryTrigger : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class ChangeToPurgatoryTrigger : MonoBehaviour
 
     private void Awake()
     {
-        _player = GameObject.FindGameObjectWithTag("Player");
+        StartCoroutine(FindPlayerRoutine());
     }
 
     private void OnEnable()
@@ -20,10 +21,21 @@ public class ChangeToPurgatoryTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("triggered soemthing");
         if (other.gameObject == _player && _swapped == false)
         {
+            Debug.Log("SWAP!");
             _swapped = true;
             WorldChangeManager.Instance.SwapToPurgatory(scenesToLoad);
+        }
+    }
+
+    private IEnumerator FindPlayerRoutine()
+    {
+        while (_player == null)
+        {
+            _player = GameObject.FindGameObjectWithTag("Player");
+            yield return null;
         }
     }
 
