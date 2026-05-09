@@ -23,9 +23,9 @@ public class DoorFixer : MonoBehaviour
 
    [SerializeField] DoorStop _DoorStop;
 
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerStay(Collider other)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             _joint.useSpring = false;
             SpringValue.damper = 0f;
@@ -55,9 +55,9 @@ public class DoorFixer : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider other)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
 
             Stop = true;
