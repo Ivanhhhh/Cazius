@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Interaction : MonoBehaviour
+public class Interaction : MonoBehaviour // Lo tiene el player con tag "Player" y layer Player
 {
     [SerializeField] private InteractionRaycast _raycast;
     [SerializeField] private InventorySystem _inventory;
@@ -16,7 +16,7 @@ public class Interaction : MonoBehaviour
 
         if (!canInteract) return;
 
-        IInteractable interactable = _raycast.CurrentTarget.GetComponent<IInteractable>();
+        IInteractable interactable = _raycast.CurrentTarget.GetComponentInParent<IInteractable>();
 
         if (interactable == null) return;
 

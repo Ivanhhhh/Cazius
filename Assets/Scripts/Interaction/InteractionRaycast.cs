@@ -1,11 +1,9 @@
 using UnityEngine;
 
-public class InteractionRaycast : MonoBehaviour
+public class InteractionRaycast : MonoBehaviour // Lo tiene el raycast 
 {
     [SerializeField] private float _maxDistance;
     [SerializeField] private LayerMask _interactiveLayerMask;
-    [SerializeField] private Transform _interactiveIcon;
-    [SerializeField] private Vector3 _iconOffset;
 
     public GameObject CurrentTarget { get; private set; }
 
@@ -26,15 +24,10 @@ public class InteractionRaycast : MonoBehaviour
         if (Physics.Raycast(origin, direction, out hit, _maxDistance, _interactiveLayerMask))
         {
             CurrentTarget = hit.transform.gameObject;
-
-            _interactiveIcon.gameObject.SetActive(true);
-
-            _interactiveIcon.position = CurrentTarget.transform.position + _iconOffset;
         }
         else
         {
             CurrentTarget = null;
-            _interactiveIcon.gameObject.SetActive(false);
         }
     }
 }
