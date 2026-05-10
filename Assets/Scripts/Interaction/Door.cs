@@ -2,7 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class Door : MonoBehaviour, IInteractable  // Lo tienen las "Door Interactive" con tag "Door" y layer "Interactive"
+public class Door : MonoBehaviour, IInteractable  // Lo tienen "Door Pivot" con tag "Door" y layer "Interactive"
 {
     [SerializeField] private bool _isOpen;
     [SerializeField] private float _openAngle;
