@@ -5,6 +5,8 @@ public class PlayerInteract : MonoBehaviour
 {
     [SerializeField] private float _interactRange = 1f;
     [SerializeField] private float _interactAngle = 60f;
+    [SerializeField] private float _interactOffset = 0.5f;
+
     private PlayerControls _controls;
 
     private void Awake()
@@ -18,20 +20,21 @@ public class PlayerInteract : MonoBehaviour
 
     private void TryInteract()
     {
-        IInteractable interactable = GetInteractableObject();
+        IEInteractable interactable = GetInteractableObject();
         if (interactable != null)
             interactable.Interact(transform);
     }
 
-    public IInteractable GetInteractableObject()
+    public IEInteractable GetInteractableObject()
     {
-        List<IInteractable> interactableList = new List<IInteractable>();
-        Collider[] colliderArray = Physics.OverlapSphere(transform.position, _interactRange);
+        List<IEInteractable> interactableList = new List<IEInteractable>();
+        Vector3 origin = transform.position + transform.forward * _interactOffset;
+        Collider[] colliderArray = Physics.OverlapSphere(origin, _interactRange);
         foreach (Collider collider in colliderArray)
         {
-            if (collider.TryGetComponent(out IInteractable interactable))
+            if (collider.TryGetComponent(out IEInteractable interactable))
             {
-                Vector3 dir = collider.transform.position - transform.position;
+                Vector3 dir = collider.transform.position - origin;
                 if (Vector3.Angle(transform.forward, dir) < _interactAngle)
                 {
                     interactableList.Add(interactable);
@@ -39,8 +42,8 @@ public class PlayerInteract : MonoBehaviour
             }
         }
 
-        IInteractable closestInteractable = null;
-        foreach (IInteractable interactable in interactableList)
+        IEInteractable closestInteractable = null;
+        foreach (IEInteractable interactable in interactableList)
         {
             if (closestInteractable == null)
             {
@@ -62,14 +65,15 @@ public class PlayerInteract : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, _interactRange);
+        Vector3 origin = transform.position + transform.forward * _interactOffset;
+        Gizmos.DrawWireSphere(origin, _interactRange);
 
         Vector3 leftDir = Quaternion.Euler(0, -_interactAngle, 0) * transform.forward;
         Vector3 rightDir = Quaternion.Euler(0, _interactAngle, 0) * transform.forward;
 
-        Gizmos.DrawRay(transform.position, leftDir * _interactRange);
-        Gizmos.DrawRay(transform.position, rightDir * _interactRange);
-        Gizmos.DrawRay(transform.position, transform.forward * _interactRange);
+        Gizmos.DrawRay(origin, leftDir * _interactRange);
+        Gizmos.DrawRay(origin, rightDir * _interactRange);
+        Gizmos.DrawRay(origin, transform.forward * _interactRange);
     }
 
 }

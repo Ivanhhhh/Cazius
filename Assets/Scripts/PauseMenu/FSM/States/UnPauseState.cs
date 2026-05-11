@@ -1,7 +1,4 @@
 using Patterns.Observer.EventManager_Delegates;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class UnPauseState : IState
 {

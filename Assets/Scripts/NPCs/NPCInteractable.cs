@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NPCInteractable : MonoBehaviour, IInteractable
+public class NPCInteractable : MonoBehaviour, IEInteractable
 {
     [SerializeField] private string _interactText = "E to talk";
     [SerializeField] private string _wavingTrigger = "Waving";

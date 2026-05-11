@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IInteractable
+public interface IEInteractable
 {
     void Interact(Transform interactorTransform);
     string GetInteractText();

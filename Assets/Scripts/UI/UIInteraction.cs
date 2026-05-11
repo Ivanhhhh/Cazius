@@ -19,7 +19,7 @@ public class UIInteraction : MonoBehaviour
         }
     }
 
-    private void Show(IInteractable interactable)
+    private void Show(IEInteractable interactable)
     {
         _containerUI.SetActive(true);
         _interactText.text = interactable.GetInteractText();
