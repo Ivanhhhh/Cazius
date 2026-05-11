@@ -1,10 +1,9 @@
-using NUnit.Framework;
 using Patterns.Observer.EventManager_Delegates;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class PauseScripts : MonoBehaviour,IPausable
+public class PauseScripts : MonoBehaviour
 {
 
     private List<MonoBehaviour> ScriptsList;
