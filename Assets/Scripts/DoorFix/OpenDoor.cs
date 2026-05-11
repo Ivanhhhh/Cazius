@@ -16,6 +16,11 @@ public class OpenDoor : MonoBehaviour
         {
             OpenIsEnabled = true;
 
+            //_joint.useMotor = true;
+
+            //_joint.useMotor = false;
+
+
             print("entro");
         }
 
@@ -29,7 +34,6 @@ public class OpenDoor : MonoBehaviour
         }
 
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         //_joint = GetComponent<HingeJoint>();
@@ -42,8 +46,6 @@ public class OpenDoor : MonoBehaviour
        if (Keyboard.current.fKey.wasPressedThisFrame && OpenIsEnabled == true && _isOpening == false)
        {
             StartCoroutine(Timer());
-           // _joint.useMotor = true;
-
        }
        else if (OpenIsEnabled == false && _isOpening == false) _joint.useMotor = false;
 
@@ -57,12 +59,12 @@ public class OpenDoor : MonoBehaviour
         _joint.useLimits = true;
 
 
-        yield return new WaitForSeconds(8f);
+        yield return new WaitForSeconds(6f);
 
         _joint.useMotor = false;
         _joint.useLimits = false;
 
-        _isOpening = false;  // desbloquea
+        _isOpening = false;
 
 
     }
