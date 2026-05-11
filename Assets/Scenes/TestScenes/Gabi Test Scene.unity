@@ -415,6 +415,47 @@ Transform:
   m_Children: []
   m_Father: {fileID: 546396341}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &496947029 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 943c3dd92f4165e40bf35545edc8465f, type: 3}
+  m_PrefabInstance: {fileID: 1119590350}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &496947032
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496947029}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.08
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.98, z: 0}
+--- !u!114 &496947033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496947029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecd5b7c47fdd13144af701037f2c8af5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCInteractable
+  _wavingTrigger: Waving
 --- !u!1001 &511828659
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -908,7 +949,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 943c3dd92f4165e40bf35545edc8465f, type: 3}
       propertyPath: m_Name
-      value: zombieApocalypseMan
+      value: PLACEHOLDER_NPC
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 943c3dd92f4165e40bf35545edc8465f, type: 3}
       propertyPath: m_Controller
@@ -917,7 +958,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 943c3dd92f4165e40bf35545edc8465f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 496947032}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 943c3dd92f4165e40bf35545edc8465f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 496947033}
   m_SourcePrefab: {fileID: 100100000, guid: 943c3dd92f4165e40bf35545edc8465f, type: 3}
 --- !u!1 &1153376158
 GameObject:
