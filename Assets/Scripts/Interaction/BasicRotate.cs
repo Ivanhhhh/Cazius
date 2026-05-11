@@ -1,15 +1,12 @@
 using UnityEngine;
 
-public class BasicRotate : MonoBehaviour
+public class BasicRotate : MonoBehaviour // Lo tiene la "Key" con layer "Interactive"
 {
-    [SerializeField]
-    private float speed = 1f;
-
-    [SerializeField]
-    private Vector3 direction = Vector3.up;
+    [SerializeField] private float _speed = 1f;
+    [SerializeField] private Vector3 _directionRotate = Vector3.up;
 
     void Update()
     {
-        transform.Rotate(direction.normalized * speed * Time.deltaTime);
+        transform.Rotate(_directionRotate.normalized * _speed * Time.deltaTime);
     }
 }
