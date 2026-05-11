@@ -1,11 +1,12 @@
+using System;
 using UnityEngine;
 
-public class InteractionUI : MonoBehaviour
+public class InteractionUI : MonoBehaviour // Lo tienen los "Door Icon Lock/Unlock" tienen q estar apagados y el Interactive Icon prendido
 {
-    [SerializeField] private Transform target;
+    [SerializeField] private Transform _target;
 
     void Update()
     {
-        transform.LookAt(target);
+        transform.LookAt(_target);
     }
 }
