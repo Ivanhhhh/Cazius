@@ -15,14 +15,21 @@ public class NPCInteractable : MonoBehaviour, IInteractable
     {
         Debug.Log("Interaction!");
 
+        RotateTowardsPlayer(interactorTransform);
         _animator.SetTrigger(_wavingTrigger);
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.MaleHeySFX, transform.position);
 
         // Give Bullets
 
         // Hide Interact UI
 
-        // VFX
+    }
 
+    private void RotateTowardsPlayer(Transform interactorTransform)
+    {
+        Vector3 dir = interactorTransform.position - transform.position;
+        dir.y = 0;
+        transform.rotation = Quaternion.LookRotation(dir);
     }
 
 }
