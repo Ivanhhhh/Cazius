@@ -14,7 +14,7 @@ public class Interaction : MonoBehaviour // Lo tiene el player con tag "Player" 
 
     void Awake()
     {
-        m_interactAction = InputActions.FindActionMap("Player").FindAction("Interact");
+        m_interactAction = InputActions.FindActionMap("Player").FindAction("Interaction");
     }
 
     void OnEnable()

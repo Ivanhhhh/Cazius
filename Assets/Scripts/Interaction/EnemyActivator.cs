@@ -6,6 +6,7 @@ public class EnemyActivator : MonoBehaviour, IInteractable // Lo que queres acti
 
     public void Interact(InventorySystem inventory)
     {
+        Debug.Log("AGARRE LA  LLAVE Y SPAAWNE EL ENEMIGO");
         foreach (GameObject enemy in _enemiesToActivate)
         {
             enemy.SetActive(true);
