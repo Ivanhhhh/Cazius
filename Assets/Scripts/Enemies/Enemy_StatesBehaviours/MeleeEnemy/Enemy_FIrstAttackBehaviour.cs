@@ -6,18 +6,20 @@ public class Enemy_FIrstAttackBehaviour
     private float _chargeSpeed;
     private float _preparationTime;
     private float _currentPreparationTime;
+    private Collider _attackCollider;
     private Transform _playerTransform;
     private NavMeshAgent _agent;
     private enum AttackPhase{ Preparing,Charging,Done}
     private AttackPhase _currentPhase = AttackPhase.Preparing;
     public bool IsDone => _currentPhase == AttackPhase.Done;
-    public Enemy_FIrstAttackBehaviour(float chargeSpeed,float preparationTime,Transform playerTransform, NavMeshAgent agent)
+    public Enemy_FIrstAttackBehaviour(float chargeSpeed,float preparationTime,Transform playerTransform, NavMeshAgent agent,Collider attackCollider)
     {
         _chargeSpeed = chargeSpeed;
         _preparationTime = preparationTime;
         _currentPreparationTime = preparationTime;
         _playerTransform = playerTransform;
         _agent = agent;
+        _attackCollider = attackCollider;
     }
     public void Tick()
     {
@@ -34,6 +36,7 @@ public class Enemy_FIrstAttackBehaviour
         {
             Vector3 pointToAttack = _playerTransform.position;
             _agent.speed = _chargeSpeed;
+            _attackCollider.enabled = true;
             _agent.SetDestination(pointToAttack);
             _currentPhase = AttackPhase.Charging;
         }
@@ -49,6 +52,7 @@ public class Enemy_FIrstAttackBehaviour
     public void Reset() 
     {
         _currentPreparationTime = _preparationTime;
+        _attackCollider.enabled = false;
         _currentPhase = AttackPhase.Preparing;
     }
 }

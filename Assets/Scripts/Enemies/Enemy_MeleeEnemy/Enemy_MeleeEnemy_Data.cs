@@ -13,6 +13,7 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
     [Header("Chasing")]
     [SerializeField] private float _attackRadius;
     [SerializeField] private float _chaseSpeed;
+    [SerializeField] private float _attackCooldown;
 
     [Header("Field of View")]
     [SerializeField] private float _radiusVision;
@@ -22,6 +23,7 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
     [Header("First Attack")]
     [SerializeField] private float _chargeSpeed;
     [SerializeField] private float _firsAttackPreparationTime;
+    [SerializeField] private Collider _attackCollider;
 
     [Header("Second Attack")]
     [SerializeField] private float _secondAttackPreparationTime;
@@ -66,13 +68,13 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
         void InitializeBehaviours()
     {
         _patrolling = new Enemy_PatrollingBehaviour(_nodes,_detectionRadius,_MaximumAmountOfNodes,_patrolSpeed,_selfObjectTransform,_agent);
-        _chasing = new Enemy_ChasingBehaviour(_playerTransform,_attackRadius,_agent,_selfObjectTransform,_chaseSpeed);
+        _chasing = new Enemy_ChasingBehaviour(_playerTransform,_attackRadius,_agent,_selfObjectTransform,_chaseSpeed,_attackCooldown);
         _fieldOfView = new Enemy_FieldOfViewBehaviour(_playerTransform,_radiusVision,_selfObjectTransform, _angleVision, _lineOfSightLayerMask);
-        _firstAttack = new Enemy_FIrstAttackBehaviour(_chargeSpeed,_firsAttackPreparationTime, _playerTransform,_agent);
+        _firstAttack = new Enemy_FIrstAttackBehaviour(_chargeSpeed,_firsAttackPreparationTime, _playerTransform,_agent,_attackCollider);
         _secondAttack= new Enemy_SecondAttackBehaviour(_spinSpeed,_objectSpeedWhileSpinning,_secondAttackPreparationTime, _spinTime,_playerTransform,_selfObjectTransform,_agent);
     }
 
-        private void OnDrawGizmos()
+        private void OnDrawGizmosSelected()
     {
         // Radio de visión
         Gizmos.color = Color.white;

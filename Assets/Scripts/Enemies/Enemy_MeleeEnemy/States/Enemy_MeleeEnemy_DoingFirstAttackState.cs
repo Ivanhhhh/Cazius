@@ -17,6 +17,7 @@ public class Enemy_MeleeEnemy_DoingFirstAttackState: Enemy_MeleeEnemy_Interface_
     public void OnExit()
     {
         _data._firstAttack.Reset();
+        _data._chasing.ResetAttackCooldown();
         Debug.Log("Changin to Chasing");
     }
     public void OnUpdate()
