@@ -145,24 +145,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""PauseMenu"",
-                    ""type"": ""Button"",
-                    ""id"": ""80c03197-32c1-4ce7-b8ba-e49c28075673"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""InventoryMenu"",
-                    ""type"": ""Button"",
-                    ""id"": ""c519c58c-ff71-4e48-960d-079dd838db42"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -275,21 +257,36 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
+                }
+            ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""24c14214-ce80-4cf5-8b8b-48b50b3813db"",
+            ""actions"": [
                 {
-                    ""name"": """",
-                    ""id"": ""d5cb3eb8-f9fb-4b77-8107-1ca8e5b18c00"",
-                    ""path"": ""<Keyboard>/p"",
-                    ""interactions"": """",
+                    ""name"": ""InventoryMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""53a98f84-c3b0-4fe1-bcee-533cd37cd480"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PauseMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""PauseMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""989a5b49-c7f6-46f2-8659-7234a4c8cd19"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
                     ""name"": """",
-                    ""id"": ""327e97ad-1a91-437b-a847-545b9ab9f0c1"",
+                    ""id"": ""6b00337d-646d-4e08-a54b-d85ba02339e7"",
                     ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -297,14 +294,19 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""InventoryMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c613992-4718-421a-99b4-fa6d77cd1b9d"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
-        },
-        {
-            ""name"": ""UI"",
-            ""id"": ""24c14214-ce80-4cf5-8b8b-48b50b3813db"",
-            ""actions"": [],
-            ""bindings"": []
         }
     ],
     ""controlSchemes"": []
@@ -317,10 +319,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
         m_Player_Recharge = m_Player.FindAction("Recharge", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
-        m_Player_PauseMenu = m_Player.FindAction("PauseMenu", throwIfNotFound: true);
-        m_Player_InventoryMenu = m_Player.FindAction("InventoryMenu", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_InventoryMenu = m_UI.FindAction("InventoryMenu", throwIfNotFound: true);
+        m_UI_PauseMenu = m_UI.FindAction("PauseMenu", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -408,8 +410,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Shoot;
     private readonly InputAction m_Player_Recharge;
     private readonly InputAction m_Player_Interact;
-    private readonly InputAction m_Player_PauseMenu;
-    private readonly InputAction m_Player_InventoryMenu;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -445,14 +445,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Interact".
         /// </summary>
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/PauseMenu".
-        /// </summary>
-        public InputAction @PauseMenu => m_Wrapper.m_Player_PauseMenu;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/InventoryMenu".
-        /// </summary>
-        public InputAction @InventoryMenu => m_Wrapper.m_Player_InventoryMenu;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -497,12 +489,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
-            @PauseMenu.started += instance.OnPauseMenu;
-            @PauseMenu.performed += instance.OnPauseMenu;
-            @PauseMenu.canceled += instance.OnPauseMenu;
-            @InventoryMenu.started += instance.OnInventoryMenu;
-            @InventoryMenu.performed += instance.OnInventoryMenu;
-            @InventoryMenu.canceled += instance.OnInventoryMenu;
         }
 
         /// <summary>
@@ -532,12 +518,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
-            @PauseMenu.started -= instance.OnPauseMenu;
-            @PauseMenu.performed -= instance.OnPauseMenu;
-            @PauseMenu.canceled -= instance.OnPauseMenu;
-            @InventoryMenu.started -= instance.OnInventoryMenu;
-            @InventoryMenu.performed -= instance.OnInventoryMenu;
-            @InventoryMenu.canceled -= instance.OnInventoryMenu;
         }
 
         /// <summary>
@@ -575,6 +555,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     // UI
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+    private readonly InputAction m_UI_InventoryMenu;
+    private readonly InputAction m_UI_PauseMenu;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -586,6 +568,14 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
         public UIActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "UI/InventoryMenu".
+        /// </summary>
+        public InputAction @InventoryMenu => m_Wrapper.m_UI_InventoryMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/PauseMenu".
+        /// </summary>
+        public InputAction @PauseMenu => m_Wrapper.m_UI_PauseMenu;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -612,6 +602,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+            @InventoryMenu.started += instance.OnInventoryMenu;
+            @InventoryMenu.performed += instance.OnInventoryMenu;
+            @InventoryMenu.canceled += instance.OnInventoryMenu;
+            @PauseMenu.started += instance.OnPauseMenu;
+            @PauseMenu.performed += instance.OnPauseMenu;
+            @PauseMenu.canceled += instance.OnPauseMenu;
         }
 
         /// <summary>
@@ -623,6 +619,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UIActions" />
         private void UnregisterCallbacks(IUIActions instance)
         {
+            @InventoryMenu.started -= instance.OnInventoryMenu;
+            @InventoryMenu.performed -= instance.OnInventoryMenu;
+            @InventoryMenu.canceled -= instance.OnInventoryMenu;
+            @PauseMenu.started -= instance.OnPauseMenu;
+            @PauseMenu.performed -= instance.OnPauseMenu;
+            @PauseMenu.canceled -= instance.OnPauseMenu;
         }
 
         /// <summary>
@@ -705,20 +707,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteract(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "PauseMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnPauseMenu(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "InventoryMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnInventoryMenu(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
@@ -727,5 +715,19 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     /// <seealso cref="UIActions.RemoveCallbacks(IUIActions)" />
     public interface IUIActions
     {
+        /// <summary>
+        /// Method invoked when associated input action "InventoryMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventoryMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PauseMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPauseMenu(InputAction.CallbackContext context);
     }
 }

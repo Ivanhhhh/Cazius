@@ -6,11 +6,18 @@ public class InventoryInputHandler : MonoBehaviour
     [SerializeField] private InputActionReference _inventoryAction;
     [SerializeField] private GameObject _inventoryCanvas;
 
-    void OnEnable() => _inventoryAction.action.performed += OnInventory;
+    void OnEnable()
+    {
+        _inventoryAction.action.Enable();
+        _inventoryAction.action.performed += OnInventory;
+    }
+
     void OnDisable() => _inventoryAction.action.performed -= OnInventory;
 
     private void OnInventory(InputAction.CallbackContext _)
     {
+        Debug.Log(_inventoryCanvas.activeSelf);
+
         if (_inventoryCanvas.activeSelf)
         {
             PauseManager.Instance.Toggle();
@@ -24,4 +31,5 @@ public class InventoryInputHandler : MonoBehaviour
         PauseManager.Instance.Toggle();
         _inventoryCanvas.SetActive(true);
     }
+
 }

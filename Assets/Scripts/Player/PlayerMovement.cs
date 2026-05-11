@@ -54,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _camera = _cameraTransform.GetComponent<Camera>();
         _controls = new PlayerControls();
+        _controls.UI.Enable();
         Cursor.lockState = CursorLockMode.Locked;
         _targetRotation = _rb.rotation;
 
@@ -67,8 +68,8 @@ public class PlayerMovement : MonoBehaviour
         _controls.Player.Aim.canceled += _ => _isAiming = false;
     }
 
-    private void OnEnable() => _controls.Enable();
-    private void OnDisable() => _controls.Disable();
+    private void OnEnable() => _controls.Player.Enable();
+    private void OnDisable() => _controls.Player.Disable();
 
     private void Update()
     {
@@ -192,6 +193,12 @@ public class PlayerMovement : MonoBehaviour
     {
         //_rb.MoveRotation(_targetRotation);
         _rb.MoveRotation(Quaternion.Euler(0f, _yaw, 0f));
+    }
+
+    public void ResetInput()
+    {
+        _moveInput = Vector2.zero;
+        _lookInput = Vector2.zero;
     }
 
     private void OnDrawGizmos()
