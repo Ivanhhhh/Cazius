@@ -16,8 +16,6 @@ public class InventoryInputHandler : MonoBehaviour
 
     private void OnInventory(InputAction.CallbackContext _)
     {
-        Debug.Log(_inventoryCanvas.activeSelf);
-
         if (_inventoryCanvas.activeSelf)
         {
             PauseManager.Instance.Toggle();

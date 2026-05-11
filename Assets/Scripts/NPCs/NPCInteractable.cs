@@ -18,7 +18,12 @@ public class NPCInteractable : MonoBehaviour, IEInteractable
         _animator.SetTrigger(_wavingTrigger);
         SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.MaleHeySFX, transform.position);
 
-        // Give Bullets
+        Player_AimAndShoot player = interactorTransform.GetComponentInParent<Player_AimAndShoot>();
+
+        if (player != null)
+        {
+            player.AddReserveBullets(10);
+        }
 
     }
     public string GetInteractText() { return _interactText; }

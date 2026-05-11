@@ -11,7 +11,8 @@ public class SFXManager : MonoBehaviour
         EnemyGruntSFX,
         PlayerShootingSFX,
         CriticalHitSFX,
-        MaleHeySFX
+        MaleHeySFX,
+        RechargingGun
         // Add Categories here
     }
 

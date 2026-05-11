@@ -7,7 +7,6 @@ public class PlayerPause : MonoBehaviour, IPausable
     [SerializeField] Animator _animator;
 
     private bool _isPaused;
-
     public bool IsPaused => _isPaused;
 
     private void Awake()
@@ -18,7 +17,6 @@ public class PlayerPause : MonoBehaviour, IPausable
 
     private void Start()
     {
-        Debug.Log(PauseManager.Instance);
         PauseManager.Instance.OnPaused += OnPause;
         PauseManager.Instance.OnResumed += OnResume;
     }
@@ -31,8 +29,6 @@ public class PlayerPause : MonoBehaviour, IPausable
 
     public void OnPause()
     {
-        Debug.Log("Player Paused");
-
         _playerMovement._controls.Player.Disable();
         foreach (MonoBehaviour script in _scriptsToDisable)
         {
@@ -47,14 +43,11 @@ public class PlayerPause : MonoBehaviour, IPausable
 
     public void OnResume()
     {
-        Debug.Log("Player Resumed");
-
         _playerMovement._controls.Player.Enable();
         foreach (MonoBehaviour script in _scriptsToDisable)
         {
             script.enabled = true;
         }
-
 
         _isPaused = false;
         _animator.speed = 1f;

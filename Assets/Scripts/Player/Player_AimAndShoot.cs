@@ -107,10 +107,10 @@ public class Player_AimAndShoot : MonoBehaviour
         if (!isAiming) return;
 
         float offset = _crosshairBaseOffset + _currentSpread * 30f;
-        _crosshairTop.anchoredPosition    = new Vector2(0,  offset);
+        _crosshairTop.anchoredPosition = new Vector2(0, offset);
         _crosshairBottom.anchoredPosition = new Vector2(0, -offset);
-        _crosshairLeft.anchoredPosition   = new Vector2(-offset, 0);
-        _crosshairRight.anchoredPosition  = new Vector2( offset, 0);
+        _crosshairLeft.anchoredPosition = new Vector2(-offset, 0);
+        _crosshairRight.anchoredPosition = new Vector2(offset, 0);
     }
 
     void UpdateSpread()
@@ -160,8 +160,8 @@ public class Player_AimAndShoot : MonoBehaviour
         }
         else
         {
-           /* _shootView.SetPosition(0, transform.position);
-            _shootView.SetPosition(1, targetPoint);*/
+            /* _shootView.SetPosition(0, transform.position);
+             _shootView.SetPosition(1, targetPoint);*/
         }
 
         _shootTimer = _shootInterval;
@@ -202,6 +202,7 @@ public class Player_AimAndShoot : MonoBehaviour
         _remainingBullets += bulletsToAdd;
         _reserveBullets -= bulletsToAdd;
         UpdateUI();
+        SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
     }
 
     void UpdateUI()
@@ -209,5 +210,13 @@ public class Player_AimAndShoot : MonoBehaviour
         _remainingBulletsUI.text = $"{_remainingBullets}";
         _maxBulletsUI.text = $"{_reserveBullets}";
         _pressR.enabled = _remainingBullets < _maxBullets && _reserveBullets > 0;
+    }
+
+    public void AddReserveBullets(int bulletsToAdd)
+    {
+        _reserveBullets += bulletsToAdd;
+        if (_reserveBullets >= _totalReserveBullets) _reserveBullets = _totalReserveBullets;
+        SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
+        UpdateUI();
     }
 }

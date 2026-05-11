@@ -15,8 +15,6 @@ public class PauseInputHandler : MonoBehaviour
 
     private void OnPause(InputAction.CallbackContext _)
     {
-        Debug.Log(_pauseMenuCanvas.activeSelf);
-
         if (_pauseMenuCanvas.activeSelf)
         {
             PauseManager.Instance.Toggle();
