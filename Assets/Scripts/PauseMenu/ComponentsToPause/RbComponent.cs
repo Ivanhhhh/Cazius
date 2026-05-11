@@ -1,7 +1,7 @@
 using Patterns.Observer.EventManager_Delegates;
 using UnityEngine;
 
-public class RbComponent : MonoBehaviour,IPausable
+public class RbComponent : MonoBehaviour
 {
     private Rigidbody _Rb;
     void Start()
