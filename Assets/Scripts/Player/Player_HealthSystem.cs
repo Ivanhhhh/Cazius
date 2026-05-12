@@ -40,13 +40,11 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
     {
         if (isInventoryOpen)
         {
-            // Calculamos el estado actual por si hubo cambios y mostramos la UI
             UpdateHealthState();
             ModifyUI(); 
         }
         else
         {
-            // Si el inventario se cierra, detenemos la corrutina (si estaba activa) y ocultamos todo al instante
             if (_hideUICoroutine != null)
             {
                 StopCoroutine(_hideUICoroutine);
@@ -55,7 +53,6 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
             SetUIElementsVisibility(false);
         }
     }
-    // --------------------------------------------------------
 
     void Start()
     {
@@ -106,23 +103,19 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
             targetColor = _healthColors[colorIndex];
         }
 
-        // 1. Actualizamos SOLO el string del Texto
         if (_currentHealthText != null)
         {
             _currentHealthText.text = $"Vida Actual: {_currentHealth}";
         }
 
-        // 2. Actualizamos SOLO el color RGB de la Imagen, manteniendo su Alpha original
         if (_healthStateImage != null)
         {
             Color finalColor = new Color(targetColor.r, targetColor.g, targetColor.b, _healthStateImage.color.a);
             _healthStateImage.color = finalColor;
         }
 
-        // 3. Mostramos los elementos
         SetUIElementsVisibility(true);
 
-        // 4. Manejamos la corrutina de desaparición
         if (_hideUICoroutine != null)
         {
             StopCoroutine(_hideUICoroutine);
