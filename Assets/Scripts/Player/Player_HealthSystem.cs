@@ -23,6 +23,40 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
     public float _currentHealth;
     private Coroutine _hideUICoroutine;
 
+    // --- INTEGRACIÓN CON EL INVENTARIO (OBSERVER PATTERN) ---
+    private void OnEnable()
+    {
+        // Nos suscribimos al evento cuando este script se activa
+        InventoryInputHandler.OnInventoryToggled += HandleInventoryState;
+    }
+
+    private void OnDisable()
+    {
+        // Nos desuscribimos para evitar errores de memoria si el jugador se destruye
+        InventoryInputHandler.OnInventoryToggled -= HandleInventoryState;
+    }
+
+    private void HandleInventoryState(bool isInventoryOpen)
+    {
+        if (isInventoryOpen)
+        {
+            // Calculamos el estado actual por si hubo cambios y mostramos la UI
+            UpdateHealthState();
+            ModifyUI(); 
+        }
+        else
+        {
+            // Si el inventario se cierra, detenemos la corrutina (si estaba activa) y ocultamos todo al instante
+            if (_hideUICoroutine != null)
+            {
+                StopCoroutine(_hideUICoroutine);
+                _hideUICoroutine = null;
+            }
+            SetUIElementsVisibility(false);
+        }
+    }
+    // --------------------------------------------------------
+
     void Start()
     {
         _currentHealth = _maxHealth;
@@ -72,7 +106,7 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
             targetColor = _healthColors[colorIndex];
         }
 
-        // 1. Actualizamos SOLO el string del Texto (No tocamos su color)
+        // 1. Actualizamos SOLO el string del Texto
         if (_currentHealthText != null)
         {
             _currentHealthText.text = $"Vida Actual: {_currentHealth}";
@@ -81,7 +115,6 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
         // 2. Actualizamos SOLO el color RGB de la Imagen, manteniendo su Alpha original
         if (_healthStateImage != null)
         {
-            // Creamos un color temporal con el RGB del array, pero le pasamos el Alpha actual de la imagen
             Color finalColor = new Color(targetColor.r, targetColor.g, targetColor.b, _healthStateImage.color.a);
             _healthStateImage.color = finalColor;
         }
