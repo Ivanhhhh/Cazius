@@ -34,6 +34,8 @@ public class Interaction : MonoBehaviour // Lo tiene el player con tag "Player" 
 
     private void HandleInteraction()
     {
+        Debug.Log("#### HandleInteraction");
+
         bool canInteract = m_interactAction.WasPressedThisFrame() && _raycast.CurrentTarget != null;
 
         if (!canInteract) return;
