@@ -1,9 +1,11 @@
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class NPCInteractable : MonoBehaviour, IEInteractable
 {
     [SerializeField] private string _interactText = "E to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
+    [SerializeField] private ItemData _item;
 
     private Animator _animator;
 
@@ -22,7 +24,8 @@ public class NPCInteractable : MonoBehaviour, IEInteractable
 
         if (player != null)
         {
-            player.AddReserveBullets(10);
+            //player.AddReserveBullets(10);
+            Inventory.Instance.AddItem(_item);
         }
 
     }
