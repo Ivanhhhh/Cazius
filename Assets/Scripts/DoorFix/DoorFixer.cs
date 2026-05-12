@@ -62,7 +62,7 @@ public class DoorFixer : MonoBehaviour
 
             Stop = true;
 
-            if (_DoorStop.Stop = true)
+            if (_DoorStop.Stop == true)
             {
                 DamperObjetiveAmount = 120;
                 SpringObjetiveAmount = 400;
