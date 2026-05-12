@@ -10879,11 +10879,40 @@ PrefabInstance:
       propertyPath: slotPrefab
       value: 
       objectReference: {fileID: 3389365823234688523, guid: d920f14a02eb0d64f9eb56480bee81a1, type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9206429892525101319, guid: 2e1f691619d530e4998142bc62f2a592, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7174426697443961543, guid: 2e1f691619d530e4998142bc62f2a592, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 1745948359331352196}
   m_SourcePrefab: {fileID: 100100000, guid: 2e1f691619d530e4998142bc62f2a592, type: 3}
+--- !u!224 &1745948359331352194 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8098828164324209710, guid: 2e1f691619d530e4998142bc62f2a592, type: 3}
+  m_PrefabInstance: {fileID: 1745948359331352193}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1745948359331352195 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7174426697443961543, guid: 2e1f691619d530e4998142bc62f2a592, type: 3}
+  m_PrefabInstance: {fileID: 1745948359331352193}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1745948359331352196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745948359331352195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fc0ab6f48910cd4eb6d22d2d0c76ed3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryUI
+  panel: {fileID: 1745948359331352195}
+  slotContainer: {fileID: 1745948359331352194}
+  slotPrefab: {fileID: 3389365823234688523, guid: d920f14a02eb0d64f9eb56480bee81a1, type: 3}
 --- !u!1001 &2009224012520615634
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11075,6 +11104,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02518a5e85f5ffe4199b5ad7f5103ccf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySystem
+--- !u!1001 &4074674914084575053
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2516537311808890670, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
+      propertyPath: m_Name
+      value: InventoryManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 4803933986972992558, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
+      propertyPath: _playerAimAndShoot
+      value: 
+      objectReference: {fileID: 9174304713106157734}
+    - target: {fileID: 4803933986972992558, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
+      propertyPath: _playerHealthSystem
+      value: 
+      objectReference: {fileID: 9174304713106157735}
+    - target: {fileID: 5732738225819877128, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732738225819877128, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732738225819877128, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732738225819877128, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732738225819877128, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732738225819877128, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732738225819877128, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732738225819877128, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732738225819877128, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732738225819877128, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e1f286d37d6855d49ab32892c636db82, type: 3}
 --- !u!1001 &5660796456313723146
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11437,6 +11531,28 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6030904365159062577, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
   m_PrefabInstance: {fileID: 9174304713106157729}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9174304713106157734 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3915939884766231080, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+  m_PrefabInstance: {fileID: 9174304713106157729}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9174304713106157733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a291a96c052dba4599ed4dd4907b6dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player_AimAndShoot
+--- !u!114 &9174304713106157735 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+  m_PrefabInstance: {fileID: 9174304713106157729}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9174304713106157733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5d69fa03a36c24e8b9492e5e606d29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player_HealthSystem
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -11460,3 +11576,4 @@ SceneRoots:
   - {fileID: 6503663804154046420}
   - {fileID: 2009224012520615634}
   - {fileID: 1745948359331352193}
+  - {fileID: 4074674914084575053}

@@ -4,6 +4,9 @@ using UnityEngine.Events;
 
 public class Inventory : MonoBehaviour
 {
+    [SerializeField] private Player_HealthSystem _playerHealthSystem;
+    [SerializeField] private Player_AimAndShoot _playerAimAndShoot;
+
     public static Inventory Instance { get; private set; }
 
     public int maxSlots = 12;
@@ -34,10 +37,12 @@ public class Inventory : MonoBehaviour
         switch (item.itemType)
         {
             case ItemType.Heal:
-                // Heal Player
+                _playerHealthSystem.Heal(10);
+                SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.Heal);
                 break;
             case ItemType.Ammo:
-                // Add Ammo
+                _playerAimAndShoot.AddReserveBullets(20);
+                SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
                 break;
         }
 

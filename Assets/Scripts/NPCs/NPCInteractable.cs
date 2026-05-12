@@ -1,11 +1,14 @@
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class NPCInteractable : MonoBehaviour, IEInteractable
 {
+    public enum GiveType { Health, Ammo }
+
     [SerializeField] private string _interactText = "E to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
-    [SerializeField] private ItemData _item;
+    [SerializeField] private GiveType _giveType;
+    [SerializeField] private ItemData _health;
+    [SerializeField] private ItemData _ammo;
 
     private Animator _animator;
 
@@ -22,13 +25,20 @@ public class NPCInteractable : MonoBehaviour, IEInteractable
 
         Player_AimAndShoot player = interactorTransform.GetComponentInParent<Player_AimAndShoot>();
 
-        if (player != null)
+        if (player == null) return;
+
+        switch (_giveType)
         {
-            //player.AddReserveBullets(10);
-            Inventory.Instance.AddItem(_item);
+            case GiveType.Health:
+                Inventory.Instance.AddItem(_health);
+                break;
+            case GiveType.Ammo:
+                Inventory.Instance.AddItem(_ammo);
+                break;
         }
 
     }
+
     public string GetInteractText() { return _interactText; }
 
     public Transform GetTransform() { return transform; }

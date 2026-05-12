@@ -8,18 +8,44 @@ public class InventoryUI : MonoBehaviour
     public Transform slotContainer;   // The GridLayoutGroup parent
     public GameObject slotPrefab;     // See setup below
 
-    void Start()
+    void OnEnable()
     {
-        Inventory.Instance.onInventoryChanged.AddListener(Refresh);
-        panel.SetActive(false);
-        Refresh();
+        if (Inventory.Instance != null)
+            Inventory.Instance.onInventoryChanged.AddListener(Refresh);
+
+        InventoryInputHandler.OnInventoryToggled += OnToggled;
+        Refresh(); // runs directly when the panel activates
     }
 
-    void Update()
+    void OnDisable()
     {
-        if (Input.GetKeyDown(KeyCode.I))
-            panel.SetActive(!panel.activeSelf);
+        if (Inventory.Instance != null)
+            Inventory.Instance.onInventoryChanged.RemoveListener(Refresh);
+
+        InventoryInputHandler.OnInventoryToggled -= OnToggled;
     }
+
+    void OnDestroy()
+    {
+        InventoryInputHandler.OnInventoryToggled -= OnToggled;
+    }
+
+    void OnToggled(bool isOpen)
+    {
+        if (isOpen) Refresh();
+    }
+
+    public void OpenInventory()
+    {
+        panel.SetActive(true);
+        Refresh(); // Build slots only when actually opening
+    }
+
+    public void CloseInventory()
+    {
+        panel.SetActive(false);
+    }
+
 
     void Refresh()
     {
@@ -32,7 +58,7 @@ public class InventoryUI : MonoBehaviour
             var slot = Instantiate(slotPrefab, slotContainer);
             bool hasItem = i < Inventory.Instance.items.Count;
 
-            var icon = slot.transform.Find("Icon").GetComponent<Image>();
+            var icon = slot.GetComponent<Image>();
             icon.enabled = hasItem;
 
             if (hasItem)

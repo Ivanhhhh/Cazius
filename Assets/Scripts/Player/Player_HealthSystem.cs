@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+
 public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
 {
     [Header("Health Settings")]
@@ -58,6 +59,14 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
     {
         _currentHealth = _maxHealth;
         SetUIElementsVisibility(false);
+    }
+
+    public void Heal(int amount)
+    {
+        _currentHealth += amount;
+        _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
+        UpdateHealthState();
+        ModifyUI();
     }
 
     public void Hit(int amount)
