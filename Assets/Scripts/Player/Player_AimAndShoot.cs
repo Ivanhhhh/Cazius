@@ -72,7 +72,7 @@ public class Player_AimAndShoot : MonoBehaviour
         UpdateUI();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         _shootTimer -= Time.deltaTime;
         UpdateCrosshairIndicators();

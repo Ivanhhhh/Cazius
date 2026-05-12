@@ -24,10 +24,11 @@ public class Enemy_MeleeEnemy_ChasingState : Enemy_MeleeEnemy_Interface_StateMac
     {
         _data._chasing.Tick();
         _angelDemonAnim.AttackFalse();
-        if (_data._chasing._isNearToAttack)
+        if (_data._chasing.CanAttack) 
         {
-            //int attackSelction = Random.Range(0,2);
+            // int attackSelction = Random.Range(0,2);
             int attackSelction = 0;
+            
             if (attackSelction == 0)
             {
                 Debug.Log("Doing First attack");
@@ -38,7 +39,6 @@ public class Enemy_MeleeEnemy_ChasingState : Enemy_MeleeEnemy_Interface_StateMac
             {
                 Debug.Log("Doing Second attack");
                 _stateMachine.ChangeState(Enemy_MeleeEnemy_States.DoingSecondAttack); 
-
             }
         }
     }
