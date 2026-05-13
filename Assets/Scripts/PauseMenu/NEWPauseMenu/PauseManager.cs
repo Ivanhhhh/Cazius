@@ -28,13 +28,13 @@ public class PauseManager : MonoBehaviour
         if (IsPaused)
         {
             Time.timeScale = 0f;
-            AudioListener.pause = true;
+            AudioSettingsManager.instance.SetMusicVolume(0f);
             OnPaused?.Invoke();
         }
         else
         {
             Time.timeScale = 1f;
-            AudioListener.pause = false;
+            AudioSettingsManager.instance.SetMusicVolume(0.175f);
             OnResumed?.Invoke();
         }
     }

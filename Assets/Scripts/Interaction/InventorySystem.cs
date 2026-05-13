@@ -7,5 +7,6 @@ public class InventorySystem : MonoBehaviour // Lo tiene inventory
     public void AddKey()
     {
         HasKey = true;
+        Debug.Log("#### HasKey: " + HasKey);
     }
 }
