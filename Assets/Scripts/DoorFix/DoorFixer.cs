@@ -23,23 +23,12 @@ public class DoorFixer : MonoBehaviour
 
    [SerializeField] DoorStop _DoorStop;
 
-    private void OnTriggerStay(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            _joint.useSpring = false;
-            SpringValue.damper = 0f;
-
-            Stop = false;
-
-
-            print("entro");
-            Flag = true;
-
-            DamperObjetiveAmount = 0;
-            SpringObjetiveAmount = 0;
-
-            SpringValue.spring = 0;
+           
+            StopDamper();
 
             // StartCoroutine(SpringLerp());
             // StartCoroutine(DamperLerp());
@@ -55,22 +44,41 @@ public class DoorFixer : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+
+            StopDamper();
+
+            // StartCoroutine(SpringLerp());
+            // StartCoroutine(DamperLerp());
+
+            print("empezaron todas las corrutinas");
+
+            // SpringValue = _joint.spring;
+            // SpringValue.spring = SpringAmount*0;
+            // _joint.spring = SpringValue;
+
+
+
+        }
+    }
+
+    private void OnCollisionExit(Collision other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
 
-            Stop = true;
+            StartDamper();
+           // Stop = true;
 
-            if (_DoorStop.Stop == true)
-            {
-                DamperObjetiveAmount = 120;
-                SpringObjetiveAmount = 400;
-                StartCoroutine (DamperLerp());
-                StartCoroutine(SpringLerp());
+           // if (_DoorStop.Stop == true)
+           // {
+               
 
-            }
-            Flag = false;
+           // }
+          //  Flag = false;
             //StopAllCoroutines();
            // _joint.useSpring = false;
            // SpringValue.damper = 0f;
@@ -89,9 +97,12 @@ public class DoorFixer : MonoBehaviour
     {
         //float angulo = Mathf.Abs(_joint.angle);
 
+        //&& Stop == false && Flag == true
 
-        if (_DoorStop.Stop == false && Stop == false && Flag == true)
+
+        if (_DoorStop.Stop == false )
         {
+
             // on colicion exit
         }
 
@@ -149,6 +160,32 @@ public class DoorFixer : MonoBehaviour
        // SpringValue.damper = 0f;
         //StopAllCoroutines();
 
+    }
+
+    public void StopDamper()
+    {
+        _joint.useSpring = false;
+        SpringValue.damper = 0f;
+
+        Stop = false;
+
+
+        print("entro");
+        Flag = true;
+
+        DamperObjetiveAmount = 0;
+        SpringObjetiveAmount = 0;
+
+        SpringValue.spring = 0;
+    }
+
+
+    public void StartDamper()
+    {
+        DamperObjetiveAmount = 120;
+        SpringObjetiveAmount = 400;
+        StartCoroutine(DamperLerp());
+        StartCoroutine(SpringLerp());
     }
 }
 

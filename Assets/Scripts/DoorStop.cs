@@ -3,12 +3,12 @@ using UnityEngine;
 public class DoorStop : MonoBehaviour
 {
     public bool Stop;
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Door"))
         {
             Stop = true;
-            print(other.gameObject);
+            print("Stop es true");
         }
     }
 
@@ -17,7 +17,7 @@ public class DoorStop : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Door"))
         {
             Stop = false;
-            print(other.gameObject);
+            print("Stop es false");
 
         }
     }
