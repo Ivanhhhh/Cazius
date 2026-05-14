@@ -21,6 +21,7 @@ public class Player_AimAndShoot : MonoBehaviour
     [SerializeField] private float _rayVisibleDuration;
     [SerializeField] private ParticleSystem _hitParticle;
     [SerializeField] private VisualEffect _shootVFX;
+    [SerializeField] private VisualEffect _shootMuzzleVFX;
     [SerializeField] private LineRenderer _shootView;
 
     [Header("Ammo")]
@@ -48,6 +49,17 @@ public class Player_AimAndShoot : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _maxBulletsUI;
     [SerializeField] private TextMeshProUGUI _pressR;
 
+    [Header("Light Flash Settings")]
+    [SerializeField] private Light flashLight;
+    [SerializeField] private float flashIntensity = 8f;
+    [SerializeField] private float flashRange = 8f;
+    [SerializeField] private float flashDuration = 0.04f;
+    private Coroutine flashCoroutine;
+
+    [Header("Hit VFX")]
+    [SerializeField] private VisualEffect _defaultHitVFX;
+    [SerializeField] private float _hitVFXDestroyDelay = 2f;
+
     private int _remainingBullets;
     private int _reserveBullets;
     private float _shootTimer;
@@ -70,6 +82,12 @@ public class Player_AimAndShoot : MonoBehaviour
 
         _movement._controls.Player.Recharge.started += Recharge;
         UpdateUI();
+
+        if (flashLight == null)
+            flashLight = GetComponent<Light>();
+
+        flashLight.intensity = 0f;
+        flashLight.range = flashRange;
     }
 
     void FixedUpdate()
@@ -135,6 +153,8 @@ public class Player_AimAndShoot : MonoBehaviour
         ManageShoot();
         _playerAnimator.SetTrigger("Shoot");
         _shootVFX.Play();
+        Flash();
+        _shootMuzzleVFX.SendEvent("OnPlay");
         SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.PlayerShootingSFX, transform.position);
 
         Ray cameraRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
@@ -171,6 +191,8 @@ public class Player_AimAndShoot : MonoBehaviour
 
     void HandleHit(RaycastHit weaponHit)
     {
+        SpawnHitVFX(weaponHit);
+
         if (_hitParticle != null)
         {
             Instantiate(_hitParticle, weaponHit.point, Quaternion.LookRotation(weaponHit.normal));
@@ -219,4 +241,52 @@ public class Player_AimAndShoot : MonoBehaviour
         SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
         UpdateUI();
     }
+
+    //flashlight effect, cambiar a otro script en algun momento
+    public void Flash()
+    {
+        if (flashCoroutine != null)
+            StopCoroutine(flashCoroutine);
+
+        flashCoroutine = StartCoroutine(FlashRoutine());
+    }
+
+    private IEnumerator FlashRoutine()
+    {
+        float timer = 0f;
+
+        while (timer < flashDuration)
+        {
+            timer += Time.deltaTime;
+
+            float t = timer / flashDuration;
+            flashLight.intensity = Mathf.Lerp(flashIntensity, 0f, t);
+
+            yield return null;
+        }
+
+        flashLight.intensity = 0f;
+        flashCoroutine = null;
+    }
+
+    private void SpawnHitVFX(RaycastHit weaponHit)
+    {
+        if (_defaultHitVFX == null)
+            return;
+
+        Vector3 spawnPosition = weaponHit.point + weaponHit.normal * 0.01f;
+
+        Quaternion spawnRotation = Quaternion.FromToRotation(Vector3.forward, weaponHit.normal);
+
+        VisualEffect hitVFX = Instantiate(
+            _defaultHitVFX,
+            spawnPosition,
+            spawnRotation
+        );
+
+        hitVFX.Play();
+
+        Destroy(hitVFX.gameObject, _hitVFXDestroyDelay);
+    }
+
 }
