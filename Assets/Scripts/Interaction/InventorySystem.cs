@@ -2,8 +2,13 @@ using UnityEngine;
 
 public class InventorySystem : MonoBehaviour // Lo tiene inventory
 {
+    [Header("Keys")]
     public bool HasEdenKey { get; private set; }
     public bool HasPurgatoryKey { get; private set; }
+
+    [Header("Soul Energy")]
+    public int CurrentSoulEnergy { get; private set; }
+    public int MaxSoulEnergy { get; private set; }
 
     public void AddEdenKey()
     {
@@ -14,6 +19,11 @@ public class InventorySystem : MonoBehaviour // Lo tiene inventory
     {
         HasPurgatoryKey = true;
         Debug.Log("Has Purgatory Key");
+    }
+    public void AddSoulEnergy()
+    {
+        CurrentSoulEnergy++;
+        Debug.Log("Soul Energy" + CurrentSoulEnergy);
     }
 
 }
