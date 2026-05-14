@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class OpenDoor : MonoBehaviour
+public class OpenDoor : MonoBehaviour, IEInteractable
 { private bool OpenIsEnabled = false;
 
     private bool _isOpening = false;
@@ -10,11 +10,15 @@ public class OpenDoor : MonoBehaviour
 
     [SerializeField] HingeJoint _joint;
 
+    [SerializeField] GameObject OpenDoorText;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             OpenIsEnabled = true;
+
+            GetInteractText();
 
             //_joint.useMotor = true;
 
@@ -30,6 +34,8 @@ public class OpenDoor : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+            OpenDoorText.SetActive(false);
+
             OpenIsEnabled = false;
         }
 
@@ -43,17 +49,18 @@ public class OpenDoor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       if (Keyboard.current.fKey.wasPressedThisFrame && OpenIsEnabled == true && _isOpening == false)
-       {
-            StartCoroutine(Timer());
-       }
-       else if (OpenIsEnabled == false && _isOpening == false) _joint.useMotor = false;
+        if (Keyboard.current.fKey.wasPressedThisFrame && OpenIsEnabled == true && _isOpening == false)
+        {
+            Interact(this.transform);
+            OpenDoorText.SetActive(false);
+        }
+        else if (OpenIsEnabled == false && _isOpening == false) _joint.useMotor = false;
 
     }
 
-    public IEnumerator Timer ()
+    public IEnumerator Timer()
     {
-        _isOpening = true; 
+        _isOpening = true;
 
         _joint.useMotor = true;
         _joint.useLimits = true;
@@ -68,4 +75,22 @@ public class OpenDoor : MonoBehaviour
 
 
     }
+
+
+  public void Interact(Transform interactorTransform)
+  {
+        StartCoroutine(Timer());
+
+
+  }
+  public string GetInteractText()
+  {
+        OpenDoorText.SetActive(true);
+        return OpenDoorText.ToString();
+  }
+   public Transform GetTransform()
+   {
+     return this.transform; 
+   }
 }
+   
