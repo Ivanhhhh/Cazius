@@ -132,6 +132,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1753217458}
     m_Modifications:
+    - target: {fileID: 1756632876480581777, guid: e7757a77e3cd54e408bfffd5c3f20e71, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4150012002934716973, guid: e7757a77e3cd54e408bfffd5c3f20e71, type: 3}
       propertyPath: m_Name
       value: Interactive Icon (Purgatory Key)
@@ -223,7 +227,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4150012002934716973, guid: e7757a77e3cd54e408bfffd5c3f20e71, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 47459911}
   m_SourcePrefab: {fileID: 100100000, guid: e7757a77e3cd54e408bfffd5c3f20e71, type: 3}
 --- !u!224 &47459909 stripped
 RectTransform:
@@ -233,6 +240,26 @@ RectTransform:
 --- !u!1 &47459910 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4150012002934716973, guid: e7757a77e3cd54e408bfffd5c3f20e71, type: 3}
+  m_PrefabInstance: {fileID: 47459908}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &47459911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47459910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41626dbd1a827e7479d9a6b36a916e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
+  _showInEden: 0
+  _showInPurgatory: 1
+  _visualRoot: {fileID: 47459912}
+--- !u!1 &47459912 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1756632876480581777, guid: e7757a77e3cd54e408bfffd5c3f20e71, type: 3}
   m_PrefabInstance: {fileID: 47459908}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &59721366 stripped
@@ -310,6 +337,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: -8513424388201257645, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -7523372300800824462, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -317,6 +348,10 @@ PrefabInstance:
     - target: {fileID: -3957782524123411102, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -3957782524123411102, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1500838157198093432, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       propertyPath: m_Layer
@@ -343,12 +378,24 @@ PrefabInstance:
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1507767883509144192, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
+      propertyPath: m_Name
+      value: KEY
+      objectReference: {fileID: 0}
+    - target: {fileID: 1507767883509144192, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1507767883509144192, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3779745573541866595, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3779745573541866595, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3899923579442822881, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       propertyPath: m_Layer
@@ -371,6 +418,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 78095365}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 78095366}
     - targetCorrespondingSourceObject: {fileID: 1507767883509144192, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1335830249}
@@ -432,6 +482,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BasicRotate
   _speed: 50
   _directionRotate: {x: 0, y: 1, z: 0}
+--- !u!114 &78095366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78095362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41626dbd1a827e7479d9a6b36a916e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
+  _showInEden: 0
+  _showInPurgatory: 1
+  _visualRoot: {fileID: 1335830245}
 --- !u!1001 &88313292
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4473,13 +4538,14 @@ GameObject:
   - component: {fileID: 214923607}
   - component: {fileID: 214923606}
   - component: {fileID: 214923609}
+  - component: {fileID: 214923610}
   m_Layer: 5
-  m_Name: Door Icon Unlock 02
+  m_Name: Door Icon Unlock 02  PURGATORY DOOR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &214923604
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4576,6 +4642,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionUI
   _target: {fileID: 9174304713106157730}
+--- !u!114 &214923610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214923603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41626dbd1a827e7479d9a6b36a916e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
+  _showInEden: 0
+  _showInPurgatory: 1
+  _visualRoot: {fileID: 1558229437}
 --- !u!1 &221147513
 GameObject:
   m_ObjectHideFlags: 0
@@ -5517,6 +5598,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: -8513424388201257645, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -7523372300800824462, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -5528,6 +5613,10 @@ PrefabInstance:
     - target: {fileID: -1500838157198093432, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -1500838157198093432, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -425565630206218756, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -5550,8 +5639,16 @@ PrefabInstance:
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1507767883509144192, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
+      propertyPath: m_Name
+      value: KEY
+      objectReference: {fileID: 0}
+    - target: {fileID: 1507767883509144192, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1507767883509144192, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3779745573541866595, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       propertyPath: m_Layer
@@ -5578,6 +5675,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 634925766}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 634925770}
     - targetCorrespondingSourceObject: {fileID: 1507767883509144192, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 634925769}
@@ -5658,6 +5758,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BasicRotate
   _speed: 1
   _directionRotate: {x: 0, y: 1, z: 0}
+--- !u!114 &634925770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634925764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41626dbd1a827e7479d9a6b36a916e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
+  _showInEden: 1
+  _showInPurgatory: 0
+  _visualRoot: {fileID: 634925765}
 --- !u!1 &651889225
 GameObject:
   m_ObjectHideFlags: 0
@@ -5747,13 +5862,14 @@ GameObject:
   - component: {fileID: 692575328}
   - component: {fileID: 692575327}
   - component: {fileID: 692575331}
+  - component: {fileID: 692575332}
   m_Layer: 5
-  m_Name: Door Icon Lock 01
+  m_Name: Door Icon Lock 01 EDEN DOOR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &692575327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5850,6 +5966,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionUI
   _target: {fileID: 9174304713106157730}
+--- !u!114 &692575332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692575326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41626dbd1a827e7479d9a6b36a916e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
+  _showInEden: 1
+  _showInPurgatory: 0
+  _visualRoot: {fileID: 1082021773}
 --- !u!1 &699545275
 GameObject:
   m_ObjectHideFlags: 0
@@ -6247,7 +6378,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &824329391
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6259,7 +6390,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1491384724}
   m_Father: {fileID: 1485008538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -6889,6 +7021,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7644864612018845570, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
   m_PrefabInstance: {fileID: 899740926}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &899740928 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6539583285025339318, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
+  m_PrefabInstance: {fileID: 899740926}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &911625148
 GameObject:
   m_ObjectHideFlags: 0
@@ -7062,6 +7199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 994780858}
   - component: {fileID: 994780859}
+  - component: {fileID: 994780860}
   m_Layer: 9
   m_Name: Door Interactive 01 PIVOT EDEN DOOR
   m_TagString: Door
@@ -7103,6 +7241,21 @@ MonoBehaviour:
   _unlockIcon: {fileID: 1485008537}
   _isEdenDoor: 1
   _isPurgatoryDoor: 0
+--- !u!114 &994780860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994780857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41626dbd1a827e7479d9a6b36a916e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
+  _showInEden: 1
+  _showInPurgatory: 0
+  _visualRoot: {fileID: 899740928}
 --- !u!4 &996747225 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3668788183484189495, guid: e278fafb54a661b46afc7f645ea83297, type: 3}
@@ -7297,7 +7450,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1082021774
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7495,13 +7648,14 @@ GameObject:
   - component: {fileID: 1154250886}
   - component: {fileID: 1154250885}
   - component: {fileID: 1154250888}
+  - component: {fileID: 1154250889}
   m_Layer: 5
-  m_Name: Door Icon Lock 02
+  m_Name: Door Icon Lock 02 PURGATORY DOOR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1154250883
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7598,6 +7752,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionUI
   _target: {fileID: 9174304713106157730}
+--- !u!114 &1154250889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1154250882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41626dbd1a827e7479d9a6b36a916e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
+  _showInEden: 0
+  _showInPurgatory: 1
+  _visualRoot: {fileID: 1987397869}
 --- !u!4 &1181568221 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3668788183484189495, guid: e278fafb54a661b46afc7f645ea83297, type: 3}
@@ -7689,9 +7858,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1370567959}
     m_Modifications:
+    - target: {fileID: 3057116544415830877, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6539583285025339318, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
       propertyPath: m_Name
       value: Door Interactive 02
+      objectReference: {fileID: 0}
+    - target: {fileID: 7000986837413134767, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7066221045438577274, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7066221045438577274, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -7745,6 +7926,11 @@ PrefabInstance:
 --- !u!4 &1192129898 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7644864612018845570, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
+  m_PrefabInstance: {fileID: 1192129897}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1192129899 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6539583285025339318, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
   m_PrefabInstance: {fileID: 1192129897}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1224512202
@@ -8629,6 +8815,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1370567959}
   - component: {fileID: 1370567960}
+  - component: {fileID: 1370567961}
   m_Layer: 9
   m_Name: Door Interactive 02 PIVOT PURGATORY DOOR
   m_TagString: Door
@@ -8670,6 +8857,21 @@ MonoBehaviour:
   _unlockIcon: {fileID: 214923603}
   _isEdenDoor: 0
   _isPurgatoryDoor: 1
+--- !u!114 &1370567961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1370567958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41626dbd1a827e7479d9a6b36a916e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
+  _showInEden: 0
+  _showInPurgatory: 1
+  _visualRoot: {fileID: 1192129899}
 --- !u!4 &1370900176 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4835181718830963013, guid: 5fcad5f324278c043b9c6f77ec36f256, type: 3}
@@ -9022,13 +9224,14 @@ GameObject:
   - component: {fileID: 1485008541}
   - component: {fileID: 1485008540}
   - component: {fileID: 1485008543}
+  - component: {fileID: 1485008544}
   m_Layer: 5
-  m_Name: Door Icon Unlock 01
+  m_Name: Door Icon Unlock 01 EDEN DOOR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1485008538
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9042,7 +9245,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 824329391}
-  - {fileID: 1491384724}
   m_Father: {fileID: 1753217458}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -9126,6 +9328,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionUI
   _target: {fileID: 9174304713106157730}
+--- !u!114 &1485008544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485008537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41626dbd1a827e7479d9a6b36a916e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
+  _showInEden: 1
+  _showInPurgatory: 0
+  _visualRoot: {fileID: 824329390}
 --- !u!1 &1491384723
 GameObject:
   m_ObjectHideFlags: 0
@@ -9152,11 +9369,11 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1491384723}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000029206271}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.000082203944}
   m_LocalScale: {x: 4.6769, y: 4.6769, z: 4.6769}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1485008538}
+  m_Father: {fileID: 824329391}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9415,7 +9632,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1558229438
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10399,6 +10616,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1753217458}
     m_Modifications:
+    - target: {fileID: 1756632876480581777, guid: e7757a77e3cd54e408bfffd5c3f20e71, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4150012002934716973, guid: e7757a77e3cd54e408bfffd5c3f20e71, type: 3}
       propertyPath: m_Name
       value: Interactive Icon (Eden Key)
@@ -10490,7 +10711,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4150012002934716973, guid: e7757a77e3cd54e408bfffd5c3f20e71, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1865253868}
   m_SourcePrefab: {fileID: 100100000, guid: e7757a77e3cd54e408bfffd5c3f20e71, type: 3}
 --- !u!224 &1865253866 stripped
 RectTransform:
@@ -10500,6 +10724,26 @@ RectTransform:
 --- !u!1 &1865253867 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4150012002934716973, guid: e7757a77e3cd54e408bfffd5c3f20e71, type: 3}
+  m_PrefabInstance: {fileID: 1865253865}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1865253868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865253867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41626dbd1a827e7479d9a6b36a916e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
+  _showInEden: 1
+  _showInPurgatory: 0
+  _visualRoot: {fileID: 1865253869}
+--- !u!1 &1865253869 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1756632876480581777, guid: e7757a77e3cd54e408bfffd5c3f20e71, type: 3}
   m_PrefabInstance: {fileID: 1865253865}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1866223544 stripped
@@ -10950,7 +11194,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1987397870
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11994,7 +12238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7436610461006387000, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: _moveSpeed
-      value: 30
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
