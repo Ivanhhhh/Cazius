@@ -2,11 +2,18 @@ using UnityEngine;
 
 public class InventorySystem : MonoBehaviour // Lo tiene inventory
 {
-    public bool HasKey { get; private set; }
+    public bool HasEdenKey { get; private set; }
+    public bool HasPurgatoryKey { get; private set; }
 
-    public void AddKey()
+    public void AddEdenKey()
     {
-        HasKey = true;
-        Debug.Log("#### HasKey: " + HasKey);
+        HasEdenKey = true;
+        Debug.Log("Has Eden Key");
     }
+    public void AddPurgatoryKey()
+    {
+        HasPurgatoryKey = true;
+        Debug.Log("Has Purgatory Key");
+    }
+
 }
