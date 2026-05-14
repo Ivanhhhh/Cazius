@@ -34,14 +34,4 @@ public class Key : MonoBehaviour, IInteractable // Lo tiene la "Key" con layer "
         _interactionIcon.SetActive(false);
         gameObject.SetActive(false);
     }
-
-    // public void ShowIcon()
-    // {
-    //     _interactionIcon.SetActive(true);
-    // }
-
-    // public void HideIcon()
-    // {
-    //     _interactionIcon.SetActive(false);
-    // }
 }
