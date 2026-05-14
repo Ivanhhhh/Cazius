@@ -11873,6 +11873,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3668788183484189495, guid: e278fafb54a661b46afc7f645ea83297, type: 3}
   m_PrefabInstance: {fileID: 2077801089}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2086325559 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1231203851605610965, guid: 11a53b814f8275e49aa9e8658f66c8fc, type: 3}
+  m_PrefabInstance: {fileID: 3433208620270763825}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2098316853 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4835181718830963013, guid: 5fcad5f324278c043b9c6f77ec36f256, type: 3}
@@ -12256,12 +12261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0835b4203d2a8543a3e68a29a0335e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player_SoulEnergy
-  _currentSoulEnergy: 0
   _maxSoulEnergy: 3
-  _soulEnergyPanel:
-  - {fileID: 1952708874}
-  - {fileID: 950711008}
-  - {fileID: 1715784089}
   _soulEnergyInteractionIcon: {fileID: 2115474389526164341}
 --- !u!114 &2076624206692721334
 MonoBehaviour:
@@ -12449,6 +12449,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 651889226}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1231203851605610965, guid: 11a53b814f8275e49aa9e8658f66c8fc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3433208620270763831}
     - targetCorrespondingSourceObject: {fileID: 8026370388278934394, guid: 11a53b814f8275e49aa9e8658f66c8fc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3433208620270763828}
@@ -12485,6 +12488,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4287653537955945435, guid: 11a53b814f8275e49aa9e8658f66c8fc, type: 3}
   m_PrefabInstance: {fileID: 3433208620270763825}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3433208620270763831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086325559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45bf7356776814840a1c85d7e9fb6f88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoulUIManager
+  _soulEnergyPanels:
+  - {fileID: 1952708874}
+  - {fileID: 950711008}
+  - {fileID: 1715784089}
 --- !u!224 &3441053232890659202
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13137,6 +13156,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6119244959425966609, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _soulUI
+      value: 
+      objectReference: {fileID: 3433208620270763831}
     - target: {fileID: 6119244959425966609, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: _inventory
       value: 

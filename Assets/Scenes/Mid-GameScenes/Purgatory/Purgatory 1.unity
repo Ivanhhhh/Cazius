@@ -53457,12 +53457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0835b4203d2a8543a3e68a29a0335e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player_SoulEnergy
-  _currentSoulEnergy: 0
   _maxSoulEnergy: 3
-  _soulEnergyPanel:
-  - {fileID: 1194082179}
-  - {fileID: 1013245444}
-  - {fileID: 622803275}
   _soulEnergyInteractionIcon: {fileID: 694871833}
 --- !u!135 &393674835
 SphereCollider:
@@ -100703,6 +100698,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 622803276}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1231203851605610965, guid: 11a53b814f8275e49aa9e8658f66c8fc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 762427863}
     - targetCorrespondingSourceObject: {fileID: 8026370388278934394, guid: 11a53b814f8275e49aa9e8658f66c8fc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 762427861}
@@ -100734,6 +100732,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02518a5e85f5ffe4199b5ad7f5103ccf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySystem
+--- !u!1 &762427862 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1231203851605610965, guid: 11a53b814f8275e49aa9e8658f66c8fc, type: 3}
+  m_PrefabInstance: {fileID: 762427857}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &762427863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762427862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45bf7356776814840a1c85d7e9fb6f88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoulUIManager
+  _soulEnergyPanels:
+  - {fileID: 1194082179}
+  - {fileID: 1013245444}
+  - {fileID: 622803275}
 --- !u!1 &765436620
 GameObject:
   m_ObjectHideFlags: 0
@@ -227494,12 +227513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0835b4203d2a8543a3e68a29a0335e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player_SoulEnergy
-  _currentSoulEnergy: 0
   _maxSoulEnergy: 3
-  _soulEnergyPanel:
-  - {fileID: 1194082179}
-  - {fileID: 1013245444}
-  - {fileID: 622803275}
   _soulEnergyInteractionIcon: {fileID: 1438382033}
 --- !u!135 &2079036778
 SphereCollider:

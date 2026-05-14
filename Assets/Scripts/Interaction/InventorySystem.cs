@@ -25,5 +25,13 @@ public class InventorySystem : MonoBehaviour // Lo tiene inventory
         CurrentSoulEnergy++;
         Debug.Log("Soul Energy" + CurrentSoulEnergy);
     }
+    public void RemoveSoulEnergy()
+    {
+        if (CurrentSoulEnergy > 0)
+        {
+            CurrentSoulEnergy--;
+            Debug.Log("Soul Energy has consumed" + CurrentSoulEnergy);
+        }
+    }
 
 }
