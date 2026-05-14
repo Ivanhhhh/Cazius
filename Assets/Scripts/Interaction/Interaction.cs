@@ -9,33 +9,27 @@ public class Interaction : MonoBehaviour // Lo tiene el player con tag "Player" 
 
     [Header("Inputs")]
     [SerializeField] private InputActionAsset InputActions;
-
     private InputAction m_interactAction;
+    private InputAction m_consumeAction;
 
     void Awake()
     {
-        m_interactAction = InputActions.FindActionMap("Player").FindAction("Interaction");
+        var playerMap = InputActions.FindActionMap("Player");
+        m_interactAction = playerMap.FindAction("Interaction");
+        m_consumeAction = playerMap.FindAction("Consume");
     }
 
-    void OnEnable()
-    {
-        InputActions.FindActionMap("Player").Enable();
-    }
-
-    void OnDisable()
-    {
-        InputActions.FindActionMap("Player").Disable();
-    }
+    void OnEnable() { InputActions.Enable(); }
+    void OnDisable() { InputActions.Disable(); }
 
     private void Update()
     {
         HandleInteraction();
+        HandleConsume();
     }
 
     private void HandleInteraction()
     {
-        Debug.Log("#### HandleInteraction");
-
         bool canInteract = m_interactAction.WasPressedThisFrame() && _raycast.CurrentTarget != null;
 
         if (!canInteract) return;
@@ -45,6 +39,21 @@ public class Interaction : MonoBehaviour // Lo tiene el player con tag "Player" 
         if (interactable == null) return;
 
         interactable.Interact(_inventory);
+    }
+
+    private void HandleConsume()
+    {
+        if (m_consumeAction.WasPressedThisFrame() && _inventory.CurrentSoulEnergy > 0)
+        {
+            _inventory.RemoveSoulEnergy();
+
+            if (SoulUIManager.Instance != null)
+            {
+                SoulUIManager.Instance.UpdateUI(_inventory.CurrentSoulEnergy);
+            }
+
+            Debug.Log("Soul Energy consumed");
+        }
     }
 }
 

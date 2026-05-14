@@ -15,11 +15,13 @@ public class WorldChangeManager : MonoBehaviour
 
     public int scenesLoaded = 0;
 
-     private  SceneField _edenBaseScene;
-     private  SceneField _purgatoryBaseScene;
+    private SceneField _edenBaseScene;
+    private SceneField _purgatoryBaseScene;
 
     [SerializeField] private SceneField edenBaseScene;
     [SerializeField] private SceneField purgatoryBaseScene;
+
+    public bool IsInEden { get; private set; } = true;
 
     public List<SceneField> LoadedScenes { get; private set; } = new List<SceneField>();
 
@@ -69,7 +71,7 @@ public class WorldChangeManager : MonoBehaviour
 
     public void LoadSceneAsync(SceneField sceneToLoad)
     {
-        if (sceneToLoad == null || LoadedScenes.Contains(sceneToLoad)) 
+        if (sceneToLoad == null || LoadedScenes.Contains(sceneToLoad))
             return;
         SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
         LoadedScenes.Add(sceneToLoad);
@@ -81,23 +83,27 @@ public class WorldChangeManager : MonoBehaviour
 
         yield return StartCoroutine(FadeShader(_edenSwapFullscreenShader, "_Intensity", 0f, 1f, _shaderTransitionLength));
 
-        SwapToEdenEvent.Invoke();
+        IsInEden = true;
 
-         yield return new WaitForSeconds(_waitForStartLoad);
+        SwapToEdenEvent?.Invoke();
+
+        yield return new WaitForSeconds(_waitForStartLoad);
 
         yield return StartCoroutine(FadeShader(_edenSwapFullscreenShader, "_Intensity", 1f, 0f, _shaderTransitionLength));
         _edenSwapFullscreenShader.SetFloat("_Intensity", 0f);
 
         //Debug.Log("End of Load!");
     }
-   
+
     private IEnumerator SwapToPurgatoryCoroutine(SceneField[] scenesToLoad)
     {
         //Debug.Log("To Purgatory!");
 
         yield return StartCoroutine(FadeShader(_purgatorySwapFullscreenShader, "_Intensity", 0f, 1f, _shaderTransitionLength));
 
-        SwapToPurgatoryEvent.Invoke();
+        IsInEden = false;
+
+        SwapToPurgatoryEvent?.Invoke();
 
         yield return new WaitForSeconds(_waitForStartLoad);
 
@@ -105,7 +111,7 @@ public class WorldChangeManager : MonoBehaviour
         _purgatorySwapFullscreenShader.SetFloat("_Intensity", 0f);
         //Debug.Log("End of load!");
     }
-    
+
     private bool IsSceneLoaded(SceneField sceneField)
     {
         Scene scene = SceneManager.GetSceneByName(sceneField.SceneName);
