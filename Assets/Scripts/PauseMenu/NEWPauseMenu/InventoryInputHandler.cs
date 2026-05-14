@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System; // ¡NUEVO: Necesario para usar Action!
+using System;
 
 public class InventoryInputHandler : MonoBehaviour
 {
