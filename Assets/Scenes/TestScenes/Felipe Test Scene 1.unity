@@ -306,11 +306,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.86492157, y: 1.903328, z: 0.1840725}
   m_Center: {x: -0.0025959015, y: -0.008194566, z: 0.0012960434}
---- !u!65 &58564598 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 2700913478087292124, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
-  m_PrefabInstance: {fileID: 1827214224}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &58564599 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 450925528186775375, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
@@ -916,13 +911,21 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8520012764948403899, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8530676213082586217, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
       propertyPath: m_Name
       value: DoorMetallic (2)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8520012764948403899, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2119469630725965073, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 1475436066}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
 --- !u!1001 &511828659
@@ -1579,12 +1582,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 117de45002870a746bed97d65e2a645c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorFixer
+  _joint: {fileID: 0}
   SpringAmount: 1000
   LerpDuration: 2
   DamperObjetiveAmount: 0
   SpringObjetiveAmount: 0
-  StopFreining: {fileID: 58564598}
-  _DoorStop: {fileID: 58564599}
 --- !u!1001 &1253521945
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2012,6 +2014,77 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6189969909263246771, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
   m_PrefabInstance: {fileID: 511828659}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1475436065
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1475436066}
+  - component: {fileID: 1475436067}
+  - component: {fileID: 1475436068}
+  m_Layer: 15
+  m_Name: DetectPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1475436066
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1475436065}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1866622896}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1475436067
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1475436065}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.8401468, y: 2.1355526, z: 0.68}
+  m_Center: {x: 0.0039994093, y: -0.14395206, z: -0.0068139415}
+--- !u!114 &1475436068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1475436065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 117de45002870a746bed97d65e2a645c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorFixer
+  _joint: {fileID: 1866622892}
+  SpringAmount: 2000
+  LerpDuration: 0.2
+  DamperObjetiveAmount: 120
+  SpringObjetiveAmount: 200
 --- !u!1 &1619484276
 GameObject:
   m_ObjectHideFlags: 0
@@ -2765,6 +2838,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.8515396, y: 1.9213517, z: 0.18380547}
   m_Center: {x: -0.0046424866, y: -0.008634448, z: 0.020058632}
+--- !u!59 &1866622892 stripped
+HingeJoint:
+  m_CorrespondingSourceObject: {fileID: 6967037987625745398, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+  m_PrefabInstance: {fileID: 496492272}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1866622896 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2119469630725965073, guid: f253deab9ca1bd2488c16b836fcbee44, type: 3}
+  m_PrefabInstance: {fileID: 496492272}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1928325123
 GameObject:
   m_ObjectHideFlags: 0

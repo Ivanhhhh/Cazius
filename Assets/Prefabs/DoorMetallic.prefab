@@ -1,5 +1,76 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &345114522351580656
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2387065767497114612}
+  - component: {fileID: 4592422587826501339}
+  - component: {fileID: 8070582234715441559}
+  m_Layer: 15
+  m_Name: DetectPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2387065767497114612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 345114522351580656}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2119469630725965073}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4592422587826501339
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 345114522351580656}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.88, y: 1.9196233, z: 0.5}
+  m_Center: {x: 0, y: 0.019426068, z: 0}
+--- !u!114 &8070582234715441559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 345114522351580656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 117de45002870a746bed97d65e2a645c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorFixer
+  _joint: {fileID: 6967037987625745398}
+  SpringAmount: 2000
+  LerpDuration: 0.2
+  DamperObjetiveAmount: 120
+  SpringObjetiveAmount: 200
 --- !u!1 &1560520024226025695
 GameObject:
   m_ObjectHideFlags: 0
@@ -1413,12 +1484,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 117de45002870a746bed97d65e2a645c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorFixer
+  _joint: {fileID: 0}
   SpringAmount: 0
   LerpDuration: 0
   DamperObjetiveAmount: 0
   SpringObjetiveAmount: 0
-  StopFreining: {fileID: 7929274146472152602}
-  _DoorStop: {fileID: 8292803961360849295}
 --- !u!1001 &1937505631117976314
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1701,7 +1771,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9f8d011288d55194f8aa5259a5fa0386, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2387065767497114612}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9f8d011288d55194f8aa5259a5fa0386, type: 3}
       insertIndex: -1
@@ -1815,17 +1888,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1594853482162429867}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 117de45002870a746bed97d65e2a645c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorFixer
+  _joint: {fileID: 0}
   SpringAmount: 2000
   LerpDuration: 0.2
   DamperObjetiveAmount: 120
   SpringObjetiveAmount: 200
-  StopFreining: {fileID: 8301365408825345149}
-  _DoorStop: {fileID: 4017612294380022096}
 --- !u!4 &2119469630725965073 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9f8d011288d55194f8aa5259a5fa0386, type: 3}

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DoorFixer : MonoBehaviour
 {
-    private HingeJoint _joint;
+    [SerializeField] HingeJoint _joint;
 
     [SerializeField] float SpringAmount;
 
@@ -13,7 +13,7 @@ public class DoorFixer : MonoBehaviour
 
     [SerializeField] int SpringObjetiveAmount;
 
-    [SerializeField] Collider StopFreining;
+  //  [SerializeField] Collider StopFreining;
 
     private JointSpring SpringValue;
 
@@ -21,9 +21,9 @@ public class DoorFixer : MonoBehaviour
 
     bool Stop;
 
-   [SerializeField] DoorStop _DoorStop;
+  // [SerializeField] DoorStop _DoorStop;
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
@@ -44,7 +44,7 @@ public class DoorFixer : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerStay(Collider collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
@@ -65,7 +65,7 @@ public class DoorFixer : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit(Collision other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
@@ -89,8 +89,7 @@ public class DoorFixer : MonoBehaviour
     }
     void Start()
     {
-       _joint = GetComponent<HingeJoint>(); 
-      // _DoorStop = GetComponentInChildren<DoorStop>();
+       //_joint = GetComponent<HingeJoint>(); 
     }
 
     void Update()
@@ -100,17 +99,17 @@ public class DoorFixer : MonoBehaviour
         //&& Stop == false && Flag == true
 
 
-        if (_DoorStop.Stop == false )
-        {
+        //if (_DoorStop.Stop == false )
+        //{
 
-            // on colicion exit
-        }
+        //    // on colicion exit
+        //}
 
 
-        if (_DoorStop.Stop == true && Stop == true && Flag == false)
-        {
+        //if (_DoorStop.Stop == true && Stop == true && Flag == false)
+        //{
            
-        }
+        //}
 
 
         //  print("el angulo es" + angulo);
