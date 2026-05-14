@@ -1,4 +1,3 @@
-using Unity.VisualScripting.ReorderableList.Element_Adder_Menu;
 using UnityEngine;
 
 public class Key : MonoBehaviour, IInteractable // Lo tiene la "Key" con layer "Interactive", _keyPanel tiene q estar apagado
