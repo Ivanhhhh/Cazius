@@ -1,5 +1,95 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2859601974613705944
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5187129201822336224}
+  - component: {fileID: 1952853002698872586}
+  - component: {fileID: 3505910829902194595}
+  m_Layer: 0
+  m_Name: ShadowCube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &5187129201822336224
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2859601974613705944}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 101.16, y: 149.56, z: 11.4}
+  m_LocalScale: {x: 203.28282, y: 299.87796, z: 9.5913}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2440821030978991900}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &1952853002698872586
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2859601974613705944}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &3505910829902194595
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2859601974613705944}
+  m_Enabled: 1
+  m_CastShadows: 3
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1001 &2762167508217843959
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56,6 +146,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 2x3OldLargeWindow2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e3e5163cd1ed2574ebe4bf7dfc6729fe, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -7511558181221131132, guid: e3e5163cd1ed2574ebe4bf7dfc6729fe, type: 3}
     - {fileID: -5754084199372789682, guid: e3e5163cd1ed2574ebe4bf7dfc6729fe, type: 3}
@@ -64,6 +158,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: e3e5163cd1ed2574ebe4bf7dfc6729fe, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4900213141977406271}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: e3e5163cd1ed2574ebe4bf7dfc6729fe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5187129201822336224}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3e5163cd1ed2574ebe4bf7dfc6729fe, type: 3}
 --- !u!4 &2440821030978991900 stripped
@@ -136,6 +233,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5852857666110783523, guid: becd66ada3ceee04288683c3b833b13b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5852857666110783523, guid: becd66ada3ceee04288683c3b833b13b, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 17ddf609773feb8489ea5a6ef8d2c6fd, type: 2}
@@ -143,14 +244,38 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
       objectReference: {fileID: 2100000, guid: 54366e106f3d10f4f99cce46f5399f00, type: 2}
+    - target: {fileID: -4153953452488843952, guid: becd66ada3ceee04288683c3b833b13b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -25484284431576814, guid: becd66ada3ceee04288683c3b833b13b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: becd66ada3ceee04288683c3b833b13b, type: 3}
       propertyPath: m_Name
       value: 2x3OldLargeWindow2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: becd66ada3ceee04288683c3b833b13b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525029621809502378, guid: becd66ada3ceee04288683c3b833b13b, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525029621809502378, guid: becd66ada3ceee04288683c3b833b13b, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4525029621809502378, guid: becd66ada3ceee04288683c3b833b13b, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: aa3532c0a2172cf4f8497058158eb5ec, type: 2}
+    - target: {fileID: 7650688996950224570, guid: becd66ada3ceee04288683c3b833b13b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
