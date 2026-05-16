@@ -7,6 +7,8 @@ public class OpenDoor : MonoBehaviour, IEInteractable
 
     private bool _isOpening = false;
 
+    private bool _CanOpen = true;
+
 
     [SerializeField] HingeJoint _joint;
 
@@ -14,7 +16,7 @@ public class OpenDoor : MonoBehaviour, IEInteractable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player") && _CanOpen)
         {
             OpenIsEnabled = true;
 
@@ -25,7 +27,6 @@ public class OpenDoor : MonoBehaviour, IEInteractable
             //_joint.useMotor = false;
 
 
-            print("entro");
         }
 
     }
@@ -49,7 +50,7 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     // Update is called once per frame
     void Update()
     {
-        if (Keyboard.current.fKey.wasPressedThisFrame && OpenIsEnabled == true && _isOpening == false)
+        if (Keyboard.current.fKey.wasPressedThisFrame && OpenIsEnabled == true && _isOpening == false && _CanOpen)
         {
             Interact(this.transform);
             OpenDoorText.SetActive(false);
@@ -62,16 +63,21 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     {
         _isOpening = true;
 
+        _CanOpen = false;
+
         _joint.useMotor = true;
         _joint.useLimits = true;
 
 
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(4f);
 
         _joint.useMotor = false;
         _joint.useLimits = false;
 
         _isOpening = false;
+
+        yield return new WaitForSeconds(2f);
+        _CanOpen = true;
 
 
     }
@@ -79,6 +85,7 @@ public class OpenDoor : MonoBehaviour, IEInteractable
 
   public void Interact(Transform interactorTransform)
   {
+        _CanOpen = false;
         StartCoroutine(Timer());
 
 

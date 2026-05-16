@@ -33,7 +33,6 @@ public class DoorFixer : MonoBehaviour
             // StartCoroutine(SpringLerp());
             // StartCoroutine(DamperLerp());
 
-            print("empezaron todas las corrutinas");
 
             // SpringValue = _joint.spring;
             // SpringValue.spring = SpringAmount*0;
@@ -54,7 +53,6 @@ public class DoorFixer : MonoBehaviour
             // StartCoroutine(SpringLerp());
             // StartCoroutine(DamperLerp());
 
-            print("empezaron todas las corrutinas");
 
             // SpringValue = _joint.spring;
             // SpringValue.spring = SpringAmount*0;
@@ -70,21 +68,9 @@ public class DoorFixer : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
 
-            StartDamper();
-           // Stop = true;
+           StartDamper();
+           
 
-           // if (_DoorStop.Stop == true)
-           // {
-               
-
-           // }
-          //  Flag = false;
-            //StopAllCoroutines();
-           // _joint.useSpring = false;
-           // SpringValue.damper = 0f;
-           // _joint.spring = SpringValue;
-
-            print("pararon todas las corrutinas");
         }
     }
     void Start()
@@ -170,7 +156,6 @@ public class DoorFixer : MonoBehaviour
         Stop = false;
 
 
-        print("entro");
         Flag = true;
 
         DamperObjetiveAmount = 0;

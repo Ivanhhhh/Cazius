@@ -1357,6 +1357,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7326373072665430714, guid: fdfe6fe141c0e964780a2d5ed489c0b7, type: 3}
+      propertyPath: _joint
+      value: 
+      objectReference: {fileID: 1492879071}
+    - target: {fileID: 7326373072665430714, guid: fdfe6fe141c0e964780a2d5ed489c0b7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8530676213082586217, guid: fdfe6fe141c0e964780a2d5ed489c0b7, type: 3}
       propertyPath: m_Name
       value: DoorWood
@@ -1368,7 +1376,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6952729120858530921, guid: fdfe6fe141c0e964780a2d5ed489c0b7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1492879076}
   m_SourcePrefab: {fileID: 100100000, guid: fdfe6fe141c0e964780a2d5ed489c0b7, type: 3}
 --- !u!1 &546396340
 GameObject:
@@ -2329,6 +2340,35 @@ MonoBehaviour:
   LerpDuration: 0.2
   DamperObjetiveAmount: 120
   SpringObjetiveAmount: 200
+--- !u!1 &1492879070 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6952729120858530921, guid: fdfe6fe141c0e964780a2d5ed489c0b7, type: 3}
+  m_PrefabInstance: {fileID: 533110578}
+  m_PrefabAsset: {fileID: 0}
+--- !u!59 &1492879071 stripped
+HingeJoint:
+  m_CorrespondingSourceObject: {fileID: 8038048529104053373, guid: fdfe6fe141c0e964780a2d5ed489c0b7, type: 3}
+  m_PrefabInstance: {fileID: 533110578}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &1492879073 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 4651472797793194644, guid: fdfe6fe141c0e964780a2d5ed489c0b7, type: 3}
+  m_PrefabInstance: {fileID: 533110578}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1492879076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492879070}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3505c6ad05dd0594daa28cc1de966dda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorHelper
+  _rb: {fileID: 1492879073}
+  _ForceApply: 20
 --- !u!1 &1504335954
 GameObject:
   m_ObjectHideFlags: 0
