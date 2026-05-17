@@ -1,13 +1,21 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class OpenDoor : MonoBehaviour, IEInteractable
-{ private bool OpenIsEnabled = false;
+{
+    //private bool OpenIsEnabled = false;
+
+    //private bool _isOpening = false;
+
+    private bool _CanOpen = true;
+
+    private bool _canClose = false;
+
+    private bool IsNear;
 
     private bool _isOpening = false;
 
-    private bool _CanOpen = true;
 
 
     [SerializeField] HingeJoint _joint;
@@ -16,11 +24,23 @@ public class OpenDoor : MonoBehaviour, IEInteractable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player") && _CanOpen)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            OpenIsEnabled = true;
+            IsNear = true;
+
+            // OpenIsEnabled = true;
 
             GetInteractText();
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            IsNear = true;
+
+
         }
     }
 
@@ -30,7 +50,7 @@ public class OpenDoor : MonoBehaviour, IEInteractable
         {
             OpenDoorText.SetActive(false);
 
-            OpenIsEnabled = false;
+            IsNear = false;
         }
 
     }
@@ -43,54 +63,67 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     // Update is called once per frame
     void Update()
     {
-        if (Keyboard.current.fKey.wasPressedThisFrame && OpenIsEnabled == true && _isOpening == false && _CanOpen)
+
+        if (Keyboard.current.fKey.wasPressedThisFrame && IsNear == true)
         {
-            Interact(this.transform);
-            OpenDoorText.SetActive(false);
+            if (_CanOpen && !_canClose)
+            {
+                Interact(this.transform);
+                OpenDoorText.SetActive(false);
+            }
+            else if (_canClose && !_CanOpen && !_isOpening)
+            {
+                StartCoroutine(CloseDoor());
+            }
         }
-        else if (OpenIsEnabled == false && _isOpening == false) _joint.useMotor = false;
+
+        //else if (OpenIsEnabled == false && _isOpening == false) _joint.useMotor = false;
 
     }
 
     public IEnumerator Timer()
     {
-        _isOpening = true;
-
         _CanOpen = false;
-
+        _isOpening = true;
         _joint.useMotor = true;
         _joint.useLimits = true;
+        _canClose = false;     // ← no puede cerrar mientras abre
+        yield return new WaitForSeconds(1f);
+        _isOpening = false;
+        _canClose = true;      // ← recién ahora puede cerrar
+    }
 
 
-        yield return new WaitForSeconds(4f);
+    public IEnumerator CloseDoor()
+    {
+        _canClose = false;
 
-        //_joint.useMotor = false;
-        //_joint.useLimits = false;
+        _joint.useMotor = false;
+        _joint.useLimits = false;
+        //  _isOpening = false;
 
-        //_isOpening = false;
-
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2);
         _CanOpen = true;
-
 
     }
 
 
-  public void Interact(Transform interactorTransform)
-  {
-        _CanOpen = false;
+    public void Interact(Transform interactorTransform)
+    {
+       _CanOpen = false;
         StartCoroutine(Timer());
 
 
-  }
-  public string GetInteractText()
-  {
+
+    }
+    public string GetInteractText()
+    {
         OpenDoorText.SetActive(true);
         return OpenDoorText.ToString();
-  }
-   public Transform GetTransform()
-   {
-     return this.transform; 
-   }
+    }
+    public Transform GetTransform()
+    {
+        return this.transform;
+    }
 }
-   
+
