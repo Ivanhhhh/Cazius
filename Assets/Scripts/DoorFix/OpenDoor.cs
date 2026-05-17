@@ -21,14 +21,7 @@ public class OpenDoor : MonoBehaviour, IEInteractable
             OpenIsEnabled = true;
 
             GetInteractText();
-
-            //_joint.useMotor = true;
-
-            //_joint.useMotor = false;
-
-
         }
-
     }
 
     private void OnTriggerExit(Collider other)
@@ -71,10 +64,10 @@ public class OpenDoor : MonoBehaviour, IEInteractable
 
         yield return new WaitForSeconds(4f);
 
-        _joint.useMotor = false;
-        _joint.useLimits = false;
+        //_joint.useMotor = false;
+        //_joint.useLimits = false;
 
-        _isOpening = false;
+        //_isOpening = false;
 
         yield return new WaitForSeconds(2f);
         _CanOpen = true;

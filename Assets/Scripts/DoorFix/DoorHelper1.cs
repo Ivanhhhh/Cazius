@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class DoorHelper : MonoBehaviour
+public class DoorHelper1 : MonoBehaviour
 {
     [SerializeField] Rigidbody _rb;
 
@@ -9,12 +9,8 @@ public class DoorHelper : MonoBehaviour
 
     [SerializeField] Collider ColliderDoor;
 
-   // [SerializeField] Collider ColliderDoorBack;
 
-
-
-
-    //  [SerializeField] GameObject ApplyForcePosition;
+  //  [SerializeField] GameObject ApplyForcePosition;
 
 
     bool Run = true;
@@ -41,14 +37,18 @@ public class DoorHelper : MonoBehaviour
     public IEnumerator Stopper()
     {
         Run = false;
+        print(Run);
+
        //_rb.AddForceAtPosition(new Vector3(0, 0, _ForceApply), ApplyForcePosition.transform.position);
 
-        _rb.AddForce(-transform.forward * _ForceApply, ForceMode.Impulse);
+        _rb.AddForce(transform.forward * _ForceApply, ForceMode.Impulse);
         ColliderDoor.isTrigger = true;
+        print("se hizo la fuerza de + transform.forward");
 
-        print("se hizo la fuerza de -transform.forward");
         yield return new WaitForSeconds(1);
-        ColliderDoor.isTrigger = false;
         Run = true;
+        print(Run);
+
+
     }
 }
