@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class DoorFixer : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class DoorFixer : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
            
-            StopDamper();
+            StartDamper();
 
             // StartCoroutine(SpringLerp());
             // StartCoroutine(DamperLerp());
@@ -48,8 +49,9 @@ public class DoorFixer : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+           Flag = true;
 
-            StopDamper();
+                //StartDamper();
 
             // StartCoroutine(SpringLerp());
             // StartCoroutine(DamperLerp());
@@ -70,6 +72,8 @@ public class DoorFixer : MonoBehaviour
         {
 
            StartDamper();
+
+            Flag = false;
            
 
         }
@@ -82,6 +86,7 @@ public class DoorFixer : MonoBehaviour
 
     void Update()
     {
+        if (Keyboard.current.fKey.wasPressedThisFrame  && Flag) StopDamper();
         //float angulo = Mathf.Abs(_joint.angle);
 
         //&& Stop == false && Flag == true
@@ -96,7 +101,7 @@ public class DoorFixer : MonoBehaviour
 
         //if (_DoorStop.Stop == true && Stop == true && Flag == false)
         //{
-           
+
         //}
 
 
@@ -157,19 +162,21 @@ public class DoorFixer : MonoBehaviour
         Stop = false;
 
 
-        Flag = true;
+        //Flag = true;
 
         DamperObjetiveAmount = 0;
         SpringObjetiveAmount = 0;
 
         SpringValue.spring = 0;
+        _joint.spring = SpringValue; // ← falta esto
+
     }
 
 
     public void StartDamper()
     {
-        DamperObjetiveAmount = 120;
-        SpringObjetiveAmount = 400;
+        DamperObjetiveAmount = 199920;
+        SpringObjetiveAmount = 99999;
         StartCoroutine(DamperLerp());
         StartCoroutine(SpringLerp());
     }
