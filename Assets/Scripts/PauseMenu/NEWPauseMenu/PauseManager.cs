@@ -24,17 +24,18 @@ public class PauseManager : MonoBehaviour
     public void Toggle()
     {
         IsPaused = !IsPaused;
+        Debug.Log($"Toggle called — IsPaused is now: {IsPaused}");
 
         if (IsPaused)
         {
             Time.timeScale = 0f;
-            AudioSettingsManager.instance.SetMusicVolume(0f);
+            //AudioSettingsManager.instance.SetMusicVolume(0f);
             OnPaused?.Invoke();
         }
         else
         {
             Time.timeScale = 1f;
-            AudioSettingsManager.instance.SetMusicVolume(0.175f);
+            //AudioSettingsManager.instance.SetMusicVolume(0.175f);
             OnResumed?.Invoke();
         }
     }

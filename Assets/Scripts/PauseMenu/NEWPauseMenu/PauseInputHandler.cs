@@ -3,15 +3,11 @@ using UnityEngine.InputSystem;
 
 public class PauseInputHandler : MonoBehaviour
 {
-    [SerializeField] private InputActionReference _pauseAction;
     [SerializeField] private GameObject _pauseMenuCanvas;
 
-    void OnEnable()
-    {
-        _pauseAction.action.Enable();
-        _pauseAction.action.performed += OnPause;
-    }
-    void OnDisable() => _pauseAction.action.performed -= OnPause;
+    void Start() => GameInputManager.Instance.Controls.UI.PauseMenu.performed += OnPause;
+
+    void OnDisable() => GameInputManager.Instance.Controls.UI.PauseMenu.performed -= OnPause;
 
     private void OnPause(InputAction.CallbackContext _)
     {
@@ -22,8 +18,7 @@ public class PauseInputHandler : MonoBehaviour
             return;
         }
 
-        if (PauseManager.Instance.IsPaused)
-            return;
+        if (PauseManager.Instance.IsPaused) return;
 
         PauseManager.Instance.Toggle();
         _pauseMenuCanvas.SetActive(true);
