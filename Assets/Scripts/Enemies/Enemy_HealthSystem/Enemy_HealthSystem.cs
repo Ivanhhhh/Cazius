@@ -1,11 +1,16 @@
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 {
     [SerializeField] private float _maxHealth = 100f;
     [SerializeField] private float _currentHealth;
+
+    [Header("Soul Energy")]
+    [SerializeField] private GameObject _soulEnergyPrefab;
 
     public Action OnDeath;
     public Action<float> OnDamaged;
@@ -105,6 +110,11 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 
         yield return new WaitForSeconds(1.2f);
 
-        Destroy(gameObject);
+        _soulEnergyPrefab.SetActive(true);
+        _soulEnergyPrefab.transform.position = transform.position;
+        Debug.Log("Soul Energy Drop");
+
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

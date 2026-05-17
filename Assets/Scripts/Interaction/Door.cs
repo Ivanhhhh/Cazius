@@ -11,6 +11,10 @@ public class Door : MonoBehaviour, IInteractable  // Lo tienen "Door Pivot" con 
     [SerializeField] private GameObject _lockIcon;
     [SerializeField] private GameObject _unlockIcon;
 
+    [Header("Door Type")]
+    [SerializeField] private bool _isEdenDoor;
+    [SerializeField] private bool _isPurgatoryDoor;
+
     void Start()
     {
         _lockIcon.SetActive(true);
@@ -22,10 +26,22 @@ public class Door : MonoBehaviour, IInteractable  // Lo tienen "Door Pivot" con 
         Debug.Log("#### IsOpen: " + _isOpen);
         if (_isOpen) return;
 
-        if (!inventory.HasKey)
+        if (_isEdenDoor)
         {
-            Debug.Log("Door locked");
-            return;
+            if (!inventory.HasPurgatoryKey)
+            {
+                Debug.Log("You need PURGATORY key");
+                return;
+            }
+        }
+
+        if (_isPurgatoryDoor)
+        {
+            if (!inventory.HasEdenKey)
+            {
+                Debug.Log("You need EDEN key");
+                return;
+            }
         }
 
         OpenDoor();
@@ -38,5 +54,7 @@ public class Door : MonoBehaviour, IInteractable  // Lo tienen "Door Pivot" con 
         _lockIcon.SetActive(false);
         transform.Rotate(0, _openAngle, 0);
         _isOpen = true;
+
+        Debug.Log("Door open");
     }
 }
