@@ -80,7 +80,6 @@ public class DoorFixer : MonoBehaviour
     }
     void Start()
     {
-        //_joint = GetComponent<HingeJoint>(); 
         StartDamper();
     }
 

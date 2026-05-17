@@ -16,11 +16,15 @@ public class OpenDoor : MonoBehaviour, IEInteractable
 
     private bool _isOpening = false;
 
-
+   
 
     [SerializeField] HingeJoint _joint;
 
-    [SerializeField] GameObject OpenDoorText;
+    JointLimits limits;
+
+   [SerializeField] GameObject OpenDoorText;
+
+    [SerializeField] Vector3 CloseAxis;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -57,6 +61,8 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     void Start()
     {
         //_joint = GetComponent<HingeJoint>();
+         limits = _joint.limits;
+
 
     }
 
@@ -73,7 +79,7 @@ public class OpenDoor : MonoBehaviour, IEInteractable
             }
             else if (_canClose && !_CanOpen && !_isOpening)
             {
-                StartCoroutine(CloseDoor());
+                StartCoroutine(CloseDoorMethod());
             }
         }
 
@@ -81,37 +87,64 @@ public class OpenDoor : MonoBehaviour, IEInteractable
 
     }
 
-    public IEnumerator Timer()
+    public IEnumerator OpenDoorMethod()
     {
-        _CanOpen = false;
+        JointMotor motor = _joint.motor;
+        motor.force = 150f;
+        motor.targetVelocity = 600f;  // negativo
+        _joint.motor = motor;
+
+
         _isOpening = true;
         _joint.useMotor = true;
         _joint.useLimits = true;
         _canClose = false;     // ← no puede cerrar mientras abre
+       
+
         yield return new WaitForSeconds(1f);
         _isOpening = false;
         _canClose = true;      // ← recién ahora puede cerrar
+        _CanOpen = false;
+
     }
 
 
-    public IEnumerator CloseDoor()
+    public IEnumerator CloseDoorMethod()
     {
-        _canClose = false;
 
-        _joint.useMotor = false;
-        _joint.useLimits = false;
-        //  _isOpening = false;
 
-        yield return new WaitForSeconds(2);
+        JointMotor motor = _joint.motor;
+        motor.force = 150f;
+        motor.targetVelocity = -600f;  // negativo
+        _joint.motor = motor;
+        _joint.useMotor = true;
+
+
+
+        //_joint.useMotor = false;
+        //_joint.useLimits = false;
+
+
+        yield return new WaitForSeconds(1f);
         _CanOpen = true;
-
+        _canClose = false;
+       // _isOpening = true;    // ← recién ahora puede abrir
     }
 
 
     public void Interact(Transform interactorTransform)
     {
        _CanOpen = false;
-        StartCoroutine(Timer());
+        StartCoroutine(OpenDoorMethod());
+
+
+
+    }
+
+    public void InteractClose(Transform interactorTransform)
+    {
+        _CanOpen = false;
+        StartCoroutine(OpenDoorMethod());
 
 
 
