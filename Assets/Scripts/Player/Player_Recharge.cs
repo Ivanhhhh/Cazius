@@ -7,7 +7,7 @@ public class Player_Recharge : MonoBehaviour
     [SerializeField] int _maxBullets;
     [SerializeField] TextMeshProUGUI _maxBulletsUI;
     [SerializeField] TextMeshProUGUI _pressR;
-    [SerializeField] PlayerMovement _movement;
+
     private int _remainingBullets;
     private TextMeshProUGUI _remainingBulletsUI;
     public bool _hasBullets => _remainingBullets > 0;
@@ -20,11 +20,12 @@ public class Player_Recharge : MonoBehaviour
     }
     void Update()
     {
-        if (_movement._controls.Player.Recharge.IsPressed())
+        if (GameInputManager.Instance.Controls.Player.Recharge.IsPressed())
         {
             OnShoot();
         }
     }
+
     void ManageShoot()
     {
         _remainingBullets --;

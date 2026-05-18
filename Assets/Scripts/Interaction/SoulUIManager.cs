@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class SoulUIManager : MonoBehaviour
 {
-    public static SoulUIManager Instance;
     [SerializeField] private GameObject[] _soulEnergyPanels;
+
+    public static SoulUIManager Instance;
+
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -22,4 +24,5 @@ public class SoulUIManager : MonoBehaviour
             _soulEnergyPanels[currentSoulEnergy - 1].SetActive(true);
         }
     }
+
 }

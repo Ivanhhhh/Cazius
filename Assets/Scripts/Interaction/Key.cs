@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Key : MonoBehaviour, IInteractable // Lo tiene la "Key" con layer "Interactive", _keyPanel tiene q estar apagado
+public class Key : MonoBehaviour, IEInteractable
 {
     [Header("Key type")]
     [SerializeField] private bool _isEdenKey;
@@ -8,29 +8,33 @@ public class Key : MonoBehaviour, IInteractable // Lo tiene la "Key" con layer "
 
     [Header("UI")]
     [SerializeField] private GameObject _keyPanel;
-    [SerializeField] private GameObject _interactionIcon;
+    [SerializeField] private string _interactText = "F to Grab Key";
 
     [SerializeField] private ObjectsActivator _objectsToActivate;
 
-    public void Interact(InventorySystem inventory)
+    public void Interact(Transform interactorTransform)
     {
         if (_isPurgatoryKey)
         {
-            inventory.AddPurgatoryKey();
+            KeyInventorySystem.Instance.AddPurgatoryKey();
 
             if (_objectsToActivate != null)
             {
-                _objectsToActivate.Interact(inventory);
+                _objectsToActivate.Activate();
             }
         }
 
         if (_isEdenKey)
         {
-            inventory.AddEdenKey();
+            KeyInventorySystem.Instance.AddEdenKey();
         }
 
         _keyPanel.SetActive(true);
-        _interactionIcon.SetActive(false);
         gameObject.SetActive(false);
     }
+
+    public string GetInteractText() { return _interactText; }
+
+    public Transform GetTransform() { return transform; }
+
 }
