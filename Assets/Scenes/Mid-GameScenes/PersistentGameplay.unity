@@ -12037,6 +12037,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2062108433815016815, guid: 2e1f691619d530e4998142bc62f2a592, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1745948359331352195}
+    - targetCorrespondingSourceObject: {fileID: 2062108433815016815, guid: 2e1f691619d530e4998142bc62f2a592, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1745948359331352196}
   m_SourcePrefab: {fileID: 100100000, guid: 2e1f691619d530e4998142bc62f2a592, type: 3}
 --- !u!1 &1745948359331352194 stripped
 GameObject:
@@ -12055,6 +12058,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02518a5e85f5ffe4199b5ad7f5103ccf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KeyInventorySystem
+  _inventoryCanvas: {fileID: 1745948359331352197}
+--- !u!114 &1745948359331352196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745948359331352194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45bf7356776814840a1c85d7e9fb6f88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoulUIManager
+  _soulEnergyPanels:
+  - {fileID: 1952708874}
+  - {fileID: 950711008}
+  - {fileID: 1715784089}
+--- !u!1 &1745948359331352197 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2372650093326736052, guid: 2e1f691619d530e4998142bc62f2a592, type: 3}
+  m_PrefabInstance: {fileID: 1745948359331352193}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1834386828028990098
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12665,23 +12690,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2882463650824585210}
   m_CullTransparentMesh: 1
---- !u!114 &3433208620270763831
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4517999303658548964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45bf7356776814840a1c85d7e9fb6f88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SoulUIManager
-  _soulEnergyPanels:
-  - {fileID: 1952708874}
-  - {fileID: 950711008}
-  - {fileID: 1715784089}
-  _keyInventorySystem: {fileID: 0}
 --- !u!224 &3441053232890659202
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13144,7 +13152,6 @@ GameObject:
   - component: {fileID: 1132169986169369673}
   - component: {fileID: 5989402406274459379}
   - component: {fileID: 1533106929218099891}
-  - component: {fileID: 3433208620270763831}
   m_Layer: 5
   m_Name: PlayerCanvas
   m_TagString: Untagged

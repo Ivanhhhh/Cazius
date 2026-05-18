@@ -35,7 +35,7 @@ public class Interaction : MonoBehaviour // Lo tiene el player con tag "Player" 
 
     private void HandleConsume()
     {
-        if (_controls.Player.Consume.WasPressedThisFrame() && _inventory.CurrentSoulEnergy > 0)
+        if (_controls.UI.Consume.WasPressedThisFrame() && _inventory.CurrentSoulEnergy > 0)
         {
             _inventory.RemoveSoulEnergy();
 
