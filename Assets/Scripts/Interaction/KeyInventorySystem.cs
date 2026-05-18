@@ -12,6 +12,8 @@ public class KeyInventorySystem : MonoBehaviour // Lo tiene Inventory
 
     public static KeyInventorySystem Instance { get; private set; }
 
+    public PlayerControls _controls;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -21,6 +23,15 @@ public class KeyInventorySystem : MonoBehaviour // Lo tiene Inventory
         }
         Instance = this;
     }
+
+    private void Start()
+    {
+        _controls = GameInputManager.Instance.Controls;
+    }
+
+    private void OnEnable() => _controls.Player.Consume.performed += _ => ConsumeSoulEnergy();
+
+    private void OnDisable() => _controls.Player.Consume.performed += _ => ConsumeSoulEnergy();
 
     public void AddEdenKey()
     {
@@ -41,6 +52,17 @@ public class KeyInventorySystem : MonoBehaviour // Lo tiene Inventory
         {
             CurrentSoulEnergy--;
             Debug.Log("Soul Energy has consumed" + CurrentSoulEnergy);
+        }
+    }
+
+    private void ConsumeSoulEnergy()
+    {
+        if (CurrentSoulEnergy > 0)
+        {
+            RemoveSoulEnergy();
+            SoulUIManager.Instance.UpdateUI(CurrentSoulEnergy);
+
+            Debug.Log("Soul Energy consumed");
         }
     }
 

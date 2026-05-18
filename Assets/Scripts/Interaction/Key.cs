@@ -20,7 +20,7 @@ public class Key : MonoBehaviour, IEInteractable
 
             if (_objectsToActivate != null)
             {
-                _objectsToActivate.Interact(KeyInventorySystem.Instance);
+                _objectsToActivate.Activate();
             }
         }
 
@@ -37,25 +37,4 @@ public class Key : MonoBehaviour, IEInteractable
 
     public Transform GetTransform() { return transform; }
 
-    /* public void Interact(KeyInventorySystem inventory)
-     {
-         if (_isPurgatoryKey)
-         {
-             inventory.AddPurgatoryKey();
-
-             if (_objectsToActivate != null)
-             {
-                 _objectsToActivate.Interact(inventory);
-             }
-         }
-
-         if (_isEdenKey)
-         {
-             inventory.AddEdenKey();
-         }
-
-         _keyPanel.SetActive(true);
-         gameObject.SetActive(false);
-     }
-    */
 }

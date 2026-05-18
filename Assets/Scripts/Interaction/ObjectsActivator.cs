@@ -1,16 +1,14 @@
 using UnityEngine;
 
-public class ObjectsActivator : MonoBehaviour, IInteractable // Lo que queres activar cuando agaarras la llave
+public class ObjectsActivator : MonoBehaviour
 {
     [SerializeField] private GameObject[] _ObjectsToActivate;
 
-    public void Interact(KeyInventorySystem inventory)
+    public void Activate()
     {
         foreach (GameObject objects in _ObjectsToActivate)
         {
             objects.SetActive(true);
         }
-
-        //gameObject.SetActive(false);
     }
 }

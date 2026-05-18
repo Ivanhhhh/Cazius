@@ -5,7 +5,7 @@ public class Interaction : MonoBehaviour // Lo tiene el player con tag "Player" 
     [SerializeField] private InteractionRaycast _raycast;
     [SerializeField] private KeyInventorySystem _inventory;
 
-        public PlayerControls _controls;
+    public PlayerControls _controls;
 
     void Start()
     {
