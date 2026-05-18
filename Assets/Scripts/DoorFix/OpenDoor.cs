@@ -22,7 +22,7 @@ public class OpenDoor : MonoBehaviour, IEInteractable
 
     JointLimits limits;
 
-   [SerializeField] GameObject OpenDoorText;
+   [SerializeField] string OpenDoorText;
 
     [SerializeField] Vector3 CloseAxis;
 
@@ -52,7 +52,7 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            OpenDoorText.SetActive(false);
+           // OpenDoorText.SetActive(false);
 
             IsNear = false;
         }
@@ -60,22 +60,19 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     }
     void Start()
     {
-        //_joint = GetComponent<HingeJoint>();
          limits = _joint.limits;
 
 
     }
 
-    // Update is called once per frame
     void Update()
     {
-
         if (Keyboard.current.fKey.wasPressedThisFrame && IsNear == true)
         {
             if (_CanOpen && !_canClose)
             {
                 Interact(this.transform);
-                OpenDoorText.SetActive(false);
+               // OpenDoorText.SetActive(false);
             }
             else if (_canClose && !_CanOpen && !_isOpening)
             {
@@ -119,11 +116,8 @@ public class OpenDoor : MonoBehaviour, IEInteractable
         _joint.motor = motor;
         _joint.useMotor = true;
 
-
-
         //_joint.useMotor = false;
         //_joint.useLimits = false;
-
 
         yield return new WaitForSeconds(1f);
         _CanOpen = true;
@@ -136,27 +130,17 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     {
        _CanOpen = false;
         StartCoroutine(OpenDoorMethod());
-
-
-
     }
 
     public void InteractClose(Transform interactorTransform)
     {
         _CanOpen = false;
         StartCoroutine(OpenDoorMethod());
-
-
-
     }
-    public string GetInteractText()
-    {
-        OpenDoorText.SetActive(true);
-        return OpenDoorText.ToString();
-    }
+    public string GetInteractText() { return OpenDoorText; }
+
     public Transform GetTransform()
     {
         return this.transform;
     }
 }
-
