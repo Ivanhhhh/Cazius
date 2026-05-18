@@ -8,15 +8,9 @@ public class InventoryInputHandler : MonoBehaviour
 
     public static event Action<bool> OnInventoryToggled;
 
-    void Start()
-    {
-        GameInputManager.Instance.Controls.UI.InventoryMenu.performed += OnInventory;
-    }
+    void Start() => GameInputManager.Instance.Controls.UI.InventoryMenu.performed += OnInventory;
 
-    void OnDisable()
-    {
-        GameInputManager.Instance.Controls.UI.InventoryMenu.performed -= OnInventory;
-    }
+    void OnDisable() => GameInputManager.Instance.Controls.UI.InventoryMenu.performed -= OnInventory;
 
     private void OnInventory(InputAction.CallbackContext _)
     {
@@ -29,8 +23,7 @@ public class InventoryInputHandler : MonoBehaviour
             return;
         }
 
-        if (PauseManager.Instance.IsPaused)
-            return;
+        if (PauseManager.Instance.IsPaused) return;
 
         PauseManager.Instance.Toggle();
         _inventoryCanvas.SetActive(true);

@@ -8,7 +8,7 @@ public class Player_SoulEnergy : MonoBehaviour, IInteractable
     [Header("UI")]
     [SerializeField] private GameObject _soulEnergyInteractionIcon;
 
-    public void Interact(InventorySystem inventory)
+    public void Interact(KeyInventorySystem inventory)
     {
         if (inventory.CurrentSoulEnergy >= _maxSoulEnergy) return;
 

@@ -24,7 +24,6 @@ public class PauseManager : MonoBehaviour
     public void Toggle()
     {
         IsPaused = !IsPaused;
-        Debug.Log($"Toggle called — IsPaused is now: {IsPaused}");
 
         if (IsPaused)
         {

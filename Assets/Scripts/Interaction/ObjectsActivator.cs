@@ -4,7 +4,7 @@ public class ObjectsActivator : MonoBehaviour, IInteractable // Lo que queres ac
 {
     [SerializeField] private GameObject[] _ObjectsToActivate;
 
-    public void Interact(InventorySystem inventory)
+    public void Interact(KeyInventorySystem inventory)
     {
         foreach (GameObject objects in _ObjectsToActivate)
         {

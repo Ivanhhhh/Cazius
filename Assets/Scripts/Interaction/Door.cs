@@ -21,7 +21,7 @@ public class Door : MonoBehaviour, IInteractable  // Lo tienen "Door Pivot" con 
         _unlockIcon.SetActive(false);
     }
 
-    public void Interact(InventorySystem inventory)
+    public void Interact(KeyInventorySystem inventory)
     {
         Debug.Log("#### IsOpen: " + _isOpen);
         if (_isOpen) return;

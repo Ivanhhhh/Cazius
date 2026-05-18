@@ -637,7 +637,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Interaction
   _raycast: {fileID: 7110116111672242473}
   _inventory: {fileID: 0}
-  InputActions: {fileID: -944628639613478452, guid: 627bacdb2647ba34f8b57b9c1006a98f, type: 3}
 --- !u!114 &7476170225939602253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -670,7 +669,6 @@ MonoBehaviour:
   - {fileID: 3915939884766231080}
   - {fileID: 7476170225939602253}
   - {fileID: 6119244959425966609}
-  _playerMovement: {fileID: 7436610461006387000}
   _animator: {fileID: 8848708899537715038}
 --- !u!114 &1222896182196848814
 MonoBehaviour:
@@ -685,9 +683,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player_HealthSystem
   _maxHealth: 100
-  _healthColors: []
+  _healthColors:
+  - {r: 0, g: 1, b: 0.08520007, a: 1}
+  - {r: 0.019118482, g: 0.509434, b: 0, a: 1}
+  - {r: 1, g: 0.90821296, b: 0, a: 1}
+  - {r: 1, g: 0.40705168, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
   _healthState: 0
-  _invincibilityDuration: 0.5
+  _invincibilityDuration: 1.5
   _currentHealthText: {fileID: 0}
   _healthStateImage: {fileID: 0}
   _displayDuration: 2.5
