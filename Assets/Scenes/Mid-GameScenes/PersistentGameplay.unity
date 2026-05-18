@@ -6880,7 +6880,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 994780858}
-  - component: {fileID: 994780859}
+  - component: {fileID: 994780862}
   - component: {fileID: 994780860}
   - component: {fileID: 994780861}
   m_Layer: 9
@@ -6906,25 +6906,6 @@ Transform:
   - {fileID: 899740927}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &994780859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 994780857}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c704448a668e7bf4188891176c4dd27b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Door
-  _isOpen: 0
-  _openAngle: -90
-  _interactTextA: F to Open Door
-  _interactTextB: You need PURGATORY key
-  _interactTextC: You need EDEN key
-  _isEdenDoor: 0
-  _isPurgatoryDoor: 1
 --- !u!114 &994780860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6962,6 +6943,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.1260223, y: 2.168431, z: 0.3168993}
   m_Center: {x: 0.51795197, y: 1.0703758, z: 0.10493612}
+--- !u!114 &994780862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994780857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39754afe0ca105c479a08f929fe08518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PurgatoryDoor
+  _isOpen: 0
+  _openAngle: -90
+  _interactText: You need Purgatory Key
 --- !u!4 &996747225 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3668788183484189495, guid: e278fafb54a661b46afc7f645ea83297, type: 3}
@@ -8576,11 +8572,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Door
   _isOpen: 0
   _openAngle: -90
-  _interactTextA: F to Open Door
-  _interactTextB: You need PURGATORY key
-  _interactTextC: You need EDEN key
-  _isEdenDoor: 1
-  _isPurgatoryDoor: 0
+  _interactText: You need Eden Key
 --- !u!114 &1370567961
 MonoBehaviour:
   m_ObjectHideFlags: 0
