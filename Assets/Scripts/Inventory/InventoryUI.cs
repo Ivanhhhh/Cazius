@@ -6,8 +6,8 @@ public class InventoryUI : MonoBehaviour
 {
     [Header("References")]
     public GameObject panel;
-    public Transform slotContainer;   
-    public GameObject slotPrefab;     
+    public Transform slotContainer;   // The GridLayoutGroup parent
+    public GameObject slotPrefab;
 
     void OnEnable()
     {
@@ -59,6 +59,8 @@ public class InventoryUI : MonoBehaviour
 
     void Refresh()
     {
+        if (Inventory.Instance == null) return;
+
         foreach (Transform child in slotContainer)
             Destroy(child.gameObject);
 

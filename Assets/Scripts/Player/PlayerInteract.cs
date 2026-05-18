@@ -11,12 +11,9 @@ public class PlayerInteract : MonoBehaviour
 
     private void Awake()
     {
-        _controls = new PlayerControls();
+        _controls = GameInputManager.Instance.Controls;
         _controls.Player.Interact.performed += _ => TryInteract();
     }
-
-    private void OnEnable() => _controls.Enable();
-    private void OnDisable() => _controls.Disable();
 
     private void TryInteract()
     {

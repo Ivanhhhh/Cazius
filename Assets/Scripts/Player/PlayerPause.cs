@@ -3,7 +3,6 @@ using UnityEngine;
 public class PlayerPause : MonoBehaviour, IPausable
 {
     [SerializeField] private MonoBehaviour[] _scriptsToDisable;
-    [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] Animator _animator;
 
     private bool _isPaused;
@@ -12,7 +11,6 @@ public class PlayerPause : MonoBehaviour, IPausable
     private void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
-        _playerMovement = GetComponent<PlayerMovement>();
     }
 
     private void Start()
@@ -29,7 +27,7 @@ public class PlayerPause : MonoBehaviour, IPausable
 
     public void OnPause()
     {
-        _playerMovement._controls.Player.Disable();
+        GameInputManager.Instance.Controls.Player.Disable();
         foreach (MonoBehaviour script in _scriptsToDisable)
         {
             script.enabled = false;
@@ -43,7 +41,7 @@ public class PlayerPause : MonoBehaviour, IPausable
 
     public void OnResume()
     {
-        _playerMovement._controls.Player.Enable();
+        GameInputManager.Instance.Controls.Player.Enable();
         foreach (MonoBehaviour script in _scriptsToDisable)
         {
             script.enabled = true;

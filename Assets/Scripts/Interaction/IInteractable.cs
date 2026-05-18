@@ -1,6 +1,4 @@
-using UnityEngine;
-
 public interface IInteractable
 {
-    void Interact(InventorySystem inventory);
+    void Interact(KeyInventorySystem inventory);
 }
