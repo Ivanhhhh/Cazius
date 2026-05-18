@@ -1,26 +1,16 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Interaction : MonoBehaviour // Lo tiene el player con tag "Player" y layer Player
 {
     [SerializeField] private InteractionRaycast _raycast;
-    [SerializeField] private InventorySystem _inventory;
+    [SerializeField] private KeyInventorySystem _inventory;
 
-    [Header("Inputs")]
-    [SerializeField] private InputActionAsset InputActions;
-    private InputAction m_interactAction;
-    private InputAction m_consumeAction;
+    public PlayerControls _controls;
 
-    void Awake()
+    void Start()
     {
-        var playerMap = InputActions.FindActionMap("Player");
-        m_interactAction = playerMap.FindAction("Interaction");
-        m_consumeAction = playerMap.FindAction("Consume");
+        _controls = GameInputManager.Instance.Controls;
     }
-
-    void OnEnable() { InputActions.Enable(); }
-    void OnDisable() { InputActions.Disable(); }
 
     private void Update()
     {
@@ -30,7 +20,9 @@ public class Interaction : MonoBehaviour // Lo tiene el player con tag "Player" 
 
     private void HandleInteraction()
     {
-        bool canInteract = m_interactAction.WasPressedThisFrame() && _raycast.CurrentTarget != null;
+        Debug.Log("#### HandleInteraction");
+
+        bool canInteract = _controls.Player.Interaction.WasPressedThisFrame() && _raycast.CurrentTarget != null;
 
         if (!canInteract) return;
 
@@ -43,7 +35,7 @@ public class Interaction : MonoBehaviour // Lo tiene el player con tag "Player" 
 
     private void HandleConsume()
     {
-        if (m_consumeAction.WasPressedThisFrame() && _inventory.CurrentSoulEnergy > 0)
+        if (_controls.UI.Consume.WasPressedThisFrame() && _inventory.CurrentSoulEnergy > 0)
         {
             _inventory.RemoveSoulEnergy();
 
