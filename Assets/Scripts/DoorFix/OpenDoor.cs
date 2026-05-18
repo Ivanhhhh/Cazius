@@ -1,146 +1,68 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class OpenDoor : MonoBehaviour, IEInteractable
 {
-    //private bool OpenIsEnabled = false;
-
-    //private bool _isOpening = false;
-
-    private bool _CanOpen = true;
-
+    private bool _canOpen = true;
     private bool _canClose = false;
-
-    private bool IsNear;
-
     private bool _isOpening = false;
 
-   
+    [SerializeField] private HingeJoint _joint;
+    [SerializeField] private string _interactText = "F to Open Door";
 
-    [SerializeField] HingeJoint _joint;
+    private JointLimits _limits;
 
-    JointLimits limits;
-
-   [SerializeField] string OpenDoorText;
-
-    [SerializeField] Vector3 CloseAxis;
-
-    private void OnTriggerEnter(Collider other)
+    private void Start()
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            IsNear = true;
-
-            // OpenIsEnabled = true;
-
-            GetInteractText();
-        }
+        _limits = _joint.limits;
     }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            IsNear = true;
-
-
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-           // OpenDoorText.SetActive(false);
-
-            IsNear = false;
-        }
-
-    }
-    void Start()
-    {
-         limits = _joint.limits;
-
-
-    }
-
-    void Update()
-    {
-        if (Keyboard.current.fKey.wasPressedThisFrame && IsNear == true)
-        {
-            if (_CanOpen && !_canClose)
-            {
-                Interact(this.transform);
-               // OpenDoorText.SetActive(false);
-            }
-            else if (_canClose && !_CanOpen && !_isOpening)
-            {
-                StartCoroutine(CloseDoorMethod());
-            }
-        }
-
-        //else if (OpenIsEnabled == false && _isOpening == false) _joint.useMotor = false;
-
-    }
-
-    public IEnumerator OpenDoorMethod()
-    {
-        JointMotor motor = _joint.motor;
-        motor.force = 150f;
-        motor.targetVelocity = 600f;  // negativo
-        _joint.motor = motor;
-
-
-        _isOpening = true;
-        _joint.useMotor = true;
-        _joint.useLimits = true;
-        _canClose = false;     // ← no puede cerrar mientras abre
-       
-
-        yield return new WaitForSeconds(1f);
-        _isOpening = false;
-        _canClose = true;      // ← recién ahora puede cerrar
-        _CanOpen = false;
-
-    }
-
-
-    public IEnumerator CloseDoorMethod()
-    {
-
-
-        JointMotor motor = _joint.motor;
-        motor.force = 150f;
-        motor.targetVelocity = -600f;  // negativo
-        _joint.motor = motor;
-        _joint.useMotor = true;
-
-        //_joint.useMotor = false;
-        //_joint.useLimits = false;
-
-        yield return new WaitForSeconds(1f);
-        _CanOpen = true;
-        _canClose = false;
-       // _isOpening = true;    // ← recién ahora puede abrir
-    }
-
 
     public void Interact(Transform interactorTransform)
     {
-       _CanOpen = false;
-        StartCoroutine(OpenDoorMethod());
+        if (_canOpen && !_canClose)
+        {
+            StartCoroutine(OpenDoorMethod());
+        }
+        else if (_canClose && !_canOpen && !_isOpening)
+        {
+            StartCoroutine(CloseDoorMethod());
+        }
     }
 
-    public void InteractClose(Transform interactorTransform)
+    private IEnumerator OpenDoorMethod()
     {
-        _CanOpen = false;
-        StartCoroutine(OpenDoorMethod());
-    }
-    public string GetInteractText() { return OpenDoorText; }
+        _canOpen = false;
+        _canClose = false;
+        _isOpening = true;
 
-    public Transform GetTransform()
-    {
-        return this.transform;
+        JointMotor motor = _joint.motor;
+        motor.force = 150f;
+        motor.targetVelocity = 600f;
+        _joint.motor = motor;
+        _joint.useMotor = true;
+        _joint.useLimits = true;
+
+        yield return new WaitForSeconds(1f);
+
+        _isOpening = false;
+        _canClose = true;
     }
+
+    private IEnumerator CloseDoorMethod()
+    {
+        _canClose = false;
+
+        JointMotor motor = _joint.motor;
+        motor.force = 150f;
+        motor.targetVelocity = -600f;
+        _joint.motor = motor;
+        _joint.useMotor = true;
+
+        yield return new WaitForSeconds(1f);
+
+        _canOpen = true;
+    }
+
+    public string GetInteractText() { return _interactText; }
+    public Transform GetTransform() { return transform; }
 }
