@@ -7,11 +7,14 @@ public class WorldObject : MonoBehaviour // Va en cada objecto que se quiera pre
     [SerializeField] private bool _showInPurgatory;
 
     [SerializeField] private GameObject _visualRoot;
+    [SerializeField] private Collider _collider;
 
     void Start()
     {
         UpdateWorldVisibility();
+        _collider = GetComponent<Collider>();
     }
+
     void OnEnable()
     {
         WorldChangeManager.Instance.SwapToEdenEvent += HandleSwapToEden;
@@ -29,18 +32,28 @@ public class WorldObject : MonoBehaviour // Va en cada objecto que se quiera pre
     private void HandleSwapToEden()
     {
         _visualRoot.SetActive(_showInEden);
+        if (_collider) _collider.enabled = _showInEden;
     }
 
     private void HandleSwapToPurgatory()
     {
         _visualRoot.SetActive(_showInPurgatory);
+        if (_collider) _collider.enabled = _showInPurgatory;
     }
 
     private void UpdateWorldVisibility()
     {
         bool isInEden = WorldChangeManager.Instance.IsInEden;
 
-        if (isInEden) _visualRoot.SetActive(_showInEden);
-        else _visualRoot.SetActive(_showInPurgatory);
+        if (isInEden)
+        {
+            _visualRoot.SetActive(_showInEden);
+            _collider.enabled = _showInEden;
+        }
+        else
+        {
+            _visualRoot.SetActive(_showInPurgatory);
+            _collider.enabled = _showInPurgatory;
+        }
     }
 }

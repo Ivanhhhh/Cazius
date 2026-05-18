@@ -12,5 +12,5 @@ public class ItemData : ScriptableObject
     public string itemName;
     public Sprite icon;
     public ItemType itemType;
-    public int value; // HP restored OR ammo added
+    public int value; // HP restored, Ammo added, Soul Energy, etc
 }

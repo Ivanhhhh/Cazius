@@ -80,7 +80,7 @@ public class Player_AimAndShoot : MonoBehaviour
         _crosshairLeft.gameObject.SetActive(false);
         _crosshairRight.gameObject.SetActive(false);
 
-        _movement._controls.Player.Recharge.started += Recharge;
+        GameInputManager.Instance.Controls.Player.Recharge.started += Recharge;
         UpdateUI();
 
         if (flashLight == null)
@@ -100,15 +100,15 @@ public class Player_AimAndShoot : MonoBehaviour
     void HandleAimInput()
     {
         // Se suscribe y desuscribe cada frame para evitar disparos fuera del modo apuntado
-        if (_movement._controls.Player.Aim.IsPressed())
-            _movement._controls.Player.Shoot.started += OnShootStarted;
+        if (GameInputManager.Instance.Controls.Player.Aim.IsPressed())
+            GameInputManager.Instance.Controls.Player.Shoot.started += OnShootStarted;
         else
-            _movement._controls.Player.Shoot.started -= OnShootStarted;
+            GameInputManager.Instance.Controls.Player.Shoot.started -= OnShootStarted;
     }
 
     void UpdateCrosshairIndicators()
     {
-        bool isAiming = _movement._controls.Player.Aim.IsPressed();
+        bool isAiming = GameInputManager.Instance.Controls.Player.Aim.IsPressed();
 
         // El spread se actualiza siempre aunque no se esté apuntando
         // para que al volver a apuntar ya refleje la velocidad actual

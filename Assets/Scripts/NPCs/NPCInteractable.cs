@@ -4,7 +4,7 @@ public class NPCInteractable : MonoBehaviour, IEInteractable
 {
     public enum GiveType { Health, Ammo }
 
-    [SerializeField] private string _interactText = "E to talk";
+    [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
     [SerializeField] private GiveType _giveType;
     [SerializeField] private ItemData _health;

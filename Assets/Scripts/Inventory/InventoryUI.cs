@@ -6,7 +6,7 @@ public class InventoryUI : MonoBehaviour
     [Header("References")]
     public GameObject panel;
     public Transform slotContainer;   // The GridLayoutGroup parent
-    public GameObject slotPrefab;     // See setup below
+    public GameObject slotPrefab;
 
     void OnEnable()
     {
@@ -49,6 +49,8 @@ public class InventoryUI : MonoBehaviour
 
     void Refresh()
     {
+        if (Inventory.Instance == null) return;
+
         foreach (Transform child in slotContainer)
             Destroy(child.gameObject);
 
@@ -66,7 +68,7 @@ public class InventoryUI : MonoBehaviour
                 var item = Inventory.Instance.items[i];
                 icon.sprite = item.icon;
 
-                int index = i; // capture for lambda
+                int index = i;
                 slot.GetComponent<Button>().onClick.AddListener(() =>
                     Inventory.Instance.UseItem(Inventory.Instance.items[index])
                 );
