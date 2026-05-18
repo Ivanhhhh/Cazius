@@ -1,13 +1,15 @@
+using TMPro;
 using UnityEngine;
 
 public class NPCInteractable : MonoBehaviour, IEInteractable
 {
-    public enum GiveType { Health, Ammo }
+    public enum GiveType { Health, Ammo, Scrap }
 
     [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
     [SerializeField] private GiveType _giveType;
     [SerializeField] private ItemData _health;
+    [SerializeField] private ItemData _scrap;
     [SerializeField] private ItemData _ammo;
 
     private Animator _animator;
@@ -35,8 +37,10 @@ public class NPCInteractable : MonoBehaviour, IEInteractable
             case GiveType.Ammo:
                 Inventory.Instance.AddItem(_ammo);
                 break;
+            case GiveType.Scrap:
+                Inventory.Instance.AddItem(_scrap);
+                break;
         }
-
     }
 
     public string GetInteractText() { return _interactText; }

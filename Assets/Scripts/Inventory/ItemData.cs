@@ -3,7 +3,8 @@ using UnityEngine;
 public enum ItemType
 {
     Heal,
-    Ammo
+    Ammo,
+    Scrap
 }
 
 [CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/Item")]
