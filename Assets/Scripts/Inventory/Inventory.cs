@@ -5,7 +5,6 @@ using UnityEngine.Events;
 public class Inventory : MonoBehaviour
 {
     [SerializeField] private Player_HealthSystem _playerHealthSystem;
-    [SerializeField] private Player_AimAndShoot _playerAimAndShoot;
 
     public static Inventory Instance { get; private set; }
 
@@ -27,7 +26,9 @@ public class Inventory : MonoBehaviour
             return false;
         }
 
-        items.Add(item);
+        ItemData clonedItem = Instantiate(item);
+        items.Add(clonedItem);
+        
         onInventoryChanged?.Invoke();
         return true;
     }
@@ -39,14 +40,60 @@ public class Inventory : MonoBehaviour
             case ItemType.Heal:
                 _playerHealthSystem.Heal(10);
                 SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.Heal);
+                items.Remove(item);
+                onInventoryChanged?.Invoke();
                 break;
             case ItemType.Ammo:
-                _playerAimAndShoot.AddReserveBullets(20);
-                SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
+                // Ya no hacemos nada al "Usar" la munición manualmente.
+                Debug.Log("La munición se recarga automáticamente con la tecla R.");
                 break;
         }
+    }
 
-        items.Remove(item);
-        onInventoryChanged?.Invoke();
+
+    public int GetTotalAmmo()
+    {
+        int totalAmmo = 0;
+        foreach (var item in items)
+        {
+            if (item.itemType == ItemType.Ammo)
+            {
+                totalAmmo += item.value;
+            }
+        }
+        return totalAmmo;
+    }
+
+    public int ConsumeAmmo(int amountNeeded)
+    {
+        int amountExtracted = 0;
+
+        for (int i = items.Count - 1; i >= 0; i--)
+        {
+            if (items[i].itemType == ItemType.Ammo)
+            {
+                int bulletsToTake = Mathf.Min(items[i].value, amountNeeded - amountExtracted);
+                
+                items[i].value -= bulletsToTake;
+                amountExtracted += bulletsToTake;
+
+                if (items[i].value <= 0)
+                {
+                    items.RemoveAt(i);
+                }
+
+                if (amountExtracted >= amountNeeded)
+                {
+                    break;
+                }
+            }
+        }
+
+        if (amountExtracted > 0)
+        {
+            onInventoryChanged?.Invoke();
+        }
+
+        return amountExtracted;
     }
 }

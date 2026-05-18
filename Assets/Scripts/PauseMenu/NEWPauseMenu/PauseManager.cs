@@ -27,7 +27,7 @@ public class PauseManager : MonoBehaviour
 
         if (IsPaused)
         {
-            Time.timeScale = 0f;
+            //Time.timeScale = 0f;
             AudioSettingsManager.instance.SetMusicVolume(0f);
             OnPaused?.Invoke();
         }
