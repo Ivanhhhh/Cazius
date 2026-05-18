@@ -1,68 +1,104 @@
 ﻿using System.Collections;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 public class OpenDoor : MonoBehaviour, IEInteractable
 {
-    private bool _canOpen = true;
+    //private bool OpenIsEnabled = false;
+    //private bool _isOpening = false;
+    private bool _CanOpen = true;
     private bool _canClose = false;
+    private bool IsNear;
     private bool _isOpening = false;
 
-    [SerializeField] private HingeJoint _joint;
-    [SerializeField] private string _interactText = "F to Open Door";
-
-    private JointLimits _limits;
-
-    private void Start()
+    [SerializeField] HingeJoint _joint;
+    JointLimits limits;
+    [SerializeField] string OpenDoorText = "F To Interact";
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+    //    {
+    //        IsNear = true;
+    //        // OpenIsEnabled = true;
+    //        GetInteractText();
+    //    }
+    //}
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+    //    {
+    //        IsNear = true;
+    //    }
+    //}
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+    //    {
+    //        // OpenDoorText.SetActive(false);
+    //        IsNear = false;
+    //    }
+    //}
+    void Start()
     {
-        _limits = _joint.limits;
+        limits = _joint.limits;
     }
-
-    public void Interact(Transform interactorTransform)
+    void Update()
     {
-        if (_canOpen && !_canClose)
-        {
-            StartCoroutine(OpenDoorMethod());
-        }
-        else if (_canClose && !_canOpen && !_isOpening)
-        {
-            StartCoroutine(CloseDoorMethod());
-        }
+       
+        //else if (OpenIsEnabled == false && _isOpening == false) _joint.useMotor = false;
     }
-
-    private IEnumerator OpenDoorMethod()
+    public IEnumerator OpenDoorMethod()
     {
-        _canOpen = false;
-        _canClose = false;
-        _isOpening = true;
+        _CanOpen = false;
 
         JointMotor motor = _joint.motor;
         motor.force = 150f;
-        motor.targetVelocity = 600f;
+        motor.targetVelocity = 600f;  // negativo
         _joint.motor = motor;
+        _isOpening = true;
         _joint.useMotor = true;
         _joint.useLimits = true;
+        _canClose = false;     // ← no puede cerrar mientras abre
 
         yield return new WaitForSeconds(1f);
-
         _isOpening = false;
-        _canClose = true;
+        _canClose = true;      // ← recién ahora puede cerrar
+        _CanOpen = false;
     }
-
-    private IEnumerator CloseDoorMethod()
+    public IEnumerator CloseDoorMethod()
     {
-        _canClose = false;
+        _CanOpen = false;
 
         JointMotor motor = _joint.motor;
         motor.force = 150f;
-        motor.targetVelocity = -600f;
+        motor.targetVelocity = -600f;  // negativo
         _joint.motor = motor;
         _joint.useMotor = true;
-
+        //_joint.useMotor = false;
+        //_joint.useLimits = false;
         yield return new WaitForSeconds(1f);
-
-        _canOpen = true;
+        _CanOpen = true;
+        _canClose = false;
+        // _isOpening = true;    // ← recién ahora puede abrir
     }
-
-    public string GetInteractText() { return _interactText; }
-    public Transform GetTransform() { return transform; }
+    public void Interact(Transform interactorTransform)
+    {
+       // StartCoroutine(OpenDoorMethod());     
+            if (_CanOpen && !_canClose)
+            {
+               StartCoroutine(OpenDoorMethod());
+            }
+            else if (_canClose && !_CanOpen && !_isOpening)
+            {
+                StartCoroutine(CloseDoorMethod());
+            }
+    }
+    //public void InteractClose(Transform interactorTransform)
+    //{
+    //    StartCoroutine(OpenDoorMethod());
+    //}
+    public string GetInteractText() { return OpenDoorText; }
+    public Transform GetTransform()
+    {
+        return this.transform;
+    }
 }
