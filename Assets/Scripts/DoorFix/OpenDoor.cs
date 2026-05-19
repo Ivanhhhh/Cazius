@@ -9,7 +9,7 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     private bool _canClose = false;
     private bool IsNear;
     private bool _isOpening = false;
-
+    [SerializeField] Rigidbody _rigidbody;
     [SerializeField] HingeJoint _joint;
     JointLimits limits;
     [SerializeField] string OpenDoorText = "F To Interact";
@@ -26,24 +26,25 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     //{
     //    if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
     //    {
-    //        IsNear = true;
+    //        _rigidbody.isKinematic = true;
+
     //    }
+    //}
     //}
     //private void OnTriggerExit(Collider other)
     //{
     //    if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
     //    {
-    //        // OpenDoorText.SetActive(false);
-    //        IsNear = false;
     //    }
     //}
+
     void Start()
     {
         limits = _joint.limits;
     }
     void Update()
     {
-       
+
         //else if (OpenIsEnabled == false && _isOpening == false) _joint.useMotor = false;
     }
     public IEnumerator OpenDoorMethod()
@@ -82,15 +83,21 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     }
     public void Interact(Transform interactorTransform)
     {
-       // StartCoroutine(OpenDoorMethod());     
-            if (_CanOpen && !_canClose)
-            {
-               StartCoroutine(OpenDoorMethod());
-            }
-            else if (_canClose && !_CanOpen && !_isOpening)
-            {
-                StartCoroutine(CloseDoorMethod());
-            }
+        _rigidbody.isKinematic = false;
+
+        // StartCoroutine(OpenDoorMethod());     
+        if (_CanOpen && !_canClose)
+        {
+            _rigidbody.isKinematic = false;
+
+            StartCoroutine(OpenDoorMethod());
+        }
+        else if (_canClose && !_CanOpen && !_isOpening)
+        {
+            _rigidbody.isKinematic = false;
+
+            StartCoroutine(CloseDoorMethod());
+        }
     }
     //public void InteractClose(Transform interactorTransform)
     //{
