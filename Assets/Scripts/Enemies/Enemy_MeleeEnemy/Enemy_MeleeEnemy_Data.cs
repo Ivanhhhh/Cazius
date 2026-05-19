@@ -33,9 +33,10 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
 
     [Header("General")]
     [SerializeField] private Transform _playerTransform;
-
     [SerializeField] private Transform _selfObjectTransform;
     [SerializeField] private NavMeshAgent _agent;
+    [Header("Health")]
+    [SerializeField] public Enemy_HealthSystem _healthSystem;
 
     [Header("Behaviours")]
     public Enemy_PatrollingBehaviour _patrolling { get; private set; }
@@ -67,7 +68,7 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
 
         void InitializeBehaviours()
     {
-        _patrolling = new Enemy_PatrollingBehaviour(_nodes,_detectionRadius,_MaximumAmountOfNodes,_patrolSpeed,_selfObjectTransform,_agent);
+        _patrolling = new Enemy_PatrollingBehaviour(_nodes,_detectionRadius,_MaximumAmountOfNodes,_patrolSpeed,_selfObjectTransform,_agent,_healthSystem);
         _chasing = new Enemy_ChasingBehaviour(_playerTransform,_attackRadius,_agent,_selfObjectTransform,_chaseSpeed,_attackCooldown);
         _fieldOfView = new Enemy_FieldOfViewBehaviour(_playerTransform,_radiusVision,_selfObjectTransform, _angleVision, _lineOfSightLayerMask);
         _firstAttack = new Enemy_FirstAttackBehaviour(_firsAttackPreparationTime, _firstAttackDuration,_agent,_attackCollider);
