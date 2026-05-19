@@ -27,8 +27,6 @@ public class Player_AimAndShoot : MonoBehaviour
 
     [Header("Ammo")]
     [SerializeField] private int _maxBullets;
-    [SerializeField] private int _totalReserveBullets;
-
     [Header("Spread")]
     [SerializeField] private float _minSpread;
     [SerializeField] private float _maxSpread;
@@ -71,7 +69,6 @@ public class Player_AimAndShoot : MonoBehaviour
     [SerializeField] private BulletDecalSpawner _bulletDecalSpawner;
 
     private int _remainingBullets;
-    private int _reserveBullets;
     private float _shootTimer;
     public float _currentSpread;
 
@@ -81,7 +78,6 @@ public class Player_AimAndShoot : MonoBehaviour
     {
         _shootTimer = _shootInterval;
         _remainingBullets = _maxBullets;
-        _reserveBullets = _totalReserveBullets;
 
         _crossHair.enabled = false;
         _shootView.enabled = false;
@@ -99,7 +95,13 @@ public class Player_AimAndShoot : MonoBehaviour
         flashLight.intensity = 0f;
         flashLight.range = flashRange;
     }
-
+    void OnDestroy()
+    {
+        if (Inventory.Instance != null)
+        {
+            Inventory.Instance.onInventoryChanged.RemoveListener(UpdateUI);
+        }
+    }
     void FixedUpdate()
     {
         _shootTimer -= Time.deltaTime;
@@ -247,32 +249,30 @@ public class Player_AimAndShoot : MonoBehaviour
 
     void Recharge(InputAction.CallbackContext context)
     {
-        if (_remainingBullets == _maxBullets || _reserveBullets <= 0) return;
+        int totalReserve = Inventory.Instance.GetTotalAmmo();
 
-        // Toma solo las balas necesarias para no exceder el máximo del cargador
-        int bulletsToAdd = Mathf.Min(_maxBullets - _remainingBullets, _reserveBullets);
-        _remainingBullets += bulletsToAdd;
-        _reserveBullets -= bulletsToAdd;
+        if (_remainingBullets == _maxBullets || totalReserve <= 0) return;
+
+        int bulletsNeeded = _maxBullets - _remainingBullets;
+        
+        int bulletsObtained = Inventory.Instance.ConsumeAmmo(bulletsNeeded);
+
+        _remainingBullets += bulletsObtained;
+        
         UpdateUI();
         SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
     }
 
     void UpdateUI()
     {
+        int currentReserve = Inventory.Instance.GetTotalAmmo();
+
         _remainingBulletsUI.text = $"{_remainingBullets}";
-        _maxBulletsUI.text = $"{_reserveBullets}";
-        _pressR.enabled = _remainingBullets < _maxBullets && _reserveBullets > 0;
+        _maxBulletsUI.text = $"{currentReserve}";
+        
+        _pressR.enabled = _remainingBullets < _maxBullets && currentReserve > 0;
     }
 
-    public void AddReserveBullets(int bulletsToAdd)
-    {
-        _reserveBullets += bulletsToAdd;
-        if (_reserveBullets >= _totalReserveBullets) _reserveBullets = _totalReserveBullets;
-        SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
-        UpdateUI();
-    }
-
-    //flashlight effect, cambiar a otro script en algun momento
     public void Flash()
     {
         if (flashCoroutine != null)
