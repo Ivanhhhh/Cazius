@@ -17,16 +17,15 @@ public class Key : MonoBehaviour, IEInteractable
         if (_isPurgatoryKey)
         {
             KeyInventorySystem.Instance.AddPurgatoryKey();
-
-            if (_objectsToActivate != null)
-            {
-                _objectsToActivate.Activate();
-            }
         }
 
         if (_isEdenKey)
         {
             KeyInventorySystem.Instance.AddEdenKey();
+            if (_objectsToActivate != null)
+            {
+                _objectsToActivate.Activate();
+            }
         }
 
         _keyPanel.SetActive(true);
