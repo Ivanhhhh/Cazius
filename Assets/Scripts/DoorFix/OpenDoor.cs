@@ -41,8 +41,6 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     void Start()
     {
         limits = _joint.limits;
-        _rigidbody.isKinematic = true;
-
     }
     void Update()
     {
@@ -51,8 +49,6 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     }
     public IEnumerator OpenDoorMethod()
     {
-        _rigidbody.isKinematic = false;
-
         _CanOpen = false;
 
         JointMotor motor = _joint.motor;
@@ -71,8 +67,6 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     }
     public IEnumerator CloseDoorMethod()
     {
-        _rigidbody.isKinematic = false;
-
         _CanOpen = false;
 
         JointMotor motor = _joint.motor;
@@ -89,14 +83,18 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     }
     public void Interact(Transform interactorTransform)
     {
+        _rigidbody.isKinematic = false;
+
         // StartCoroutine(OpenDoorMethod());     
         if (_CanOpen && !_canClose)
         {
+            _rigidbody.isKinematic = false;
 
             StartCoroutine(OpenDoorMethod());
         }
         else if (_canClose && !_CanOpen && !_isOpening)
         {
+            _rigidbody.isKinematic = false;
 
             StartCoroutine(CloseDoorMethod());
         }
