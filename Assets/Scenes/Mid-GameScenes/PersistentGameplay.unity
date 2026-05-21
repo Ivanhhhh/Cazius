@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: fe4e130f9947345a2b213cb5038851a2, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 2d796ced94d61438fbab81b194038162, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000002, guid: f5f29d3083b9bc34da8416768d3ea612, type: 2}
+  m_LightingDataAsset: {fileID: 112000006, guid: 7279845d8dec1974dbeac4be5be1a8d0, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -9846,6 +9846,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1491384723}
   m_CullTransparentMesh: 1
+--- !u!1 &1524053986
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1524053988}
+  - component: {fileID: 1524053987}
+  m_Layer: 0
+  m_Name: SkyboxManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1524053987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1524053986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0e366dd8183f024ba49d8d8fbb36bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkyboxWorldChanger
+  edenSkybox: {fileID: 2100000, guid: 2d796ced94d61438fbab81b194038162, type: 2}
+  purgatorySkybox: {fileID: 2100000, guid: b4f152e0498484391a9f0d5a1facf03b, type: 2}
+  updateGlobalIllumination: 1
+--- !u!4 &1524053988
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1524053986}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -103.56519, y: 0.00001, z: 6901.511}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1534330317
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10599,7 +10646,7 @@ MonoBehaviour:
   _edenScatteringMin: 0.102
   _edenScatteringMax: 1
   _purgatoryColor: {r: 1, g: 0.7971698, b: 0.7971698, a: 1}
-  _purgatoryDensity: 0.027
+  _purgatoryDensity: 0.014
   _purgatoryMaxDistance: 9
   _purgatoryAnisotropy: 0.885
   _purgatoryAnisotropyBlend: 0.308
@@ -15807,3 +15854,4 @@ SceneRoots:
   - {fileID: 1746468667}
   - {fileID: 1285600281}
   - {fileID: 113381018}
+  - {fileID: 1524053988}
