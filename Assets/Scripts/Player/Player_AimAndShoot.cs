@@ -22,12 +22,11 @@ public class Player_AimAndShoot : MonoBehaviour
     [SerializeField] private ParticleSystem _hitParticle;
     [SerializeField] private VisualEffect _shootVFX;
     [SerializeField] private VisualEffect _shootMuzzleVFX;
+    [SerializeField] private VisualEffect _shootMuzzleVFX2;
     [SerializeField] private LineRenderer _shootView;
 
     [Header("Ammo")]
     [SerializeField] private int _maxBullets;
-    [SerializeField] private int _totalReserveBullets;
-
     [Header("Spread")]
     [SerializeField] private float _minSpread;
     [SerializeField] private float _maxSpread;
@@ -60,8 +59,16 @@ public class Player_AimAndShoot : MonoBehaviour
     [SerializeField] private VisualEffect _defaultHitVFX;
     [SerializeField] private float _hitVFXDestroyDelay = 2f;
 
+    [Header("Blood VFX Graph")]
+    [SerializeField] private VisualEffect _bloodHitVFX;
+    [SerializeField] private float _bloodVFXDestroyDelay = 2f;
+    [SerializeField] private float _bloodSurfaceOffset = 0.03f;
+     private string _bloodPlayEventName = "OnPlay";
+
+    [Header("Decals")]
+    [SerializeField] private BulletDecalSpawner _bulletDecalSpawner;
+
     private int _remainingBullets;
-    private int _reserveBullets;
     private float _shootTimer;
     public float _currentSpread;
 
@@ -71,7 +78,6 @@ public class Player_AimAndShoot : MonoBehaviour
     {
         _shootTimer = _shootInterval;
         _remainingBullets = _maxBullets;
-        _reserveBullets = _totalReserveBullets;
 
         _crossHair.enabled = false;
         _shootView.enabled = false;
@@ -80,7 +86,7 @@ public class Player_AimAndShoot : MonoBehaviour
         _crosshairLeft.gameObject.SetActive(false);
         _crosshairRight.gameObject.SetActive(false);
 
-        _movement._controls.Player.Recharge.started += Recharge;
+        GameInputManager.Instance.Controls.Player.Recharge.started += Recharge;
         UpdateUI();
 
         if (flashLight == null)
@@ -89,7 +95,13 @@ public class Player_AimAndShoot : MonoBehaviour
         flashLight.intensity = 0f;
         flashLight.range = flashRange;
     }
-
+    void OnDestroy()
+    {
+        if (Inventory.Instance != null)
+        {
+            Inventory.Instance.onInventoryChanged.RemoveListener(UpdateUI);
+        }
+    }
     void FixedUpdate()
     {
         _shootTimer -= Time.deltaTime;
@@ -100,15 +112,15 @@ public class Player_AimAndShoot : MonoBehaviour
     void HandleAimInput()
     {
         // Se suscribe y desuscribe cada frame para evitar disparos fuera del modo apuntado
-        if (_movement._controls.Player.Aim.IsPressed())
-            _movement._controls.Player.Shoot.started += OnShootStarted;
+        if (GameInputManager.Instance.Controls.Player.Aim.IsPressed())
+            GameInputManager.Instance.Controls.Player.Shoot.started += OnShootStarted;
         else
-            _movement._controls.Player.Shoot.started -= OnShootStarted;
+            GameInputManager.Instance.Controls.Player.Shoot.started -= OnShootStarted;
     }
 
     void UpdateCrosshairIndicators()
     {
-        bool isAiming = _movement._controls.Player.Aim.IsPressed();
+        bool isAiming = GameInputManager.Instance.Controls.Player.Aim.IsPressed();
 
         // El spread se actualiza siempre aunque no se esté apuntando
         // para que al volver a apuntar ya refleje la velocidad actual
@@ -155,6 +167,7 @@ public class Player_AimAndShoot : MonoBehaviour
         _shootVFX.Play();
         Flash();
         _shootMuzzleVFX.SendEvent("OnPlay");
+        _shootMuzzleVFX2.SendEvent("OnPlay");
         SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.PlayerShootingSFX, transform.position);
 
         Ray cameraRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
@@ -191,15 +204,34 @@ public class Player_AimAndShoot : MonoBehaviour
 
     void HandleHit(RaycastHit weaponHit)
     {
-        SpawnHitVFX(weaponHit);
+        bool hitEnemy = weaponHit.collider.TryGetComponent<Enemy_Interface_Damage>(out var damageable);
 
-        if (_hitParticle != null)
+        if (_bulletDecalSpawner != null)
         {
-            Instantiate(_hitParticle, weaponHit.point, Quaternion.LookRotation(weaponHit.normal));
+            if (hitEnemy)
+            {
+                _bulletDecalSpawner.SpawnBloodyDecal(weaponHit);
+            }
+            else
+            {
+                _bulletDecalSpawner.SpawnNormalDecal(weaponHit);
+            }
         }
 
-        if (weaponHit.collider.TryGetComponent<Enemy_Interface_Damage>(out var damageable))
+        if (hitEnemy)
+        {
+            SpawnBloodVFXGraph(weaponHit);
             damageable.TakeDamage(_shootDamageAmount);
+        }
+        else
+        {
+            SpawnHitVFX(weaponHit);
+
+            if (_hitParticle != null)
+            {
+                Instantiate(_hitParticle,weaponHit.point,Quaternion.LookRotation(weaponHit.normal));
+            }
+        }
     }
 
     private IEnumerator HideRay()
@@ -217,32 +249,30 @@ public class Player_AimAndShoot : MonoBehaviour
 
     void Recharge(InputAction.CallbackContext context)
     {
-        if (_remainingBullets == _maxBullets || _reserveBullets <= 0) return;
+        int totalReserve = Inventory.Instance.GetTotalAmmo();
 
-        // Toma solo las balas necesarias para no exceder el máximo del cargador
-        int bulletsToAdd = Mathf.Min(_maxBullets - _remainingBullets, _reserveBullets);
-        _remainingBullets += bulletsToAdd;
-        _reserveBullets -= bulletsToAdd;
+        if (_remainingBullets == _maxBullets || totalReserve <= 0) return;
+
+        int bulletsNeeded = _maxBullets - _remainingBullets;
+        
+        int bulletsObtained = Inventory.Instance.ConsumeAmmo(bulletsNeeded);
+
+        _remainingBullets += bulletsObtained;
+        
         UpdateUI();
         SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
     }
 
     void UpdateUI()
     {
+        int currentReserve = Inventory.Instance.GetTotalAmmo();
+
         _remainingBulletsUI.text = $"{_remainingBullets}";
-        _maxBulletsUI.text = $"{_reserveBullets}";
-        _pressR.enabled = _remainingBullets < _maxBullets && _reserveBullets > 0;
+        _maxBulletsUI.text = $"{currentReserve}";
+        
+        _pressR.enabled = _remainingBullets < _maxBullets && currentReserve > 0;
     }
 
-    public void AddReserveBullets(int bulletsToAdd)
-    {
-        _reserveBullets += bulletsToAdd;
-        if (_reserveBullets >= _totalReserveBullets) _reserveBullets = _totalReserveBullets;
-        SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
-        UpdateUI();
-    }
-
-    //flashlight effect, cambiar a otro script en algun momento
     public void Flash()
     {
         if (flashCoroutine != null)
@@ -287,6 +317,26 @@ public class Player_AimAndShoot : MonoBehaviour
         hitVFX.Play();
 
         Destroy(hitVFX.gameObject, _hitVFXDestroyDelay);
+    }
+
+    private void SpawnBloodVFXGraph(RaycastHit weaponHit)
+    {
+        if (_bloodHitVFX == null)
+            return;
+
+        Vector3 spawnPosition = weaponHit.point + weaponHit.normal * _bloodSurfaceOffset;
+
+        Quaternion spawnRotation = Quaternion.LookRotation(weaponHit.normal);
+
+        VisualEffect bloodVFX = Instantiate(
+            _bloodHitVFX,
+            spawnPosition,
+            spawnRotation
+        );
+
+        bloodVFX.SendEvent(_bloodPlayEventName);
+
+        Destroy(bloodVFX.gameObject, _bloodVFXDestroyDelay);
     }
 
 }

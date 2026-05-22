@@ -47,16 +47,20 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 _smoothedMoveInput;
     float _verticalOffset;
 
-    public float _currentSpeed {get;set;}
+    public float _currentSpeed { get; set; }
+
     private void Awake()
     {
-        _aimSpeed = _moveSpeed / 2;
-        _rb = GetComponent<Rigidbody>();
         _camera = _cameraTransform.GetComponent<Camera>();
-        _controls = new PlayerControls();
-        _controls.UI.Enable();
-        Cursor.lockState = CursorLockMode.Locked;
+        _rb = GetComponent<Rigidbody>();
+        _aimSpeed = _moveSpeed / 2;
         _targetRotation = _rb.rotation;
+
+    }
+
+    private void Start()
+    {
+        _controls = GameInputManager.Instance.Controls;
 
         _controls.Player.Move.performed += callbackContext => _moveInput = callbackContext.ReadValue<Vector2>();
         _controls.Player.Move.canceled += _ => _moveInput = Vector2.zero;
@@ -66,10 +70,9 @@ public class PlayerMovement : MonoBehaviour
 
         _controls.Player.Aim.performed += _ => _isAiming = true;
         _controls.Player.Aim.canceled += _ => _isAiming = false;
-    }
 
-    private void OnEnable() => _controls.Player.Enable();
-    private void OnDisable() => _controls.Player.Disable();
+        Cursor.lockState = CursorLockMode.Locked;
+    }
 
     private void Update()
     {
@@ -123,7 +126,7 @@ public class PlayerMovement : MonoBehaviour
         _cameraTarget.localRotation = Quaternion.Euler(_cameraPitch, 0f, 0f);
 
         Vector3 localPos = _cameraTarget.localPosition;
-        localPos.y = _verticalOffset+ _YOffset;
+        localPos.y = _verticalOffset + _YOffset;
         _cameraTarget.localPosition = localPos;
     }
     /*

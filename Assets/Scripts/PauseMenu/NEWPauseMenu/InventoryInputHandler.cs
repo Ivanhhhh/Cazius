@@ -4,18 +4,13 @@ using System;
 
 public class InventoryInputHandler : MonoBehaviour
 {
-    [SerializeField] private InputActionReference _inventoryAction;
     [SerializeField] private GameObject _inventoryCanvas;
 
     public static event Action<bool> OnInventoryToggled;
 
-    void OnEnable()
-    {
-        _inventoryAction.action.Enable();
-        _inventoryAction.action.performed += OnInventory;
-    }
+    void Start() => GameInputManager.Instance.Controls.UI.InventoryMenu.performed += OnInventory;
 
-    void OnDisable() => _inventoryAction.action.performed -= OnInventory;
+    void OnDisable() => GameInputManager.Instance.Controls.UI.InventoryMenu.performed -= OnInventory;
 
     private void OnInventory(InputAction.CallbackContext _)
     {
@@ -23,17 +18,16 @@ public class InventoryInputHandler : MonoBehaviour
         {
             PauseManager.Instance.Toggle();
             _inventoryCanvas.SetActive(false);
-            
-            OnInventoryToggled?.Invoke(false); 
+
+            OnInventoryToggled?.Invoke(false);
             return;
         }
 
-        if (PauseManager.Instance.IsPaused)
-            return;
+        if (PauseManager.Instance.IsPaused) return;
 
         PauseManager.Instance.Toggle();
         _inventoryCanvas.SetActive(true);
-        
-        OnInventoryToggled?.Invoke(true); 
+
+        OnInventoryToggled?.Invoke(true);
     }
 }
