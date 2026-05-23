@@ -10,7 +10,7 @@ public class EdenDoor : MonoBehaviour, IEInteractable
     {
         if (_isOpen) return;
 
-        if (KeyInventorySystem.Instance.HasPurgatoryKey)
+        if (KeyInventorySystem.Instance.HasEdenKey)
         {
             transform.Rotate(0, _openAngle, 0);
             _isOpen = true;

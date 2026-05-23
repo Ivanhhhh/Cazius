@@ -10,7 +10,7 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
     {
         if (_isOpen) return;
 
-        if (KeyInventorySystem.Instance.HasEdenKey)
+        if (KeyInventorySystem.Instance.HasPurgatoryKey)
         {
             transform.Rotate(0, _openAngle, 0);
             _isOpen = true;
