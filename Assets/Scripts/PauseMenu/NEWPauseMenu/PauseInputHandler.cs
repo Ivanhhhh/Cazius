@@ -9,7 +9,7 @@ public class PauseInputHandler : MonoBehaviour
 
     void OnDisable() => GameInputManager.Instance.Controls.UI.PauseMenu.performed -= OnPause;
 
-    private void OnPause(InputAction.CallbackContext _)
+    public void OnPause(InputAction.CallbackContext _)
     {
         if (_pauseMenuCanvas.activeSelf)
         {
