@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ChangeOption : MonoBehaviour
 {
-    private (Button last, Button current) tupleButtons;
+   private (Button last, Button current) tupleButtons;
    private  CloseOptions closeOptions;
 
     private Canvas _canvas1;
@@ -15,6 +15,8 @@ public class ChangeOption : MonoBehaviour
     {
         if (this.gameObject.activeSelf)
         {
+            tupleButtons.current = GetComponentInChildren<Button>();
+
             foreach (var canvas in GetComponentsInChildren<Canvas>())
             {
                 if (canvas.GetComponentInParent<Button>() != null)
@@ -22,12 +24,6 @@ public class ChangeOption : MonoBehaviour
                     canvas.enabled = false;
                 }
             } 
-
-            //_canvas1 = tupleButtons.last.GetComponentInChildren<Canvas>();
-            //_canvas2 = tupleButtons.current.GetComponentInChildren<Canvas>();
-            //if (_canvas1 != null) _canvas1.enabled = false;
-
-            //if (_canvas2 != null) _canvas2.enabled = false;
         }
     }
 
@@ -37,11 +33,11 @@ public class ChangeOption : MonoBehaviour
 
         if (this.gameObject.activeSelf)
         {
-            tupleButtons.last = tupleButtons.current;
-            tupleButtons.current = PressedButton;
+            tupleButtons.last = tupleButtons.current; // el ultimo boton es el ultimo que aprete
+            tupleButtons.current = PressedButton; // el boton actual es el que apreto ahora
 
-            Debug.Log("Pressed: " + PressedButton.name);
-            Debug.Log("Canvas del pressed: " + PressedButton.GetComponentInChildren<Canvas>());
+            //Debug.Log("Pressed: " + PressedButton.name);
+            //Debug.Log("Canvas del pressed: " + PressedButton.GetComponentInChildren<Canvas>());
 
             _canvas2 = tupleButtons.last.GetComponentInChildren<Canvas>();
                _canvas2.enabled = false;
