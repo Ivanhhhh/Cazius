@@ -22,9 +22,14 @@ public class DoorFixer : MonoBehaviour
 
     bool Stop;
 
-  // [SerializeField] DoorStop _DoorStop;
+    // [SerializeField] DoorStop _DoorStop;
 
-    
+    private void OnEnable()
+    {
+        _joint = GetComponent<HingeJoint>();
+    }
+
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
