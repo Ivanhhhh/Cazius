@@ -11,12 +11,12 @@ public class WorldObject : MonoBehaviour // Va en cada objecto que se quiera pre
 
     void Start()
     {
-        WorldChangeManager.Instance.SwapToEdenEvent += HandleSwapToEden;
-        WorldChangeManager.Instance.SwapToPurgatoryEvent += HandleSwapToPurgatory;
+        //WorldChangeManager.Instance.SwapToEdenEvent += HandleSwapToEden;
+        //WorldChangeManager.Instance.SwapToPurgatoryEvent += HandleSwapToPurgatory;
         UpdateWorldVisibility();
         _collider = GetComponent<Collider>();
     }
-    /*
+
     void OnEnable()
     {
         WorldChangeManager.Instance.SwapToEdenEvent += HandleSwapToEden;
@@ -29,7 +29,7 @@ public class WorldObject : MonoBehaviour // Va en cada objecto que se quiera pre
 
         WorldChangeManager.Instance.SwapToEdenEvent -= HandleSwapToEden;
         WorldChangeManager.Instance.SwapToPurgatoryEvent -= HandleSwapToPurgatory;
-    }*/
+    }
 
     private void HandleSwapToEden()
     {
