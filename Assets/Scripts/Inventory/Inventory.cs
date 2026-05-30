@@ -28,7 +28,7 @@ public class Inventory : MonoBehaviour
 
         ItemData clonedItem = Instantiate(item);
         items.Add(clonedItem);
-        
+
         onInventoryChanged?.Invoke();
         return true;
     }
@@ -49,7 +49,6 @@ public class Inventory : MonoBehaviour
                 break;
         }
     }
-
 
     public int GetTotalAmmo()
     {
@@ -73,7 +72,7 @@ public class Inventory : MonoBehaviour
             if (items[i].itemType == ItemType.Ammo)
             {
                 int bulletsToTake = Mathf.Min(items[i].value, amountNeeded - amountExtracted);
-                
+
                 items[i].value -= bulletsToTake;
                 amountExtracted += bulletsToTake;
 
