@@ -9,6 +9,7 @@ public class SaveManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Transform playerTransform;
+    [SerializeField] private ItemRegistry itemRegistry;
 
     private string SavePath => Path.Combine(Application.persistentDataPath, "save.json");
 
@@ -43,8 +44,8 @@ public class SaveManager : MonoBehaviour
         data.questStates = questEntries;
 
         // --- Inventory ---
-        // data.inventoryItemIDs = Inventory.Instance.GetAllItemIDs();
-        // data.keyItemIDs = Inventory.Instance.GetKeyItemIDs();
+        data.inventoryItemIDs = Inventory.Instance.GetAllItemIDs();
+        data.keyItemIDs = Inventory.Instance.GetKeyItemIDs();
 
         // --- Player ---
         if (playerTransform != null)
@@ -81,9 +82,8 @@ public class SaveManager : MonoBehaviour
         QuestManager.Instance.LoadSaveData(questDict);
 
         // --- Inventory ---
-        // Inventory.Instance.LoadSaveData(data.inventoryItemIDs, data.keyItemIDs);
+        Inventory.Instance.LoadSaveData(data.inventoryItemIDs, data.keyItemIDs, itemRegistry);
 
-        // --- Player position is applied by the scene loader, not here ---
         Debug.Log($"[SaveManager] Loaded from {SavePath}");
     }
 

@@ -5,9 +5,7 @@ using UnityEngine.Events;
 public class Inventory : MonoBehaviour
 {
     [SerializeField] private Player_HealthSystem _playerHealthSystem;
-
     public static Inventory Instance { get; private set; }
-
     public int maxSlots = 12;
     public List<ItemData> items = new();
     public UnityEvent onInventoryChanged;
@@ -25,10 +23,8 @@ public class Inventory : MonoBehaviour
             Debug.Log("Inventory full!");
             return false;
         }
-
         ItemData clonedItem = Instantiate(item);
         items.Add(clonedItem);
-
         onInventoryChanged?.Invoke();
         return true;
     }
@@ -44,7 +40,6 @@ public class Inventory : MonoBehaviour
                 onInventoryChanged?.Invoke();
                 break;
             case ItemType.Ammo:
-                // Ya no hacemos nada al "Usar" la munición manualmente.
                 Debug.Log("La munición se recarga automáticamente con la tecla R.");
                 break;
         }
@@ -56,9 +51,7 @@ public class Inventory : MonoBehaviour
         foreach (var item in items)
         {
             if (item.itemType == ItemType.Ammo)
-            {
                 totalAmmo += item.value;
-            }
         }
         return totalAmmo;
     }
@@ -66,33 +59,81 @@ public class Inventory : MonoBehaviour
     public int ConsumeAmmo(int amountNeeded)
     {
         int amountExtracted = 0;
-
         for (int i = items.Count - 1; i >= 0; i--)
         {
             if (items[i].itemType == ItemType.Ammo)
             {
                 int bulletsToTake = Mathf.Min(items[i].value, amountNeeded - amountExtracted);
-
                 items[i].value -= bulletsToTake;
                 amountExtracted += bulletsToTake;
-
                 if (items[i].value <= 0)
-                {
                     items.RemoveAt(i);
-                }
 
                 if (amountExtracted >= amountNeeded)
-                {
                     break;
-                }
+            }
+        }
+        if (amountExtracted > 0)
+            onInventoryChanged?.Invoke();
+
+        return amountExtracted;
+    }
+
+    // --- Quest system ---
+
+    public bool HasItem(string itemID)
+    {
+        return items.Exists(i => i.itemID == itemID);
+    }
+
+    // --- Save system ---
+
+    public string[] GetAllItemIDs()
+    {
+        var ids = new List<string>();
+        foreach (var item in items)
+        {
+            if (!item.isKeyItem)
+                ids.Add(item.itemID);
+        }
+        return ids.ToArray();
+    }
+
+    public string[] GetKeyItemIDs()
+    {
+        var ids = new List<string>();
+        foreach (var item in items)
+        {
+            if (item.isKeyItem)
+                ids.Add(item.itemID);
+        }
+        return ids.ToArray();
+    }
+
+    public void LoadSaveData(string[] inventoryIDs, string[] keyItemIDs, ItemRegistry registry)
+    {
+        items.Clear();
+
+        if (inventoryIDs != null)
+        {
+            foreach (var id in inventoryIDs)
+            {
+                var itemData = registry.GetItemByID(id);
+                if (itemData != null)
+                    items.Add(Instantiate(itemData));
             }
         }
 
-        if (amountExtracted > 0)
+        if (keyItemIDs != null)
         {
-            onInventoryChanged?.Invoke();
+            foreach (var id in keyItemIDs)
+            {
+                var itemData = registry.GetItemByID(id);
+                if (itemData != null)
+                    items.Add(Instantiate(itemData));
+            }
         }
 
-        return amountExtracted;
+        onInventoryChanged?.Invoke();
     }
 }
