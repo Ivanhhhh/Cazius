@@ -5,30 +5,52 @@ using UnityEngine.UI;
 
 public class DialogUIController : MonoBehaviour
 {
-    [Header("References")]
+    public static DialogUIController Instance { get; private set; }
+
+    [Header("UI References")]
     [SerializeField] private GameObject dialogPanel;
     [SerializeField] private DialogTypewriter typewriter;
     [SerializeField] private Button nextButton;
     [SerializeField] private Button acceptButton;
     [SerializeField] private Button closeButton;
 
-    [Header("Input")]
-    [SerializeField] private PlayerInput playerInput;
-
     private string[] _pages;
     private int _currentPage;
     private Action _onAccept;
     private Action _onClose;
 
+    // Stored handler references for safe unsubscription
+    private Action<InputAction.CallbackContext> _onAdvance;
+    private Action<InputAction.CallbackContext> _onSkip;
+
     private void Awake()
     {
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this;
+
         nextButton.onClick.AddListener(OnNextPressed);
         acceptButton.onClick.AddListener(OnAcceptPressed);
         closeButton.onClick.AddListener(OnClosePressed);
 
         typewriter.OnComplete += OnPageTypingComplete;
 
+        // Assign handlers once so the same reference is used for both sub and unsub
+        _onAdvance = _ => OnAdvancePressed();
+        _onSkip = _ => OnSkipPressed();
+
         dialogPanel.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        GameInputManager.Instance.Controls.Dialog.Advance.performed += _onAdvance;
+        GameInputManager.Instance.Controls.Dialog.Skip.performed += _onSkip;
+    }
+
+    private void OnDisable()
+    {
+        GameInputManager.Instance.Controls.Dialog.Advance.performed -= _onAdvance;
+        GameInputManager.Instance.Controls.Dialog.Skip.performed -= _onSkip;
     }
 
     // --- Public API called by QuestGiverNPC ---
@@ -42,9 +64,10 @@ public class DialogUIController : MonoBehaviour
 
         SetActionButtons(false);
         nextButton.gameObject.SetActive(true);
+        nextButton.interactable = false;
 
         dialogPanel.SetActive(true);
-        SwitchToDialogInput();
+        GameInputManager.Instance.EnableDialogInput();
         ShowCurrentPage();
     }
 
@@ -52,7 +75,6 @@ public class DialogUIController : MonoBehaviour
 
     private void ShowCurrentPage()
     {
-        nextButton.interactable = false;
         typewriter.Play(_pages[_currentPage]);
     }
 
@@ -71,6 +93,21 @@ public class DialogUIController : MonoBehaviour
         }
     }
 
+    // --- Input handlers ---
+
+    // Advance (A key) — skip typing if in progress, or advance to next page if done
+    private void OnAdvancePressed()
+    {
+        OnNextPressed();
+    }
+
+    // Skip (X key) — only completes current page typing instantly, never advances
+    private void OnSkipPressed()
+    {
+        if (!typewriter.IsComplete)
+            typewriter.Skip();
+    }
+
     private void OnNextPressed()
     {
         if (!typewriter.IsComplete)
@@ -78,6 +115,9 @@ public class DialogUIController : MonoBehaviour
             typewriter.Skip();
             return;
         }
+
+        // On last page, do nothing — player must use Accept/Close buttons
+        if (_currentPage >= _pages.Length - 1) return;
 
         _currentPage++;
         nextButton.interactable = false;
@@ -108,35 +148,6 @@ public class DialogUIController : MonoBehaviour
     private void CloseDialog()
     {
         dialogPanel.SetActive(false);
-        SwitchToPlayerInput();
-    }
-
-    // --- Input map switching ---
-
-    private void SwitchToDialogInput()
-    {
-        playerInput.SwitchCurrentActionMap("Dialog");
-    }
-
-    private void SwitchToPlayerInput()
-    {
-        playerInput.SwitchCurrentActionMap("Player");
-    }
-
-    // --- Keyboard / gamepad confirm binding (Dialog action map) ---
-
-    public void OnConfirm(InputAction.CallbackContext ctx)
-    {
-        if (!ctx.performed) return;
-        OnNextPressed();
-    }
-
-    public void OnCancel(InputAction.CallbackContext ctx)
-    {
-        if (!ctx.performed) return;
-
-        // Only close if on last page and typing is done
-        if (!nextButton.gameObject.activeSelf && closeButton.gameObject.activeSelf)
-            OnClosePressed();
+        GameInputManager.Instance.DisableDialogInput();
     }
 }

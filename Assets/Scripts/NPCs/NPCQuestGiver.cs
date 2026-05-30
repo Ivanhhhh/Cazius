@@ -2,17 +2,27 @@ using UnityEngine;
 
 public class NPCQuestGiver : MonoBehaviour
 {
-
     [Header("Quest")]
     [SerializeField] private QuestDefinition quest;
 
-    [Header("References")]
-    [SerializeField] private DialogUIController dialogUI;
+    [Header("NPC Behavior")]
+    [SerializeField] private string _interactText = "F to talk";
+    [SerializeField] private string _wavingTrigger = "Waving";
 
-    public void Interact()
+    private Animator _animator;
+
+    private void Awake()
     {
-        QuestManager.Instance.RegisterQuest(quest.questID);
+        _animator = GetComponent<Animator>();
+    }
 
+    public void Interact(Transform interactorTransform)
+    {
+        RotateTowardsPlayer(interactorTransform);
+        _animator.SetTrigger(_wavingTrigger);
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.MaleHeySFX, transform.position);
+
+        QuestManager.Instance.RegisterQuest(quest.questID);
         QuestStatus status = QuestManager.Instance.GetStatus(quest.questID);
 
         switch (status)
@@ -34,11 +44,14 @@ public class NPCQuestGiver : MonoBehaviour
         }
     }
 
+    public string GetInteractText() { return _interactText; }
+    public Transform GetTransform() { return transform; }
+
     // --- Dialog openers ---
 
     private void OpenOfferDialog()
     {
-        dialogUI.OpenDialog(
+        DialogUIController.Instance.OpenDialog(
             pages: quest.offerDialog,
             onAccept: () => QuestManager.Instance.StartQuest(quest.questID),
             onClose: null
@@ -47,7 +60,7 @@ public class NPCQuestGiver : MonoBehaviour
 
     private void OpenActiveDialog()
     {
-        dialogUI.OpenDialog(
+        DialogUIController.Instance.OpenDialog(
             pages: quest.activeDialog,
             onAccept: null,
             onClose: null
@@ -58,7 +71,7 @@ public class NPCQuestGiver : MonoBehaviour
     {
         QuestManager.Instance.CompleteQuest(quest.questID);
 
-        dialogUI.OpenDialog(
+        DialogUIController.Instance.OpenDialog(
             pages: quest.completedDialog,
             onAccept: null,
             onClose: null
@@ -67,10 +80,19 @@ public class NPCQuestGiver : MonoBehaviour
 
     private void OpenCompletedDialog()
     {
-        dialogUI.OpenDialog(
+        DialogUIController.Instance.OpenDialog(
             pages: quest.completedDialog,
             onAccept: null,
             onClose: null
         );
+    }
+
+    // --- Helpers ---
+
+    private void RotateTowardsPlayer(Transform interactorTransform)
+    {
+        Vector3 dir = interactorTransform.position - transform.position;
+        dir.y = 0;
+        transform.rotation = Quaternion.LookRotation(dir);
     }
 }
