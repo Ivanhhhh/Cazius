@@ -21,6 +21,12 @@ public class ItemRegistry : ScriptableObject
         {
             if (item == null) continue;
 
+            if (string.IsNullOrEmpty(item.itemID))
+            {
+                Debug.LogWarning($"[ItemRegistry] Item '{item.name}' has no itemID set. Skipping.");
+                continue;
+            }
+
             if (!_lookup.TryAdd(item.itemID, item))
                 Debug.LogWarning($"[ItemRegistry] Duplicate itemID found: '{item.itemID}'. Skipping.");
         }
