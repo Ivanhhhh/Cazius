@@ -17,9 +17,4 @@ public class ButtonSelfRegister : MonoBehaviour
         _button.onClick.AddListener(() => _changeOption.ButtonToggle(this._button));
 
     }
-
-    private void Update()
-    {
-       
-    }
 }
