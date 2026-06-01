@@ -353,7 +353,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ""id"": ""23d953eb-9270-44ea-b667-b038b00f38d7"",
             ""actions"": [
                 {
-                    ""name"": ""Advance"",
+                    ""name"": ""Next/Advance/Accept/Close"",
                     ""type"": ""Button"",
                     ""id"": ""8c3e598c-3996-4d1b-9e44-1d7e2ae935f8"",
                     ""expectedControlType"": """",
@@ -362,7 +362,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Skip"",
+                    ""name"": ""Decline"",
                     ""type"": ""Button"",
                     ""id"": ""45df60e8-48a0-4ae3-ae54-91441c8d8d88"",
                     ""expectedControlType"": """",
@@ -379,18 +379,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Advance"",
+                    ""action"": ""Next/Advance/Accept/Close"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""b4d5cbf1-499a-499b-8f20-40ead143561f"",
-                    ""path"": ""<Keyboard>/x"",
+                    ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Skip"",
+                    ""action"": ""Decline"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -415,8 +415,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_UI_Consume = m_UI.FindAction("Consume", throwIfNotFound: true);
         // Dialog
         m_Dialog = asset.FindActionMap("Dialog", throwIfNotFound: true);
-        m_Dialog_Advance = m_Dialog.FindAction("Advance", throwIfNotFound: true);
-        m_Dialog_Skip = m_Dialog.FindAction("Skip", throwIfNotFound: true);
+        m_Dialog_NextAdvanceAcceptClose = m_Dialog.FindAction("Next/Advance/Accept/Close", throwIfNotFound: true);
+        m_Dialog_Decline = m_Dialog.FindAction("Decline", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -779,8 +779,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     // Dialog
     private readonly InputActionMap m_Dialog;
     private List<IDialogActions> m_DialogActionsCallbackInterfaces = new List<IDialogActions>();
-    private readonly InputAction m_Dialog_Advance;
-    private readonly InputAction m_Dialog_Skip;
+    private readonly InputAction m_Dialog_NextAdvanceAcceptClose;
+    private readonly InputAction m_Dialog_Decline;
     /// <summary>
     /// Provides access to input actions defined in input action map "Dialog".
     /// </summary>
@@ -793,13 +793,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// </summary>
         public DialogActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "Dialog/Advance".
+        /// Provides access to the underlying input action "Dialog/NextAdvanceAcceptClose".
         /// </summary>
-        public InputAction @Advance => m_Wrapper.m_Dialog_Advance;
+        public InputAction @NextAdvanceAcceptClose => m_Wrapper.m_Dialog_NextAdvanceAcceptClose;
         /// <summary>
-        /// Provides access to the underlying input action "Dialog/Skip".
+        /// Provides access to the underlying input action "Dialog/Decline".
         /// </summary>
-        public InputAction @Skip => m_Wrapper.m_Dialog_Skip;
+        public InputAction @Decline => m_Wrapper.m_Dialog_Decline;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -826,12 +826,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_DialogActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_DialogActionsCallbackInterfaces.Add(instance);
-            @Advance.started += instance.OnAdvance;
-            @Advance.performed += instance.OnAdvance;
-            @Advance.canceled += instance.OnAdvance;
-            @Skip.started += instance.OnSkip;
-            @Skip.performed += instance.OnSkip;
-            @Skip.canceled += instance.OnSkip;
+            @NextAdvanceAcceptClose.started += instance.OnNextAdvanceAcceptClose;
+            @NextAdvanceAcceptClose.performed += instance.OnNextAdvanceAcceptClose;
+            @NextAdvanceAcceptClose.canceled += instance.OnNextAdvanceAcceptClose;
+            @Decline.started += instance.OnDecline;
+            @Decline.performed += instance.OnDecline;
+            @Decline.canceled += instance.OnDecline;
         }
 
         /// <summary>
@@ -843,12 +843,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="DialogActions" />
         private void UnregisterCallbacks(IDialogActions instance)
         {
-            @Advance.started -= instance.OnAdvance;
-            @Advance.performed -= instance.OnAdvance;
-            @Advance.canceled -= instance.OnAdvance;
-            @Skip.started -= instance.OnSkip;
-            @Skip.performed -= instance.OnSkip;
-            @Skip.canceled -= instance.OnSkip;
+            @NextAdvanceAcceptClose.started -= instance.OnNextAdvanceAcceptClose;
+            @NextAdvanceAcceptClose.performed -= instance.OnNextAdvanceAcceptClose;
+            @NextAdvanceAcceptClose.canceled -= instance.OnNextAdvanceAcceptClose;
+            @Decline.started -= instance.OnDecline;
+            @Decline.performed -= instance.OnDecline;
+            @Decline.canceled -= instance.OnDecline;
         }
 
         /// <summary>
@@ -976,18 +976,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public interface IDialogActions
     {
         /// <summary>
-        /// Method invoked when associated input action "Advance" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Next/Advance/Accept/Close" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnAdvance(InputAction.CallbackContext context);
+        void OnNextAdvanceAcceptClose(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Skip" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Decline" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSkip(InputAction.CallbackContext context);
+        void OnDecline(InputAction.CallbackContext context);
     }
 }

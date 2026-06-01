@@ -13,6 +13,11 @@ public class DialogUIController : MonoBehaviour
     [SerializeField] private Button nextButton;
     [SerializeField] private Button acceptButton;
     [SerializeField] private Button closeButton;
+    [SerializeField] private Button declineButton;
+
+    // Static events so UIInteraction can subscribe without a direct reference
+    public static event Action OnDialogOpened;
+    public static event Action OnDialogClosed;
 
     private string[] _pages;
     private int _currentPage;
@@ -21,7 +26,7 @@ public class DialogUIController : MonoBehaviour
 
     // Stored handler references for safe unsubscription
     private Action<InputAction.CallbackContext> _onAdvance;
-    private Action<InputAction.CallbackContext> _onSkip;
+    private Action<InputAction.CallbackContext> _onDecline;
 
     private void Awake()
     {
@@ -31,26 +36,26 @@ public class DialogUIController : MonoBehaviour
         nextButton.onClick.AddListener(OnNextPressed);
         acceptButton.onClick.AddListener(OnAcceptPressed);
         closeButton.onClick.AddListener(OnClosePressed);
+        declineButton.onClick.AddListener(OnDeclinePressed);
 
         typewriter.OnComplete += OnPageTypingComplete;
 
-        // Assign handlers once so the same reference is used for both sub and unsub
         _onAdvance = _ => OnAdvancePressed();
-        _onSkip = _ => OnSkipPressed();
+        _onDecline = _ => OnDeclinePressed();
 
         dialogPanel.SetActive(false);
     }
 
     private void OnEnable()
     {
-        GameInputManager.Instance.Controls.Dialog.Advance.performed += _onAdvance;
-        GameInputManager.Instance.Controls.Dialog.Skip.performed += _onSkip;
+        GameInputManager.Instance.Controls.Dialog.NextAdvanceAcceptClose.performed += _onAdvance;
+        GameInputManager.Instance.Controls.Dialog.Decline.performed += _onDecline;
     }
 
     private void OnDisable()
     {
-        GameInputManager.Instance.Controls.Dialog.Advance.performed -= _onAdvance;
-        GameInputManager.Instance.Controls.Dialog.Skip.performed -= _onSkip;
+        GameInputManager.Instance.Controls.Dialog.NextAdvanceAcceptClose.performed -= _onAdvance;
+        GameInputManager.Instance.Controls.Dialog.Decline.performed -= _onDecline;
     }
 
     // --- Public API called by QuestGiverNPC ---
@@ -62,12 +67,13 @@ public class DialogUIController : MonoBehaviour
         _onAccept = onAccept;
         _onClose = onClose;
 
-        SetActionButtons(false);
+        HideAllActionButtons();
         nextButton.gameObject.SetActive(true);
         nextButton.interactable = false;
 
         dialogPanel.SetActive(true);
         GameInputManager.Instance.EnableDialogInput();
+        OnDialogOpened?.Invoke();
         ShowCurrentPage();
     }
 
@@ -85,7 +91,7 @@ public class DialogUIController : MonoBehaviour
         if (isLastPage)
         {
             nextButton.gameObject.SetActive(false);
-            SetActionButtons(true);
+            ShowActionButtons();
         }
         else
         {
@@ -95,17 +101,29 @@ public class DialogUIController : MonoBehaviour
 
     // --- Input handlers ---
 
-    // Advance (A key) — skip typing if in progress, or advance to next page if done
+    // A key — skip typing > advance page > Accept or Close on last page
     private void OnAdvancePressed()
     {
+        if (acceptButton.gameObject.activeSelf)
+        {
+            OnAcceptPressed();
+            return;
+        }
+
+        if (closeButton.gameObject.activeSelf)
+        {
+            OnClosePressed();
+            return;
+        }
+
         OnNextPressed();
     }
 
-    // Skip (X key) — only completes current page typing instantly, never advances
-    private void OnSkipPressed()
+    // D key — Decline on offer, ignored otherwise
+    private void OnDeclinePressed()
     {
-        if (!typewriter.IsComplete)
-            typewriter.Skip();
+        if (declineButton.gameObject.activeSelf)
+            CloseDialog();
     }
 
     private void OnNextPressed()
@@ -116,7 +134,6 @@ public class DialogUIController : MonoBehaviour
             return;
         }
 
-        // On last page, do nothing — player must use Accept/Close buttons
         if (_currentPage >= _pages.Length - 1) return;
 
         _currentPage++;
@@ -126,11 +143,21 @@ public class DialogUIController : MonoBehaviour
 
     // --- Action buttons ---
 
-    private void SetActionButtons(bool active)
+    // Offer state > Accept (A) + Decline (D)
+    // Active/Completed state > Close (A) only
+    private void ShowActionButtons()
     {
-        bool hasAccept = _onAccept != null;
-        acceptButton.gameObject.SetActive(active && hasAccept);
-        closeButton.gameObject.SetActive(active);
+        bool isOffer = _onAccept != null;
+        acceptButton.gameObject.SetActive(isOffer);
+        declineButton.gameObject.SetActive(isOffer);
+        closeButton.gameObject.SetActive(!isOffer);
+    }
+
+    private void HideAllActionButtons()
+    {
+        acceptButton.gameObject.SetActive(false);
+        declineButton.gameObject.SetActive(false);
+        closeButton.gameObject.SetActive(false);
     }
 
     private void OnAcceptPressed()
@@ -149,5 +176,6 @@ public class DialogUIController : MonoBehaviour
     {
         dialogPanel.SetActive(false);
         GameInputManager.Instance.DisableDialogInput();
+        OnDialogClosed?.Invoke();
     }
 }

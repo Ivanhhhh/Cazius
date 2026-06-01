@@ -24,27 +24,6 @@ public class DialogTypewriter : MonoBehaviour
         _typingCoroutine = StartCoroutine(TypeRoutine(text));
     }
 
-    private IEnumerator TypeRoutine(string text)
-    {
-        IsComplete = false;
-
-        dialogText.text = text; // Full rich text immediately
-        dialogText.ForceMeshUpdate();
-
-        int totalCharacters = dialogText.textInfo.characterCount;
-
-        dialogText.maxVisibleCharacters = 0;
-
-        for (int i = 0; i <= totalCharacters; i++)
-        {
-            dialogText.maxVisibleCharacters = i;
-            yield return new WaitForSeconds(charDelay);
-        }
-
-        IsComplete = true;
-        OnComplete?.Invoke();
-    }
-
     public void Skip()
     {
         if (IsComplete) return;
@@ -53,6 +32,24 @@ public class DialogTypewriter : MonoBehaviour
             StopCoroutine(_typingCoroutine);
 
         dialogText.maxVisibleCharacters = int.MaxValue;
+        IsComplete = true;
+        OnComplete?.Invoke();
+    }
+
+    private IEnumerator TypeRoutine(string text)
+    {
+        IsComplete = false;
+        dialogText.text = text;
+        dialogText.ForceMeshUpdate();
+
+        int totalCharacters = dialogText.textInfo.characterCount;
+        dialogText.maxVisibleCharacters = 0;
+
+        for (int i = 0; i <= totalCharacters; i++)
+        {
+            dialogText.maxVisibleCharacters = i;
+            yield return new WaitForSeconds(charDelay);
+        }
 
         IsComplete = true;
         OnComplete?.Invoke();

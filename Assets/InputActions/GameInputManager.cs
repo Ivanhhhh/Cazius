@@ -1,9 +1,12 @@
+using System.Collections;
 using UnityEngine;
 
 public class GameInputManager : MonoBehaviour
 {
     public static GameInputManager Instance { get; private set; }
     public PlayerControls Controls { get; private set; }
+
+    [SerializeField] private float _afterDialogReleaseSecs = 0.5f;
 
     void Awake()
     {
@@ -34,9 +37,15 @@ public class GameInputManager : MonoBehaviour
     {
         Controls.Dialog.Disable();
         Controls.UI.Enable();
-        Controls.Player.Enable();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        StartCoroutine(EnablePlayerNextFrame());
+    }
+
+    private IEnumerator EnablePlayerNextFrame()
+    {
+        yield return new WaitForSeconds(_afterDialogReleaseSecs);
+        Controls.Player.Enable();
     }
 
     void OnDestroy() => Controls.Dispose();
