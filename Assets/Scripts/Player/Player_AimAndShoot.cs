@@ -86,7 +86,16 @@ public class Player_AimAndShoot : MonoBehaviour
         _crosshairLeft.gameObject.SetActive(false);
         _crosshairRight.gameObject.SetActive(false);
 
+        // Inputs nativos configurados una sola vez
         GameInputManager.Instance.Controls.Player.Recharge.started += Recharge;
+        GameInputManager.Instance.Controls.Player.Shoot.started += OnShootStarted;
+
+        // 🔥 SOLUCIÓN: Nos suscribimos al inventario para escuchar cualquier cambio (recoger, craftear, etc.)
+        if (Inventory.Instance != null)
+        {
+            Inventory.Instance.onInventoryChanged.AddListener(UpdateUI);
+        }
+
         UpdateUI();
 
         if (flashLight == null)
@@ -95,35 +104,33 @@ public class Player_AimAndShoot : MonoBehaviour
         flashLight.intensity = 0f;
         flashLight.range = flashRange;
     }
+
     void OnDestroy()
     {
+        // Limpieza de inputs para evitar fugas de memoria (Memory Leaks)
+        if (GameInputManager.Instance != null && GameInputManager.Instance.Controls != null)
+        {
+            GameInputManager.Instance.Controls.Player.Recharge.started -= Recharge;
+            GameInputManager.Instance.Controls.Player.Shoot.started -= OnShootStarted;
+        }
+
         if (Inventory.Instance != null)
         {
             Inventory.Instance.onInventoryChanged.RemoveListener(UpdateUI);
         }
     }
+
     void FixedUpdate()
     {
         _shootTimer -= Time.deltaTime;
         UpdateCrosshairIndicators();
-        HandleAimInput();
-    }
-
-    void HandleAimInput()
-    {
-        // Se suscribe y desuscribe cada frame para evitar disparos fuera del modo apuntado
-        if (GameInputManager.Instance.Controls.Player.Aim.IsPressed())
-            GameInputManager.Instance.Controls.Player.Shoot.started += OnShootStarted;
-        else
-            GameInputManager.Instance.Controls.Player.Shoot.started -= OnShootStarted;
+        // 🛠️ Eliminamos HandleAimInput() de aquí porque causaba que los disparos se multiplicaran
     }
 
     void UpdateCrosshairIndicators()
     {
         bool isAiming = GameInputManager.Instance.Controls.Player.Aim.IsPressed();
 
-        // El spread se actualiza siempre aunque no se esté apuntando
-        // para que al volver a apuntar ya refleje la velocidad actual
         UpdateSpread();
 
         _crosshairTop.gameObject.SetActive(isAiming);
@@ -131,7 +138,6 @@ public class Player_AimAndShoot : MonoBehaviour
         _crosshairLeft.gameObject.SetActive(isAiming);
         _crosshairRight.gameObject.SetActive(isAiming);
 
-        // El punto central solo aparece cuando el spread es mínimo
         _crossHair.enabled = isAiming && _currentSpread < 0.1f;
 
         if (!isAiming) return;
@@ -145,20 +151,20 @@ public class Player_AimAndShoot : MonoBehaviour
 
     void UpdateSpread()
     {
-        // El 1.2f compensa que la física nunca llega exactamente a _moveSpeed
         float speedRatio = Mathf.Clamp01(_movement._currentSpeed / _movement._moveSpeed * 1.2f);
         float targetSpread = Mathf.Lerp(0f, _maxSpread, speedRatio);
 
-        // Velocidad distinta según si el spread está subiendo o bajando
         float lerpSpeed = _currentSpread > targetSpread ? _spreadDecreaseSpeed : _spreadIncreaseSpeed;
         _currentSpread = Mathf.MoveTowards(_currentSpread, targetSpread, lerpSpeed * Time.deltaTime);
 
-        // Evita que quede en valores microscópicos por el MoveTowards
         if (_currentSpread < 0.05f) _currentSpread = 0f;
     }
 
     private void OnShootStarted(InputAction.CallbackContext context)
     {
+        // 🛠️ CORRECCIÓN DE AIM: Si el jugador intenta disparar sin presionar el botón de apuntar, cancelamos el tiro.
+        if (!GameInputManager.Instance.Controls.Player.Aim.IsPressed()) return;
+
         if (_shootTimer > 0f || !_hasBullets) return;
 
         _recoil.OnRecoil?.Invoke();
@@ -175,7 +181,6 @@ public class Player_AimAndShoot : MonoBehaviour
             ? hit.point
             : cameraRay.origin + cameraRay.direction * _maxDistance;
 
-        // El spread se aplica ANTES de sumarlo para que el primer disparo sea preciso
         Vector3 direction = (targetPoint - transform.position).normalized;
         direction = Quaternion.Euler(
             UnityEngine.Random.Range(-_currentSpread, _currentSpread),
@@ -188,13 +193,6 @@ public class Player_AimAndShoot : MonoBehaviour
         if (Physics.Raycast(transform.position, direction, out RaycastHit weaponHit, _maxDistance))
         {
             HandleHit(weaponHit);
-            /*_shootView.SetPosition(0, transform.position);
-            _shootView.SetPosition(1, weaponHit.point);*/
-        }
-        else
-        {
-            /* _shootView.SetPosition(0, transform.position);
-             _shootView.SetPosition(1, targetPoint);*/
         }
 
         _shootTimer = _shootInterval;
@@ -208,14 +206,8 @@ public class Player_AimAndShoot : MonoBehaviour
 
         if (_bulletDecalSpawner != null)
         {
-            if (hitEnemy)
-            {
-                _bulletDecalSpawner.SpawnBloodyDecal(weaponHit);
-            }
-            else
-            {
-                _bulletDecalSpawner.SpawnNormalDecal(weaponHit);
-            }
+            if (hitEnemy) _bulletDecalSpawner.SpawnBloodyDecal(weaponHit);
+            else _bulletDecalSpawner.SpawnNormalDecal(weaponHit);
         }
 
         if (hitEnemy)
@@ -226,10 +218,9 @@ public class Player_AimAndShoot : MonoBehaviour
         else
         {
             SpawnHitVFX(weaponHit);
-
             if (_hitParticle != null)
             {
-                Instantiate(_hitParticle,weaponHit.point,Quaternion.LookRotation(weaponHit.normal));
+                Instantiate(_hitParticle, weaponHit.point, Quaternion.LookRotation(weaponHit.normal));
             }
         }
     }
@@ -254,7 +245,6 @@ public class Player_AimAndShoot : MonoBehaviour
         if (_remainingBullets == _maxBullets || totalReserve <= 0) return;
 
         int bulletsNeeded = _maxBullets - _remainingBullets;
-        
         int bulletsObtained = Inventory.Instance.ConsumeAmmo(bulletsNeeded);
 
         _remainingBullets += bulletsObtained;
@@ -284,59 +274,38 @@ public class Player_AimAndShoot : MonoBehaviour
     private IEnumerator FlashRoutine()
     {
         float timer = 0f;
-
         while (timer < flashDuration)
         {
             timer += Time.deltaTime;
-
             float t = timer / flashDuration;
             flashLight.intensity = Mathf.Lerp(flashIntensity, 0f, t);
-
             yield return null;
         }
-
         flashLight.intensity = 0f;
         flashCoroutine = null;
     }
 
     private void SpawnHitVFX(RaycastHit weaponHit)
     {
-        if (_defaultHitVFX == null)
-            return;
+        if (_defaultHitVFX == null) return;
 
         Vector3 spawnPosition = weaponHit.point + weaponHit.normal * 0.01f;
-
         Quaternion spawnRotation = Quaternion.FromToRotation(Vector3.forward, weaponHit.normal);
 
-        VisualEffect hitVFX = Instantiate(
-            _defaultHitVFX,
-            spawnPosition,
-            spawnRotation
-        );
-
+        VisualEffect hitVFX = Instantiate(_defaultHitVFX, spawnPosition, spawnRotation);
         hitVFX.Play();
-
         Destroy(hitVFX.gameObject, _hitVFXDestroyDelay);
     }
 
     private void SpawnBloodVFXGraph(RaycastHit weaponHit)
     {
-        if (_bloodHitVFX == null)
-            return;
+        if (_bloodHitVFX == null) return;
 
         Vector3 spawnPosition = weaponHit.point + weaponHit.normal * _bloodSurfaceOffset;
-
         Quaternion spawnRotation = Quaternion.LookRotation(weaponHit.normal);
 
-        VisualEffect bloodVFX = Instantiate(
-            _bloodHitVFX,
-            spawnPosition,
-            spawnRotation
-        );
-
+        VisualEffect bloodVFX = Instantiate(_bloodHitVFX, spawnPosition, spawnRotation);
         bloodVFX.SendEvent(_bloodPlayEventName);
-
         Destroy(bloodVFX.gameObject, _bloodVFXDestroyDelay);
     }
-
 }
