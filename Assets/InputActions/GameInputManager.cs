@@ -26,6 +26,8 @@ public class GameInputManager : MonoBehaviour
         Controls.Player.Disable();
         Controls.UI.Disable();
         Controls.Dialog.Enable();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void DisableDialogInput()
@@ -33,6 +35,8 @@ public class GameInputManager : MonoBehaviour
         Controls.Dialog.Disable();
         Controls.UI.Enable();
         Controls.Player.Enable();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void OnDestroy() => Controls.Dispose();

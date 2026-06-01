@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NPCQuestGiver : MonoBehaviour
+public class NPCQuestGiver : MonoBehaviour, IEInteractable
 {
     [Header("Quest")]
     [SerializeField] private QuestDefinition quest;

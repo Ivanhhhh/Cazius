@@ -34584,16 +34584,40 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2014333835609990869, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1903780025400950734, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 272080706}
   m_SourcePrefab: {fileID: 100100000, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
 --- !u!4 &272080704 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8776130559922324971, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
   m_PrefabInstance: {fileID: 272080703}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &272080705 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1903780025400950734, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+  m_PrefabInstance: {fileID: 272080703}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &272080706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 272080705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad495b62dbed61b42b988d5f6b93dbc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCQuestGiver
+  quest: {fileID: 11400000, guid: a8ba0962e345e334da6112d4191f98a7, type: 2}
+  _interactText: F to talk
+  _wavingTrigger: Waving
 --- !u!1 &278527973
 GameObject:
   m_ObjectHideFlags: 0
@@ -179375,7 +179399,7 @@ Transform:
   m_GameObject: {fileID: 2070616906}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 38.154095, y: 11.124662, z: 8.199194}
+  m_LocalPosition: {x: 38.15408, y: 11.124662, z: 8.199198}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -179396,7 +179420,7 @@ MonoBehaviour:
   version: 2
   globalVolume: 0
   mode: 1
-  size: {x: 162.42691, y: 44.031628, z: 77.255226}
+  size: {x: 162.42688, y: 44.031628, z: 77.25523}
   overrideRendererFilters: 0
   minRendererVolumeSize: 0.1
   objectLayerMask:
