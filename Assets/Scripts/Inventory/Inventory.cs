@@ -24,6 +24,7 @@ public class Inventory : MonoBehaviour
             return false;
         }
         ItemData clonedItem = Instantiate(item);
+        clonedItem.name = item.name;
         items.Add(clonedItem);
         onInventoryChanged?.Invoke();
         return true;
