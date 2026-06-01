@@ -34,6 +34,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _aimFOV = 40f;
     [SerializeField] private float _fovSpeed = 10f;
     [SerializeField] private Player_CameraRecoil _recoil;
+    
+    
+    [Header("Rig Object")]
+    [SerializeField] private Transform _targetObject;  // Arrastra aquí el objeto que quieres mover
+    [SerializeField] private float _maxDistance = 5f;  // A qué distancia máxima estará de la cámara
+    [SerializeField] private float _followSpeed = 15f; // Qué tan rápido viaja hacia el centro
+
     private Rigidbody _rb;
     private Camera _camera;
     public PlayerControls _controls;
@@ -108,6 +115,17 @@ public class PlayerMovement : MonoBehaviour
 
         _cameraTransform.LookAt(_cameraTarget.position);
         _cameraTransform.rotation *= Quaternion.Euler(_recoil.CurrentRotation);
+
+        // RIg Object rotation
+        if (_targetObject != null)
+        {
+            Vector3 targetPosition = _cameraTransform.position + _cameraTransform.forward * _maxDistance;
+
+            _targetObject.position = Vector3.Lerp(_targetObject.position, targetPosition, Time.deltaTime * _followSpeed);
+
+        }
+
+
     }
 
     void HandleLook()
