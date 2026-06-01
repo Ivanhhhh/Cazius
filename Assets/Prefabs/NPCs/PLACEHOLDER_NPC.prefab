@@ -242,8 +242,8 @@ Transform:
   m_GameObject: {fileID: 9067970645695086688}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.81154, z: 0}
+  m_LocalScale: {x: 0.57573, y: 0.57573, z: 0.57573}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4377230761694154076}
@@ -262,8 +262,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c06c78f4325786c46aa397ce697f2716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicFloat
-  speed: 1
-  height: 0.5
+  speed: 0.5
+  height: 0.1
 --- !u!114 &8457751327713074858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65584bb149b3e584ab587388a3bb1fa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicRotate
-  _speed: 1
+  _speed: 20
   _directionRotate: {x: 0, y: 1, z: 0}
 --- !u!1001 &1633394931878642335
 PrefabInstance:
@@ -355,7 +355,7 @@ PrefabInstance:
       addedObject: {fileID: 664993198399504474}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 943c3dd92f4165e40bf35545edc8465f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2014333835609990869}
+      addedObject: {fileID: 2246221729836303111}
   m_SourcePrefab: {fileID: 100100000, guid: 943c3dd92f4165e40bf35545edc8465f, type: 3}
 --- !u!4 &1234062663125935476 stripped
 Transform:
@@ -390,7 +390,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0.98, z: 0}
---- !u!114 &2014333835609990869
+--- !u!114 &2246221729836303111
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -399,8 +399,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1903780025400950734}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecd5b7c47fdd13144af701037f2c8af5, type: 3}
+  m_Script: {fileID: 11500000, guid: ad495b62dbed61b42b988d5f6b93dbc3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NPCInteractable
-  _interactText: E to talk
+  m_EditorClassIdentifier: Assembly-CSharp::NPCQuestGiver
+  quest: {fileID: 11400000, guid: a8ba0962e345e334da6112d4191f98a7, type: 2}
+  _interactText: F to talk
   _wavingTrigger: Waving
+  _ammo: {fileID: 11400000, guid: 8840355ec19837e48989f3eca26602a5, type: 2}
