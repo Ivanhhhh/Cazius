@@ -5,7 +5,9 @@ public enum ItemType
 {
     Heal,
     Ammo,
-    Scrap
+    Scrap,
+    Cat,
+    Herbs
 }
 
 [CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/Item")]

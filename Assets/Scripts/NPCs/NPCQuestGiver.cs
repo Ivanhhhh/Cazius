@@ -9,7 +9,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
 
-    [SerializeField] private ItemData _ammo;
+    [SerializeField] private ItemData _questPrizeItem;
     private Animator _animator;
 
     private void Awake()
@@ -71,7 +71,8 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     private void OpenCompletionDialog()
     {
         QuestManager.Instance.CompleteQuest(quest.questID);
-        Inventory.Instance.AddItem(_ammo);
+        Inventory.Instance.AddItem(_questPrizeItem);
+        Inventory.Instance.RemoveItem(quest.requiredItemID);
 
         DialogUIController.Instance.OpenDialog(
             pages: quest.completedDialog,

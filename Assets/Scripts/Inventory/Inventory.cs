@@ -87,6 +87,19 @@ public class Inventory : MonoBehaviour
         return items.Exists(i => i.itemID == itemID);
     }
 
+    public bool RemoveItem(string itemID)
+    {
+        ItemData item = items.Find(i => i.itemID == itemID);
+        if (item == null)
+        {
+            Debug.LogWarning($"[Inventory] Item not found for removal: '{itemID}'");
+            return false;
+        }
+        items.Remove(item);
+        onInventoryChanged?.Invoke();
+        return true;
+    }
+
     // --- Save system ---
 
     public string[] GetAllItemIDs()
