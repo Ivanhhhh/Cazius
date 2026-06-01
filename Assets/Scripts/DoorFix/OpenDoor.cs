@@ -3,108 +3,57 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class OpenDoor : MonoBehaviour, IEInteractable
 {
-    //private bool OpenIsEnabled = false;
-    //private bool _isOpening = false;
     private bool _CanOpen = true;
     private bool _canClose = false;
-    private bool IsNear;
+    private bool Flag = false;
     private bool _isOpening = false;
     [SerializeField] Rigidbody _rigidbody;
-    [SerializeField] HingeJoint _joint;
-    JointLimits limits;
+    [SerializeField] Animator _Anim;
     [SerializeField] string OpenDoorText = "F To Interact";
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-    //    {
-    //        IsNear = true;
-    //        // OpenIsEnabled = true;
-    //        GetInteractText();
-    //    }
-    //}
-    //private void OnTriggerStay(Collider other)
-    //{
-    //    if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-    //    {
-    //        _rigidbody.isKinematic = true;
-
-    //    }
-    //}
-    //}
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-    //    {
-    //    }
-    //}
-
-    void Start()
-    {
-        limits = _joint.limits;
-        _rigidbody.isKinematic = true;
-
-    }
-    void Update()
-    {
-
-        //else if (OpenIsEnabled == false && _isOpening == false) _joint.useMotor = false;
-    }
+   
     public IEnumerator OpenDoorMethod()
     {
-        _rigidbody.isKinematic = false;
+        _Anim.SetTrigger("OpenDoor");
 
-        _CanOpen = false;
-
-        JointMotor motor = _joint.motor;
-        motor.force = 150f;
-        motor.targetVelocity = 600f;  // negativo
-        _joint.motor = motor;
+        _CanOpen = false;     
         _isOpening = true;
-        _joint.useMotor = true;
-        _joint.useLimits = true;
-        _canClose = false;     // ← no puede cerrar mientras abre
+        _canClose = false;
 
         yield return new WaitForSeconds(1f);
         _isOpening = false;
-        _canClose = true;      // ← recién ahora puede cerrar
+        _canClose = true;     
         _CanOpen = false;
+        Flag = true;
+
+
+        print("Open");
     }
     public IEnumerator CloseDoorMethod()
     {
-        _rigidbody.isKinematic = false;
-
-        _CanOpen = false;
-
-        JointMotor motor = _joint.motor;
-        motor.force = 150f;
-        motor.targetVelocity = -600f;  // negativo
-        _joint.motor = motor;
-        _joint.useMotor = true;
-        //_joint.useMotor = false;
-        //_joint.useLimits = false;
+        _Anim.SetTrigger("CloseDoor");
         yield return new WaitForSeconds(1f);
         _CanOpen = true;
+        //_isOpening = false;
         _canClose = false;
-        // _isOpening = true;    // ← recién ahora puede abrir
+        print("Close");
+        Flag = false;
     }
     public void Interact(Transform interactorTransform)
     {
-        // StartCoroutine(OpenDoorMethod());     
-        if (_CanOpen && !_canClose)
+        print("Interact llamado");   // ← agregá esto
+
+        if (_CanOpen && !_canClose && Flag == false)
         {
 
             StartCoroutine(OpenDoorMethod());
         }
-        else if (_canClose && !_CanOpen && !_isOpening)
+        else if (_canClose && !_CanOpen && !_isOpening && Flag == true)
         {
 
             StartCoroutine(CloseDoorMethod());
         }
     }
-    //public void InteractClose(Transform interactorTransform)
-    //{
-    //    StartCoroutine(OpenDoorMethod());
-    //}
+    
     public string GetInteractText() { return OpenDoorText; }
     public Transform GetTransform()
     {
