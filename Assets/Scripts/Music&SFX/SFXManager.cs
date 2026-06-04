@@ -13,7 +13,8 @@ public class SFXManager : MonoBehaviour
         CriticalHitSFX,
         MaleHeySFX,
         RechargingGun,
-        Heal
+        Heal,
+        Cat
         // Add Categories here
     }
 

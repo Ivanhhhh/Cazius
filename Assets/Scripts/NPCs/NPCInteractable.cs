@@ -7,11 +7,7 @@ public class NPCInteractable : MonoBehaviour, IEInteractable
 
     [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
-    [SerializeField] private GiveType _giveType;
-    [SerializeField] private ItemData _health;
-    [SerializeField] private ItemData _scrap;
-    [SerializeField] private ItemData _ammo;
-
+    [SerializeField] private ItemData _itemToGive;
     private Animator _animator;
 
     private void Awake()
@@ -29,18 +25,8 @@ public class NPCInteractable : MonoBehaviour, IEInteractable
 
         if (player == null) return;
 
-        switch (_giveType)
-        {
-            case GiveType.Health:
-                Inventory.Instance.AddItem(_health);
-                break;
-            case GiveType.Ammo:
-                Inventory.Instance.AddItem(_ammo);
-                break;
-            case GiveType.Scrap:
-                Inventory.Instance.AddItem(_scrap);
-                break;
-        }
+        Inventory.Instance.AddItem(_itemToGive);
+
     }
 
     public string GetInteractText() { return _interactText; }

@@ -347,6 +347,54 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Dialog"",
+            ""id"": ""23d953eb-9270-44ea-b667-b038b00f38d7"",
+            ""actions"": [
+                {
+                    ""name"": ""Next/Advance/Accept/Close"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c3e598c-3996-4d1b-9e44-1d7e2ae935f8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Decline"",
+                    ""type"": ""Button"",
+                    ""id"": ""45df60e8-48a0-4ae3-ae54-91441c8d8d88"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""ef2a1ec8-59a8-44a4-b748-b0e727b8d358"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Next/Advance/Accept/Close"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b4d5cbf1-499a-499b-8f20-40ead143561f"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Decline"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -365,12 +413,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_UI_InventoryMenu = m_UI.FindAction("InventoryMenu", throwIfNotFound: true);
         m_UI_PauseMenu = m_UI.FindAction("PauseMenu", throwIfNotFound: true);
         m_UI_Consume = m_UI.FindAction("Consume", throwIfNotFound: true);
+        // Dialog
+        m_Dialog = asset.FindActionMap("Dialog", throwIfNotFound: true);
+        m_Dialog_NextAdvanceAcceptClose = m_Dialog.FindAction("Next/Advance/Accept/Close", throwIfNotFound: true);
+        m_Dialog_Decline = m_Dialog.FindAction("Decline", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, PlayerControls.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, PlayerControls.UI.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Dialog.enabled, "This will cause a leak and performance issues, PlayerControls.Dialog.Disable() has not been called.");
     }
 
     /// <summary>
@@ -722,6 +775,113 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="UIActions" /> instance referencing this action map.
     /// </summary>
     public UIActions @UI => new UIActions(this);
+
+    // Dialog
+    private readonly InputActionMap m_Dialog;
+    private List<IDialogActions> m_DialogActionsCallbackInterfaces = new List<IDialogActions>();
+    private readonly InputAction m_Dialog_NextAdvanceAcceptClose;
+    private readonly InputAction m_Dialog_Decline;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Dialog".
+    /// </summary>
+    public struct DialogActions
+    {
+        private @PlayerControls m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public DialogActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Dialog/NextAdvanceAcceptClose".
+        /// </summary>
+        public InputAction @NextAdvanceAcceptClose => m_Wrapper.m_Dialog_NextAdvanceAcceptClose;
+        /// <summary>
+        /// Provides access to the underlying input action "Dialog/Decline".
+        /// </summary>
+        public InputAction @Decline => m_Wrapper.m_Dialog_Decline;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Dialog; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="DialogActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(DialogActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="DialogActions" />
+        public void AddCallbacks(IDialogActions instance)
+        {
+            if (instance == null || m_Wrapper.m_DialogActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_DialogActionsCallbackInterfaces.Add(instance);
+            @NextAdvanceAcceptClose.started += instance.OnNextAdvanceAcceptClose;
+            @NextAdvanceAcceptClose.performed += instance.OnNextAdvanceAcceptClose;
+            @NextAdvanceAcceptClose.canceled += instance.OnNextAdvanceAcceptClose;
+            @Decline.started += instance.OnDecline;
+            @Decline.performed += instance.OnDecline;
+            @Decline.canceled += instance.OnDecline;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="DialogActions" />
+        private void UnregisterCallbacks(IDialogActions instance)
+        {
+            @NextAdvanceAcceptClose.started -= instance.OnNextAdvanceAcceptClose;
+            @NextAdvanceAcceptClose.performed -= instance.OnNextAdvanceAcceptClose;
+            @NextAdvanceAcceptClose.canceled -= instance.OnNextAdvanceAcceptClose;
+            @Decline.started -= instance.OnDecline;
+            @Decline.performed -= instance.OnDecline;
+            @Decline.canceled -= instance.OnDecline;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="DialogActions.UnregisterCallbacks(IDialogActions)" />.
+        /// </summary>
+        /// <seealso cref="DialogActions.UnregisterCallbacks(IDialogActions)" />
+        public void RemoveCallbacks(IDialogActions instance)
+        {
+            if (m_Wrapper.m_DialogActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="DialogActions.AddCallbacks(IDialogActions)" />
+        /// <seealso cref="DialogActions.RemoveCallbacks(IDialogActions)" />
+        /// <seealso cref="DialogActions.UnregisterCallbacks(IDialogActions)" />
+        public void SetCallbacks(IDialogActions instance)
+        {
+            foreach (var item in m_Wrapper.m_DialogActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_DialogActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="DialogActions" /> instance referencing this action map.
+    /// </summary>
+    public DialogActions @Dialog => new DialogActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.
     /// </summary>
@@ -807,5 +967,27 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnConsume(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Dialog" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="DialogActions.AddCallbacks(IDialogActions)" />
+    /// <seealso cref="DialogActions.RemoveCallbacks(IDialogActions)" />
+    public interface IDialogActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Next/Advance/Accept/Close" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNextAdvanceAcceptClose(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Decline" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDecline(InputAction.CallbackContext context);
     }
 }

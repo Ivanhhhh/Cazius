@@ -4,19 +4,32 @@ using TMPro;
 public class UIInteraction : MonoBehaviour
 {
     [SerializeField] private GameObject _containerUI;
-    [SerializeField] private PlayerInteract _playerInteract;
     [SerializeField] private TextMeshProUGUI _interactText;
 
-    private void Update()
+    private bool _dialogOpen = false;
+
+    private void OnEnable()
     {
-        if (_playerInteract.GetInteractableObject() != null)
-        {
-            Show(_playerInteract.GetInteractableObject());
-        }
+        PlayerInteract.OnInteractableChanged += OnInteractableChanged;
+        DialogUIController.OnDialogOpened += OnDialogOpened;
+        DialogUIController.OnDialogClosed += OnDialogClosed;
+    }
+
+    private void OnDisable()
+    {
+        PlayerInteract.OnInteractableChanged -= OnInteractableChanged;
+        DialogUIController.OnDialogOpened -= OnDialogOpened;
+        DialogUIController.OnDialogClosed -= OnDialogClosed;
+    }
+
+    private void OnInteractableChanged(IEInteractable interactable)
+    {
+        if (_dialogOpen) return;
+
+        if (interactable != null)
+            Show(interactable);
         else
-        {
             Hide();
-        }
     }
 
     private void Show(IEInteractable interactable)
@@ -25,8 +38,21 @@ public class UIInteraction : MonoBehaviour
         _interactText.text = interactable.GetInteractText();
     }
 
-    public void Hide()
+    private void Hide()
     {
         _containerUI.SetActive(false);
+    }
+
+    private void OnDialogOpened()
+    {
+        _dialogOpen = true;
+        Hide();
+    }
+
+    private void OnDialogClosed()
+    {
+        _dialogOpen = false;
+        // Re-evaluate — if player is still in front of an interactable, show prompt again
+        // PlayerInteract will fire OnInteractableChanged on next frame naturally
     }
 }
