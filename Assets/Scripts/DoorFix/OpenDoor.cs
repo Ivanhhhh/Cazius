@@ -3,54 +3,57 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class OpenDoor : MonoBehaviour, IEInteractable
 {
-    private bool _CanOpen = true;
+    [SerializeField] SideOpen _SideOpen;
     private bool _canClose = false;
-    private bool Flag = false;
-    private bool _isOpening = false;
     [SerializeField] Rigidbody _rigidbody;
     [SerializeField] Animator _Anim;
     [SerializeField] string OpenDoorText = "F To Interact";
    
     public IEnumerator OpenDoorMethod()
     {
-        _Anim.SetTrigger("OpenDoor");
-
-        _CanOpen = false;     
-        _isOpening = true;
-        _canClose = false;
-
+       _Anim.SetTrigger("OpenDoor");
+      
         yield return new WaitForSeconds(1f);
-        _isOpening = false;
         _canClose = true;     
-        _CanOpen = false;
-        Flag = true;
-
-
-        print("Open");
+        
+        print("Open1");
     }
+
+    public IEnumerator OpenDoorMethodOtherSide()
+    {
+        _Anim.SetTrigger("OpenDoor2");
+      
+        yield return new WaitForSeconds(1f);
+        _canClose = true;
+        
+        print("Open2");
+    }
+
     public IEnumerator CloseDoorMethod()
     {
-        _Anim.SetTrigger("CloseDoor");
+       _Anim.SetTrigger("CloseDoor");
         yield return new WaitForSeconds(1f);
-        _CanOpen = true;
-        //_isOpening = false;
         _canClose = false;
-        print("Close");
-        Flag = false;
+        print("Close3");
+        
     }
     public void Interact(Transform interactorTransform)
     {
-        print("Interact llamado");   // ← agregá esto
 
-        if (_CanOpen && !_canClose && Flag == false)
+        if (_SideOpen.Opened == true && _canClose == false)
         {
 
-            StartCoroutine(OpenDoorMethod());
+            StartCoroutine(OpenDoorMethodOtherSide());
         }
-        else if (_canClose && !_CanOpen && !_isOpening && Flag == true)
-        {
 
-            StartCoroutine(CloseDoorMethod());
+        else if (_SideOpen.Opened == false && _canClose== false)
+        {
+            StartCoroutine(OpenDoorMethod());         
+        }
+
+        else if (_canClose == true)
+        {
+            StartCoroutine(CloseDoorMethod());         
         }
     }
     
