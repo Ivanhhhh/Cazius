@@ -8,38 +8,47 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     [SerializeField] Rigidbody _rigidbody;
     [SerializeField] Animator _Anim;
     [SerializeField] string OpenDoorText = "F To Interact";
-   
+    private bool IsRunning;
     public IEnumerator OpenDoorMethod()
-    {
+    {  
+        IsRunning = true;
        _Anim.SetTrigger("OpenDoor");
       
         yield return new WaitForSeconds(1f);
         _canClose = true;     
         
         print("Open1");
+
+        IsRunning = false;
     }
 
     public IEnumerator OpenDoorMethodOtherSide()
     {
+        IsRunning = true;
+
         _Anim.SetTrigger("OpenDoor2");
       
         yield return new WaitForSeconds(1f);
         _canClose = true;
         
         print("Open2");
+        IsRunning = false;
+
     }
 
     public IEnumerator CloseDoorMethod()
     {
-       _Anim.SetTrigger("CloseDoor");
+        IsRunning = true;
+
+        _Anim.SetTrigger("CloseDoor");
         yield return new WaitForSeconds(1f);
         _canClose = false;
         print("Close3");
-        
+        IsRunning = false;
     }
     public void Interact(Transform interactorTransform)
     {
-
+        if (IsRunning) return;
         if (_SideOpen.Opened == true && _canClose == false)
         {
 
