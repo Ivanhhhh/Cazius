@@ -34,7 +34,7 @@ public class PauseManager : MonoBehaviour
         else
         {
             Time.timeScale = 1f;
-            AudioSettingsManager.instance.SetMusicVolume(0.175f);
+            AudioSettingsManager.instance.SetMusicVolume(0f);
             OnResumed?.Invoke();
         }
     }
