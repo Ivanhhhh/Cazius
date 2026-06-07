@@ -47,6 +47,14 @@ public class QuestManager : MonoBehaviour
     {
         if (!_questStates.ContainsKey(questID)) return;
         if (_questStates[questID] != QuestStatus.Active) return;
+        _questStates[questID] = QuestStatus.JustCompleted;
+        SaveManager.Instance.Save();
+    }
+
+    public void AcknowledgeCompletion(string questID)
+    {
+        if (!_questStates.ContainsKey(questID)) return;
+        if (_questStates[questID] != QuestStatus.JustCompleted) return;
         _questStates[questID] = QuestStatus.Completed;
         SaveManager.Instance.Save();
     }

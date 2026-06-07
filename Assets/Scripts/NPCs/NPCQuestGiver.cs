@@ -44,6 +44,10 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                     OpenActiveDialog();
                 break;
 
+            case QuestStatus.JustCompleted:
+                OpenFirstCompletionDialog();
+                break;
+
             case QuestStatus.Completed:
                 OpenCompletedDialog();
                 break;
@@ -83,10 +87,15 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         if (_removeItemOnCompletion)
             Inventory.Instance.RemoveItem(quest.conditionTargetID);
 
+        OpenFirstCompletionDialog();
+    }
+
+    private void OpenFirstCompletionDialog()
+    {
         DialogUIController.Instance.OpenDialog(
-            pages: quest.completedDialog,
+            pages: quest.firstCompletionDialog,
             onAccept: null,
-            onClose: null
+            onClose: () => QuestManager.Instance.AcknowledgeCompletion(quest.questID)
         );
     }
 

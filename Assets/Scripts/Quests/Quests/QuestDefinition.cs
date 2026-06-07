@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewQuest", 
+[CreateAssetMenu(fileName = "NewQuest",
                  menuName = "Quests/Quest Definition")]
 public class QuestDefinition : ScriptableObject
 {
@@ -20,7 +20,11 @@ public class QuestDefinition : ScriptableObject
     [TextArea(2, 5)]
     public string[] activeDialog;
 
-    [Header("Dialog — Completed")]
+    [Header("Dialog — First Completion (plays once)")]
+    [TextArea(2, 5)]
+    public string[] firstCompletionDialog;
+
+    [Header("Dialog — Completed (plays every time after)")]
     [TextArea(2, 5)]
     public string[] completedDialog;
 }
