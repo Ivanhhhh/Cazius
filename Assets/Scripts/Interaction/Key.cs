@@ -14,6 +14,7 @@ public class Key : MonoBehaviour, IEInteractable
     [SerializeField] private GameObject _currentCamera;
     [SerializeField] private GameObject _secondCamera;
     [SerializeField] private Vector3 _offsetKey;
+    [SerializeField] private bool _isAnim1End;
 
     [Header("UI")]
     [SerializeField] private GameObject _keyPanel;
@@ -46,6 +47,7 @@ public class Key : MonoBehaviour, IEInteractable
 
     public IEnumerator WhenKeyOpenDoor(Transform doorTransform, string animationName)
     {
+
         gameObject.SetActive(true);
         _currentCamera.SetActive(false);
 
@@ -54,11 +56,21 @@ public class Key : MonoBehaviour, IEInteractable
         _keyRoot.position = doorTransform.position + _offsetKey;
 
         _secondCamera.SetActive(true);
-        // _secondCamera.transform.position = _posSecondCamera;
-        // _secondCamera.transform.rotation = _rotationSecondCamera;
 
         _keyAnimator.enabled = true;
-        _keyAnimator.Play(animationName, 0, 0f);
+
+        if (gameObject.CompareTag("PurgatoryKey")) _keyAnimator.Play(animationName, 0, 0f);
+
+        if (!_isAnim1End && gameObject.CompareTag("EdenKey"))
+        {
+            _keyAnimator.Play(animationName, 0, 0f);
+            _isAnim1End = true;
+        }
+        else if (_isAnim1End && gameObject.CompareTag("EdenKey"))
+        {
+            _keyAnimator.Play(animationName, 0, 0f);
+            _keyRoot.position = doorTransform.position + new Vector3(0.4f, 0.9f, 0.1f);
+        }
 
         yield return new WaitForSeconds(3f);
 
