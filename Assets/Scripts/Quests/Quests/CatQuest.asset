@@ -15,12 +15,16 @@ MonoBehaviour:
   questID: Cat01
   questTitle: Test Quest
   condition: {fileID: 11400000, guid: 3e5c4ca02ef60124ca28af946b347d90, type: 2}
+  conditionTargetID: Cat01
   offerDialog:
   - 'Hey, stranger! I''ve lost my <b><color=yellow>cat</b></color>. He likes to dance. '
   - If you see him would you bring him to me? It's my only companion.
   activeDialog:
   - Have you seen my <b><color=yellow>cat</b></color>?
   - I miss his moves...
-  completedDialog:
-  - Thanks, man! Hope the <b><color=green>scrap</b></color> comes in handy.
+  firstCompletionDialog:
+  - Thanks, man! Hope this <b><color=green>scrap</b></color> comes in handy.
   - It's the only thing I can give you.
+  completedDialog:
+  - 'Thank you for retrieving my cat Oia '
+  - 'Have a nice day! '
