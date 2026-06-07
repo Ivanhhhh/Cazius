@@ -307,6 +307,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1041778468}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1041778469}
     - targetCorrespondingSourceObject: {fileID: 1507767883509144192, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1335830249}
@@ -8403,7 +8406,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8530193996410143844, guid: 57fe568f0822eb943ace194674ef3497, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8495,6 +8498,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnableObjectOnDisable
   objectToEnable: {fileID: 1118246715}
+--- !u!114 &1041778469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78095362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7cffafec4b4751478c7da91f69d09b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TriggerAnimatorOnDisable
+  targetAnimator: {fileID: 0}
+  triggerName: BreakFloor
+  findAnimatorIfMissing: 1
+  animatorObjectName: FallDownObjects
 --- !u!4 &1043680622 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3194098706223647977, guid: 327b1d1a1616b5a4d9657f40880536eb, type: 3}
