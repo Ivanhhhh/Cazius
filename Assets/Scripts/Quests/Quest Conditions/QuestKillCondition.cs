@@ -1,14 +1,11 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewQuestKillCondition", 
+[CreateAssetMenu(fileName = "NewQuestKillCondition",
                  menuName = "Quests/Conditions/Quest Kill Condition")]
 public class QuestKillCondition : QuestCondition
 {
-    [Tooltip("Must match the enemyID on the QuestEnemy component")]
-    public string enemyID;
-
-    public override bool IsMet()
+    public override bool IsMet(string targetID)
     {
-        return QuestManager.Instance.WasKilled(enemyID);
+        return QuestManager.Instance.WasKilled(targetID);
     }
 }

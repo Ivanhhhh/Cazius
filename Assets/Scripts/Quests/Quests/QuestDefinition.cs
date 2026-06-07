@@ -10,6 +10,7 @@ public class QuestDefinition : ScriptableObject
 
     [Header("Required Condition")]
     public QuestCondition condition;
+    public string conditionTargetID;
 
     [Header("Dialog — Offer")]
     [TextArea(2, 5)]

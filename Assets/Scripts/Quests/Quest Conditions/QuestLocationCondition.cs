@@ -4,11 +4,8 @@ using UnityEngine;
                  menuName = "Quests/Conditions/Quest Location Condition")]
 public class QuestLocationCondition : QuestCondition
 {
-    [Tooltip("Must match the locationID on the QuestLocationTrigger component")]
-    public string locationID;
-
-    public override bool IsMet()
+    public override bool IsMet(string targetID)
     {
-        return QuestManager.Instance.WasReached(locationID);
+        return QuestManager.Instance.WasReached(targetID);
     }
 }
