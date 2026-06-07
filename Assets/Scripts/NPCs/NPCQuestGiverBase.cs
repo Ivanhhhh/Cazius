@@ -1,18 +1,20 @@
 using UnityEngine;
 
-public class NPCQuestGiver : MonoBehaviour, IEInteractable
+public abstract class NPCQuestGiverBase : MonoBehaviour, IEInteractable
 {
     [Header("Quest")]
-    [SerializeField] private QuestDefinition quest;
+    [SerializeField] protected QuestDefinition quest;
 
     [Header("NPC Behavior")]
     [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
 
+    [Header("Reward")]
     [SerializeField] private ItemData _questPrizeItem;
+
     private Animator _animator;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _animator = GetComponent<Animator>();
     }
@@ -32,18 +34,22 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                 OpenOfferDialog();
                 break;
 
-            /*case QuestStatus.Active:
-                if (Inventory.Instance.HasItem(quest.requiredItemID))
+            case QuestStatus.Active:
+                if (IsConditionMet())
                     OpenCompletionDialog();
                 else
                     OpenActiveDialog();
-                break;*/
+                break;
 
             case QuestStatus.Completed:
                 OpenCompletedDialog();
                 break;
         }
     }
+
+    protected abstract bool IsConditionMet();
+
+    protected virtual void OnQuestCompleted() { }
 
     public string GetInteractText() { return _interactText; }
     public Transform GetTransform() { return transform; }
@@ -71,8 +77,11 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     private void OpenCompletionDialog()
     {
         QuestManager.Instance.CompleteQuest(quest.questID);
-        Inventory.Instance.AddItem(_questPrizeItem);
-        //Inventory.Instance.RemoveItem(quest.requiredItemID);
+
+        if (_questPrizeItem != null)
+            Inventory.Instance.AddItem(_questPrizeItem);
+
+        OnQuestCompleted();
 
         DialogUIController.Instance.OpenDialog(
             pages: quest.completedDialog,

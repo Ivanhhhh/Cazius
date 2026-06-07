@@ -1,6 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewQuest", menuName = "Quests/Quest Definition")]
+[CreateAssetMenu(fileName = "NewQuest", 
+                 menuName = "Quests/Quest Definition")]
 public class QuestDefinition : ScriptableObject
 {
     [Header("Identity")]
@@ -8,13 +9,13 @@ public class QuestDefinition : ScriptableObject
     public string questTitle;
 
     [Header("Required Condition")]
-    public string requiredItemID;
+    public QuestCondition condition;
 
     [Header("Dialog — Offer")]
     [TextArea(2, 5)]
     public string[] offerDialog;
 
-    [Header("Dialog — Active (item not yet found)")]
+    [Header("Dialog — Active (condition not yet met)")]
     [TextArea(2, 5)]
     public string[] activeDialog;
 
