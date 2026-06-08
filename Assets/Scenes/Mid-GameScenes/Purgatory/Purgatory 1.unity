@@ -2628,6 +2628,8 @@ MonoBehaviour:
   quest: {fileID: 11400000, guid: a464cced7addcd741998852f81b59f84, type: 2}
   _interactText: F to talk
   _wavingTrigger: Waving
+  _showOnMap: 1
+  _questDestination: {x: 47.434, y: 5.169, z: -31.364}
   _questPrizeItem: {fileID: 0}
   _removeItemOnCompletion: 0
 --- !u!1 &48082194
@@ -110254,74 +110256,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2375554601785720986, guid: 2c83f7a93d056084ba805c9e930ccd08, type: 3}
   m_PrefabInstance: {fileID: 733526679}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &734436223
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 734436224}
-  - component: {fileID: 734436226}
-  - component: {fileID: 734436225}
-  m_Layer: 0
-  m_Name: TESTLOCATONQUEST
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &734436224
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 734436223}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 70.43, y: 0, z: -30.45}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1000121721}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &734436225
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 734436223}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 17.190567, y: 9.546658, z: 8.440837}
-  m_Center: {x: 4.717842, y: 4.273329, z: 3.72042}
---- !u!114 &734436226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 734436223}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cf4c548b9f9a9848bbd4627c997c75a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QuestLocationTrigger
-  locationID: TESTLocation01
-  playerTag: Player
 --- !u!1001 &734720013
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -143214,7 +143148,6 @@ Transform:
   - {fileID: 1752455180}
   - {fileID: 345493217}
   - {fileID: 1978742307}
-  - {fileID: 734436224}
   - {fileID: 44754080}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

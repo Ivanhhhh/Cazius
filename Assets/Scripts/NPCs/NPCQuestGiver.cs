@@ -9,6 +9,10 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
 
+    [Header("Map")]
+    [SerializeField] private bool _showOnMap = false;
+    [SerializeField] private Vector3 _questDestination;
+
     [Header("Reward")]
     [SerializeField] private ItemData _questPrizeItem;
 
@@ -53,6 +57,9 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                 break;
         }
     }
+
+    public bool ShowOnMap => _showOnMap;
+    public Vector3 QuestDestination => _questDestination;
 
     public string GetInteractText() { return _interactText; }
     public Transform GetTransform() { return transform; }
