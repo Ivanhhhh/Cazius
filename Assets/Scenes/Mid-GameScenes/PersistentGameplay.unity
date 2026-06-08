@@ -124,6 +124,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 945954129571072745, guid: dcaeb3293b9060443a23da4f88fdaa69, type: 3}
   m_PrefabInstance: {fileID: 1928204354}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &50280613 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5263217399552253381, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+  m_PrefabInstance: {fileID: 9174304713106157729}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &50280614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50280613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a30ba3fa73e0e8f49be7e59edbbe7161, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FactoryPool.Decal
+  _decalLifetime: 2
+--- !u!114 &50280615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50280613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8a0969069b1ea848b2db88c07c20a52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FactoryPool.DecalFactory
+  _decalPrefab: {fileID: 8124093340824151479, guid: 40c5e37ea305d984cae4f730f4e79976, type: 3}
 --- !u!114 &51499937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18204,7 +18235,13 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6189969909263246771, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       insertIndex: 3
       addedObject: {fileID: 1637414772}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5263217399552253381, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 50280614}
+    - targetCorrespondingSourceObject: {fileID: 5263217399552253381, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 50280615}
   m_SourcePrefab: {fileID: 100100000, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
 --- !u!4 &9174304713106157730 stripped
 Transform:
