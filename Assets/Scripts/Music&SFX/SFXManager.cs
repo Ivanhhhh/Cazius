@@ -17,7 +17,8 @@ public class SFXManager : MonoBehaviour
         MaleHeySFX,
         RechargingGun,
         Heal,
-        Cat
+        Cat,
+        RockCrumble
         // Add Categories here
     }
 
