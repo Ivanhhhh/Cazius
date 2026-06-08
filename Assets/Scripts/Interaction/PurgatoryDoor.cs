@@ -10,6 +10,7 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
 
     [SerializeField] private Key _key;
     [SerializeField] private PlayerMovement _playerMovement;
+    [SerializeField] private Animator _playerAnimator;
 
     public void Interact(Transform interactorTransform)
     {
@@ -23,6 +24,7 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
     public IEnumerator OpenDoor()
     {
         _playerMovement.enabled = false;
+        _playerAnimator.speed = 0f;
 
         yield return StartCoroutine(_key.WhenKeyOpenDoor(transform, "KeyOpen"));
 
@@ -30,6 +32,7 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
         _isOpen = true;
 
         _playerMovement.enabled = true;
+        _playerAnimator.speed = 1f;
     }
 
     public string GetInteractText() { return _interactText; }
