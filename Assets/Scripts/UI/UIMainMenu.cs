@@ -7,50 +7,48 @@ public class UIMainMenu : MonoBehaviour
     [Header("Panels")]
     [SerializeField] private GameObject _mainPanel;
     [SerializeField] private GameObject _optionsPanel;
-    [SerializeField] private GameObject _controlsPanel;
-    [SerializeField] private GameObject _soundConfigPanel;
 
-    [Header("Main Panel")]
+    [Header("Sub Panels")]
+    [SerializeField] private GameObject _controlsPanel;
+    [SerializeField] private GameObject _soundPanel;
+
+    [Header("Main Panel - Buttons")]
     [SerializeField] private string _startGameScene = "LoadToGameFromMenu";
     [SerializeField] private Button _startGameButton;
     [SerializeField] private Button _optionsButton;
     [SerializeField] private Button _exitButton;
 
-    [Header("Options Panel")]
+    [Header("Options Panel - Buttons")]
     [SerializeField] private Button _controlsButton;
     [SerializeField] private Button _soundConfigButton;
-    [SerializeField] private Button _optionsBackButton;
+    [SerializeField] private Button _backToMainButton;
 
-    [Header("Controls Panel")]
-    [SerializeField] private Button _controlsBackButton;
-
-    [Header("Sound Config Panel")]
+    [Header("Sound Panel - Sliders")]
     [SerializeField] private Slider _masterSlider;
     [SerializeField] private Slider _musicSlider;
     [SerializeField] private Slider _sfxSlider;
-    [SerializeField] private Button _soundConfigBackButton;
 
     private GameObject _currentPanel;
+    private GameObject _currentSubPanel;
 
     private void Start()
     {
-        // Register button listeners
+        // Main panel listeners
         _startGameButton.onClick.AddListener(OnStartGame);
         _optionsButton.onClick.AddListener(OnOpenOptions);
         _exitButton.onClick.AddListener(OnExit);
 
+        // Options panel listeners
         _controlsButton.onClick.AddListener(OnOpenControls);
         _soundConfigButton.onClick.AddListener(OnOpenSoundConfig);
-        _optionsBackButton.onClick.AddListener(OnOptionsBack);
+        _backToMainButton.onClick.AddListener(OnBackToMain);
 
-        _controlsBackButton.onClick.AddListener(OnControlsBack);
-
+        // Slider listeners
         _masterSlider.onValueChanged.AddListener(OnMasterVolumeChanged);
         _musicSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
         _sfxSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
-        _soundConfigBackButton.onClick.AddListener(OnSoundConfigBack);
 
-        // Start on the main panel
+        // Start on main panel
         ShowPanel(_mainPanel);
     }
 
@@ -64,13 +62,27 @@ public class UIMainMenu : MonoBehaviour
         _currentPanel.SetActive(true);
     }
 
+    // Sub Panel Navigation (Controls/Sound inside Options)
+    private void ShowSubPanel(GameObject subPanel)
+    {
+        if (_currentSubPanel != null)
+            _currentSubPanel.SetActive(false);
+
+        _currentSubPanel = subPanel;
+        _currentSubPanel.SetActive(true);
+    }
+
     // Main Panel Handlers
     private void OnStartGame()
     {
         SceneManager.LoadScene(_startGameScene);
     }
 
-    private void OnOpenOptions() => ShowPanel(_optionsPanel);
+    private void OnOpenOptions()
+    {
+        ShowPanel(_optionsPanel);
+        ShowSubPanel(_controlsPanel); // Controls open by default
+    }
 
     private void OnExit()
     {
@@ -82,14 +94,11 @@ public class UIMainMenu : MonoBehaviour
     }
 
     // Options Panel Handlers
-    private void OnOpenControls() => ShowPanel(_controlsPanel);
-    private void OnOpenSoundConfig() => ShowPanel(_soundConfigPanel);
-    private void OnOptionsBack() => ShowPanel(_mainPanel);
+    private void OnOpenControls() => ShowSubPanel(_controlsPanel);
+    private void OnOpenSoundConfig() => ShowSubPanel(_soundPanel);
+    private void OnBackToMain() => ShowPanel(_mainPanel);
 
-    // Controls Panel Handlers
-    private void OnControlsBack() => ShowPanel(_optionsPanel);
-
-    // Sound Config Panel Handlers
+    // Sound Panel Handlers
     private void OnMasterVolumeChanged(float value)
     {
         // TODO: connect to AudioManager
@@ -104,6 +113,4 @@ public class UIMainMenu : MonoBehaviour
     {
         // TODO: connect to AudioManager
     }
-
-    private void OnSoundConfigBack() => ShowPanel(_optionsPanel);
 }
