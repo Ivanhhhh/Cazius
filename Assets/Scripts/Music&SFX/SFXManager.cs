@@ -18,6 +18,8 @@ public class SFXManager : MonoBehaviour
         RechargingGun,
         Heal,
         Cat,
+        HoverButton,
+        ClickButton,
         RockCrumble
         // Add Categories here
     }

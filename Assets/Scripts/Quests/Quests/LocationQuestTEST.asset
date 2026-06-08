@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c775739362622dc4c93274687942abf2, type: 3}
-  m_Name: ScrapQuest
+  m_Name: LocationQuestTEST
   m_EditorClassIdentifier: Assembly-CSharp::QuestDefinition
-  questID: Cat01
-  questTitle: Test Quest
-  requiredItemID: Cat01
+  questID: TESTReachLocation
+  questTitle: TESTReachLocation
+  condition: {fileID: 11400000, guid: 4ea20f7b4bf4a84489fe82e76a59cc4a, type: 2}
+  conditionTargetID: TESTLocation01
   offerDialog:
-  - 'Hey, stranger! I''ve lost my <b><color=yellow>cat</b></color>. He likes to dance. '
-  - If you see him would you bring him to me? It's my only companion.
+  - '[TEST] Reach location?'
   activeDialog:
-  - Have you seen my <b><color=yellow>cat</b></color>?
-  - I miss his moves...
+  - '[TEST] Have you reached location?'
+  firstCompletionDialog:
+  - '[TEST] Reached location!!'
   completedDialog:
-  - Thanks, man! Hope the <b><color=green>scrap</b></color> comes in handy.
-  - It's the only thing I can give you.
+  - '[TEST] How are you?'

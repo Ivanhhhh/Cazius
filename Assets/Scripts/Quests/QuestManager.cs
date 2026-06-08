@@ -6,6 +6,8 @@ public class QuestManager : MonoBehaviour
     public static QuestManager Instance { get; private set; }
 
     private Dictionary<string, QuestStatus> _questStates = new();
+    private HashSet<string> _killedEnemies = new();
+    private HashSet<string> _reachedLocations = new();
 
     private void Awake()
     {
@@ -14,12 +16,12 @@ public class QuestManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
-    // Called by QuestGiverNPC on first interact — does not overwrite loaded state
+    // --- Quest registration ---
+
     public void RegisterQuest(string questID)
     {
         if (!_questStates.ContainsKey(questID))
@@ -37,7 +39,6 @@ public class QuestManager : MonoBehaviour
     {
         if (!_questStates.ContainsKey(questID)) return;
         if (_questStates[questID] != QuestStatus.NotStarted) return;
-
         _questStates[questID] = QuestStatus.Active;
         SaveManager.Instance.Save();
     }
@@ -46,9 +47,40 @@ public class QuestManager : MonoBehaviour
     {
         if (!_questStates.ContainsKey(questID)) return;
         if (_questStates[questID] != QuestStatus.Active) return;
+        _questStates[questID] = QuestStatus.JustCompleted;
+        SaveManager.Instance.Save();
+    }
 
+    public void AcknowledgeCompletion(string questID)
+    {
+        if (!_questStates.ContainsKey(questID)) return;
+        if (_questStates[questID] != QuestStatus.JustCompleted) return;
         _questStates[questID] = QuestStatus.Completed;
         SaveManager.Instance.Save();
+    }
+
+    // --- Kill tracking ---
+
+    public void RegisterKill(string enemyID)
+    {
+        _killedEnemies.Add(enemyID);
+    }
+
+    public bool WasKilled(string enemyID)
+    {
+        return _killedEnemies.Contains(enemyID);
+    }
+
+    // --- Location tracking ---
+
+    public void RegisterLocation(string locationID)
+    {
+        _reachedLocations.Add(locationID);
+    }
+
+    public bool WasReached(string locationID)
+    {
+        return _reachedLocations.Contains(locationID);
     }
 
     // --- Save / Load integration ---

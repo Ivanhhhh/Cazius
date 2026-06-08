@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c775739362622dc4c93274687942abf2, type: 3}
+  m_Name: EnemyQuestTEST
+  m_EditorClassIdentifier: Assembly-CSharp::QuestDefinition
+  questID: TESTKillEnemy
+  questTitle: TESTKillEnemy
+  condition: {fileID: 11400000, guid: 5c29c3e30d3b527479b405bc18e9e23c, type: 2}
+  conditionTargetID: TestEnemy01
+  offerDialog:
+  - '[TEST] Kill monster please'
+  activeDialog:
+  - '[TEST] Killed monster?'
+  firstCompletionDialog:
+  - '[TEST] Thanks for killing monster'
+  completedDialog:
+  - '[TEST] How are you?'
