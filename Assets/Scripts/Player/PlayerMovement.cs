@@ -12,10 +12,20 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _groundingForce = 20f;
     [SerializeField] private float _groundCheckDistance = 0.1f;
 
-    [Header("Camera")]
-    [SerializeField] private float _cameraDistance = 1f;
-    [SerializeField] private float _cameraXOffset = 0.4f;
-    [SerializeField] private float _cameraYOffset = 0.4f;
+    [Header("Camera Elevator Logic")]
+    [SerializeField] private float _rotationCenterY = 1.2f; // Altura del pecho/cabeza (Pivote central)
+    [SerializeField] private float _rotationCenterZ = 0.2f; // NUEVO: Desplazamiento del centro hacia adelante/atrás
+    [SerializeField] private float _cameraXOffset = 0.4f;   // Distancia lateral FIJA
+
+    [Header("Topes de Altura (Y)")]
+    [SerializeField] private float _minCameraY = -0.2f; // Altura mínima (Se alcanza al llegar a _minPitch)
+    [SerializeField] private float _maxCameraY = 1.2f;  // Altura máxima (Se alcanza al llegar a _maxPitch)
+
+    [Header("Topes de Profundidad (Z)")]
+    [SerializeField] private float _minCameraZ = -1.5f; // Qué tan lejos está al mirar arriba (Valores negativos)
+    [SerializeField] private float _maxCameraZ = -0.5f; // Qué tan cerca está al mirar abajo
+
+    [Header("Camera Settings")]
     [SerializeField] private float _cameraCollisionRadius = 0.2f;
     [SerializeField] private LayerMask _cameraCollisionMask;
     [SerializeField] private float _mouseSensitivityY = 0.15f;
@@ -24,10 +34,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _maxPitch = 40f;
     [SerializeField] private float _cameraVerticalTilt = 0.3f;
 
-    [Header("Camera Target")]
-    [SerializeField] private float _YOffset = 0.4f;
-    [SerializeField] private float _minVerticalY = -1f;
-    [SerializeField] private float _maxVerticalY = 1f;
+    [Header("Camera Target Dynamic")]
+    [SerializeField] private float _minTargetY = 0.2f; // Altura del target al mirar arriba (Pitch mínimo)
+    [SerializeField] private float _maxTargetY = 0.8f; // Altura del target al mirar abajo (Pitch máximo)
 
     [Header("Aim Settings")]
     [SerializeField] private float _normalFOV = 60f;
@@ -35,11 +44,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _fovSpeed = 10f;
     [SerializeField] private Player_CameraRecoil _recoil;
     
-    
     [Header("Rig Object")]
-    [SerializeField] private Transform _targetObject;  // Arrastra aquí el objeto que quieres mover
-    [SerializeField] private float _maxDistance = 5f;  // A qué distancia máxima estará de la cámara
-    [SerializeField] private float _followSpeed = 15f; // Qué tan rápido viaja hacia el centro
+    [SerializeField] private Transform _targetObject; 
+    [SerializeField] private float _maxDistance = 5f; 
+    [SerializeField] private float _followSpeed = 15f; 
 
     private Rigidbody _rb;
     private Camera _camera;
@@ -62,7 +70,6 @@ public class PlayerMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _aimSpeed = _moveSpeed / 2;
         _targetRotation = _rb.rotation;
-
     }
 
     private void Start()
@@ -85,7 +92,6 @@ public class PlayerMovement : MonoBehaviour
     {
         HandleLook();
         HandleAim();
-        // anims
         _smoothedMoveInput = Vector2.Lerp(_smoothedMoveInput, _moveInput, Time.deltaTime * 10f);
     }
 
@@ -97,18 +103,29 @@ public class PlayerMovement : MonoBehaviour
 
     void LateUpdate()
     {
+        // 1. Establecemos el pivote central (Ej: Altura del pecho)
+        Vector3 pivotPosition = transform.position 
+                    + Vector3.up * _rotationCenterY 
+                    + transform.forward * _rotationCenterZ;
+
+        // 2. Calculamos el porcentaje de rotación actual (0 a 1)
         float pitchT = Mathf.InverseLerp(_minPitch, _maxPitch, _cameraPitch);
-        //float cameraVertical = Mathf.Lerp(_cameraVerticalTilt, -_cameraVerticalTilt, pitchT);
 
-        Vector3 desiredPosition = transform.position
+        // 3. Calculamos la altura (Y) y la profundidad (Z) dinámica interpolando entre los topes fijos
+        float dynamicYOffset = Mathf.Lerp(_minCameraY, _maxCameraY, pitchT);
+        float dynamicZOffset = Mathf.Lerp(_minCameraZ, _maxCameraZ, pitchT);
+
+        // 4. Posición ideal usando X fijo, Y dinámico, Z dinámico
+        Vector3 desiredPosition = pivotPosition
             + transform.right * _cameraXOffset
-            + Vector3.up * (_cameraYOffset)
-            + transform.forward * -_cameraDistance;
+            + Vector3.up * dynamicYOffset
+            + transform.forward * dynamicZOffset;
 
-        Vector3 direction = desiredPosition - transform.position;
+        Vector3 direction = desiredPosition - pivotPosition;
         float distance = direction.magnitude;
 
-        if (Physics.Raycast(transform.position, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
+        // El Raycast se dispara desde el pecho (pivote) hacia la cámara
+        if (Physics.Raycast(pivotPosition, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
             _cameraTransform.position = hit.point;
         else
             _cameraTransform.position = desiredPosition;
@@ -116,16 +133,11 @@ public class PlayerMovement : MonoBehaviour
         _cameraTransform.LookAt(_cameraTarget.position);
         _cameraTransform.rotation *= Quaternion.Euler(_recoil.CurrentRotation);
 
-        // RIg Object rotation
         if (_targetObject != null)
         {
             Vector3 targetPosition = _cameraTransform.position + _cameraTransform.forward * _maxDistance;
-
             _targetObject.position = Vector3.Lerp(_targetObject.position, targetPosition, Time.deltaTime * _followSpeed);
-
         }
-
-
     }
 
     void HandleLook()
@@ -133,41 +145,25 @@ public class PlayerMovement : MonoBehaviour
         float mouseX = _lookInput.x * _mouseSensitivityX;
         float mouseY = _lookInput.y * _mouseSensitivityY;
 
-        _verticalOffset -= -mouseY * 2f * Time.deltaTime;
-        _verticalOffset = Mathf.Clamp(_verticalOffset, _minVerticalY, _maxVerticalY);
-
-        //_targetRotation = _rb.rotation * Quaternion.Euler(0f, mouseX, 0f);
         _yaw += mouseX;
 
+        // 1. Calculamos y limitamos la rotación (El Pitch)
         _cameraPitch -= mouseY;
         _cameraPitch = Mathf.Clamp(_cameraPitch, _minPitch, _maxPitch);
         _cameraTarget.localRotation = Quaternion.Euler(_cameraPitch, 0f, 0f);
 
+        // 2. Porcentaje de inclinación (0 a 1)
+        float pitchT = Mathf.InverseLerp(_minPitch, _maxPitch, _cameraPitch);
+
+        // 3. Calculamos la altura dinámica del objetivo
+        float dynamicTargetY = Mathf.Lerp(_minTargetY, _maxTargetY, pitchT);
+
+        // 4. Aplicamos la nueva altura al _cameraTarget
         Vector3 localPos = _cameraTarget.localPosition;
-        localPos.y = _verticalOffset + _YOffset;
+        localPos.y = dynamicTargetY;
         _cameraTarget.localPosition = localPos;
     }
-    /*
-    void HandleMovement()
-    {
-        float actualSpeed = _isAiming ? _aimSpeed : _moveSpeed;
-        Vector3 move = transform.forward * _moveInput.y + transform.right * _moveInput.x;
-        if (move.sqrMagnitude > 1f) move.Normalize();
 
-        bool grounded = Physics.Raycast(transform.position, Vector3.down, _groundCheckDistance);
-
-        _rb.linearVelocity = new Vector3(move.x * actualSpeed, _rb.linearVelocity.y, move.z * actualSpeed);
-        _rb.AddForce(Vector3.down * _groundingForce, ForceMode.Force);
-
-        // Animator
-        bool isMoving = _smoothedMoveInput.sqrMagnitude > 0.01f;
-
-        _animator.SetBool("IsMoving", isMoving);
-        _animator.SetFloat("MoveX", _smoothedMoveInput.y, 0.3f, Time.deltaTime);
-        _animator.SetFloat("MoveZ", _smoothedMoveInput.x, 0.3f, Time.deltaTime);
-
-        _currentSpeed = _rb.linearVelocity.magnitude;
-    }*/
     void HandleMovement()
     {
         float actualSpeed = _isAiming ? _aimSpeed : _moveSpeed;
@@ -175,7 +171,6 @@ public class PlayerMovement : MonoBehaviour
         Vector3 camForward = _cameraTransform.forward;
         Vector3 camRight = _cameraTransform.right;
 
-        // Remove vertical angle so movement stays flat
         camForward.y = 0f;
         camRight.y = 0f;
 
@@ -212,7 +207,6 @@ public class PlayerMovement : MonoBehaviour
 
     void ApplyRotation()
     {
-        //_rb.MoveRotation(_targetRotation);
         _rb.MoveRotation(Quaternion.Euler(0f, _yaw, 0f));
     }
 
@@ -224,29 +218,36 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (_cameraTarget == null) return;
+        Vector3 pivotPosition = transform.position + Vector3.up * _rotationCenterY;
+        
+        float pitchT = Mathf.InverseLerp(_minPitch, _maxPitch, _cameraPitch);
+        float dynamicYOffset = Mathf.Lerp(_minCameraY, _maxCameraY, pitchT);
+        float dynamicZOffset = Mathf.Lerp(_minCameraZ, _maxCameraZ, pitchT);
 
-        Vector3 desiredPosition = _cameraTarget.position
-            + _cameraTarget.forward * -_cameraDistance
-            + _cameraTarget.right * _cameraXOffset
-            + _cameraTarget.up * _cameraYOffset;
+        Vector3 desiredPosition = pivotPosition
+            + transform.right * _cameraXOffset
+            + Vector3.up * dynamicYOffset
+            + transform.forward * dynamicZOffset;
 
-        Vector3 direction = desiredPosition - transform.position;
+        Vector3 direction = desiredPosition - pivotPosition;
         float distance = direction.magnitude;
 
-        if (Physics.Raycast(transform.position, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
+        if (Physics.Raycast(pivotPosition, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, hit.point);
+            Gizmos.DrawLine(pivotPosition, hit.point);
             Gizmos.DrawWireSphere(hit.point, 0.1f);
         }
         else
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, desiredPosition);
+            Gizmos.DrawLine(pivotPosition, desiredPosition);
         }
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(desiredPosition, 0.1f);
+        
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(pivotPosition, 0.05f);
     }
 }
