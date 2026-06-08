@@ -35694,16 +35694,42 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3512742297041317391, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1903780025400950734, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 272080706}
   m_SourcePrefab: {fileID: 100100000, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
 --- !u!4 &272080704 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8776130559922324971, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
   m_PrefabInstance: {fileID: 272080703}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &272080705 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1903780025400950734, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+  m_PrefabInstance: {fileID: 272080703}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &272080706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 272080705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad495b62dbed61b42b988d5f6b93dbc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCQuestGiver
+  quest: {fileID: 11400000, guid: a8ba0962e345e334da6112d4191f98a7, type: 2}
+  _interactText: F to talk
+  _wavingTrigger: Waving
+  _questPrizeItem: {fileID: 11400000, guid: 33d5c6a2c4a26c645b85e9080f8eea8c, type: 2}
+  _removeItemOnCompletion: 1
 --- !u!1001 &276803560
 PrefabInstance:
   m_ObjectHideFlags: 0
