@@ -65,8 +65,8 @@ public class UIButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 _baseTextColor.a
             );
 
-        /* if (_enableHoverSFX)
-             _sfxManager.PlaySFX(SFXManager.SFXCategoryType.UI_Hover);*/
+        if (_enableHoverSFX)
+            _sfxManager.PlaySFX(SFXManager.SFXCategoryType.HoverButton);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -85,8 +85,8 @@ public class UIButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         transform.localScale = _baseScale * _clickScale;
         _targetScale = _isHovered ? _baseScale * _hoverScale : _baseScale;
 
-        /*if (_enableClickSFX)
-            _sfxManager.PlaySFX(SFXManager.SFXCategoryType.UI_Click);*/
+        if (_enableClickSFX)
+            _sfxManager.PlaySFX(SFXManager.SFXCategoryType.ClickButton);
     }
 
     public void OnPointerUp(PointerEventData eventData)
