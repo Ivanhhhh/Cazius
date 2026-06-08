@@ -19,7 +19,7 @@ public class SFXManager : MonoBehaviour
         Heal,
         Cat,
         HoverButton,
-        ClickButton
+        ClickButton,
         RockCrumble
         // Add Categories here
     }

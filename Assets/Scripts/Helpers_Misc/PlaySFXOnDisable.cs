@@ -27,7 +27,7 @@ public class PlaySFXOnDisable : MonoBehaviour
 
         if (SFXManager.Instance == null)
         {
-            Debug.LogWarning("No SFXManager FOund");
+            Debug.LogWarning("SFXManager Not Found");
             return;
         }
 
