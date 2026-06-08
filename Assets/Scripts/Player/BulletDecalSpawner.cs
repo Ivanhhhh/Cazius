@@ -1,8 +1,12 @@
+using FactoryPool;
 using UnityEngine;
+
 
 public class BulletDecalSpawner : MonoBehaviour
 {
-    [Header("Decal Prefabs")]
+
+   Pool<Decal> _pool;   // junto a los demás campos
+[Header("Decal Prefabs")]
     [SerializeField] private GameObject _normalBulletDecalPrefab;
     [SerializeField] private GameObject _bloodyBulletDecalPrefab;
 
@@ -14,8 +18,16 @@ public class BulletDecalSpawner : MonoBehaviour
 
     public void SpawnNormalDecal(RaycastHit hit)
     {
-        _decalLifetime = 8f;
-        SpawnDecal(hit, _normalBulletDecalPrefab, null);
+        //_decalLifetime = 8f;
+        //SpawnDecal(hit, _normalBulletDecalPrefab, null);
+        Decal decal = DecalFactory.Instance.GetDecal();
+
+        Vector3 spawnPosition = hit.point + hit.normal * _surfaceOffset;
+
+        Quaternion spawnRotation = Quaternion.LookRotation(-hit.normal);
+
+        decal.transform.position = spawnPosition;
+        decal.transform.rotation = spawnRotation;
     }
 
     public void SpawnBloodyDecal(RaycastHit hit)
@@ -42,8 +54,8 @@ public class BulletDecalSpawner : MonoBehaviour
 
         GameObject decal = Instantiate(
             decalPrefab,
-            spawnPosition,
-            spawnRotation
+           spawnPosition,
+           spawnRotation
         );
 
         if (parent != null)
@@ -52,7 +64,7 @@ public class BulletDecalSpawner : MonoBehaviour
         }
 
         float randomSize = Random.Range(_randomSizeRange.x, _randomSizeRange.y);
-        decal.transform.localScale = Vector3.one * randomSize;
+       decal.transform.localScale = Vector3.one * randomSize;
 
         Destroy(decal, _decalLifetime);
     }

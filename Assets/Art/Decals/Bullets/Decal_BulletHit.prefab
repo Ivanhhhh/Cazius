@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3403944156468013453}
   - component: {fileID: 1108643498870024289}
+  - component: {fileID: 7304237535059218973}
+  - component: {fileID: 8124093340824151479}
   m_Layer: 0
   m_Name: Decal_BulletHit
   m_TagString: Untagged
@@ -60,3 +62,34 @@ MonoBehaviour:
   m_FadeFactor: 0.574
   version: 1
   m_DecalLayerMask: 1
+--- !u!114 &7304237535059218973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8165848099415300166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45bbe7ab1e6d7fb4d9199e17a97888b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletDecalSpawner
+  _normalBulletDecalPrefab: {fileID: 8165848099415300166}
+  _bloodyBulletDecalPrefab: {fileID: 8165848099415300166, guid: fbd41ac8a6e8beb41a7c1afbf95a2c34, type: 3}
+  _decalLifetime: 8
+  _surfaceOffset: 0.01
+  _randomSizeRange: {x: 0.08, y: 0.14}
+  _randomRotation: 1
+--- !u!114 &8124093340824151479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8165848099415300166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a30ba3fa73e0e8f49be7e59edbbe7161, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FactoryPool.Decal
+  _decalLifetime: 4
