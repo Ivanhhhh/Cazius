@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SFXManager : MonoBehaviour
 {
     public static SFXManager Instance;
+
+    //[SerializeField] AudioSource sfxMixerGroup;
 
     // SFX categories
     public enum SFXCategoryType
@@ -78,13 +81,30 @@ public class SFXManager : MonoBehaviour
         PlayRandomClip(category, volume);
     }
 
+    //public void PlaySFXAtPosition(SFXCategoryType category, Vector3 position)
+    //{
+    //    if (sfxDict.TryGetValue(category, out SFXCategory sfxCategory))
+    //    {
+    //        int randomIndex = Random.Range(0, sfxCategory.clips.Count);
+    //        AudioClip clip = sfxCategory.clips[randomIndex];
+    //        AudioSource.PlayClipAtPoint(clip, position);
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning($"SFXManager: Sound effect category '{category}' not found!");
+    //    }
+    //}
+
+
     public void PlaySFXAtPosition(SFXCategoryType category, Vector3 position)
     {
         if (sfxDict.TryGetValue(category, out SFXCategory sfxCategory))
         {
             int randomIndex = Random.Range(0, sfxCategory.clips.Count);
             AudioClip clip = sfxCategory.clips[randomIndex];
-            AudioSource.PlayClipAtPoint(clip, position);
+
+            audioSource.transform.position = position;
+            audioSource.PlayOneShot(clip);
         }
         else
         {

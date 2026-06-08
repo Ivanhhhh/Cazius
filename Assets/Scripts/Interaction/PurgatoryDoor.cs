@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class PurgatoryDoor : MonoBehaviour, IEInteractable
@@ -6,15 +8,31 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
     [SerializeField] private float _openAngle;
     [SerializeField] private string _interactText = "You need Purgatory Key";
 
+    [SerializeField] private Key _key;
+    [SerializeField] private PlayerMovement _playerMovement;
+    [SerializeField] private Animator _playerAnimator;
+
     public void Interact(Transform interactorTransform)
     {
         if (_isOpen) return;
 
         if (KeyInventorySystem.Instance.HasPurgatoryKey)
         {
-            transform.Rotate(0, _openAngle, 0);
-            _isOpen = true;
+            StartCoroutine(OpenDoor());
         }
+    }
+    public IEnumerator OpenDoor()
+    {
+        _playerMovement.enabled = false;
+        _playerAnimator.speed = 0f;
+
+        yield return StartCoroutine(_key.WhenKeyOpenDoor(transform, "KeyOpen"));
+
+        transform.Rotate(0, _openAngle, 0);
+        _isOpen = true;
+
+        _playerMovement.enabled = true;
+        _playerAnimator.speed = 1f;
     }
 
     public string GetInteractText() { return _interactText; }

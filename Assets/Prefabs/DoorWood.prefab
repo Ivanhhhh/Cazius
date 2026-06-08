@@ -175,7 +175,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8617422406065916499}
   - component: {fileID: 1260250863911065759}
-  - component: {fileID: 105027994643595144}
   m_Layer: 0
   m_Name: DetectPlayer
   m_TagString: Untagged
@@ -219,87 +218,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.88, y: 1.9196233, z: 0.77}
   m_Center: {x: 0, y: 0.019426068, z: 0}
---- !u!114 &105027994643595144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3912162780135715377}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 117de45002870a746bed97d65e2a645c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DoorFixer
---- !u!1 &5910634218313665831
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4692901452189914857}
-  - component: {fileID: 5982838990180523246}
-  - component: {fileID: 3692084920819344828}
-  m_Layer: 13
-  m_Name: CloseTrigger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &4692901452189914857
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5910634218313665831}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5, y: -0.73565716, z: -2.46}
-  m_LocalScale: {x: 4.9667463, y: 0.33327642, z: 1.1075466}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3297221255708230129}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &5982838990180523246
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5910634218313665831}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.75, y: 1, z: 3.21}
-  m_Center: {x: 0.19561845, y: 0, z: 0}
---- !u!114 &3692084920819344828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5910634218313665831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f076110db297664cbf999c41256591c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OpenDoor
-  _rigidbody: {fileID: 4651472797793194644}
-  _Anim: {fileID: 6174878515940514445}
-  OpenDoorText: F To Interact
 --- !u!1 &6778745224734082424
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,10 +227,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6629282238913098612}
-  - component: {fileID: 8026869699021860519}
-  - component: {fileID: 2907189305809624105}
+  - component: {fileID: 4393585802351445013}
+  - component: {fileID: 569482130760441558}
   m_Layer: 13
-  m_Name: OpenTrigger
+  m_Name: Open1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -333,7 +251,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3297221255708230129}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &8026869699021860519
+--- !u!65 &4393585802351445013
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -352,23 +270,23 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.41, y: 1, z: 3.21}
-  m_Center: {x: 0.3, y: 0, z: 0}
---- !u!114 &2907189305809624105
+  m_Size: {x: 0.2607914, y: 1, z: 3.43}
+  m_Center: {x: 0.16960423, y: 0, z: 0.12000008}
+--- !u!114 &569482130760441558
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6778745224734082424}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f076110db297664cbf999c41256591c, type: 3}
+  m_Script: {fileID: 11500000, guid: e05ce840346d5c64da01c6ec2ddd5e95, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OpenDoor
-  _rigidbody: {fileID: 4651472797793194644}
+  m_EditorClassIdentifier: Assembly-CSharp::SideOpen
+  _SideOpen: {fileID: 4393585802351445013}
   _Anim: {fileID: 6174878515940514445}
-  OpenDoorText: F To Interact
+  Opened: 0
 --- !u!1 &7535843489473853190
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,8 +388,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3297221255708230129}
   - component: {fileID: 6174878515940514445}
-  - component: {fileID: 2667335040881589403}
   - component: {fileID: 7114225284267023167}
+  - component: {fileID: 833650186568962099}
   m_Layer: 0
   m_Name: DoorWood
   m_TagString: Untagged
@@ -494,7 +412,6 @@ Transform:
   m_Children:
   - {fileID: 6068523487519738237}
   - {fileID: 6629282238913098612}
-  - {fileID: 4692901452189914857}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &6174878515940514445
@@ -519,18 +436,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2667335040881589403
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8530676213082586217}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 117de45002870a746bed97d65e2a645c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DoorFixer
 --- !u!114 &7114225284267023167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,9 +448,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f076110db297664cbf999c41256591c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpenDoor
+  _SideOpen: {fileID: 569482130760441558}
   _rigidbody: {fileID: 4651472797793194644}
   _Anim: {fileID: 6174878515940514445}
-  OpenDoorText: F To Interact
+  OpenDoorText: F To Open/Close
+--- !u!65 &833650186568962099
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8530676213082586217}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 11.540001, y: 2.0694683, z: 3.2099996}
+  m_Center: {x: 0.27000022, y: 0.20473541, z: -2.35}
 --- !u!1001 &2254915728635239386
 PrefabInstance:
   m_ObjectHideFlags: 0
