@@ -66,6 +66,7 @@ public class UIMainMenu : MonoBehaviour
     private void OnStartGame()
     {
         SceneManager.LoadScene(_startGameScene);
+        MusicManager.Instance.PlayTrack(MusicManager.MusicTrack.Eden1);
     }
 
     private void OnOpenOptions()
