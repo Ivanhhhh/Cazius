@@ -23,11 +23,6 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] private Button _soundConfigButton;
     [SerializeField] private Button _backToMainButton;
 
-    [Header("Sound Panel - Sliders")]
-    [SerializeField] private Slider _masterSlider;
-    [SerializeField] private Slider _musicSlider;
-    [SerializeField] private Slider _sfxSlider;
-
     private GameObject _currentPanel;
     private GameObject _currentSubPanel;
 
@@ -42,11 +37,6 @@ public class UIMainMenu : MonoBehaviour
         _controlsButton.onClick.AddListener(OnOpenControls);
         _soundConfigButton.onClick.AddListener(OnOpenSoundConfig);
         _backToMainButton.onClick.AddListener(OnBackToMain);
-
-        // Slider listeners
-        _masterSlider.onValueChanged.AddListener(OnMasterVolumeChanged);
-        _musicSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
-        _sfxSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
 
         // Start on main panel
         ShowPanel(_mainPanel);
@@ -98,19 +88,4 @@ public class UIMainMenu : MonoBehaviour
     private void OnOpenSoundConfig() => ShowSubPanel(_soundPanel);
     private void OnBackToMain() => ShowPanel(_mainPanel);
 
-    // Sound Panel Handlers
-    private void OnMasterVolumeChanged(float value)
-    {
-        // TODO: connect to AudioManager
-    }
-
-    private void OnMusicVolumeChanged(float value)
-    {
-        // TODO: connect to AudioManager
-    }
-
-    private void OnSFXVolumeChanged(float value)
-    {
-        // TODO: connect to AudioManager
-    }
 }
