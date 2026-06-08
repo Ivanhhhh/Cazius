@@ -1,22 +1,26 @@
+using System;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class VolumeSliders : MonoBehaviour
 {
-    [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private AudioMixer _audioMixer;
 
     [Header("Sliders")]
     [SerializeField] private Slider _masterSlider;
     [SerializeField] private Slider _musicSlider;
     [SerializeField] private Slider _sfxSlider;
 
-    private bool _sfxSliderIsBeingDragged = false;
+    private SFXManager _sfxManager;
 
     private void Start()
     {
-        // Load saved values or default to 0 dB
-        // EXPOSE VARS IN AUDIOMIXER ! !
+        _sfxManager = SFXManager.Instance;
+
+        // Load saved values or default to 0.75
+        // EXPOSE VARS IN AUDIOMIXER
         float master = PlayerPrefs.GetFloat("MasterVolume", 0.75f);
         float music = PlayerPrefs.GetFloat("MusicVolume", 0.75f);
         float sfx = PlayerPrefs.GetFloat("SFXVolume", 0.75f);
@@ -32,37 +36,33 @@ public class VolumeSliders : MonoBehaviour
         // Listeners
         _masterSlider.onValueChanged.AddListener(SetMasterVolume);
         _musicSlider.onValueChanged.AddListener(SetMusicVolume);
-        _sfxSlider.onValueChanged.AddListener((value) =>
-        {
-            SetSFXVolume(value);
-            _sfxSliderIsBeingDragged = true; // Start tracking
-        });
+        _sfxSlider.onValueChanged.AddListener(SetSFXVolume);
+
+        // Listen for pointer release on SFX slider
+        SliderPointerUpHandler sfxPointerUp = _sfxSlider.gameObject.AddComponent<SliderPointerUpHandler>();
+        sfxPointerUp.OnPointerUpEvent += OnSFXSliderReleased;
     }
 
-    private void Update()
+    private void OnSFXSliderReleased()
     {
-        if (_sfxSliderIsBeingDragged && Input.GetMouseButtonUp(0))
-        {
-            _sfxSliderIsBeingDragged = false;
-            SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.ClickButton);
-        }
+        _sfxManager.PlaySFX(SFXManager.SFXCategoryType.ClickButton);
     }
 
     public void SetMasterVolume(float value)
     {
-        audioMixer.SetFloat("MasterVolume", LinearToDecibel(value));
+        _audioMixer.SetFloat("MasterVolume", LinearToDecibel(value));
         PlayerPrefs.SetFloat("MasterVolume", value);
     }
 
     public void SetMusicVolume(float value)
     {
-        audioMixer.SetFloat("MusicVolume", LinearToDecibel(value));
+        _audioMixer.SetFloat("MusicVolume", LinearToDecibel(value));
         PlayerPrefs.SetFloat("MusicVolume", value);
     }
 
     public void SetSFXVolume(float value)
     {
-        audioMixer.SetFloat("SFXVolume", LinearToDecibel(value));
+        _audioMixer.SetFloat("SFXVolume", LinearToDecibel(value));
         PlayerPrefs.SetFloat("SFXVolume", value);
     }
 
@@ -70,5 +70,14 @@ public class VolumeSliders : MonoBehaviour
     {
         return linear <= 0.0001f ? -80f : Mathf.Log10(linear) * 20f;
     }
+}
 
+public class SliderPointerUpHandler : MonoBehaviour, IPointerUpHandler
+{
+    public event Action OnPointerUpEvent;
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        OnPointerUpEvent?.Invoke();
+    }
 }
