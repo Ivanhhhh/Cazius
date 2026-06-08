@@ -20,6 +20,7 @@ public class SFXManager : MonoBehaviour
         Cat,
         HoverButton,
         ClickButton
+        RockCrumble
         // Add Categories here
     }
 
