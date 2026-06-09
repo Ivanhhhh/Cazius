@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MusicManager : MonoBehaviour
 {
     // Define music track options
     public enum MusicTrack
     {
+        MainMenu,
         Eden1,
         Purgatory1
     }
@@ -57,8 +57,9 @@ public class MusicManager : MonoBehaviour
                 musicDict[trackClip.track] = trackClip.clip;
         }
 
-        PlayTrack(MusicTrack.Eden1);
+        PlayTrack(MusicTrack.MainMenu);
     }
+
     /*
     void OnEnable()
     {
@@ -89,7 +90,7 @@ public class MusicManager : MonoBehaviour
     }
     */
 
-    //new code to wok with new WorldChangeManager
+    //N ew code to wok with new WorldChangeManager
     private void OnEnable()
     {
         StartCoroutine(WaitForWorldChangeManager());
@@ -115,7 +116,7 @@ public class MusicManager : MonoBehaviour
     private void PlayEdenTrack() { PlayTrack(MusicTrack.Eden1); }
 
 
-    // Play specific track by enum
+    // Play specific track by Enum
     public void PlayTrack(MusicTrack track)
     {
         if (!musicDict.TryGetValue(track, out AudioClip newClip))

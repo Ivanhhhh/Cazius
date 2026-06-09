@@ -9,7 +9,16 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
 
+    [Header("Map")]
+    [SerializeField] private bool _showOnMap = false;
+    [SerializeField] private Vector3 _questDestination;
+
+    [Header("Reward")]
     [SerializeField] private ItemData _questPrizeItem;
+
+    [Header("Item Quest")]
+    [SerializeField] private bool _removeItemOnCompletion = false;
+
     private Animator _animator;
 
     private void Awake()
@@ -33,10 +42,14 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                 break;
 
             case QuestStatus.Active:
-                if (Inventory.Instance.HasItem(quest.requiredItemID))
+                if (quest.condition.IsMet(quest.conditionTargetID))
                     OpenCompletionDialog();
                 else
                     OpenActiveDialog();
+                break;
+
+            case QuestStatus.JustCompleted:
+                OpenFirstCompletionDialog();
                 break;
 
             case QuestStatus.Completed:
@@ -44,6 +57,9 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                 break;
         }
     }
+
+    public bool ShowOnMap => _showOnMap;
+    public Vector3 QuestDestination => _questDestination;
 
     public string GetInteractText() { return _interactText; }
     public Transform GetTransform() { return transform; }
@@ -71,13 +87,22 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     private void OpenCompletionDialog()
     {
         QuestManager.Instance.CompleteQuest(quest.questID);
-        Inventory.Instance.AddItem(_questPrizeItem);
-        Inventory.Instance.RemoveItem(quest.requiredItemID);
 
+        if (_questPrizeItem != null)
+            Inventory.Instance.AddItem(_questPrizeItem);
+
+        if (_removeItemOnCompletion)
+            Inventory.Instance.RemoveItem(quest.conditionTargetID);
+
+        OpenFirstCompletionDialog();
+    }
+
+    private void OpenFirstCompletionDialog()
+    {
         DialogUIController.Instance.OpenDialog(
-            pages: quest.completedDialog,
+            pages: quest.firstCompletionDialog,
             onAccept: null,
-            onClose: null
+            onClose: () => QuestManager.Instance.AcknowledgeCompletion(quest.questID)
         );
     }
 
