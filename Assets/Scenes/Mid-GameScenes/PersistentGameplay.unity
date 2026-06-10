@@ -8833,6 +8833,10 @@ PrefabInstance:
       propertyPath: _soulEnergyPrefab
       value: 
       objectReference: {fileID: 5083281668784995367}
+    - target: {fileID: 2403377581215005788, guid: 57fe568f0822eb943ace194674ef3497, type: 3}
+      propertyPath: _ditheredTransparency
+      value: 
+      objectReference: {fileID: 1016235706}
     - target: {fileID: 2583789807097763503, guid: 57fe568f0822eb943ace194674ef3497, type: 3}
       propertyPath: _slowAmount
       value: 1.5
@@ -8885,6 +8889,10 @@ PrefabInstance:
       propertyPath: _lineOfSightLayerMask.m_Bits
       value: 136
       objectReference: {fileID: 0}
+    - target: {fileID: 6882373035651476324, guid: 57fe568f0822eb943ace194674ef3497, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6058057d71953fb439a37233e6881c05, type: 2}
     - target: {fileID: 8530193996410143844, guid: 57fe568f0822eb943ace194674ef3497, type: 3}
       propertyPath: m_Name
       value: Enemy_MeleeEnemy (1)
@@ -8896,7 +8904,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3770463230934125654, guid: 57fe568f0822eb943ace194674ef3497, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1016235706}
   m_SourcePrefab: {fileID: 100100000, guid: 57fe568f0822eb943ace194674ef3497, type: 3}
 --- !u!1 &1016235702 stripped
 GameObject:
@@ -8908,6 +8919,30 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2982787627856157152, guid: 57fe568f0822eb943ace194674ef3497, type: 3}
   m_PrefabInstance: {fileID: 1016235701}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1016235704 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3770463230934125654, guid: 57fe568f0822eb943ace194674ef3497, type: 3}
+  m_PrefabInstance: {fileID: 1016235701}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &1016235705 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6882373035651476324, guid: 57fe568f0822eb943ace194674ef3497, type: 3}
+  m_PrefabInstance: {fileID: 1016235701}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1016235706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1016235704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 963ea64038b002b419d39b8a5a883164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
+  _renderer: {fileID: 1016235705}
+  _fadeDuration: 1.5
 --- !u!4 &1041778465 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 564aa612cfa40284aa5c899509356ec6, type: 3}
