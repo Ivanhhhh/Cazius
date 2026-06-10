@@ -270,6 +270,8 @@ public class Player_AimAndShoot : MonoBehaviour
 
         yield return new WaitForSeconds(LengthAnim); //LengthAnim
         NewRecharge();
+        UpdateUI();
+
         CanShoot = true;
 
     }
@@ -301,7 +303,6 @@ public class Player_AimAndShoot : MonoBehaviour
 
         _remainingBullets += bulletsObtained;
 
-        UpdateUI();
         SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
 
        
