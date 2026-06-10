@@ -1,15 +1,16 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.VFX;
-using TMPro;
 
 public class Player_AimAndShoot : MonoBehaviour
 {
+    bool CanShoot;
     float LengthAnim;
-    private string AnimName = "ReloadGun";
+    private string AnimName = "ReloadAnim";
     [Header("References")]
     [SerializeField] private Camera _playerCamera;
     [SerializeField] private PlayerMovement _movement;
@@ -78,6 +79,7 @@ public class Player_AimAndShoot : MonoBehaviour
 
     void Start()
     {
+        CanShoot = true;
         _shootTimer = _shootInterval;
         _remainingBullets = _maxBullets;
 
@@ -176,42 +178,47 @@ public class Player_AimAndShoot : MonoBehaviour
 
     private void OnShootStarted(InputAction.CallbackContext context)
     {
-        // 🛠️ CORRECCIÓN DE AIM: Si el jugador intenta disparar sin presionar el botón de apuntar, cancelamos el tiro.
-        if (!GameInputManager.Instance.Controls.Player.Aim.IsPressed()) return;
-
-        if (_shootTimer > 0f || !_hasBullets) return;
-
-        _recoil.OnRecoil?.Invoke();
-        ManageShoot();
-        _playerAnimator.SetTrigger("Shoot");
-        _shootVFX.Play();
-        Flash();
-        _shootMuzzleVFX.SendEvent("OnPlay");
-        _shootMuzzleVFX2.SendEvent("OnPlay");
-        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.PlayerShootingSFX, transform.position);
-
-        Ray cameraRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-        Vector3 targetPoint = Physics.Raycast(cameraRay, out RaycastHit hit, _maxDistance)
-            ? hit.point
-            : cameraRay.origin + cameraRay.direction * _maxDistance;
-
-        Vector3 direction = (targetPoint - transform.position).normalized;
-        direction = Quaternion.Euler(
-            UnityEngine.Random.Range(-_currentSpread, _currentSpread),
-            UnityEngine.Random.Range(-_currentSpread, _currentSpread),
-            0
-        ) * direction;
-
-        _currentSpread = Mathf.Clamp(_currentSpread + _spreadPerShot, 0, _maxSpreadClamp);
-
-        if (Physics.Raycast(transform.position, direction, out RaycastHit weaponHit, _maxDistance))
+        if (CanShoot)
         {
-            HandleHit(weaponHit);
-        }
+            // 🛠️ CORRECCIÓN DE AIM: Si el jugador intenta disparar sin presionar el botón de apuntar, cancelamos el tiro.
+            if (!GameInputManager.Instance.Controls.Player.Aim.IsPressed()) return;
 
-        _shootTimer = _shootInterval;
-        StopCoroutine(nameof(HideRay));
-        StartCoroutine(nameof(HideRay));
+            if (_shootTimer > 0f || !_hasBullets) return;
+
+            _recoil.OnRecoil?.Invoke();
+            ManageShoot();
+            _playerAnimator.SetTrigger("Shoot");
+            _shootVFX.Play();
+            Flash();
+            _shootMuzzleVFX.SendEvent("OnPlay");
+            _shootMuzzleVFX2.SendEvent("OnPlay");
+            SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.PlayerShootingSFX, transform.position);
+
+            Ray cameraRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            Vector3 targetPoint = Physics.Raycast(cameraRay, out RaycastHit hit, _maxDistance)
+                ? hit.point
+                : cameraRay.origin + cameraRay.direction * _maxDistance;
+
+            Vector3 direction = (targetPoint - transform.position).normalized;
+            direction = Quaternion.Euler(
+                UnityEngine.Random.Range(-_currentSpread, _currentSpread),
+                UnityEngine.Random.Range(-_currentSpread, _currentSpread),
+                0
+            ) * direction;
+
+            _currentSpread = Mathf.Clamp(_currentSpread + _spreadPerShot, 0, _maxSpreadClamp);
+
+            if (Physics.Raycast(transform.position, direction, out RaycastHit weaponHit, _maxDistance))
+            {
+                HandleHit(weaponHit);
+            }
+
+            _shootTimer = _shootInterval;
+            StopCoroutine(nameof(HideRay));
+            StartCoroutine(nameof(HideRay));
+
+        }
+      
     }
 
     void HandleHit(RaycastHit weaponHit)
@@ -258,10 +265,12 @@ public class Player_AimAndShoot : MonoBehaviour
     }
     public IEnumerator WaitTime()
     {
+        CanShoot = false;
         _playerAnimator.SetTrigger("Reload");
 
-        yield return new WaitForSeconds(LengthAnim);
+        yield return new WaitForSeconds(LengthAnim); //LengthAnim
         NewRecharge();
+        CanShoot = true;
 
     }
 
@@ -282,6 +291,7 @@ public class Player_AimAndShoot : MonoBehaviour
 
     void NewRecharge ()
     {
+
         int totalReserve = Inventory.Instance.GetTotalAmmo();
 
         if (_remainingBullets == _maxBullets || totalReserve <= 0) return;
