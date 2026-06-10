@@ -8,6 +8,8 @@ using TMPro;
 
 public class Player_AimAndShoot : MonoBehaviour
 {
+    float LengthAnim;
+    private string AnimName = "ReloadGun";
     [Header("References")]
     [SerializeField] private Camera _playerCamera;
     [SerializeField] private PlayerMovement _movement;
@@ -87,7 +89,7 @@ public class Player_AimAndShoot : MonoBehaviour
         _crosshairRight.gameObject.SetActive(false);
 
         // Inputs nativos configurados una sola vez
-        GameInputManager.Instance.Controls.Player.Recharge.started += Recharge;
+        //GameInputManager.Instance.Controls.Player.Recharge.started += Recharge;
         GameInputManager.Instance.Controls.Player.Shoot.started += OnShootStarted;
 
         // 🔥 SOLUCIÓN: Nos suscribimos al inventario para escuchar cualquier cambio (recoger, craftear, etc.)
@@ -103,6 +105,18 @@ public class Player_AimAndShoot : MonoBehaviour
 
         flashLight.intensity = 0f;
         flashLight.range = flashRange;
+
+
+        foreach (AnimationClip clip in _playerAnimator.runtimeAnimatorController.animationClips)
+        {
+            if (clip.name == AnimName) LengthAnim = clip.length;
+
+        }
+    }
+
+    private void Update()
+    {
+       
     }
 
     void OnDestroy()
@@ -110,7 +124,7 @@ public class Player_AimAndShoot : MonoBehaviour
         // Limpieza de inputs para evitar fugas de memoria (Memory Leaks)
         if (GameInputManager.Instance != null && GameInputManager.Instance.Controls != null)
         {
-            GameInputManager.Instance.Controls.Player.Recharge.started -= Recharge;
+            //GameInputManager.Instance.Controls.Player.Recharge.started -= NewRecharge;
             GameInputManager.Instance.Controls.Player.Shoot.started -= OnShootStarted;
         }
 
@@ -236,9 +250,37 @@ public class Player_AimAndShoot : MonoBehaviour
     {
         _remainingBullets--;
         UpdateUI();
+
+        if (_remainingBullets <= 0)
+        {
+            StartCoroutine(WaitTime());
+        }
+    }
+    public IEnumerator WaitTime()
+    {
+        _playerAnimator.SetTrigger("Reload");
+
+        yield return new WaitForSeconds(LengthAnim);
+        NewRecharge();
+
     }
 
-    void Recharge(InputAction.CallbackContext context)
+    //void Recharge(InputAction.CallbackContext context)
+    //{
+    //    int totalReserve = Inventory.Instance.GetTotalAmmo();
+
+    //    if (_remainingBullets == _maxBullets || totalReserve <= 0) return;
+
+    //    int bulletsNeeded = _maxBullets - _remainingBullets;
+    //    int bulletsObtained = Inventory.Instance.ConsumeAmmo(bulletsNeeded);
+
+    //    _remainingBullets += bulletsObtained;
+
+    //    UpdateUI();
+    //    SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
+    //}
+
+    void NewRecharge ()
     {
         int totalReserve = Inventory.Instance.GetTotalAmmo();
 
@@ -248,9 +290,11 @@ public class Player_AimAndShoot : MonoBehaviour
         int bulletsObtained = Inventory.Instance.ConsumeAmmo(bulletsNeeded);
 
         _remainingBullets += bulletsObtained;
-        
+
         UpdateUI();
         SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
+
+       
     }
 
     void UpdateUI()
