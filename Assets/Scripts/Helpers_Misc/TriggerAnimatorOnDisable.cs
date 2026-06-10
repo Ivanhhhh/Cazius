@@ -9,6 +9,11 @@ public class TriggerAnimatorOnDisable : MonoBehaviour
     [SerializeField] private bool findAnimatorIfMissing = true;
     [SerializeField] private string animatorObjectName = "FloorAnimator";
 
+    private void Start()
+    {
+        targetAnimator = GameObject.Find(animatorObjectName).GetComponent<Animator>();
+    }
+
     private void OnDisable()
     {
         if (targetAnimator == null && findAnimatorIfMissing)
