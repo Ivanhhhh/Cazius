@@ -18,6 +18,7 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
     private bool _isDead;
 
     [SerializeField] private AngelDemonAnim anim;
+    [SerializeField] private DitheredTransparency _ditheredTransparency;
 
     void Start()
     {
@@ -107,6 +108,7 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
     IEnumerator DieCoroutine()
     {
         anim.DieAnim();
+        _ditheredTransparency.FadeAlphaToZero();
 
         yield return new WaitForSeconds(1.2f);
 
@@ -114,7 +116,6 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
         _soulEnergyPrefab.transform.position = transform.position;
         Debug.Log("Soul Energy Drop");
 
-        //Destroy(gameObject);
         gameObject.SetActive(false);
     }
 }
