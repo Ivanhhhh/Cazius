@@ -841,7 +841,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -877,7 +877,7 @@ MonoBehaviour:
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 4294967295
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
     m_Bits: 1
@@ -1082,9 +1082,13 @@ MonoBehaviour:
   _moveSpeed: 5
   _groundingForce: 20
   _groundCheckDistance: 2
-  _cameraDistance: 1.09
+  _rotationCenterY: 1.2
+  _rotationCenterZ: 0.2
   _cameraXOffset: 1.02
-  _cameraYOffset: 0.8
+  _minCameraY: -0.2
+  _maxCameraY: 1.2
+  _minCameraZ: -1.5
+  _maxCameraZ: -0.5
   _cameraCollisionRadius: 0.41
   _cameraCollisionMask:
     serializedVersion: 2
@@ -1094,9 +1098,8 @@ MonoBehaviour:
   _minPitch: -20
   _maxPitch: 20
   _cameraVerticalTilt: -0.69
-  _YOffset: 1.8
-  _minVerticalY: -2.72
-  _maxVerticalY: 3.8
+  _minTargetY: 0.2
+  _maxTargetY: 0.8
   _normalFOV: 60
   _aimFOV: 40
   _fovSpeed: 25
@@ -1494,7 +1497,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -1530,7 +1533,7 @@ MonoBehaviour:
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 4294967295
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
     m_Bits: 1
