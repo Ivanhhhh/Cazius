@@ -471,12 +471,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Key
   _isEdenKey: 0
   _isPurgatoryKey: 1
-  _keyRoot: {fileID: 1041778465}
-  _keyAnimator: {fileID: 955625985}
-  _currentCamera: {fileID: 467510131}
-  _secondCamera: {fileID: 1637414771}
-  _offsetKey: {x: 0.6, y: 1, z: -0.3}
-  _isAnim1End: 0
   _keyPanel: {fileID: 5667419363721575161}
   _interactText: F to Grab Key
   _objectsToActivate: {fileID: 1118246717}
@@ -4943,9 +4937,8 @@ MonoBehaviour:
   _isOpen: 0
   _openAngle: -90
   _interactText: You need Eden Key
-  _key: {fileID: 634925767}
+  _whenOpenDoor: {fileID: 0}
   _playerMovement: {fileID: 9174304713106157739}
-  _animationName: KeyOpen(InEdenKey)
   _playerAnimator: {fileID: 956012549}
 --- !u!4 &196633968
 Transform:
@@ -4978,7 +4971,7 @@ MonoBehaviour:
   _isOpen: 0
   _openAngle: -90
   _interactText: You need Purgatory Key
-  _key: {fileID: 634925767}
+  _whenOpenDoor: {fileID: 0}
   _playerMovement: {fileID: 9174304713106157739}
   _playerAnimator: {fileID: 0}
 --- !u!1001 &200328531
@@ -5949,7 +5942,7 @@ MonoBehaviour:
   _isOpen: 0
   _openAngle: -90
   _interactText: You need Purgatory Key
-  _key: {fileID: 78095364}
+  _whenOpenDoor: {fileID: 0}
   _playerMovement: {fileID: 9174304713106157739}
   _playerAnimator: {fileID: 956012549}
 --- !u!4 &375627810
@@ -6273,11 +6266,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.12506166, y: 0.12506169, z: 0.24462037}
   m_Center: {x: 0, y: 0, z: 0.11373439}
---- !u!1 &467510131 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6158739908765658823, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
-  m_PrefabInstance: {fileID: 9174304713106157729}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &472250673
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7797,12 +7785,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Key
   _isEdenKey: 1
   _isPurgatoryKey: 0
-  _keyRoot: {fileID: 1417488309}
-  _keyAnimator: {fileID: 911617847}
-  _currentCamera: {fileID: 467510131}
-  _secondCamera: {fileID: 1637414771}
-  _offsetKey: {x: -0.2, y: 0.9, z: 0.6}
-  _isAnim1End: 0
   _keyPanel: {fileID: 651889225}
   _interactText: F to Grab Key
   _objectsToActivate: {fileID: 0}
@@ -10403,7 +10385,7 @@ MonoBehaviour:
   _isOpen: 0
   _openAngle: -90
   _interactText: You need Purgatory Key
-  _key: {fileID: 78095364}
+  _whenOpenDoor: {fileID: 0}
   _playerMovement: {fileID: 9174304713106157739}
   _playerAnimator: {fileID: 956012549}
 --- !u!4 &996747225 stripped
@@ -11494,261 +11476,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1041778465}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1192129897
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1370567959}
-    m_Modifications:
-    - target: {fileID: 206461100369400433, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 229150220321319491, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1140712886480844083, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1277898150444566309, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1290615911514742146, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1694047983345291621, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 2073437832796425749, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 2214282293721412540, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 2506416819221631914, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 3057116544415830877, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3216513043855075589, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 3309903378503458508, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 3940858262697687036, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 3994137527820525210, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 4304493743753100068, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 4391500375878990664, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 4707519469513342820, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 4720647958838973501, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 4795731806245989250, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 5064215233134381070, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 5078461426362350478, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 5087376102494225372, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 5703627788901964795, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6080630109870373975, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6200233131587859728, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6247616651141887158, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6377983267004726874, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6539583285025339318, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Name
-      value: Door Interactive 02
-      objectReference: {fileID: 0}
-    - target: {fileID: 6539583285025339318, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6539583285025339318, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6583152335232861072, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6610763876161966125, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 7000986837413134767, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7000986837413134767, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 3bf5a4a92aeebb945bfeff7e5f3b7524, type: 2}
-    - target: {fileID: 7066221045438577274, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7066221045438577274, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: a92552bc59dc6ed45a708860bced59d3, type: 2}
-    - target: {fileID: 7632875845189209824, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 7644864612018845570, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.02676773
-      objectReference: {fileID: 0}
-    - target: {fileID: 7644864612018845570, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.92819756
-      objectReference: {fileID: 0}
-    - target: {fileID: 7644864612018845570, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.6106491
-      objectReference: {fileID: 0}
-    - target: {fileID: 7644864612018845570, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071079
-      objectReference: {fileID: 0}
-    - target: {fileID: 7644864612018845570, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7644864612018845570, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.70710576
-      objectReference: {fileID: 0}
-    - target: {fileID: 7644864612018845570, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7644864612018845570, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7644864612018845570, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 7644864612018845570, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7674290325370143895, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 7985238466389144005, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8589406773602984088, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8828392800751334163, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8848000798353748807, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6539583285025339318, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1192129902}
-  m_SourcePrefab: {fileID: 100100000, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
---- !u!4 &1192129898 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7644864612018845570, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-  m_PrefabInstance: {fileID: 1192129897}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1192129899 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6539583285025339318, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-  m_PrefabInstance: {fileID: 1192129897}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1192129900 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4391500375878990664, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-  m_PrefabInstance: {fileID: 1192129897}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1192129902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1192129899}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41626dbd1a827e7479d9a6b36a916e8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
-  _showInEden: 0
-  _showInPurgatory: 1
-  _visualRoot: {fileID: 1192129900}
-  _collider: {fileID: 0}
 --- !u!1 &1224512202
 GameObject:
   m_ObjectHideFlags: 0
@@ -12827,7 +12554,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 725993180}
-  - {fileID: 1192129898}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1370567960
@@ -12845,9 +12571,8 @@ MonoBehaviour:
   _isOpen: 0
   _openAngle: -90
   _interactText: You need Eden Key
-  _key: {fileID: 634925767}
+  _whenOpenDoor: {fileID: 0}
   _playerMovement: {fileID: 9174304713106157739}
-  _animationName: KeyOpen(InEdenKey)2
   _playerAnimator: {fileID: 956012549}
 --- !u!114 &1370567961
 MonoBehaviour:

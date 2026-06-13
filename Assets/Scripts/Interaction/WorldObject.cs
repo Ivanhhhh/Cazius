@@ -15,6 +15,7 @@ public class WorldObject : MonoBehaviour // Va en cada objecto que se quiera pre
         WorldChangeManager.Instance.SwapToPurgatoryEvent += HandleSwapToPurgatory;
         UpdateWorldVisibility();
         _collider = GetComponent<Collider>();
+        if (_visualRoot == null) Debug.Log("Tenemos q setear la visual root");
     }
     /*
     void OnEnable()
@@ -39,7 +40,9 @@ public class WorldObject : MonoBehaviour // Va en cada objecto que se quiera pre
 
     private void HandleSwapToPurgatory()
     {
+        if (_visualRoot == null) return;
         _visualRoot.SetActive(_showInPurgatory);
+
         if (_collider) _collider.enabled = _showInPurgatory;
     }
 
