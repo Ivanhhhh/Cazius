@@ -21,7 +21,8 @@ public class SFXManager : MonoBehaviour
         HoverButton,
         ClickButton,
         RockCrumble,
-        Door
+        DoorPurgatory,
+        DoorEden
         // Add Categories here
     }
 

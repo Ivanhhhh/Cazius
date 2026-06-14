@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.ProBuilder.Shapes;
 
 public class PurgatoryDoor : MonoBehaviour, IEInteractable
 {
@@ -12,7 +13,6 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
     [SerializeField] private WhenOpenDoor _whenOpenDoor;
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private Animator _playerAnimator;
-    [SerializeField] private SFXManager.SFXCategoryType _sfxCategory = SFXManager.SFXCategoryType.Door;
 
     public void Interact(Transform interactorTransform)
     {
@@ -28,7 +28,7 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
         _playerMovement.enabled = false;
         _playerAnimator.speed = 0f;
 
-        // SFXManager.Instance.PlaySFXAtPosition(_sfxCategory, position);
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.DoorPurgatory, transform.position);
 
         yield return StartCoroutine(_whenOpenDoor.WhenKeyOpenDoor("PurgatoryDoor"));
 

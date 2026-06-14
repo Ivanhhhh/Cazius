@@ -27,6 +27,8 @@ public class EdenDoor : MonoBehaviour, IEInteractable
         _playerMovement.enabled = false;
         _playerAnimator.speed = 0f;
 
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.DoorEden, transform.position);
+
         yield return StartCoroutine(_whenOpenDoor.WhenKeyOpenDoor("EdenDoor"));
 
         transform.Rotate(0, _openAngle, 0);
