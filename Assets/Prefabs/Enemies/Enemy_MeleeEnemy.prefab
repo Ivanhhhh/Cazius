@@ -908,6 +908,7 @@ GameObject:
   - component: {fileID: 2403377581215005788}
   - component: {fileID: 1766453461097756148}
   - component: {fileID: 2583789807097763503}
+  - component: {fileID: 7372226561272275744}
   m_Layer: 12
   m_Name: Enemy_MeleeEnemy
   m_TagString: Untagged
@@ -1051,9 +1052,9 @@ MonoBehaviour:
   _objectSpeedWhileSpinning: 3
   _spinSpeed: 300
   _playerTransform: {fileID: 0}
-  _healthSystem: {fileID: 2403377581215005788}
   _selfObjectTransform: {fileID: 2982787627856157152}
   _agent: {fileID: 3124132245714216588}
+  _healthSystem: {fileID: 2403377581215005788}
 --- !u!114 &8279044427122396188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1083,6 +1084,7 @@ MonoBehaviour:
   _currentHealth: 0
   _soulEnergyPrefab: {fileID: 0}
   anim: {fileID: 2583789807097763503}
+  _ditheredTransparency: {fileID: 7372226561272275744}
 --- !u!95 &1766453461097756148
 Animator:
   serializedVersion: 7
@@ -1120,6 +1122,20 @@ MonoBehaviour:
   animator: {fileID: 3506826430803160929}
   _slowAmount: 3
   _slowDuration: 1
+--- !u!114 &7372226561272275744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8530193996410143844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 963ea64038b002b419d39b8a5a883164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
+  _renderer: {fileID: 6882373035651476324}
+  _fadeDuration: 1.5
 --- !u!1001 &7043723992606806768
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2280,6 +2296,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -1.6036426
       objectReference: {fileID: 0}
+    - target: {fileID: 4486513668359600532, guid: 7919520442c179d4185b25142f840655, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6058057d71953fb439a37233e6881c05, type: 2}
     - target: {fileID: 4522384389361526640, guid: 7919520442c179d4185b25142f840655, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -26.915257
@@ -2687,6 +2707,11 @@ PrefabInstance:
 --- !u!95 &3506826430803160929 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 7919520442c179d4185b25142f840655, type: 3}
+  m_PrefabInstance: {fileID: 7043723992606806768}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &6882373035651476324 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4486513668359600532, guid: 7919520442c179d4185b25142f840655, type: 3}
   m_PrefabInstance: {fileID: 7043723992606806768}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7370964167995749659 stripped

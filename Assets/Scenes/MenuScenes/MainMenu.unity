@@ -253,6 +253,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1363083006
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1363083008}
+  - component: {fileID: 1363083007}
+  m_Layer: 0
+  m_Name: FrameRateLimiter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1363083007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363083006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a212fe0fedefa204f8287e64a0a06692, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FrameRateLimiter
+  targetFrameRate: 120
+--- !u!4 &1363083008
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363083006}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 33.05449, y: 93.86533, z: 129.37451}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1643822501
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,41 +481,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1285062803643985703, guid: 39c73aa824b6ccc4aa3e033e64e9163a, type: 3}
-      propertyPath: sfxCategories.Array.size
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1285062803643985703, guid: 39c73aa824b6ccc4aa3e033e64e9163a, type: 3}
-      propertyPath: sfxCategories.Array.data[9].sfxCategory
-      value: 
-      objectReference: {fileID: 11400000, guid: a7e2c1b59cefc874f8bb8e0ca5f23b2a, type: 2}
-    - target: {fileID: 1285062803643985703, guid: 39c73aa824b6ccc4aa3e033e64e9163a, type: 3}
-      propertyPath: sfxCategories.Array.data[9].categoryType
-      value: 9
-      objectReference: {fileID: 0}
     - target: {fileID: 1373049047170458891, guid: 39c73aa824b6ccc4aa3e033e64e9163a, type: 3}
       propertyPath: m_Name
       value: AudioRoot
-      objectReference: {fileID: 0}
-    - target: {fileID: 1591091666085501695, guid: 39c73aa824b6ccc4aa3e033e64e9163a, type: 3}
-      propertyPath: trackClips.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1591091666085501695, guid: 39c73aa824b6ccc4aa3e033e64e9163a, type: 3}
-      propertyPath: trackClips.Array.data[0].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 5cb7df8758671fb46bfac6a61722d96d, type: 3}
-    - target: {fileID: 1591091666085501695, guid: 39c73aa824b6ccc4aa3e033e64e9163a, type: 3}
-      propertyPath: trackClips.Array.data[1].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 1c2874d109a61c641afc55aaea3e31af, type: 3}
-    - target: {fileID: 1591091666085501695, guid: 39c73aa824b6ccc4aa3e033e64e9163a, type: 3}
-      propertyPath: trackClips.Array.data[2].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 31a3e134c7c423441bdd6d68a0433c96, type: 3}
-    - target: {fileID: 1591091666085501695, guid: 39c73aa824b6ccc4aa3e033e64e9163a, type: 3}
-      propertyPath: trackClips.Array.data[2].track
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2549990356706360723, guid: 39c73aa824b6ccc4aa3e033e64e9163a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -688,3 +701,4 @@ SceneRoots:
   - {fileID: 361263965}
   - {fileID: 2984815506262209579}
   - {fileID: 1643822504}
+  - {fileID: 1363083008}
