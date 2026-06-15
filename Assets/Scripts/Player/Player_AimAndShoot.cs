@@ -295,19 +295,24 @@ public class Player_AimAndShoot : MonoBehaviour
     //}
 
     void Recharge(InputAction.CallbackContext context)
-    {
-        StartCoroutine(WaitTime());
-        int totalReserve = Inventory.Instance.GetTotalAmmo();
+    {   if (_remainingBullets < 6)
+        {
+            StartCoroutine(WaitTime());
+            int totalReserve = Inventory.Instance.GetTotalAmmo();
 
-        if (_remainingBullets == _maxBullets || totalReserve <= 0) return;
+            if (_remainingBullets == _maxBullets || totalReserve <= 0) return;
 
-       int bulletsNeeded = _maxBullets - _remainingBullets;
-        int bulletsObtained = Inventory.Instance.ConsumeAmmo(bulletsNeeded);
+            int bulletsNeeded = _maxBullets - _remainingBullets;
+            int bulletsObtained = Inventory.Instance.ConsumeAmmo(bulletsNeeded);
 
-        _remainingBullets += bulletsObtained;
+            _remainingBullets += bulletsObtained;
 
-        //UpdateUI();
-        SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
+            //UpdateUI();
+            SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
+
+
+        }
+        
     }
 
     void NewRecharge ()
