@@ -8,6 +8,7 @@ using UnityEngine.VFX;
 
 public class Player_AimAndShoot : MonoBehaviour
 {
+    IEnumerator RechargeC;
     bool CanShoot;
     float LengthAnim;
     private string AnimName = "ReloadAnim";
@@ -91,7 +92,7 @@ public class Player_AimAndShoot : MonoBehaviour
         _crosshairRight.gameObject.SetActive(false);
 
         // Inputs nativos configurados una sola vez
-        //GameInputManager.Instance.Controls.Player.Recharge.started += Recharge;
+        GameInputManager.Instance.Controls.Player.Recharge.started += Recharge;
         GameInputManager.Instance.Controls.Player.Shoot.started += OnShootStarted;
 
         // 🔥 SOLUCIÓN: Nos suscribimos al inventario para escuchar cualquier cambio (recoger, craftear, etc.)
@@ -260,7 +261,12 @@ public class Player_AimAndShoot : MonoBehaviour
 
         if (_remainingBullets <= 0)
         {
-            StartCoroutine(WaitTime());
+            //if (RechargeC != null) StopCoroutine(RechargeC);
+
+            //RechargeC = WaitTime();
+            //StartCoroutine(RechargeC);
+
+            NewRecharge();
         }
     }
     public IEnumerator WaitTime()
@@ -268,32 +274,45 @@ public class Player_AimAndShoot : MonoBehaviour
         CanShoot = false;
         _playerAnimator.SetTrigger("Reload");
 
-        yield return new WaitForSeconds(LengthAnim); //LengthAnim
-        NewRecharge();
+        yield return new WaitForSeconds(LengthAnim-1); //LengthAnim
         UpdateUI();
 
         CanShoot = true;
 
     }
 
-    //void Recharge(InputAction.CallbackContext context)
+    //public IEnumerator WaitTimeOld()
     //{
-    //    int totalReserve = Inventory.Instance.GetTotalAmmo();
+    //    CanShoot = false;
+    //    _playerAnimator.SetTrigger("Reload");
 
-    //    if (_remainingBullets == _maxBullets || totalReserve <= 0) return;
-
-    //    int bulletsNeeded = _maxBullets - _remainingBullets;
-    //    int bulletsObtained = Inventory.Instance.ConsumeAmmo(bulletsNeeded);
-
-    //    _remainingBullets += bulletsObtained;
-
+    //    yield return new WaitForSeconds(LengthAnim); //LengthAnim
+    //    NewRecharge();
     //    UpdateUI();
-    //    SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
+
+    //    CanShoot = true;
+
     //}
+
+    void Recharge(InputAction.CallbackContext context)
+    {
+        StartCoroutine(WaitTime());
+        int totalReserve = Inventory.Instance.GetTotalAmmo();
+
+        if (_remainingBullets == _maxBullets || totalReserve <= 0) return;
+
+       int bulletsNeeded = _maxBullets - _remainingBullets;
+        int bulletsObtained = Inventory.Instance.ConsumeAmmo(bulletsNeeded);
+
+        _remainingBullets += bulletsObtained;
+
+        //UpdateUI();
+        SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
+    }
 
     void NewRecharge ()
     {
-
+        StartCoroutine(WaitTime());
         int totalReserve = Inventory.Instance.GetTotalAmmo();
 
         if (_remainingBullets == _maxBullets || totalReserve <= 0) return;
