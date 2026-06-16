@@ -7,9 +7,9 @@ public class EdenDoor : MonoBehaviour, IEInteractable
     [SerializeField] private float _openAngle;
     [SerializeField] private string _interactText = "You need Eden Key";
 
-    [SerializeField] private Key _key;
+    [Header("Open Door Anim")]
+    [SerializeField] private WhenOpenDoor _whenOpenDoor;
     [SerializeField] private PlayerMovement _playerMovement;
-    [SerializeField] private string _animationName;
     [SerializeField] private Animator _playerAnimator;
 
     public void Interact(Transform interactorTransform)
@@ -27,7 +27,9 @@ public class EdenDoor : MonoBehaviour, IEInteractable
         _playerMovement.enabled = false;
         _playerAnimator.speed = 0f;
 
-        yield return StartCoroutine(_key.WhenKeyOpenDoor(transform, _animationName));
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.DoorEden, transform.position);
+
+        yield return StartCoroutine(_whenOpenDoor.WhenKeyOpenDoor("EdenDoor"));
 
         transform.Rotate(0, _openAngle, 0);
         _isOpen = true;
