@@ -72,6 +72,8 @@ public class Player_AimAndShoot : MonoBehaviour
     [Header("Decals")]
     [SerializeField] private BulletDecalSpawner _bulletDecalSpawner;
 
+    [SerializeField] private LayerMask _shootLayerMask = ~0;
+
     private int _remainingBullets;
     private float _shootTimer;
     public float _currentSpread;
@@ -194,7 +196,7 @@ public class Player_AimAndShoot : MonoBehaviour
             _shootMuzzleVFX.SendEvent("OnPlay");
             _shootMuzzleVFX2.SendEvent("OnPlay");
             SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.PlayerShootingSFX, transform.position);
-
+            /*
             Ray cameraRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             Vector3 targetPoint = Physics.Raycast(cameraRay, out RaycastHit hit, _maxDistance)
                 ? hit.point
@@ -210,6 +212,51 @@ public class Player_AimAndShoot : MonoBehaviour
             _currentSpread = Mathf.Clamp(_currentSpread + _spreadPerShot, 0, _maxSpreadClamp);
 
             if (Physics.Raycast(transform.position, direction, out RaycastHit weaponHit, _maxDistance))
+            {
+                HandleHit(weaponHit);
+            }
+            */
+            Ray cameraRay = _playerCamera.ViewportPointToRay(
+    new Vector3(0.5f, 0.5f, 0f)
+);
+
+            Vector3 targetPoint;
+
+            if (Physics.Raycast(
+                cameraRay,
+                out RaycastHit cameraHit,
+                _maxDistance,
+                _shootLayerMask,
+                QueryTriggerInteraction.Ignore))
+            {
+                targetPoint = cameraHit.point;
+            }
+            else
+            {
+                targetPoint = cameraRay.origin + cameraRay.direction * _maxDistance;
+            }
+
+            Vector3 direction = (targetPoint - transform.position).normalized;
+
+            direction = Quaternion.Euler(
+                UnityEngine.Random.Range(-_currentSpread, _currentSpread),
+                UnityEngine.Random.Range(-_currentSpread, _currentSpread),
+                0f
+            ) * direction;
+
+            _currentSpread = Mathf.Clamp(
+                _currentSpread + _spreadPerShot,
+                0f,
+                _maxSpreadClamp
+            );
+
+            if (Physics.Raycast(
+                transform.position,
+                direction,
+                out RaycastHit weaponHit,
+                _maxDistance,
+                _shootLayerMask,
+                QueryTriggerInteraction.Ignore))
             {
                 HandleHit(weaponHit);
             }
