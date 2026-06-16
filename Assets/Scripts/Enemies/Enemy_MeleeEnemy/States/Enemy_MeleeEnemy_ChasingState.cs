@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy_MeleeEnemy_ChasingState : Enemy_MeleeEnemy_Interface_StateMachine
+public class Enemy_MeleeEnemy_ChasingState : Enemy_Interface_StateMachine
 {
     Enemy_MeleeEnemy_StateMachine _stateMachine;
     Enemy_MeleeEnemy_Data _data;

@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _maxCameraZ = -0.5f; // Qué tan cerca está al mirar abajo
 
     [Header("Camera Settings")]
-    [SerializeField] private float _cameraCollisionRadius = 0.2f;
+    [SerializeField] private float _sphereCollisionRadius = 0.2f;
     [SerializeField] private LayerMask _cameraCollisionMask;
     [SerializeField] private float _mouseSensitivityY = 0.15f;
     [SerializeField] private float _mouseSensitivityX = 0.75f;
@@ -125,8 +125,8 @@ public class PlayerMovement : MonoBehaviour
         float distance = direction.magnitude;
 
         // El Raycast se dispara desde el pecho (pivote) hacia la cámara
-        if (Physics.Raycast(pivotPosition, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
-            _cameraTransform.position = hit.point;
+        if (Physics.SphereCast(pivotPosition, _sphereCollisionRadius, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
+            _cameraTransform.position = pivotPosition + direction.normalized * (hit.distance - _sphereCollisionRadius);
         else
             _cameraTransform.position = desiredPosition;
 
@@ -232,21 +232,39 @@ public class PlayerMovement : MonoBehaviour
         Vector3 direction = desiredPosition - pivotPosition;
         float distance = direction.magnitude;
 
-        if (Physics.Raycast(pivotPosition, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
+        if (Physics.SphereCast(pivotPosition, _sphereCollisionRadius, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
         {
+            Vector3 clampedPosition = pivotPosition + direction.normalized * (hit.distance - _sphereCollisionRadius);
+            
+            // Linea desde pivote hasta donde se detiene
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(pivotPosition, hit.point);
-            Gizmos.DrawWireSphere(hit.point, 0.1f);
+            Gizmos.DrawLine(pivotPosition, clampedPosition);
+            
+            // Esfera roja donde la camara se detiene
+            Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
+            Gizmos.DrawSphere(clampedPosition, _sphereCollisionRadius);
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(clampedPosition, _sphereCollisionRadius);
+
+            // Linea punteada hasta donde hubiera ido sin colision
+            Gizmos.color = new Color(1f, 1f, 0f, 0.4f);
+            Gizmos.DrawLine(clampedPosition, desiredPosition);
+            Gizmos.DrawWireSphere(desiredPosition, _sphereCollisionRadius);
         }
         else
         {
+            // Linea verde hasta posicion deseada
             Gizmos.color = Color.green;
             Gizmos.DrawLine(pivotPosition, desiredPosition);
+
+            // Esfera verde en posicion deseada
+            Gizmos.color = new Color(0f, 1f, 0f, 0.3f);
+            Gizmos.DrawSphere(desiredPosition, _sphereCollisionRadius);
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(desiredPosition, _sphereCollisionRadius);
         }
 
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(desiredPosition, 0.1f);
-        
+        // Pivote
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(pivotPosition, 0.05f);
     }
