@@ -321,6 +321,12 @@ MonoBehaviour:
   _baseScene2:
     m_SceneAsset: {fileID: 102900000, guid: c854948fec006f24e90cb7bfc5b77e08, type: 3}
     m_SceneName: PurgatoryBase
+  _vfxPrefabsToWarmUp:
+  - {fileID: 6618262032621166478, guid: 20e7a5024e5184043986a9f0b0c38106, type: 3}
+  - {fileID: 1489122979609902005, guid: 837081a8349856443ace5beb05f40585, type: 3}
+  - {fileID: 6687610108537278911, guid: 17eab4fc42ccef74983e8af9290e7985, type: 3}
+  _vfxWarmupPoint: {fileID: 2016592364}
+  _secondsPerVFX: 0.15
 --- !u!4 &583836671
 Transform:
   m_ObjectHideFlags: 0
@@ -1129,6 +1135,37 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &2016592363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2016592364}
+  m_Layer: 0
+  m_Name: VFXLoad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2016592364
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016592363}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.021214563, y: 0.9988678, z: 0.0020299202, w: 0.04253098}
+  m_LocalPosition: {x: 0.21496248, y: 0.9227661, z: -4.9038105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1095434315012871736
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1198,4 +1235,5 @@ SceneRoots:
   - {fileID: 361263965}
   - {fileID: 508683199}
   - {fileID: 1643822504}
+  - {fileID: 2016592364}
   - {fileID: 500929535}
