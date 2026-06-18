@@ -329,6 +329,7 @@ MonoBehaviour:
   - {fileID: 1541552508825477229, guid: 178e0e76642d83448a19ffbc7d6275d5, type: 3}
   _vfxWarmupPoint: {fileID: 2016592364}
   _secondsPerVFX: 0.15
+  _psoWarmupManager: {fileID: 1731783396}
 --- !u!4 &583836671
 Transform:
   m_ObjectHideFlags: 0
@@ -935,6 +936,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687534604}
   m_CullTransparentMesh: 1
+--- !u!1 &1731783395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1731783397}
+  - component: {fileID: 1731783396}
+  m_Layer: 0
+  m_Name: PSOWarmupManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1731783396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731783395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd988a9ee3da4ae44b29206c886c3bec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSOWarmupManager
+  collectionsToWarmUp:
+  - {fileID: -6766982352335285333, guid: a0f5047b9ef897549a0e0a78418dce1c, type: 3}
+  useProgressiveWarmup: 0
+  statesPerFrame: 64
+--- !u!4 &1731783397
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731783395}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 20.69506, y: 0.89161, z: 18.92807}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1737537558
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,3 +1288,4 @@ SceneRoots:
   - {fileID: 1643822504}
   - {fileID: 2016592364}
   - {fileID: 500929535}
+  - {fileID: 1731783397}

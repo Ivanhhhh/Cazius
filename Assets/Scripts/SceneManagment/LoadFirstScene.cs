@@ -22,6 +22,8 @@ public class LoadFirstScene : MonoBehaviour
     [SerializeField] private Transform _vfxWarmupPoint;
     [SerializeField] private float _secondsPerVFX = 0.15f;
 
+    [SerializeField] private PSOWarmupManager _psoWarmupManager;
+
     private List<AsyncOperation> _scenesToLoad = new List<AsyncOperation>();
 
 
@@ -36,6 +38,8 @@ public class LoadFirstScene : MonoBehaviour
         StartGame();
 
         yield return StartCoroutine(WarmUpVFX());
+
+        yield return StartCoroutine(_psoWarmupManager.WarmUp());
 
         StartCoroutine(LoadBar());
     }
