@@ -22,7 +22,8 @@ public class SFXManager : MonoBehaviour
         ClickButton,
         RockCrumble,
         DoorPurgatory,
-        DoorEden
+        DoorEden,
+        CrowDeath
         // Add Categories here
     }
 
