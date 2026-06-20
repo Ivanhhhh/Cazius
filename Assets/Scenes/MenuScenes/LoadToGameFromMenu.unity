@@ -321,6 +321,15 @@ MonoBehaviour:
   _baseScene2:
     m_SceneAsset: {fileID: 102900000, guid: c854948fec006f24e90cb7bfc5b77e08, type: 3}
     m_SceneName: PurgatoryBase
+  _vfxPrefabsToWarmUp:
+  - {fileID: 6618262032621166478, guid: 20e7a5024e5184043986a9f0b0c38106, type: 3}
+  - {fileID: 1489122979609902005, guid: 837081a8349856443ace5beb05f40585, type: 3}
+  - {fileID: 6687610108537278911, guid: 17eab4fc42ccef74983e8af9290e7985, type: 3}
+  - {fileID: 6840622633064387719, guid: f2fe03b78ecf676448840732d5cefe72, type: 3}
+  - {fileID: 1541552508825477229, guid: 178e0e76642d83448a19ffbc7d6275d5, type: 3}
+  _vfxWarmupPoint: {fileID: 2016592364}
+  _secondsPerVFX: 0.15
+  _psoWarmupManager: {fileID: 1731783396}
 --- !u!4 &583836671
 Transform:
   m_ObjectHideFlags: 0
@@ -927,6 +936,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687534604}
   m_CullTransparentMesh: 1
+--- !u!1 &1731783395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1731783397}
+  - component: {fileID: 1731783396}
+  m_Layer: 0
+  m_Name: PSOWarmupManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1731783396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731783395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd988a9ee3da4ae44b29206c886c3bec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSOWarmupManager
+  collectionsToWarmUp:
+  - {fileID: -6766982352335285333, guid: a0f5047b9ef897549a0e0a78418dce1c, type: 3}
+  useProgressiveWarmup: 0
+  statesPerFrame: 64
+--- !u!4 &1731783397
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731783395}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 20.69506, y: 0.89161, z: 18.92807}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1737537558
 GameObject:
   m_ObjectHideFlags: 0
@@ -1129,6 +1186,37 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &2016592363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2016592364}
+  m_Layer: 0
+  m_Name: VFXLoad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2016592364
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016592363}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.021214563, y: 0.9988678, z: 0.0020299202, w: 0.04253098}
+  m_LocalPosition: {x: 0.21496248, y: 0.9227661, z: -4.9038105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1095434315012871736
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1198,4 +1286,6 @@ SceneRoots:
   - {fileID: 361263965}
   - {fileID: 508683199}
   - {fileID: 1643822504}
+  - {fileID: 2016592364}
   - {fileID: 500929535}
+  - {fileID: 1731783397}
