@@ -33,7 +33,7 @@ public class WhenOpenDoor : MonoBehaviour
         _doorAnimator.enabled = true;
         _doorAnimator.Play(animationName, 0, 0f);
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1);
 
         _doorAnimator.enabled = false;
 
