@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c775739362622dc4c93274687942abf2, type: 3}
+  m_Name: WorldCupAlbumQuest
+  m_EditorClassIdentifier: Assembly-CSharp::QuestDefinition
+  questID: WorldCupAlbumQuest
+  questTitle: Get World Cup Album From Crows
+  condition: {fileID: 11400000, guid: 3e5c4ca02ef60124ca28af946b347d90, type: 2}
+  conditionTargetID: WorldCupAlbum
+  offerDialog:
+  - 'Those fucking crows, they''ve stolen my <b><color=yellow>World Cup Sticker Album</b></color>. '
+  - It's 100% complete. I wish I had it back...
+  activeDialog:
+  - It seems they know they took something valuable.
+  firstCompletionDialog:
+  - You're my hero, thanks a lot!
+  - Please, take this <b><color=green>Depot Key</b></color>, it's around the corner.
+  - Grab anything you want, I hope you find something useful.
+  completedDialog:
+  - 'Do you know how intelligent crows are? Some are more intelligent than people. '

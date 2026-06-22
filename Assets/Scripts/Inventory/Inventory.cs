@@ -9,11 +9,14 @@ public class Inventory : MonoBehaviour
     public int maxSlots = 12;
     public List<ItemData> items = new();
     public UnityEvent onInventoryChanged;
+    public ItemData itemToAdd;
 
     void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+
+        AddItem(itemToAdd);
     }
 
     public bool AddItem(ItemData item)
