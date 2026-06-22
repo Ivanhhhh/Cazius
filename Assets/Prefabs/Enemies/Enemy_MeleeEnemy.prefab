@@ -83,7 +83,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.058206238, y: 0.24204288, z: 0.6975671, w: 0.6718836}
   m_LocalPosition: {x: -0.000001983643, y: 0.4099683, z: 0.0000003051758}
-  m_LocalScale: {x: 4.324435, y: 8.232812, z: 4.998333}
+  m_LocalScale: {x: 5.8535557, y: 11.143934, z: 6.7657437}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8052024681790753258}
@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68bf2537a0e939844b86c48cdfbc5fbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Health_BodyPart
-  _damageMultiplier: 0.75
+  _damageMultiplier: 2
   _bodyPart: 2
 --- !u!65 &6398475343643635234
 BoxCollider:
@@ -379,7 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68bf2537a0e939844b86c48cdfbc5fbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Health_BodyPart
-  _damageMultiplier: 0.75
+  _damageMultiplier: 2
   _bodyPart: 4
 --- !u!1 &5539367217416066930
 GameObject:
@@ -485,7 +485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68bf2537a0e939844b86c48cdfbc5fbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Health_BodyPart
-  _damageMultiplier: 0.75
+  _damageMultiplier: 2
   _bodyPart: 3
 --- !u!65 &886359218425200308
 BoxCollider:
@@ -635,7 +635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68bf2537a0e939844b86c48cdfbc5fbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Health_BodyPart
-  _damageMultiplier: 0.75
+  _damageMultiplier: 2
   _bodyPart: 5
 --- !u!1 &5996904536515310639
 GameObject:
@@ -762,7 +762,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68bf2537a0e939844b86c48cdfbc5fbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Health_BodyPart
-  _damageMultiplier: 0.5
+  _damageMultiplier: 2
   _bodyPart: 1
 --- !u!1 &6439998687556063354
 GameObject:
@@ -1038,14 +1038,16 @@ MonoBehaviour:
   _MaximumAmountOfNodes: 6
   _attackRadius: 1
   _chaseSpeed: 2
-  _attackCooldown: 3
+  _attackCooldown: 1
   _radiusVision: 25
-  _angleVision: 170
+  _horizontalAngleVision: 90
+  _verticalAngleVision: 180
   _lineOfSightLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  _firstAttackDuration: 2
-  _firsAttackPreparationTime: 2
+  _aimOffset: 0
+  _firstAttackDuration: 0.2
+  _firsAttackPreparationTime: 0.5
   _attackCollider: {fileID: 5453744403819950517}
   _secondAttackPreparationTime: 2
   _spinTime: 4
