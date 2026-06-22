@@ -10,34 +10,19 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
     private Rigidbody _rb;
     private Transform _playerTransform;
 
+    [Header("Flying Stats (Scriptable Object)")]
+    [SerializeField] private FlyingEnemyStatsSO _flyingStats; // <--- El SO
+
+    [Header("Projectile Settings")]
+    [SerializeField] private GameObject _projectilePrefab; 
+    [SerializeField] private Transform _muzzlePoint;       
+    [SerializeField] private float _projectileSpeed = 20f;
+
     [Header("Patrolling Variables")]
     [SerializeField] private float _patrolSpeed = 3f;
     [SerializeField] private float _patrollingRotationSpeed = 2f;
     [SerializeField] private float _patrolAcceleration = 3f;
     [SerializeField] private float _waypointTolerance = 1.5f;
-
-    [Header("Chasing & Attacking Variables")]
-    [SerializeField] private float _chaseSpeed = 6f;
-    [SerializeField] private float _chasingRotationSpeed = 5f;
-    [SerializeField] private float _attackRange = 10f; // Distancia IA: Cuándo se detiene a disparar
-    [SerializeField] private float _shootRange = 25f;  // Distancia Arma: Qué tan largo es el raycast letal
-    [SerializeField] private float _shootDelay = 1f;
-    [SerializeField] private float _shootCooldown = 2.5f;
-    [SerializeField] private LayerMask _playerLayer;
-
-    [Header("Chasing - Advanced Movement")]
-    [SerializeField] private float _aimOffset = 1f; // Altura a la que apunta (1f = ombligo/pecho, 0.5f = rodillas)
-    [SerializeField] private float _hoverHeight = 4f;
-    [SerializeField] private float _retreatMargin = 2f; 
-    [SerializeField] private float _normalReactionSpeed = 5f; 
-    [SerializeField] private float _evasionReactionSpeed = 15f; 
-    [SerializeField] private float _heightCorrectionMultiplier = 2f; 
-    
-    [Header("Chasing - Random Wander")]
-    [SerializeField] private float _minWanderTime = 1.5f;
-    [SerializeField] private float _maxWanderTime = 3f;
-    [Range(0f, 2f)] [SerializeField] private float _wanderStrafeLimit = 1f;
-    [Range(0f, 2f)] [SerializeField] private float _wanderForwardLimit = 0.5f;
 
     [Header("Field of View Variables")]
     [SerializeField] private float _radiusVision = 15f;
@@ -54,13 +39,6 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
     [SerializeField] private float _interiorSensorLength = 1.5f;
     [SerializeField] private float _interiorAvoidanceForce = 5f;
 
-    [Header("3D Visual Effects (Lasers)")]
-    [SerializeField] private GameObject _charging3DLaser;   // Objeto 3D para la mira/carga
-    [SerializeField] private GameObject _shoot3DLaser;      // Objeto 3D para el disparo final
-    [SerializeField] private float _chargingLaserThickness = 0.02f;
-    [SerializeField] private float _shootLaserThickness = 0.15f;
-    [SerializeField] private float _shootLaserDuration = 0.08f;
-
     [Header("Visual Debugging (Rays)")]
     [SerializeField] private bool _showTargetingRay = true;     
     [SerializeField] private bool _showWanderRay = true;        
@@ -70,7 +48,6 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
     [SerializeField] private bool _showVelocityRay = true;     
 
     [Header("Health System")] 
-
     [SerializeField] private Enemy_SUPERHEALTHSYSTEM _healthSystem;
 
     [Header("Behaviours (Read Only)")]
@@ -86,9 +63,6 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
         _rb.isKinematic = false; 
         _rb.constraints = RigidbodyConstraints.FreezeRotation; 
         _rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-
-        if (_charging3DLaser != null) _charging3DLaser.SetActive(false);
-        if (_shoot3DLaser != null) _shoot3DLaser.SetActive(false);
 
         StartCoroutine(WaitForPlayer());
     }
@@ -110,107 +84,40 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
 
     private void InitializeBehaviours()
     {
-        _fieldOfView = new Enemy_FieldOfViewBehaviour(_playerTransform, _radiusVision, _objectTransform, _horizontalAngleVision, _verticalAngleVision, _lineOfSightLayerMask, _aimOffset);
+        _fieldOfView = new Enemy_FieldOfViewBehaviour(_playerTransform, _radiusVision, _objectTransform, _horizontalAngleVision, _verticalAngleVision, _lineOfSightLayerMask, _flyingStats.aimOffset);
         _obstacleBehaviour = new Enemy_ObstacleAvoidanceBehaviour(_objectTransform, _sensorLength, _avoidanceForce, _obstacleMask, _interiorSensorLength, _interiorAvoidanceForce);
         
         _patrolling = new Enemy_FlyingPatrollingBehaviour(_objectTransform, _rb, _flightZone, _obstacleBehaviour, 
-            _patrolSpeed, _patrollingRotationSpeed, _patrolAcceleration, _waypointTolerance,_healthSystem);
+        _patrolSpeed, _patrollingRotationSpeed, _patrolAcceleration, _waypointTolerance, _healthSystem);
         
-        // Inyectamos "this" al final para que el comportamiento tenga acceso a los efectos 3D
-            _chasing = new Enemy_FlyingChasingBehaviour(_objectTransform, _rb, _playerTransform, _fieldOfView, _obstacleBehaviour, 
-            _chaseSpeed, _chasingRotationSpeed, _attackRange, _shootRange, _shootDelay, _shootCooldown, _playerLayer, 
-            _hoverHeight, _retreatMargin, _normalReactionSpeed, _evasionReactionSpeed, _heightCorrectionMultiplier,
-            _minWanderTime, _maxWanderTime, _wanderStrafeLimit, _wanderForwardLimit,
-            _showTargetingRay, _showWanderRay, _showIdealMovementRay, _showAvoidanceRay, _showFinalDirectionRay, _showVelocityRay,
-            _aimOffset, // <--- ¡FALTABA ESTO AQUÍ!
-            this);
+        // Inyectamos "this" al final para que el comportamiento tenga acceso a instanciar proyectiles
+        _chasing = new Enemy_FlyingCasterAttackBehaviour(_objectTransform, _rb, _playerTransform, _fieldOfView, _obstacleBehaviour, _flyingStats, this);
     }
 
     // ==========================================
-    // SISTEMA DE LÁSERES 3D
+    // SISTEMA DE PROYECTILES
     // ==========================================
-
-    public void SetCharging3DLaser(bool active, Vector3 start = default, Vector3 end = default)
+    public void SpawnProjectile(Vector3 direction)
     {
-        if (_charging3DLaser == null) return;
-
-        _charging3DLaser.SetActive(active);
-
-        if (active)
+        if (_projectilePrefab == null)
         {
-            Transform3DLaser(_charging3DLaser, start, end, _chargingLaserThickness);
+            Debug.LogWarning("Falta asignar el Prefab del Proyectil en el Inspector.");
+            return;
         }
-    }
 
-    public void Trigger3DShootLaser(Vector3 start, Vector3 end)
-    {
-        if (_shoot3DLaser != null)
+        // Si asignaste un cañón, el disparo sale de ahí; si no, sale del centro del enemigo
+        Vector3 spawnPosition = (_muzzlePoint != null) ? _muzzlePoint.position : _objectTransform.position;
+
+        // Instanciamos la bala mirando hacia donde va a viajar
+        GameObject projectile = Instantiate(_projectilePrefab, spawnPosition, Quaternion.LookRotation(direction));
+
+        // Le damos el empuje físico
+        Rigidbody projRb = projectile.GetComponent<Rigidbody>();
+        if (projRb != null)
         {
-            StartCoroutine(Shoot3DLaserCoroutine(start, end));
-        }
-    }
-
-    private IEnumerator Shoot3DLaserCoroutine(Vector3 start, Vector3 end)
-    {
-        _shoot3DLaser.SetActive(true);
-        Transform3DLaser(_shoot3DLaser, start, end, _shootLaserThickness);
-        
-        yield return new WaitForSeconds(_shootLaserDuration);
-        
-        _shoot3DLaser.SetActive(false);
-    }
-
-    /// <summary>
-    /// Método Helper que calcula la matemática espacial de la cápsula.
-    /// </summary>
-    private void Transform3DLaser(GameObject laserObj, Vector3 start, Vector3 end, float thickness)
-    {
-        Vector3 direction = end - start;
-        float distance = direction.magnitude;
-
-        // La posición del centro sigue siendo exactamente la mitad del camino
-        laserObj.transform.position = start + (direction / 2f);
-
-        if (direction.sqrMagnitude > 0.01f)
-        {
-            laserObj.transform.rotation = Quaternion.FromToRotation(Vector3.up, direction.normalized);
-        }
-        
-        // ESCALA ESTIRADA AL 100%: Quitamos el "/ 2f" de la distancia
-        laserObj.transform.localScale = new Vector3(thickness, distance, thickness);
-    }
-
-    // ==========================================
-    // DIBUJO DE GIZMOS
-    // ==========================================
-    private void OnDrawGizmosSelected()
-    {
-        if (_objectTransform == null) _objectTransform = transform;
-
-        Gizmos.color = Color.white;
-        Vector3 angleLeft = _objectTransform.rotation * Quaternion.Euler(0, -_horizontalAngleVision / 2, 0) * Vector3.forward;
-        Vector3 angleRight = _objectTransform.rotation * Quaternion.Euler(0, _horizontalAngleVision / 2, 0) * Vector3.forward;
-        Vector3 angleUp = _objectTransform.rotation * Quaternion.Euler(-_verticalAngleVision / 2, 0, 0) * Vector3.forward;
-        Vector3 angleDown = _objectTransform.rotation * Quaternion.Euler(_verticalAngleVision / 2, 0, 0) * Vector3.forward;
-
-        Gizmos.DrawLine(_objectTransform.position, _objectTransform.position + angleLeft * _radiusVision);
-        Gizmos.DrawLine(_objectTransform.position, _objectTransform.position + angleRight * _radiusVision);
-        
-        Gizmos.color = new Color(1, 1, 1, 0.4f); 
-        Gizmos.DrawLine(_objectTransform.position, _objectTransform.position + angleUp * _radiusVision);
-        Gizmos.DrawLine(_objectTransform.position, _objectTransform.position + angleDown * _radiusVision);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(_objectTransform.position, _attackRange);
-
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(_objectTransform.position, _sensorLength);
-
-        if (Application.isPlaying && _patrolling != null)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(_patrolling.CurrentTarget, 0.5f);
-            Gizmos.DrawLine(_objectTransform.position, _patrolling.CurrentTarget);
+            // Resetear la velocidad por si acaso y aplicar la nueva dirección
+            projRb.linearVelocity = Vector3.zero;
+            projRb.linearVelocity = direction * _projectileSpeed;
         }
     }
 }
