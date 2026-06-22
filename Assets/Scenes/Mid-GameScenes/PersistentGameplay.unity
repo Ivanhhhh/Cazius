@@ -20961,6 +20961,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1600529470}
   m_Mesh: {fileID: 1273371391728916064, guid: b5e59165a8cfa12419904784a1f9bc94, type: 3}
+--- !u!1 &1600558141 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1061756029020455327, guid: 257ce3dca2d2bae439954723c92af1b5, type: 3}
+  m_PrefabInstance: {fileID: 4688503463126037727}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1636136076
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22607,6 +22612,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32a5dc7be279f034f924d81a536cdefd, type: 3}
+--- !u!114 &1790353291 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5419675778210554236, guid: 257ce3dca2d2bae439954723c92af1b5, type: 3}
+  m_PrefabInstance: {fileID: 4688503463126037727}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1001 &1793471729
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27698,7 +27714,8 @@ PrefabInstance:
       value: PlayerCanvas
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5924862383007926585, guid: 257ce3dca2d2bae439954723c92af1b5, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 257ce3dca2d2bae439954723c92af1b5, type: 3}
@@ -29411,6 +29428,22 @@ PrefabInstance:
     - target: {fileID: 940023255588750779, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _deathPanel
+      value: 
+      objectReference: {fileID: 1600558141}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _fadeDuration
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _deathFadeImage
+      value: 
+      objectReference: {fileID: 1790353291}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _delayBeforeLoad
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: _healthStateImage
