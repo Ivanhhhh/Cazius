@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class SFXManager : MonoBehaviour
 {
@@ -22,7 +21,8 @@ public class SFXManager : MonoBehaviour
         ClickButton,
         RockCrumble,
         DoorPurgatory,
-        DoorEden
+        DoorEden,
+        CrowDeath
         // Add Categories here
     }
 
