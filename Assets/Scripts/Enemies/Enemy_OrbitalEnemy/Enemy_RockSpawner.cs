@@ -40,8 +40,7 @@ public class OrbitalSpawner : MonoBehaviour
         for (int i = 0; i < _amountToSpawn; i++)
         {
             Vector3 spawnPos = _spawnPoint != null ? _spawnPoint.position : transform.position;
-            GameObject newProj = Instantiate(_projectilePrefab, spawnPos, Quaternion.identity);
-            
+            GameObject newProj = Instantiate(_projectilePrefab, spawnPos, Quaternion.identity);            
             OrbitMovement orbitalComp = newProj.GetComponent<OrbitMovement>();
             if (orbitalComp != null)
             {

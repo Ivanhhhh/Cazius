@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 8522228666361377752}
   - component: {fileID: 6572012990163620544}
   - component: {fileID: 5161419493940371633}
+  - component: {fileID: 6347432497818113144}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -194,6 +195,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ae58ada70828114c9f00ba780304f82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  _damage: 10
   _lifeTime: 5
   _impactEffectPrefab: {fileID: 0}
+--- !u!114 &6347432497818113144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5209956421518824476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48a867af52cb22242aa46f65bfedd4fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_DamageSystem
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  _damageAmount: 10
+  _destroyOnImpact: 0
