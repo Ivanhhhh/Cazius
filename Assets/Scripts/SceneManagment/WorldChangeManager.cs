@@ -51,6 +51,23 @@ public class WorldChangeManager : MonoBehaviour
         _purgatorySwapFullscreenShader.SetFloat("_Intensity", 0f);
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
+
+    public static void DestroyCurrentInstance()
+    {
+        if (Instance != null)
+        {
+            Destroy(Instance.gameObject);
+            Instance = null;
+        }
+    }
+
     public void AddSceneToList(SceneField scene)
     {
         LoadedScenes.Add(scene);

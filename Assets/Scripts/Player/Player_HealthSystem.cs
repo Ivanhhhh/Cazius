@@ -196,6 +196,8 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
         {
             yield return new WaitForSeconds(_fadeDuration);
         }
+        
+        WorldChangeManager.DestroyCurrentInstance();
 
         yield return new WaitForSeconds(_delayBeforeLoad);
         SceneManager.LoadScene(_sceneToLoadAfterDeath);
