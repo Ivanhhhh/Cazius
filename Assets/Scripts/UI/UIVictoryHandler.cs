@@ -77,6 +77,7 @@ public class UIVictoryHandler : MonoBehaviour
             yield return new WaitForSeconds(_fadeDuration);
         }
 
+        WorldChangeManager.DestroyCurrentInstance();
         yield return new WaitForSeconds(_delayBeforeLoad);
         SceneManager.LoadScene(_sceneToLoadAfterVictory);
         Cursor.lockState = CursorLockMode.None;
