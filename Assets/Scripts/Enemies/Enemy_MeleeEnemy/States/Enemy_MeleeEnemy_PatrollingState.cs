@@ -1,10 +1,11 @@
 using UnityEngine;
 
-public class Enemy_MeleeEnemy_PatrollingState : Enemy_MeleeEnemy_Interface_StateMachine
+public class Enemy_MeleeEnemy_PatrollingState : Enemy_Interface_StateMachine
 {
     Enemy_MeleeEnemy_StateMachine _stateMachine;
     Enemy_MeleeEnemy_Data _data;
     
+
     public Enemy_MeleeEnemy_PatrollingState(Enemy_MeleeEnemy_StateMachine stateMachine, Enemy_MeleeEnemy_Data data)
     {
         _stateMachine = stateMachine;
@@ -17,11 +18,11 @@ public class Enemy_MeleeEnemy_PatrollingState : Enemy_MeleeEnemy_Interface_State
     }
     public void OnExit()
     {
-
+        _data._patrolling.Reset();
     }
     public void OnUpdate()
     {
-        if (_data._fieldOfView.CanseePlayer())
+        if (_data._fieldOfView.CanseePlayer() || _data._patrolling.TookDamage)
         {
             Debug.Log("Player Encontrado");
             _stateMachine.ChangeState(Enemy_MeleeEnemy_States.Chasing);

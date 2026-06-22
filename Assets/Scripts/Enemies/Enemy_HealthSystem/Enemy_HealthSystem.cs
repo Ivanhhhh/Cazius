@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
@@ -7,10 +9,16 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
     [SerializeField] private float _maxHealth = 100f;
     [SerializeField] private float _currentHealth;
 
+    [Header("Soul Energy")]
+    [SerializeField] private GameObject _soulEnergyPrefab;
+
     public Action OnDeath;
     public Action<float> OnDamaged;
 
+    private bool _isDead;
+
     [SerializeField] private AngelDemonAnim anim;
+    [SerializeField] private DitheredTransparency _ditheredTransparency;
 
     void Start()
     {
@@ -66,36 +74,48 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 
     void LeftArmShotEffect()
     {
+        anim.LeftArmAnim();
         Debug.Log("Left Arm Shot");
     }
     void RightArmShotEffect()
     {
+        anim.RightArmAnim();
         Debug.Log("Right Arm Shot");
     }
     void ChestShotEffect()
     {
+        anim.ChestAnim();
         Debug.Log("Chest shot");
     }
     void RightLegShotEffect()
     {
+        anim.RightLegAnim();
         Debug.Log("Right Leg shot");
     }
     void LeftLegShotEffect()
     {
+        anim.LeftLegAnim();
         Debug.Log("Left Leg shot");
     }
     void Death()
     {
-        DieCoroutine();
+        if (_isDead) return;
+
+        _isDead = true;
+        StartCoroutine(DieCoroutine());
     }
 
     IEnumerator DieCoroutine()
     {
-        //anim.DieAnim();
+        anim.DieAnim();
+        _ditheredTransparency.FadeAlphaToZero();
 
-        // Wait for death animation to finish
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1.2f);
 
-        Destroy(gameObject);
+        _soulEnergyPrefab.SetActive(true);
+        _soulEnergyPrefab.transform.position = transform.position;
+        Debug.Log("Soul Energy Drop");
+
+        gameObject.SetActive(false);
     }
 }

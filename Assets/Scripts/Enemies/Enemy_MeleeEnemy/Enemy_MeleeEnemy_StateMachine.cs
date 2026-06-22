@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class Enemy_MeleeEnemy_StateMachine
 {
-    Enemy_MeleeEnemy_Interface_StateMachine _currentState;
-    Dictionary<Enemy_MeleeEnemy_States,Enemy_MeleeEnemy_Interface_StateMachine> _allStates = 
-    new Dictionary<Enemy_MeleeEnemy_States, Enemy_MeleeEnemy_Interface_StateMachine>();
+    Enemy_Interface_StateMachine _currentState;
+    Dictionary<Enemy_MeleeEnemy_States,Enemy_Interface_StateMachine> _allStates = 
+    new Dictionary<Enemy_MeleeEnemy_States, Enemy_Interface_StateMachine>();
 
-    public void AddState(Enemy_MeleeEnemy_States newState, Enemy_MeleeEnemy_Interface_StateMachine state)
+    public void AddState(Enemy_MeleeEnemy_States newState, Enemy_Interface_StateMachine state)
     {
        if (!_allStates.ContainsKey(newState))
         {
