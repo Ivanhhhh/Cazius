@@ -13,7 +13,7 @@ public class UIVictoryHandler : MonoBehaviour
     [SerializeField] private GameObject _victoryPanel;
     [SerializeField] private Image _victoryFadeImage;
     [SerializeField] private float _fadeDuration = 2.0f;
-    [SerializeField] private float _delayBeforeLoad = 1.0f;
+    [SerializeField] private float _delayBeforeLoad = 2000.0f;
 
     private bool _sequenceStarted = false;
 

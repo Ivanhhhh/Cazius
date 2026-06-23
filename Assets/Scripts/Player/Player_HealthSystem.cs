@@ -28,7 +28,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     [SerializeField] private GameObject _deathPanel;
     [SerializeField] private Image _deathFadeImage;
     [SerializeField] private float _fadeDuration = 2.0f;
-    [SerializeField] private float _delayBeforeLoad = 1.0f;
+    [SerializeField] private float _delayBeforeLoad = 2000.0f;
 
     private Coroutine _hideUICoroutine;
 
