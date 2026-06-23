@@ -78,6 +78,7 @@ public class UIVictoryHandler : MonoBehaviour
         }
 
         WorldChangeManager.DestroyCurrentInstance();
+        
         yield return new WaitForSeconds(_delayBeforeLoad);
         SceneManager.LoadScene(_sceneToLoadAfterVictory);
         Cursor.lockState = CursorLockMode.None;
@@ -86,7 +87,7 @@ public class UIVictoryHandler : MonoBehaviour
 
     public void SetupTargetEnemy(Enemy_SUPERHEALTHSYSTEM enemy)
     {
-        // Si ya había uno, nos desuscribimos primero
+        // Si ya habï¿½a uno, nos desuscribimos primero
         if (_targetEnemy != null) _targetEnemy.OnDeath -= HandleEnemyDeath;
 
         _targetEnemy = enemy;
