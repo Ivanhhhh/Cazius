@@ -13,17 +13,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _groundCheckDistance = 0.1f;
 
     [Header("Camera Elevator Logic")]
-    [SerializeField] private float _rotationCenterY = 1.2f; // Altura del pecho/cabeza (Pivote central)
-    [SerializeField] private float _rotationCenterZ = 0.2f; // NUEVO: Desplazamiento del centro hacia adelante/atrás
-    [SerializeField] private float _cameraXOffset = 0.4f;   // Distancia lateral FIJA
+    [SerializeField] private float _rotationCenterY = 1.2f;
+    [SerializeField] private float _rotationCenterZ = 0.2f;
+    [SerializeField] private float _cameraXOffset = 0.4f;
 
     [Header("Topes de Altura (Y)")]
-    [SerializeField] private float _minCameraY = -0.2f; // Altura mínima (Se alcanza al llegar a _minPitch)
-    [SerializeField] private float _maxCameraY = 1.2f;  // Altura máxima (Se alcanza al llegar a _maxPitch)
+    [SerializeField] private float _minCameraY = -0.2f;
+    [SerializeField] private float _maxCameraY = 1.2f;
 
     [Header("Topes de Profundidad (Z)")]
-    [SerializeField] private float _minCameraZ = -1.5f; // Qué tan lejos está al mirar arriba (Valores negativos)
-    [SerializeField] private float _maxCameraZ = -0.5f; // Qué tan cerca está al mirar abajo
+    [SerializeField] private float _minCameraZ = -1.5f;
+    [SerializeField] private float _maxCameraZ = -0.5f;
 
     [Header("Camera Settings")]
     [SerializeField] private float _sphereCollisionRadius = 0.2f;
@@ -35,19 +35,24 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _cameraVerticalTilt = 0.3f;
 
     [Header("Camera Target Dynamic")]
-    [SerializeField] private float _minTargetY = 0.2f; // Altura del target al mirar arriba (Pitch mínimo)
-    [SerializeField] private float _maxTargetY = 0.8f; // Altura del target al mirar abajo (Pitch máximo)
+    [SerializeField] private float _minTargetY = 0.2f;
+    [SerializeField] private float _maxTargetY = 0.8f;
+
+    // --- NEW ---
+    [Header("Camera Collision Response")]
+    [SerializeField] private float _xOffsetShiftSpeed = 10f;  // How fast shoulder shifts on wall hit
+    [SerializeField] private float _xOffsetReturnSpeed = 5f;  // How fast shoulder recovers when clear
 
     [Header("Aim Settings")]
     [SerializeField] private float _normalFOV = 60f;
     [SerializeField] private float _aimFOV = 40f;
     [SerializeField] private float _fovSpeed = 10f;
     [SerializeField] private Player_CameraRecoil _recoil;
-    
+
     [Header("Rig Object")]
-    [SerializeField] private Transform _targetObject; 
-    [SerializeField] private float _maxDistance = 5f; 
-    [SerializeField] private float _followSpeed = 15f; 
+    [SerializeField] private Transform _targetObject;
+    [SerializeField] private float _maxDistance = 5f;
+    [SerializeField] private float _followSpeed = 15f;
 
     private Rigidbody _rb;
     private Camera _camera;
@@ -62,6 +67,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 _smoothedMoveInput;
     float _verticalOffset;
 
+    // --- NEW: runtime X offset that gets lerped ---
+    private float _currentXOffset;
+
     public float _currentSpeed { get; set; }
 
     private void Awake()
@@ -70,16 +78,17 @@ public class PlayerMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _aimSpeed = _moveSpeed / 2;
         _targetRotation = _rb.rotation;
+        _currentXOffset = _cameraXOffset;   // start at the configured shoulder
     }
 
     private void Start()
     {
         _controls = GameInputManager.Instance.Controls;
 
-        _controls.Player.Move.performed += callbackContext => _moveInput = callbackContext.ReadValue<Vector2>();
+        _controls.Player.Move.performed += ctx => _moveInput = ctx.ReadValue<Vector2>();
         _controls.Player.Move.canceled += _ => _moveInput = Vector2.zero;
 
-        _controls.Player.Look.performed += callbackContext => _lookInput = callbackContext.ReadValue<Vector2>();
+        _controls.Player.Look.performed += ctx => _lookInput = ctx.ReadValue<Vector2>();
         _controls.Player.Look.canceled += _ => _lookInput = Vector2.zero;
 
         _controls.Player.Aim.performed += _ => _isAiming = true;
@@ -103,36 +112,84 @@ public class PlayerMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        // 1. Establecemos el pivote central (Ej: Altura del pecho)
-        Vector3 pivotPosition = transform.position 
-                    + Vector3.up * _rotationCenterY 
-                    + transform.forward * _rotationCenterZ;
+        // ── 1. Pivot (chest height + forward offset) ─────────────────────────
+        Vector3 pivotPosition = transform.position
+                              + Vector3.up * _rotationCenterY
+                              + transform.forward * _rotationCenterZ;
 
-        // 2. Calculamos el porcentaje de rotación actual (0 a 1)
+        // ── 2. Pitch-driven Y / Z offsets ────────────────────────────────────
         float pitchT = Mathf.InverseLerp(_minPitch, _maxPitch, _cameraPitch);
-
-        // 3. Calculamos la altura (Y) y la profundidad (Z) dinámica interpolando entre los topes fijos
         float dynamicYOffset = Mathf.Lerp(_minCameraY, _maxCameraY, pitchT);
         float dynamicZOffset = Mathf.Lerp(_minCameraZ, _maxCameraZ, pitchT);
 
-        // 4. Posición ideal usando X fijo, Y dinámico, Z dinámico
+        // ── Phase 1 : determine target X offset (shoulder center / flip) ──────
+        //
+        // Cheap point-raycasts to decide which shoulder position is clear.
+        // Priority: original shoulder → center → flipped shoulder.
+        // We only use point casts here (not sphere) because we just want to
+        // know the general direction, not compute exact camera placement.
+
+        float targetXOffset = _cameraXOffset;   // assume original is free
+
+        Vector3 desiredFull = pivotPosition
+                            + transform.right * _cameraXOffset
+                            + Vector3.up * dynamicYOffset
+                            + transform.forward * dynamicZOffset;
+
+        Vector3 dirFull = desiredFull - pivotPosition;
+
+        if (Physics.Raycast(pivotPosition, dirFull.normalized, dirFull.magnitude, _cameraCollisionMask))
+        {
+            // Original shoulder is blocked → try center (X = 0)
+            targetXOffset = 0f;
+
+            Vector3 desiredCenter = pivotPosition
+                                  + Vector3.up * dynamicYOffset
+                                  + transform.forward * dynamicZOffset;
+
+            Vector3 dirCenter = desiredCenter - pivotPosition;
+
+            if (Physics.Raycast(pivotPosition, dirCenter.normalized, dirCenter.magnitude, _cameraCollisionMask))
+            {
+                // Center also blocked → flip to opposite shoulder
+                targetXOffset = -_cameraXOffset;
+            }
+        }
+
+        // Lerp toward target: shift fast, recover slow (feels more responsive on entry)
+        float lerpSpeed = (targetXOffset == _cameraXOffset) ? _xOffsetReturnSpeed : _xOffsetShiftSpeed;
+        _currentXOffset = Mathf.Lerp(_currentXOffset, targetXOffset, Time.deltaTime * lerpSpeed);
+
+        // ── Phase 2 : SphereCast for Z pull-in using the lerped X offset ─────
+        //
+        // This handles walls directly behind the player after X is already resolved.
+        // Mathf.Max(0, ...) prevents the camera snapping to the pivot when the
+        // sphere literally cannot fit — it stays as close as physically possible.
+
         Vector3 desiredPosition = pivotPosition
-            + transform.right * _cameraXOffset
-            + Vector3.up * dynamicYOffset
-            + transform.forward * dynamicZOffset;
+                                + transform.right * _currentXOffset
+                                + Vector3.up * dynamicYOffset
+                                + transform.forward * dynamicZOffset;
 
         Vector3 direction = desiredPosition - pivotPosition;
         float distance = direction.magnitude;
 
-        // El Raycast se dispara desde el pecho (pivote) hacia la cámara
-        if (Physics.SphereCast(pivotPosition, _sphereCollisionRadius, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
-            _cameraTransform.position = pivotPosition + direction.normalized * (hit.distance - _sphereCollisionRadius);
+        if (Physics.SphereCast(pivotPosition, _sphereCollisionRadius, direction.normalized,
+                                out RaycastHit hit, distance, _cameraCollisionMask))
+        {
+            float safeDistance = Mathf.Max(0f, hit.distance - _sphereCollisionRadius);
+            _cameraTransform.position = pivotPosition + direction.normalized * safeDistance;
+        }
         else
+        {
             _cameraTransform.position = desiredPosition;
+        }
 
+        // ── 3. Orientation + recoil ───────────────────────────────────────────
         _cameraTransform.LookAt(_cameraTarget.position);
         _cameraTransform.rotation *= Quaternion.Euler(_recoil.CurrentRotation);
 
+        // ── 4. Rig aim target ─────────────────────────────────────────────────
         if (_targetObject != null)
         {
             Vector3 targetPosition = _cameraTransform.position + _cameraTransform.forward * _maxDistance;
@@ -147,18 +204,13 @@ public class PlayerMovement : MonoBehaviour
 
         _yaw += mouseX;
 
-        // 1. Calculamos y limitamos la rotación (El Pitch)
         _cameraPitch -= mouseY;
         _cameraPitch = Mathf.Clamp(_cameraPitch, _minPitch, _maxPitch);
         _cameraTarget.localRotation = Quaternion.Euler(_cameraPitch, 0f, 0f);
 
-        // 2. Porcentaje de inclinación (0 a 1)
         float pitchT = Mathf.InverseLerp(_minPitch, _maxPitch, _cameraPitch);
-
-        // 3. Calculamos la altura dinámica del objetivo
         float dynamicTargetY = Mathf.Lerp(_minTargetY, _maxTargetY, pitchT);
 
-        // 4. Aplicamos la nueva altura al _cameraTarget
         Vector3 localPos = _cameraTarget.localPosition;
         localPos.y = dynamicTargetY;
         _cameraTarget.localPosition = localPos;
@@ -218,53 +270,57 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Vector3 pivotPosition = transform.position + Vector3.up * _rotationCenterY;
-        
+        // Fixed: now includes _rotationCenterZ (was missing in the original)
+        Vector3 pivotPosition = transform.position
+                              + Vector3.up * _rotationCenterY
+                              + transform.forward * _rotationCenterZ;
+
         float pitchT = Mathf.InverseLerp(_minPitch, _maxPitch, _cameraPitch);
         float dynamicYOffset = Mathf.Lerp(_minCameraY, _maxCameraY, pitchT);
         float dynamicZOffset = Mathf.Lerp(_minCameraZ, _maxCameraZ, pitchT);
 
+        // In play mode reflect the live lerped offset; in editor show the configured default
+        float xOffset = Application.isPlaying ? _currentXOffset : _cameraXOffset;
+
         Vector3 desiredPosition = pivotPosition
-            + transform.right * _cameraXOffset
-            + Vector3.up * dynamicYOffset
-            + transform.forward * dynamicZOffset;
+                                + transform.right * xOffset
+                                + Vector3.up * dynamicYOffset
+                                + transform.forward * dynamicZOffset;
 
         Vector3 direction = desiredPosition - pivotPosition;
         float distance = direction.magnitude;
 
-        if (Physics.SphereCast(pivotPosition, _sphereCollisionRadius, direction.normalized, out RaycastHit hit, distance, _cameraCollisionMask))
+        if (Physics.SphereCast(pivotPosition, _sphereCollisionRadius, direction.normalized,
+                                out RaycastHit hit, distance, _cameraCollisionMask))
         {
-            Vector3 clampedPosition = pivotPosition + direction.normalized * (hit.distance - _sphereCollisionRadius);
-            
-            // Linea desde pivote hasta donde se detiene
+            Vector3 clampedPosition = pivotPosition
+                                    + direction.normalized
+                                    * Mathf.Max(0f, hit.distance - _sphereCollisionRadius);
+
             Gizmos.color = Color.red;
             Gizmos.DrawLine(pivotPosition, clampedPosition);
-            
-            // Esfera roja donde la camara se detiene
+
             Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
             Gizmos.DrawSphere(clampedPosition, _sphereCollisionRadius);
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(clampedPosition, _sphereCollisionRadius);
 
-            // Linea punteada hasta donde hubiera ido sin colision
             Gizmos.color = new Color(1f, 1f, 0f, 0.4f);
             Gizmos.DrawLine(clampedPosition, desiredPosition);
             Gizmos.DrawWireSphere(desiredPosition, _sphereCollisionRadius);
         }
         else
         {
-            // Linea verde hasta posicion deseada
             Gizmos.color = Color.green;
             Gizmos.DrawLine(pivotPosition, desiredPosition);
 
-            // Esfera verde en posicion deseada
             Gizmos.color = new Color(0f, 1f, 0f, 0.3f);
             Gizmos.DrawSphere(desiredPosition, _sphereCollisionRadius);
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(desiredPosition, _sphereCollisionRadius);
         }
 
-        // Pivote
+        // Pivot
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(pivotPosition, 0.05f);
     }

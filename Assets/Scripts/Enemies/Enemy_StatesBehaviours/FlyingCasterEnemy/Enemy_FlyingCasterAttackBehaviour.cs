@@ -15,6 +15,7 @@ public class Enemy_FlyingCasterAttackBehaviour : Enemy_FlyingChasingBehaviour
         Vector3 targetCenter = _playerTransform.position + (Vector3.up * _stats.aimOffset);
         Vector3 shootDirection = (targetCenter - _transform.position).normalized;
 
-        if (_casterData != null) _casterData.SpawnProjectile(shootDirection);
+        //if (_casterData != null) _casterData.SpawnProjectile(shootDirection);
+        if (_casterData != null) _casterData.SpawnProjectileWithWarning(shootDirection);
     }
 }

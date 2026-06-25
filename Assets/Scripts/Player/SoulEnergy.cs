@@ -8,6 +8,10 @@ public class SoulEnergy : MonoBehaviour, IEInteractable
     [Header("UI")]
     [SerializeField] private string _interactText = "F to Grab Soul Energy";
 
+    [Header("VFX")]
+    [SerializeField] private GameObject _grabSoulEnergyVFX;
+    [SerializeField] private float _vfxDestroyDelay = 1f;
+
     public void Interact(Transform interactorTransform)
     {
         if (KeyInventorySystem.Instance.CurrentSoulEnergy >= _maxSoulEnergy) return;
@@ -17,6 +21,14 @@ public class SoulEnergy : MonoBehaviour, IEInteractable
         if (SoulUIManager.Instance != null)
         {
             SoulUIManager.Instance.UpdateUI(KeyInventorySystem.Instance.CurrentSoulEnergy);
+        }
+
+
+        if (_grabSoulEnergyVFX != null)
+        {
+            GameObject vfx = Instantiate(_grabSoulEnergyVFX, transform.position, transform.rotation);
+
+            Destroy(vfx, _vfxDestroyDelay);
         }
 
         Destroy(gameObject);

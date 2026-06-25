@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Runtime.CompilerServices;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class Enemy_SUPERHEALTHSYSTEM : MonoBehaviour
@@ -86,8 +83,9 @@ public class Enemy_SUPERHEALTHSYSTEM : MonoBehaviour
     void Death()
     {
         if (_isDead) return;
-        Debug.Log("Me mori");
         _isDead = true;
+
+        OnDeath?.Invoke();
         DieCoroutine();
     }
 

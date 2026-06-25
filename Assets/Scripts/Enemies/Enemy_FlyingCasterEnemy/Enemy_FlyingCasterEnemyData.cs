@@ -18,6 +18,12 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
     [SerializeField] private Transform _muzzlePoint;       
     [SerializeField] private float _projectileSpeed = 20f;
 
+    [Header("Attack Warning VFX")]
+    [SerializeField] private GameObject _attackWarningVFXPrefab;
+    [SerializeField] private float _warningDelay = 0.15f;
+    [SerializeField] private float _warningVFXLifetime = 1f;
+    [SerializeField] private bool _parentWarningVFXToMuzzle = true;
+
     [Header("Patrolling Variables")]
     [SerializeField] private float _patrolSpeed = 3f;
     [SerializeField] private float _patrollingRotationSpeed = 2f;
@@ -119,5 +125,37 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
             projRb.linearVelocity = Vector3.zero;
             projRb.linearVelocity = direction * _projectileSpeed;
         }
+    }
+
+    public void SpawnProjectileWithWarning(Vector3 direction)
+    {
+        StartCoroutine(SpawnProjectileWithWarningRoutine(direction));
+    }
+
+    private IEnumerator SpawnProjectileWithWarningRoutine(Vector3 direction)
+    {
+        Vector3 spawnPosition = (_muzzlePoint != null) ? _muzzlePoint.position : _objectTransform.position;
+
+        Quaternion spawnRotation = direction.sqrMagnitude > 0.01f
+            ? Quaternion.LookRotation(direction)
+            : _objectTransform.rotation;
+
+        if (_attackWarningVFXPrefab != null)
+        {
+            GameObject warningVFX = Instantiate(_attackWarningVFXPrefab, spawnPosition, spawnRotation);
+
+            if (_parentWarningVFXToMuzzle && _muzzlePoint != null)
+            {
+                warningVFX.transform.SetParent(_muzzlePoint);
+                warningVFX.transform.localPosition = Vector3.zero;
+                warningVFX.transform.localRotation = Quaternion.identity;
+            }
+
+            Destroy(warningVFX, _warningVFXLifetime);
+        }
+
+        yield return new WaitForSeconds(_warningDelay);
+
+        SpawnProjectile(direction);
     }
 }

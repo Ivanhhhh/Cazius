@@ -2,17 +2,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
-public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
+public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
 {
     [Header("Health Settings")]
     [SerializeField] private int _maxHealth = 100;
-    [SerializeField] private Color[] _healthColors; 
+    [SerializeField] private Color[] _healthColors;
     [SerializeField] private HealthStates _healthState;
-    
+    public float _currentHealth;
+
     [Header("Invincibility Settings")]
-    [SerializeField] private float _invincibilityDuration = 0.5f; 
-    private float _lastHitTime = -100f; 
+    [SerializeField] private float _invincibilityDuration = 0.5f;
+    private float _lastHitTime = -100f;
 
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI _currentHealthText;
@@ -20,8 +22,14 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
 
     [Header("Display Settings")]
     [SerializeField] private float _displayDuration = 2.5f;
-    
-    public float _currentHealth;
+
+    [Header("Death UI Settings")]
+    [SerializeField] private string _sceneToLoadAfterDeath = "MainMenu";
+    [SerializeField] private GameObject _deathPanel;
+    [SerializeField] private Image _deathFadeImage;
+    [SerializeField] private float _fadeDuration = 2.0f;
+    [SerializeField] private float _delayBeforeLoad = 2000.0f;
+
     private Coroutine _hideUICoroutine;
 
     // --- INTEGRACIÓN CON EL INVENTARIO (OBSERVER PATTERN) ---
@@ -42,7 +50,7 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
         if (isInventoryOpen)
         {
             UpdateHealthState();
-            ModifyUI(); 
+            ModifyUI();
         }
         else
         {
@@ -59,6 +67,15 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
     {
         _currentHealth = _maxHealth;
         SetUIElementsVisibility(false);
+
+        if (_deathPanel != null) { _deathPanel.SetActive(false); }
+        if (_deathFadeImage != null)
+        {
+            _deathFadeImage.enabled = false;
+            Color c = _deathFadeImage.color;
+            c.a = 0f;
+            _deathFadeImage.color = c;
+        }
     }
 
     public void Heal(int amount)
@@ -73,21 +90,20 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
     {
         if (Time.time < _lastHitTime + _invincibilityDuration)
         {
-            return; 
+            return;
         }
 
-        Debug.Log("Daño aplicado y validado");
         _lastHitTime = Time.time;
 
         _currentHealth -= amount;
-        _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth); 
+        _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
 
-        UpdateHealthState(); 
-        ModifyUI();          
-        
+        UpdateHealthState();
+        ModifyUI();
+
         if (_currentHealth <= 0)
         {
-            ManageDeath();
+            HandleDeath();
         }
     }
 
@@ -105,7 +121,7 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
     private void ModifyUI()
     {
         int colorIndex = (int)_healthState;
-        Color targetColor = Color.white; 
+        Color targetColor = Color.white;
 
         if (_healthColors != null && colorIndex >= 0 && colorIndex < _healthColors.Length)
         {
@@ -114,7 +130,7 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
 
         if (_currentHealthText != null)
         {
-            _currentHealthText.text = $"Vida Actual: {_currentHealth}";
+            _currentHealthText.text = $"Health: {_currentHealth}";
         }
 
         if (_healthStateImage != null)
@@ -136,7 +152,7 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
     {
         yield return new WaitForSeconds(_displayDuration);
         SetUIElementsVisibility(false);
-        _hideUICoroutine = null; 
+        _hideUICoroutine = null;
     }
 
     private void SetUIElementsVisibility(bool visible)
@@ -145,9 +161,48 @@ public class Player_HealthSystem : MonoBehaviour,IPlayerHitable
         if (_healthStateImage != null) _healthStateImage.enabled = visible;
     }
 
-    private void ManageDeath()
+    private void HandleDeath()
     {
-        Debug.Log("Jugador eliminado");
+        this.enabled = false;
+
+        if (_deathPanel != null) { _deathPanel.SetActive(true); }
+
+        StartCoroutine(DeathSequenceRoutine());
+    }
+
+    private IEnumerator DeathSequenceRoutine()
+    {
+        float elapsedTime = 0f;
+
+        if (_deathFadeImage != null)
+        {
+            _deathFadeImage.enabled = true;
+            Color initialColor = _deathFadeImage.color;
+
+            float startAlpha = 0f;
+            float endAlpha = 1f;
+
+            while (elapsedTime < _fadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float newAlpha = Mathf.Lerp(startAlpha, endAlpha, elapsedTime / _fadeDuration);
+
+                _deathFadeImage.color = new Color(initialColor.r, initialColor.g, initialColor.b, newAlpha);
+                yield return null;
+            }
+            _deathFadeImage.color = new Color(initialColor.r, initialColor.g, initialColor.b, endAlpha);
+        }
+        else
+        {
+            yield return new WaitForSeconds(_fadeDuration);
+        }
+        
+        WorldChangeManager.DestroyCurrentInstance();
+
+        yield return new WaitForSeconds(_delayBeforeLoad);
+        SceneManager.LoadScene(_sceneToLoadAfterDeath);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 }
 
