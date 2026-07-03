@@ -18,7 +18,7 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
     private bool _isDead;
 
     [SerializeField] private AngelDemonAnim anim;
-    [SerializeField] private DitheredTransparency _ditheredTransparency;
+    [SerializeField] private DitheredTransparency[] _ditheredTransparencies;
 
     void Start()
     {
@@ -108,7 +108,12 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
     IEnumerator DieCoroutine()
     {
         anim.DieAnim();
-        _ditheredTransparency.FadeAlphaToZero();
+
+        foreach (DitheredTransparency dither in _ditheredTransparencies)
+        {
+            if (dither != null)
+                dither.FadeAlphaToZero();
+        }
 
         yield return new WaitForSeconds(1.2f);
 
