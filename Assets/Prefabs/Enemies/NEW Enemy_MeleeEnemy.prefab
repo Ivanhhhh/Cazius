@@ -70,6 +70,7 @@ GameObject:
   - component: {fileID: 7856561298644488502}
   - component: {fileID: 4172276672993563538}
   - component: {fileID: 7758832045647152129}
+  - component: {fileID: 8783117518800229546}
   - component: {fileID: 4495515257819050386}
   - component: {fileID: 306853721808040464}
   - component: {fileID: 3036136070891182812}
@@ -110,6 +111,7 @@ Transform:
   - {fileID: 7224519753724775464}
   - {fileID: 3021722960380316014}
   - {fileID: 2552637922894749332}
+  - {fileID: 6999377732425451575}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8992226062549267390
@@ -270,6 +272,20 @@ MonoBehaviour:
   - {fileID: 7063187917015169225}
   - {fileID: 412055686851308708}
   - {fileID: 243463270029969240}
+  bloodVFXScript: {fileID: 8783117518800229546}
+--- !u!114 &8783117518800229546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589750323712136146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec53d9becb7f6cc4b85b483933d35e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BloodVFX
+  _bloodParticles: {fileID: 3120802362071512589}
 --- !u!95 &4495515257819050386
 Animator:
   serializedVersion: 7
@@ -1284,6 +1300,81 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.24, y: 3.3034174, z: 1}
   m_Center: {x: -0.030239658, y: 0.19971104, z: 0}
+--- !u!1001 &1642188240590967627
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 912681512838086180}
+    m_Modifications:
+    - target: {fileID: 8640421380984150908, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3.8922966
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640421380984150908, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3.8922966
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640421380984150908, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640421380984150908, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.845
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640421380984150908, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640421380984150908, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640421380984150908, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640421380984150908, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640421380984150908, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640421380984150908, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640421380984150908, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640421380984150908, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8717493512186920455, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+      propertyPath: m_Name
+      value: 'SurfaceBlood VFX '
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+--- !u!198 &3120802362071512589 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4433064546152179014, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+  m_PrefabInstance: {fileID: 1642188240590967627}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6999377732425451575 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8640421380984150908, guid: cc42f090787af0f4ea4e4efb8b8fddce, type: 3}
+  m_PrefabInstance: {fileID: 1642188240590967627}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2375841633740484937
 PrefabInstance:
   m_ObjectHideFlags: 0

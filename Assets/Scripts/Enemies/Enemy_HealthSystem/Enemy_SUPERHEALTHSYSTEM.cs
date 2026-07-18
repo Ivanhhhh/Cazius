@@ -10,6 +10,8 @@ public class Enemy_SUPERHEALTHSYSTEM : MonoBehaviour
     public Action<float> OnDamaged;
     private bool _isDead;
 
+    [SerializeField] private Enemy_ShakeDamage enemy_ShakeDamageScript;
+
     void Start()
     {
         _currentHealth = _maxHealth;
@@ -24,8 +26,10 @@ public class Enemy_SUPERHEALTHSYSTEM : MonoBehaviour
     public void TakeDamageFromPart(float amount, BodyPartType part)
     {
         _currentHealth -= amount;
-        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.EnemyGruntSFX, transform.position);
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.CasterDamgeSFX, transform.position);
         OnDamaged?.Invoke(_currentHealth);
+        enemy_ShakeDamageScript.OnDamage();
+
 
         // Efecto según la parte
         switch (part)
