@@ -13,7 +13,8 @@ public class DamageFeedback : MonoBehaviour
     {
        // _DmgFeedback += StopMovingMethod;
 
-        
+                SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.HurtedSFX);
+ 
     }
 
     void OnEnable()
@@ -29,15 +30,16 @@ public class DamageFeedback : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public IEnumerator StopMoving()
-    {       
+    {   
+        Debug.Log("Ejecutado");
         GameInputManager.Instance.EnableDialogInput();
-        SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.HurtedSFX);
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.HurtedSFX, this.transform.position);
         yield return new WaitForSeconds(2);
-        GameInputManager.Instance.DisableDialogInput();
+        GameInputManager.Instance.DisableDialogInput();   
     }
 
     public void StopMovingMethod(params object[] parameters)
