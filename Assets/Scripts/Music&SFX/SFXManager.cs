@@ -22,7 +22,8 @@ public class SFXManager : MonoBehaviour
         RockCrumble,
         DoorPurgatory,
         DoorEden,
-        CrowDeath
+        CrowDeath,
+        HurtedSFX
         // Add Categories here
     }
 
