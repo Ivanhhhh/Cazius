@@ -142,13 +142,16 @@ GameObject:
   - component: {fileID: 3018951180142573718}
   - component: {fileID: 3551400110651172152}
   - component: {fileID: 5297739799995086339}
+  - component: {fileID: 8684394394383095781}
+  - component: {fileID: 7565854074509952173}
+  - component: {fileID: 2637666841625034061}
   m_Layer: 12
   m_Name: Enemy_FlyingCasterEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4628032032835187159
 Transform:
   m_ObjectHideFlags: 0
@@ -159,7 +162,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.9, y: 3.45, z: 4.6}
-  m_LocalScale: {x: 0.30087128, y: 0.30087128, z: 0.30087128}
+  m_LocalScale: {x: 0.17322363, y: 0.17322363, z: 0.17322363}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3319622883261367806}
@@ -289,13 +292,13 @@ MonoBehaviour:
   _patrollingRotationSpeed: 2
   _patrolAcceleration: 3
   _waypointTolerance: 1.5
-  _radiusVision: 21.3
-  _horizontalAngleVision: 112
-  _verticalAngleVision: 126
+  _radiusVision: 104.1
+  _horizontalAngleVision: 360
+  _verticalAngleVision: 360
   _lineOfSightLayerMask:
     serializedVersion: 2
     m_Bits: 129
-  _sensorLength: 1.66
+  _sensorLength: 0.9
   _avoidanceForce: 25
   _obstacleMask:
     serializedVersion: 2
@@ -323,6 +326,92 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_SUPERHEALTHSYSTEM
   _maxHealth: 100
   _currentHealth: 0
+  enemy_ShakeDamageScript: {fileID: 2637666841625034061}
+--- !u!114 &8684394394383095781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6014290536835819705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc90a5b306717534d87e9960b9277697, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DIsable_Objects
+  objectsToDisable:
+  - {fileID: 0}
+--- !u!114 &7565854074509952173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6014290536835819705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca6c4a2ae5b653d4da56baa3a520f389, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: com.daburo.smoothshakefree::SmoothShakeFree.SmoothShake
+  timeSettings:
+    fadeValue: 0
+    enableOnStart: 0
+    constantShake: 0
+    fadeInDuration: 0
+    fadeInCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    holdDuration: 0
+    fadeOutDuration: 0.3
+    fadeOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0.016666412
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.9916687
+        value: 0.0070762634
+        inSlope: 0.051795844
+        outSlope: 0.051795844
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.09341927
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  preset: {fileID: 11400000, guid: 44089c2b640259b42b7acf94a76647f9, type: 2}
+  positionShake:
+    noiseType: 0
+    amplitude: {x: 0, y: 0, z: 0}
+    frequency: {x: 0, y: 0, z: 0}
+  rotationShake:
+    noiseType: 0
+    amplitude: {x: 2, y: 2, z: 15}
+    frequency: {x: 5.5, y: 5, z: 4.5}
+--- !u!114 &2637666841625034061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6014290536835819705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f026e6745debe43a1ea343654b215e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_ShakeDamage
+  preset: {fileID: 7565854074509952173}
 --- !u!1001 &3676319026412195355
 PrefabInstance:
   m_ObjectHideFlags: 0
