@@ -31,6 +31,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     [SerializeField] private float _delayBeforeLoad = 2000.0f;
 
     private Coroutine _hideUICoroutine;
+    [SerializeField] private CameraShake _cameraShakeScript;
 
     // --- INTEGRACIÓN CON EL INVENTARIO (OBSERVER PATTERN) ---
     private void OnEnable()
@@ -97,6 +98,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
 
         _currentHealth -= amount;
         _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
+        _cameraShakeScript.DamageShake();
 
         UpdateHealthState();
         ModifyUI();
@@ -196,7 +198,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
         {
             yield return new WaitForSeconds(_fadeDuration);
         }
-        
+
         WorldChangeManager.DestroyCurrentInstance();
 
         yield return new WaitForSeconds(_delayBeforeLoad);
