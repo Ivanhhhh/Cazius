@@ -20,6 +20,8 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
     [SerializeField] private AngelDemonAnim anim;
     [SerializeField] private DitheredTransparency[] _ditheredTransparencies;
 
+    [SerializeField] private BloodVFX bloodVFXScript;
+
     void Start()
     {
         _currentHealth = _maxHealth;
@@ -107,7 +109,9 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 
     IEnumerator DieCoroutine()
     {
+        bloodVFXScript.BloodDead();
         anim.DieAnim();
+
 
         foreach (DitheredTransparency dither in _ditheredTransparencies)
         {
