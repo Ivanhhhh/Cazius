@@ -24,6 +24,7 @@ public class SFXManager : MonoBehaviour
         DoorEden,
         CrowDeath,
         CasterDamgeSFX,
+        HurtedSFX
         // Add Categories here
     }
 
