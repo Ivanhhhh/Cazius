@@ -82,6 +82,7 @@ public class DamageFeedback : MonoBehaviour
         _PlayerMovement.enabled = false;
         //float currentForce = Mathf.Lerp(ForceAmount, 0f, t);
 
+        _rb.linearVelocity = Vector3.zero;
         _rb.AddForce(-transform.forward * BackAmount, ForceMode.VelocityChange);
 
         //t += Time.fixedDeltaTime;
