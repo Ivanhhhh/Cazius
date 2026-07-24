@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using Patterns.Observer.EventManager_Delegates;
+using UnityEngine.VFX; // ⚠️ necesario para usar VisualEffect
+
 
 
 public class DamageFeedback : MonoBehaviour
@@ -9,6 +11,7 @@ public class DamageFeedback : MonoBehaviour
     [SerializeField] float TimeStop;
     [SerializeField] float BackAmount;
     [SerializeField] Rigidbody _rb;
+    [SerializeField] VisualEffect BloodP;
     //[SerializeField] float ForceAmount;
     private PlayerMovement _PlayerMovement;
     //private Vector3 Back;
@@ -20,6 +23,8 @@ public class DamageFeedback : MonoBehaviour
 
         //StartCoroutine(MovingLerp());
         _PlayerMovement = GetComponent<PlayerMovement>();
+
+        
 
     }
 
@@ -51,11 +56,11 @@ public class DamageFeedback : MonoBehaviour
         //StartCoroutine(MovingLerp(transform.position, transform.position - transform.forward  * BackAmount));
         StartCoroutine(MovingLerp());
 
-
+         BloodP.Play();
 
         //transform.position -= BackAmount;
         //SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.HurtedSFX, transform.position);
-        yield return new WaitForSeconds(TimeStop);
+        yield return null;
         
         
         
@@ -66,22 +71,22 @@ public class DamageFeedback : MonoBehaviour
 
     private IEnumerator MovingLerp()
     {
-      float t = 0;
+      //float t = 0;
 
       //while (t < 1)
       //{
         _PlayerMovement.enabled = false;
         //float currentForce = Mathf.Lerp(ForceAmount, 0f, t);
 
-        _rb.AddForce(-transform.forward * BackAmount, ForceMode.Impulse);
+        _rb.AddForce(-transform.forward * BackAmount, ForceMode.VelocityChange);
 
-        t += Time.fixedDeltaTime;
+        //t += Time.fixedDeltaTime;
 
         //yield return new WaitForFixedUpdate();
 
-         yield return null;
+        yield return new WaitForSeconds(TimeStop);
 
-       // _PlayerMovement.enabled = true;
+        _PlayerMovement.enabled = true;
 
       //}
     }
