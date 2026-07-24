@@ -48,29 +48,29 @@ public class DamageFeedback : MonoBehaviour
 
     // } 
 
-    public IEnumerator StopMoving()
-    {   
-        //_PlayerMovement.enabled  = false;
-        Debug.Log("Ejecutado");
-        //poner animacion;
-        //GameInputManager.Instance.DisablePlayerMovement();
-        SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.HurtedSFX);
+    // public IEnumerator StopMoving()
+    // {   
+    //     //_PlayerMovement.enabled  = false;
+    //     Debug.Log("Ejecutado");
+    //     //poner animacion;
+    //     //GameInputManager.Instance.DisablePlayerMovement();
+    //     SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.HurtedSFX);
        
-        //StartCoroutine(MovingLerp(transform.position, transform.position - transform.forward  * BackAmount));
-        StartCoroutine(MovingLerp());
-         //Blood.SetActive(true);
-         //BloodP.SetActive(true);
-         BloodEffect.Play();
+    //     //StartCoroutine(MovingLerp(transform.position, transform.position - transform.forward  * BackAmount));
+    //     StartCoroutine(MovingLerp());
+    //      //Blood.SetActive(true);
+    //      //BloodP.SetActive(true);
+    //      BloodEffect.Play();
 
-        //transform.position -= BackAmount;
-        //SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.HurtedSFX, transform.position);
-        yield return null;
+    //     //transform.position -= BackAmount;
+    //     //SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.HurtedSFX, transform.position);
+    //     yield return null;
         
-        //BloodP.SetActive(false);
+    //     //BloodP.SetActive(false);
         
         
-        //GameInputManager.Instance.EnablePlayerMovement();
-    }
+    //     //GameInputManager.Instance.EnablePlayerMovement();
+    // }
 
 
     private IEnumerator MovingLerp()
@@ -114,6 +114,20 @@ public class DamageFeedback : MonoBehaviour
 
     public void StopMovingMethod(params object[] parameters)
     {
-        StartCoroutine(StopMoving());
+       // StartCoroutine(StopMoving());
+
+         Debug.Log("Ejecutado");
+        //poner animacion;
+        //GameInputManager.Instance.DisablePlayerMovement();
+        SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.HurtedSFX);
+       
+        //StartCoroutine(MovingLerp(transform.position, transform.position - transform.forward  * BackAmount));
+        StartCoroutine(MovingLerp());
+         //Blood.SetActive(true);
+         //BloodP.SetActive(true);
+         BloodEffect.Play();
+
+        //transform.position -= BackAmount;
+        //SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.HurtedSFX, transform.position);
     }
 }
