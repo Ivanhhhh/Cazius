@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using Patterns.Observer.EventManager_Delegates;
-using UnityEngine.VFX; // ⚠️ necesario para usar VisualEffect
+using UnityEngine.VFX;
 
 
 
@@ -11,8 +11,8 @@ public class DamageFeedback : MonoBehaviour
     [SerializeField] float TimeStop;
     [SerializeField] float BackAmount;
     [SerializeField] Rigidbody _rb;
-    [SerializeField] VisualEffect BloodP;
-        [SerializeField] GameObject Blood;
+    [SerializeField] VisualEffect BloodEffect;
+        //[SerializeField] GameObject Blood;
 
     //[SerializeField] float ForceAmount;
     private PlayerMovement _PlayerMovement;
@@ -21,7 +21,7 @@ public class DamageFeedback : MonoBehaviour
     
     void Start()
     {
-      Blood.SetActive(false);
+      //Blood.SetActive(false);
          _rb = GetComponent<Rigidbody>();
 
         //StartCoroutine(MovingLerp());
@@ -58,9 +58,9 @@ public class DamageFeedback : MonoBehaviour
        
         //StartCoroutine(MovingLerp(transform.position, transform.position - transform.forward  * BackAmount));
         StartCoroutine(MovingLerp());
-         Blood.SetActive(true);
+         //Blood.SetActive(true);
          //BloodP.SetActive(true);
-         BloodP.Play();
+         BloodEffect.Play();
 
         //transform.position -= BackAmount;
         //SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.HurtedSFX, transform.position);
