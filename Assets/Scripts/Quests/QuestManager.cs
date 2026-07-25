@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public class QuestManager : MonoBehaviour
 {
     public static QuestManager Instance { get; private set; }
+    public static event Action OnQuestUpdated;
 
     private Dictionary<string, QuestDefinition> _questDefinitions = new();
     private Dictionary<string, QuestStatus> _questStates = new();
@@ -29,6 +31,7 @@ public class QuestManager : MonoBehaviour
         if (_questStates.ContainsKey(quest.questID)) return;
         _questDefinitions[quest.questID] = quest;
         _questStates[quest.questID] = QuestStatus.NotStarted;
+        OnQuestUpdated?.Invoke();
     }
 
     public QuestStatus GetStatus(string questID)
@@ -44,6 +47,7 @@ public class QuestManager : MonoBehaviour
         if (_questStates[questID] != QuestStatus.NotStarted) return;
         _questStates[questID] = QuestStatus.Active;
         SaveManager.Instance.Save();
+        OnQuestUpdated?.Invoke();
     }
 
     public void CompleteQuest(string questID)
@@ -52,6 +56,7 @@ public class QuestManager : MonoBehaviour
         if (_questStates[questID] != QuestStatus.Active) return;
         _questStates[questID] = QuestStatus.JustCompleted;
         SaveManager.Instance.Save();
+        OnQuestUpdated?.Invoke();
     }
 
     public void AcknowledgeCompletion(string questID)
@@ -60,6 +65,7 @@ public class QuestManager : MonoBehaviour
         if (_questStates[questID] != QuestStatus.JustCompleted) return;
         _questStates[questID] = QuestStatus.Completed;
         SaveManager.Instance.Save();
+        OnQuestUpdated?.Invoke();
     }
 
     // --- UI queries ---
