@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class QuestManager : MonoBehaviour
 {
     public static QuestManager Instance { get; private set; }
 
+    private Dictionary<string, QuestDefinition> _questDefinitions = new();
     private Dictionary<string, QuestStatus> _questStates = new();
     private HashSet<string> _killedEnemies = new();
     private HashSet<string> _reachedLocations = new();
@@ -22,10 +24,11 @@ public class QuestManager : MonoBehaviour
 
     // --- Quest registration ---
 
-    public void RegisterQuest(string questID)
+    public void RegisterQuest(QuestDefinition quest)
     {
-        if (!_questStates.ContainsKey(questID))
-            _questStates[questID] = QuestStatus.NotStarted;
+        if (_questStates.ContainsKey(quest.questID)) return;
+        _questDefinitions[quest.questID] = quest;
+        _questStates[quest.questID] = QuestStatus.NotStarted;
     }
 
     public QuestStatus GetStatus(string questID)
@@ -57,6 +60,20 @@ public class QuestManager : MonoBehaviour
         if (_questStates[questID] != QuestStatus.JustCompleted) return;
         _questStates[questID] = QuestStatus.Completed;
         SaveManager.Instance.Save();
+    }
+
+    // --- UI queries ---
+
+    public List<QuestDefinition> GetQuestsByType(QuestType type)
+    {
+        return _questDefinitions.Values
+            .Where(q => q.questType == type)
+            .ToList();
+    }
+
+    public List<QuestDefinition> GetAllQuests()
+    {
+        return _questDefinitions.Values.ToList();
     }
 
     // --- Kill tracking ---
