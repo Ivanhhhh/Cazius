@@ -10,19 +10,26 @@ public class DamageFeedback : MonoBehaviour
     [SerializeField] float BackAmount;
     [SerializeField] Rigidbody _rb;
     [SerializeField] VisualEffect BloodEffect;
+    private Animator _Animator;
 
     private PlayerMovement _PlayerMovement;
+
+    [SerializeField] Vector3 BloodPosition;
     
     void Start()
     {
          _rb = GetComponent<Rigidbody>();
 
         _PlayerMovement = GetComponent<PlayerMovement>();
+
+        _Animator = GetComponent<Animator>();
     }
 
     void OnEnable()
     {
       EventManager.SubscribeToEvent(EventsType.Event_PausePlayer, StopMovingMethod);
+
+        BloodEffect.transform.position = transform.up * 9; // solo el componente, no el gameObject
     }
 
     void OnDisable()
@@ -33,8 +40,10 @@ public class DamageFeedback : MonoBehaviour
     
     private IEnumerator MovingLerp()
     {
+
         _PlayerMovement.enabled = false;
 
+                 //poner animacion;
         _rb.linearVelocity = Vector3.zero;
         _rb.AddForce(-transform.forward * BackAmount, ForceMode.VelocityChange);
 
@@ -47,11 +56,12 @@ public class DamageFeedback : MonoBehaviour
     public void StopMovingMethod(params object[] parameters)
     {
          Debug.Log("Ejecutado");
-        //poner animacion;
-        SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.HurtedSFX);
+
+         SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.HurtedSFX);
        
-        StartCoroutine(MovingLerp());
+         StartCoroutine(MovingLerp());
         
+         BloodEffect.transform.position = transform.position;
          BloodEffect.Play();
     }
 }
