@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class UIQuestLog : MonoBehaviour
 {
+    [SerializeField] private GameObject _questEntryPrefab;
+
     [Header("Main Quests")]
     [SerializeField] private Transform _mainQuestContainer;
-    [SerializeField] private GameObject _questEntryPrefab;
 
     [Header("Side Quests")]
     [SerializeField] private Transform _sideQuestContainer;
