@@ -9,15 +9,20 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
 
-    [Header("Map")]
-    [SerializeField] private bool _showOnMap = false;
-    [SerializeField] private Vector3 _questDestination;
-
     [Header("Reward")]
     [SerializeField] private ItemData _questPrizeItem;
 
     [Header("Item Quest")]
     [SerializeField] private bool _removeItemOnCompletion = false;
+
+    [Header("Map")]
+    [SerializeField] private bool _showOnMap = false;
+    [SerializeField] private Vector3 _questDestination;
+
+    [Header("Reposition After Quest")]
+    [SerializeField] private bool _moveAfterCompletion = false;
+    [SerializeField] private Vector3 _newPosition;
+    [SerializeField] private Vector3 _newRotationEuler;
 
     private Animator _animator;
 
@@ -32,7 +37,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         _animator.SetTrigger(_wavingTrigger);
         SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.MaleHeySFX, transform.position);
 
-        QuestManager.Instance.RegisterQuest(quest.questID);
+        QuestManager.Instance.RegisterQuest(quest);
         QuestStatus status = QuestManager.Instance.GetStatus(quest.questID);
 
         switch (status)
@@ -102,7 +107,16 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: quest.firstCompletionDialog,
             onAccept: null,
-            onClose: () => QuestManager.Instance.AcknowledgeCompletion(quest.questID)
+            onClose: () =>
+            {
+                QuestManager.Instance.AcknowledgeCompletion(quest.questID);
+
+                if (_moveAfterCompletion)
+                {
+                    transform.position = _newPosition;
+                    transform.rotation = Quaternion.Euler(_newRotationEuler);
+                }
+            }
         );
     }
 
