@@ -1,16 +1,15 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UIQuestEntry : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private TMP_Text _titleText;
     [SerializeField] private TMP_Text _statusText;
-    [SerializeField] private CanvasGroup _canvasGroup;
 
-    [Header("Settings")]
-    [SerializeField] private float _completedAlpha = 0.4f;
+    [Header("Colors")]
+    [SerializeField] private Color _defaultColor = Color.white;
+    [SerializeField] private Color _completedColor = new Color(1f, 0.84f, 0f); // Gold
 
     private string _questID;
 
@@ -37,6 +36,6 @@ public class UIQuestEntry : MonoBehaviour
             _ => string.Empty
         };
 
-        _canvasGroup.alpha = isCompleted ? _completedAlpha : 1f;
+        _statusText.color = isCompleted ? _completedColor : _defaultColor;
     }
 }

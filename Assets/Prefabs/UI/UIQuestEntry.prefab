@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7416496385119531364}
   - component: {fileID: 7926955535892639628}
-  - component: {fileID: 2332018161349031127}
   m_Layer: 0
   m_Name: UIQuestEntry
   m_TagString: Untagged
@@ -53,20 +52,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIQuestEntry
   _titleText: {fileID: 860106455389229401}
   _statusText: {fileID: 6246160586062970464}
-  _canvasGroup: {fileID: 2332018161349031127}
-  _completedAlpha: 0.4
---- !u!225 &2332018161349031127
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3262950458568145784}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
+  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  _completedColor: {r: 1, g: 0.84, b: 0, a: 1}
 --- !u!1 &3291346541083197439
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,15 +148,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 27
+  m_fontSizeBase: 27
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 4
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
@@ -200,7 +187,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 7.848526, y: 0, z: -21.527817, w: 0}
+  m_margin: {x: -20.789062, y: 0, z: -21.527817, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -298,15 +285,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 27
+  m_fontSizeBase: 27
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
@@ -337,7 +324,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -32.154205, y: 0, z: -306.08606, w: 0}
+  m_margin: {x: -32.154205, y: 0, z: -295.8712, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
