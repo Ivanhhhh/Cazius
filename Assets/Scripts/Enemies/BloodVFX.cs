@@ -4,11 +4,12 @@ public class BloodVFX : MonoBehaviour
 {
     [Header("Blood Particles")]
     [SerializeField] private ParticleSystem _bloodParticles;
+    [SerializeField] private Transform _positionSpawnBlood;
 
     public void BloodDead()
     {
         ParticleSystem blood = Instantiate(_bloodParticles,
-                                            transform.position,
+                                            _positionSpawnBlood.position,
                                             Quaternion.identity);
 
         blood.Play();
