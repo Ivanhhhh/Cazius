@@ -254,6 +254,9 @@ public class PlayerMovement : MonoBehaviour
     void HandleAim()
     {
         float targetFOV = _isAiming ? _aimFOV : _normalFOV;
+
+            _animator.SetBool("IsAiming", _isAiming);
+
         _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, targetFOV, Time.deltaTime * _fovSpeed);
     }
 
