@@ -32,6 +32,10 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
     [SerializeField] private float _spinTime;
     [SerializeField] private float _objectSpeedWhileSpinning;
     [SerializeField] private float _spinSpeed;
+    
+    [Header("Stun")]
+    [SerializeField] private float _stunDuration;
+    public bool _isStunned;
 
     [Header("General")]
     [SerializeField] private Transform _playerTransform;
@@ -73,7 +77,7 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
         _patrolling = new Enemy_PatrollingBehaviour(_nodes,_detectionRadius,_MaximumAmountOfNodes,_patrolSpeed,_selfObjectTransform,_agent,_healthSystem);
         _chasing = new Enemy_ChasingBehaviour(_playerTransform,_attackRadius,_agent,_selfObjectTransform,_chaseSpeed,_attackCooldown);
         _fieldOfView = new Enemy_FieldOfViewBehaviour(_playerTransform, _radiusVision, _selfObjectTransform, _horizontalAngleVision, _verticalAngleVision, _lineOfSightLayerMask,_aimOffset);        
-        _firstAttack = new Enemy_FirstAttackBehaviour(_firsAttackPreparationTime, _firstAttackDuration,_agent,_attackCollider);
+        _firstAttack = new Enemy_FirstAttackBehaviour(_firsAttackPreparationTime, _firstAttackDuration, _stunDuration,_agent,_attackCollider, this);
         _secondAttack= new Enemy_SecondAttackBehaviour(_spinSpeed,_objectSpeedWhileSpinning,_secondAttackPreparationTime, _spinTime,_playerTransform,_selfObjectTransform,_agent);
     }
 

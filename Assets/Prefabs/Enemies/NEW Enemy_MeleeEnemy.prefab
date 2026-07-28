@@ -89,7 +89,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &912681512838086180
 Transform:
   m_ObjectHideFlags: 0
@@ -228,6 +228,8 @@ MonoBehaviour:
   _spinTime: 4
   _objectSpeedWhileSpinning: 3
   _spinSpeed: 300
+  _stunDuration: 0
+  _isStunned: 0
   _playerTransform: {fileID: 0}
   _selfObjectTransform: {fileID: 912681512838086180}
   _agent: {fileID: 6583817609841896493}
@@ -857,7 +859,8 @@ GameObject:
   - component: {fileID: 5631901868955702019}
   - component: {fileID: 5574857843816776722}
   - component: {fileID: 511838623229059055}
-  m_Layer: 0
+  - component: {fileID: 4957254256245432652}
+  m_Layer: 19
   m_Name: Attack_hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -872,13 +875,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6005359593082181861}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00441671, y: 0.0023375736, z: 0.7137073, w: 0.7004263}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5.7960787, y: 11.034533, z: 6.699319}
+  m_LocalRotation: {x: -0.14278163, y: -0.13878584, z: 0.7000873, w: 0.685733}
+  m_LocalPosition: {x: -1.42, y: 0.03, z: 5.44}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4862746576958450499}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.086, y: -22.971, z: 91.204}
 --- !u!65 &5574857843816776722
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -898,7 +901,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 2.72}
+  m_Size: {x: 6.7, y: 7.72, z: 14.76}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &511838623229059055
 MonoBehaviour:
@@ -917,6 +920,19 @@ MonoBehaviour:
     m_Bits: 256
   _damageAmount: 15
   _destroyOnImpact: 0
+--- !u!114 &4957254256245432652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6005359593082181861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2000d5cd22f0b394db9cd8acbc7a6df2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_Parry
+  _enemyData: {fileID: 0}
 --- !u!1 &6814700054873584148
 GameObject:
   m_ObjectHideFlags: 0
