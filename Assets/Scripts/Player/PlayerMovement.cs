@@ -266,6 +266,8 @@ public class PlayerMovement : MonoBehaviour
     {
         _moveInput = Vector2.zero;
         _lookInput = Vector2.zero;
+
+        Debug.Log(_moveInput);
     }
 
     private void OnDrawGizmos()
@@ -322,5 +324,6 @@ public class PlayerMovement : MonoBehaviour
 
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(pivotPosition, 0.05f);
+
     }
 }

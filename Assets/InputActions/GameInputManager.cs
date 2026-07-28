@@ -24,6 +24,16 @@ public class GameInputManager : MonoBehaviour
         Controls.Dialog.Disable();
     }
 
+    public void DisablePlayerMovement()
+    {
+      Controls.Player.Disable();
+    }
+
+    public void EnablePlayerMovement()
+    {
+      Controls.Player.Enable();
+    }
+
     public void EnableDialogInput()
     {
         Controls.Player.Disable();
@@ -49,4 +59,6 @@ public class GameInputManager : MonoBehaviour
     }
 
     void OnDestroy() => Controls.Dispose();
+
+   
 }

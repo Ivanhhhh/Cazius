@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Patterns.Observer.EventManager_Delegates; // <-- esto arriba del todo
 
 public class Enemy_DamageSystem : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class Enemy_DamageSystem : MonoBehaviour
             {
                 hitable.Hit(_damageAmount);
                 Debug.Log("aplicar daño");
+                EventManager.TriggerEvent(EventsType.Event_PausePlayer);
             }
 
             if (_destroyOnImpact)

@@ -1,5 +1,7 @@
 using UnityEngine;
 
+public enum QuestType { Main, Side }
+
 [CreateAssetMenu(fileName = "NewQuest",
                  menuName = "Quests/Quest Definition")]
 public class QuestDefinition : ScriptableObject
@@ -7,6 +9,7 @@ public class QuestDefinition : ScriptableObject
     [Header("Identity")]
     public string questID;
     public string questTitle;
+    public QuestType questType;
 
     [Header("Required Condition")]
     public QuestCondition condition;

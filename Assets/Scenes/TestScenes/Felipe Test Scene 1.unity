@@ -759,6 +759,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f076110db297664cbf999c41256591c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpenDoor
+  _SideOpen: {fileID: 0}
   _rigidbody: {fileID: 0}
   _Anim: {fileID: 0}
   OpenDoorText: 
@@ -1914,9 +1915,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b161e52cb7358845b22e53f582d7f97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorHelper1
-  _rb: {fileID: 1769970408}
-  _ForceApply: 20
-  ColliderDoor: {fileID: 0}
 --- !u!65 &1183678337 stripped
 BoxCollider:
   m_CorrespondingSourceObject: {fileID: 3838199267014200141, guid: fdfe6fe141c0e964780a2d5ed489c0b7, type: 3}
@@ -2118,6 +2116,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6986aef266b3b9b4ba0fbd6c208fc416, type: 3}
+--- !u!1001 &1258960354
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 912681512838086180, guid: 620442c95f114e644afbe540e0f94060, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.0931883
+      objectReference: {fileID: 0}
+    - target: {fileID: 912681512838086180, guid: 620442c95f114e644afbe540e0f94060, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 912681512838086180, guid: 620442c95f114e644afbe540e0f94060, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.4802742
+      objectReference: {fileID: 0}
+    - target: {fileID: 912681512838086180, guid: 620442c95f114e644afbe540e0f94060, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 912681512838086180, guid: 620442c95f114e644afbe540e0f94060, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 912681512838086180, guid: 620442c95f114e644afbe540e0f94060, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 912681512838086180, guid: 620442c95f114e644afbe540e0f94060, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 912681512838086180, guid: 620442c95f114e644afbe540e0f94060, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 912681512838086180, guid: 620442c95f114e644afbe540e0f94060, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 912681512838086180, guid: 620442c95f114e644afbe540e0f94060, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1589750323712136146, guid: 620442c95f114e644afbe540e0f94060, type: 3}
+      propertyPath: m_Name
+      value: NEW Enemy_MeleeEnemy
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 620442c95f114e644afbe540e0f94060, type: 3}
 --- !u!1001 &1302429407
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2551,11 +2606,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6952729120858530921, guid: fdfe6fe141c0e964780a2d5ed489c0b7, type: 3}
   m_PrefabInstance: {fileID: 533110578}
   m_PrefabAsset: {fileID: 0}
---- !u!54 &1492879073 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 4651472797793194644, guid: fdfe6fe141c0e964780a2d5ed489c0b7, type: 3}
-  m_PrefabInstance: {fileID: 533110578}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1492879076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2568,9 +2618,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3505c6ad05dd0594daa28cc1de966dda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorHelper
-  _rb: {fileID: 1492879073}
-  _ForceApply: 20
-  ColliderDoor: {fileID: 0}
 --- !u!1 &1504335954
 GameObject:
   m_ObjectHideFlags: 0
@@ -2747,9 +2794,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3505c6ad05dd0594daa28cc1de966dda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorHelper
-  _rb: {fileID: 1769970408}
-  _ForceApply: 20
-  ColliderDoor: {fileID: 0}
 --- !u!1001 &1588530778
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3270,11 +3314,6 @@ BoxCollider:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3297221255708230129, guid: fdfe6fe141c0e964780a2d5ed489c0b7, type: 3}
   m_PrefabInstance: {fileID: 533110578}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &1769970408 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 4651472797793194644, guid: fdfe6fe141c0e964780a2d5ed489c0b7, type: 3}
-  m_PrefabInstance: {fileID: 1588530778}
   m_PrefabAsset: {fileID: 0}
 --- !u!65 &1769970409 stripped
 BoxCollider:
@@ -4932,3 +4971,4 @@ SceneRoots:
   - {fileID: 1546287826}
   - {fileID: 3260946772849818123}
   - {fileID: 3807990170396208393}
+  - {fileID: 1258960354}
