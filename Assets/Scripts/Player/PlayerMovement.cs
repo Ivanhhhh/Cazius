@@ -49,10 +49,27 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _fovSpeed = 10f;
     [SerializeField] private Player_CameraRecoil _recoil;
 
-    [Header("Rig Object")]
+    [Header("Crosshair Aim Target")]
     [SerializeField] private Transform _targetObject;
-    [SerializeField] private float _maxDistance = 5f;
-    [SerializeField] private float _followSpeed = 15f;
+
+    [SerializeField] private LayerMask _aimCollisionMask;
+
+    [SerializeField] private float _maximumAimDistance = 100f;
+
+    [SerializeField] private float _fallbackAimDistance = 30f;
+
+    [SerializeField] private float _followSpeed = 25f;
+
+    [SerializeField] private float _minimumVisualAimDistance = 10f;
+
+    private Vector3 _currentAimPoint;
+
+    public Vector3 CurrentAimPoint => _currentAimPoint;
+
+    private Vector3 _visualAimPoint;
+    private Vector3 _actualAimPoint;
+
+    public Vector3 ActualAimPoint => _actualAimPoint;
 
     [Header("Visual Aim Alignment")]
     [SerializeField] private Transform _modelAimPivot;
@@ -62,6 +79,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _aimYawRotationSpeed = 12f;
 
     private Quaternion _modelAimDefaultLocalRotation;
+
+    [Header("Visual Aim Target Offset")]
+    [SerializeField] private float _aimTargetYawOffset = 5f;
+
+    [SerializeField] private float _aimTargetYawSpeed = 10f;
+
+    private float _currentAimTargetYawOffset;
 
     private Rigidbody _rb;
     private Camera _camera;
@@ -200,11 +224,7 @@ public class PlayerMovement : MonoBehaviour
         _cameraTransform.rotation *= Quaternion.Euler(_recoil.CurrentRotation);
 
         // ── 4. Rig aim target ─────────────────────────────────────────────────
-        if (_targetObject != null)
-        {
-            Vector3 targetPosition = _cameraTransform.position + _cameraTransform.forward * _maxDistance;
-            _targetObject.position = Vector3.Lerp(_targetObject.position, targetPosition, Time.deltaTime * _followSpeed);
-        }
+        UpdateAimTarget();
 
         HandleVisualAimRotation();
     }
@@ -362,5 +382,90 @@ public class PlayerMovement : MonoBehaviour
             desiredRotation,
             interpolation
         );
+    }
+
+    private void UpdateAimTarget()
+    {
+        if (_targetObject == null || _camera == null)
+            return;
+
+        Ray crosshairRay = _camera.ViewportPointToRay(
+            new Vector3(0.5f, 0.5f, 0f)
+        );
+
+        float fallbackDistance = Mathf.Max(
+            _fallbackAimDistance,
+            _minimumVisualAimDistance
+        );
+
+        Vector3 fallbackPoint =
+            crosshairRay.GetPoint(fallbackDistance);
+
+        _actualAimPoint = fallbackPoint;
+        _visualAimPoint = fallbackPoint;
+
+        if (Physics.Raycast(
+            crosshairRay,
+            out RaycastHit hit,
+            _maximumAimDistance,
+            _aimCollisionMask,
+            QueryTriggerInteraction.Ignore))
+        {
+            _actualAimPoint = hit.point;
+
+            float distanceFromPlayer =
+                Vector3.Distance(transform.position, hit.point);
+
+            if (distanceFromPlayer >= _minimumVisualAimDistance)
+            {
+                _visualAimPoint = hit.point;
+            }
+        }
+
+        float interpolation =
+            1f - Mathf.Exp(-_followSpeed * Time.deltaTime);
+
+        Vector3 adjustedVisualAimPoint =
+            ApplyVisualAimTargetOffset(_visualAimPoint);
+
+        _targetObject.position = Vector3.Lerp(
+            _targetObject.position,
+            adjustedVisualAimPoint,
+            interpolation
+        );
+    }
+
+    private Vector3 ApplyVisualAimTargetOffset(Vector3 originalAimPoint)
+    {
+        float desiredYawOffset = _isAiming
+            ? _aimTargetYawOffset
+            : 0f;
+
+        float interpolation =
+            1f - Mathf.Exp(-_aimTargetYawSpeed * Time.deltaTime);
+
+        _currentAimTargetYawOffset = Mathf.Lerp(
+            _currentAimTargetYawOffset,
+            desiredYawOffset,
+            interpolation
+        );
+
+        Vector3 rotationPivot = _modelAimPivot != null
+            ? _modelAimPivot.position
+            : transform.position;
+
+        Vector3 directionToTarget =
+            originalAimPoint - rotationPivot;
+
+        if (directionToTarget.sqrMagnitude < 0.001f)
+            return originalAimPoint;
+
+        Quaternion yawRotation = Quaternion.AngleAxis(
+            _currentAimTargetYawOffset,
+            transform.up
+        );
+
+        return rotationPivot +
+               yawRotation * directionToTarget;
     }
 }

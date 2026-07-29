@@ -1895,11 +1895,18 @@ MonoBehaviour:
   _fovSpeed: 25
   _recoil: {fileID: 8989134539119359854}
   _targetObject: {fileID: 7899945195060762092}
-  _maxDistance: 1000
+  _aimCollisionMask:
+    serializedVersion: 2
+    m_Bits: 36992
+  _maximumAimDistance: 100
+  _fallbackAimDistance: 30
   _followSpeed: 50
+  _minimumVisualAimDistance: 10
   _modelAimPivot: {fileID: 3198439039336233015}
   _aimYawOffset: 8
   _aimYawRotationSpeed: 12
+  _aimTargetYawOffset: 10
+  _aimTargetYawSpeed: 10
 --- !u!114 &3915939884766231080
 MonoBehaviour:
   m_ObjectHideFlags: 0
