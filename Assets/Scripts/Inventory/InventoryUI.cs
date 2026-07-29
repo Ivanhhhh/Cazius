@@ -9,6 +9,7 @@ public class InventoryUI : MonoBehaviour
     public Transform slotContainer;   // The GridLayoutGroup parent
     public GameObject slotPrefab;
     [SerializeField] private GameObject _questPanel;
+    [SerializeField] private bool _savePanelOpenClose = true;
 
     void OnEnable()
     {
@@ -57,7 +58,7 @@ public class InventoryUI : MonoBehaviour
     {
         panel.SetActive(false);
 
-        if (_questPanel != null)
+        if (_questPanel != null && !_savePanelOpenClose)
             _questPanel.SetActive(false);
     }
 
