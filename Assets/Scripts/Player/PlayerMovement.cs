@@ -54,6 +54,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _maxDistance = 5f;
     [SerializeField] private float _followSpeed = 15f;
 
+    [Header("Visual Aim Alignment")]
+    [SerializeField] private Transform _modelAimPivot;
+
+    [SerializeField] private float _aimYawOffset = 8f;
+
+    [SerializeField] private float _aimYawRotationSpeed = 12f;
+
+    private Quaternion _modelAimDefaultLocalRotation;
+
     private Rigidbody _rb;
     private Camera _camera;
     public PlayerControls _controls;
@@ -79,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
         _aimSpeed = _moveSpeed / 2;
         _targetRotation = _rb.rotation;
         _currentXOffset = _cameraXOffset;   // start at the configured shoulder
+        _modelAimDefaultLocalRotation = _modelAimPivot.localRotation;
     }
 
     private void Start()
@@ -195,6 +205,8 @@ public class PlayerMovement : MonoBehaviour
             Vector3 targetPosition = _cameraTransform.position + _cameraTransform.forward * _maxDistance;
             _targetObject.position = Vector3.Lerp(_targetObject.position, targetPosition, Time.deltaTime * _followSpeed);
         }
+
+        HandleVisualAimRotation();
     }
 
     void HandleLook()
@@ -329,5 +341,26 @@ public class PlayerMovement : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(pivotPosition, 0.05f);
 
+    }
+
+    private void HandleVisualAimRotation()
+    {
+        if (_modelAimPivot == null)
+            return;
+
+        float yawOffset = _isAiming ? _aimYawOffset : 0f;
+
+        Quaternion desiredRotation =
+            _modelAimDefaultLocalRotation *
+            Quaternion.Euler(0f, yawOffset, 0f);
+
+        float interpolation =
+            1f - Mathf.Exp(-_aimYawRotationSpeed * Time.deltaTime);
+
+        _modelAimPivot.localRotation = Quaternion.Slerp(
+            _modelAimPivot.localRotation,
+            desiredRotation,
+            interpolation
+        );
     }
 }
