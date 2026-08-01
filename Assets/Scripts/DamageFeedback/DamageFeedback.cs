@@ -10,6 +10,7 @@ public class DamageFeedback : MonoBehaviour
     [SerializeField] float BackAmount;
     [SerializeField] Rigidbody _rb;
     [SerializeField] VisualEffect BloodEffect;
+    [SerializeField] Animator _animator;
     private Animator _Animator;
 
     private PlayerMovement _PlayerMovement;
@@ -55,9 +56,11 @@ public class DamageFeedback : MonoBehaviour
     
     public void StopMovingMethod(params object[] parameters)
     {
-         Debug.Log("Ejecutado");
+        Debug.Log("Ejecutado");
 
-         SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.HurtedSFX);
+        _animator.SetTrigger("TakeDamage");
+
+        SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.HurtedSFX);
        
          StartCoroutine(MovingLerp());
         
