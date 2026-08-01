@@ -31,6 +31,7 @@ public class Player_Parry : MonoBehaviour
     {
         if (!_isParrying)
         {
+            Debug.Log("Parry tried");
             StartCoroutine(ParryWindow());
         }
     }
@@ -60,6 +61,7 @@ public class Player_Parry : MonoBehaviour
             Enemy_Parry scriptEnemigo = hit.GetComponent<Enemy_Parry>();
             if (scriptEnemigo != null)
             {
+                Debug.Log("parry encontrado");
                 scriptEnemigo.Execute();
             }
         }

@@ -4,23 +4,47 @@ public class Enemy_FlyingOrbitAttackBehaviour : Enemy_FlyingChasingBehaviour
 
 {
     private Enemy_OrbitEnemyData _orbitData;
+    private Enemy_OrbitEnemySecondAttackBehaviour _secondAttack;
 
-    public Enemy_FlyingOrbitAttackBehaviour(Transform transform, Rigidbody rb, Transform player, Enemy_FieldOfViewBehaviour fov, Enemy_ObstacleAvoidanceBehaviour avoidance, FlyingEnemyStatsSO stats, Enemy_OrbitEnemyData orbitData) 
+    private bool _hasAttackedOnce = false;
+
+    public Enemy_FlyingOrbitAttackBehaviour(Transform transform, Rigidbody rb, Transform player, Enemy_FieldOfViewBehaviour fov, Enemy_ObstacleAvoidanceBehaviour avoidance, FlyingEnemyStatsSO stats, Enemy_OrbitEnemyData orbitData)
         : base(transform, rb, player, fov, avoidance, stats)
     {
         _orbitData = orbitData;
+        _secondAttack = new Enemy_OrbitEnemySecondAttackBehaviour(orbitData);
+    }
+
+    public override void EnterChase()
+    {
+        base.EnterChase();
+        _hasAttackedOnce = false;
     }
 
     protected override void ExecuteAttack()
     {
         Vector3 targetCenter = _playerTransform.position + (Vector3.up * _stats.aimOffset);
-        
-        // Antes pasábamos un shootDirection, ahora le pasamos la POSICIÓN directa
-        HandleOrbitWeapon(targetCenter); 
+
+        // Primer ataque: siempre spawnea enemigos
+        if (!_hasAttackedOnce)
+        {
+            _hasAttackedOnce = true;
+            _secondAttack.SpawnEnemies();
+            return;
+        }
+
+        // De ahí en más: se gira la ruleta en cada ataque
+        if (Random.value <= _orbitData.SecondAttackChance)
+        {
+            _secondAttack.SpawnEnemies();
+        }
+        else
+        {
+            HandleOrbitWeapon(targetCenter);
+        }
     }
 
-    // 2. Modificamos el parámetro que recibe y envía
-    private void HandleOrbitWeapon(Vector3 targetPosition) 
+    private void HandleOrbitWeapon(Vector3 targetPosition)
     {
         if (_orbitData.OrbitManager == null) return;
 
@@ -29,12 +53,11 @@ public class Enemy_FlyingOrbitAttackBehaviour : Enemy_FlyingChasingBehaviour
             OrbitMovement projectile = _orbitData.OrbitManager.GetNextProjectile();
             if (projectile != null)
             {
-                // Disparamos usando la Posición exacta
-                projectile.FireAsBullet(targetPosition, _orbitData.BulletSpeed); 
+                projectile.FireAsBullet(targetPosition, _orbitData.BulletSpeed);
                 Debug.Log("¡Proyectil orbital desvinculado y disparado!");
             }
         }
-        else 
+        else
         {
             _orbitData.InvokeRequireProjectiles();
         }
