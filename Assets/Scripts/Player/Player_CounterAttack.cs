@@ -14,6 +14,7 @@ public class Player_CounterAttack : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private Animator _animator;
     private static readonly int HeadbuttTrigger = Animator.StringToHash("Headbutt");
+    [SerializeField] private ParryCounterVisuals _combatVisuals;
 
     [Header("Duración de la ejecución")]
     [Tooltip("Tiempo en segundos que dura la animación de Headbutt. Tiene que matchear la duración real del clip.")]
@@ -144,6 +145,7 @@ public class Player_CounterAttack : MonoBehaviour
         if (_animator != null)
         {
             _animator.SetTrigger(HeadbuttTrigger);
+            _combatVisuals.PlayCounterattackVisuals();
         }
         else
         {
