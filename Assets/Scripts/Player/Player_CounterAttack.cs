@@ -196,6 +196,11 @@ public class Player_CounterAttack : MonoBehaviour
 
         foreach (var hit in hits)
         {
+
+            if (hit.TryGetComponent<Enemy_MeleeEnemy_Data>(out var enemyData))
+            {
+                enemyData._isStunned = false;
+            }
             if (!hit.TryGetComponent<Enemy_Health_BodyPart>(out var bodyPart) || bodyPart.BodyPart != BodyPartType.Chest)
                 continue;
 
@@ -208,10 +213,7 @@ public class Player_CounterAttack : MonoBehaviour
                 damageable.TakeDamage(_aoeDamageAmount);
 
                 // Libera el stun de cualquier enemigo golpeado por el AOE
-                if (hit.TryGetComponent<Enemy_MeleeEnemy_Data>(out var enemyData))
-                {
-                    enemyData._isStunned = false;
-                }
+
             }
         }
     }
