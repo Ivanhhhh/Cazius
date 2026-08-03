@@ -43,7 +43,7 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
     public float SecondAttackChance => _secondAttackChance;
     public float SecondAttackCooldown => _secondAttackCooldown; // NUEVO
  
-    public IReadOnlyList<GameObject> EnemiesAlive => _enemiesAlive;
+    public List<GameObject> EnemiesAlive => _enemiesAlive;
     public bool HasEnemiesAlive => _enemiesAlive.Count > 0;
  
     // Accesos para el cerebro
