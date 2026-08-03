@@ -263,6 +263,66 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1479754430}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &207567781
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 207567783}
+  - component: {fileID: 207567782}
+  m_Layer: 0
+  m_Name: ParryCounterVisuals
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &207567782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207567781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12c6e6c90ccf8d24fbc8f7896e2bf115, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParryCounterVisuals
+  _parryEffects:
+    spawnPoint: {fileID: 0}
+    startDelay: 0
+    effectPrefabs: []
+    effectLifetime: 1
+    useActionFrame: 1
+    actionFrameTimeScale: 0.15
+    actionFrameDuration: 0.04
+  _counterattackEffects:
+    spawnPoint: {fileID: 0}
+    startDelay: 0
+    effectPrefabs: []
+    effectLifetime: 1
+    useActionFrame: 1
+    actionFrameTimeScale: 0.15
+    actionFrameDuration: 0.04
+--- !u!4 &207567783
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207567781}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10.76909, y: 1.87181, z: -5.89697}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &284268382
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5840,3 +5900,4 @@ SceneRoots:
   - {fileID: 284268382}
   - {fileID: 1170894998612374917}
   - {fileID: 1952845733}
+  - {fileID: 207567783}

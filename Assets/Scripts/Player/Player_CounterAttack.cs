@@ -14,6 +14,7 @@ public class Player_CounterAttack : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private Animator _animator;
     private static readonly int HeadbuttTrigger = Animator.StringToHash("Headbutt");
+    [SerializeField] private ParryCounterVisuals _combatVisuals;
 
     [Header("Duración de la ejecución")]
     [Tooltip("Tiempo en segundos que dura la animación de Headbutt. Tiene que matchear la duración real del clip.")]
@@ -144,6 +145,7 @@ public class Player_CounterAttack : MonoBehaviour
         if (_animator != null)
         {
             _animator.SetTrigger(HeadbuttTrigger);
+            _combatVisuals.PlayCounterattackVisuals();
         }
         else
         {
@@ -190,11 +192,19 @@ public class Player_CounterAttack : MonoBehaviour
 
         Log($"DamageAllInArea: {hits.Length} collider(s) detectado(s) en el área.");
 
+        HashSet<Enemy_Interface_Damage> alreadyDamaged = new HashSet<Enemy_Interface_Damage>();
+
         foreach (var hit in hits)
         {
+            if (!hit.TryGetComponent<Enemy_Health_BodyPart>(out var bodyPart) || bodyPart.BodyPart != BodyPartType.Chest)
+                continue;
+
             if (hit.TryGetComponent<Enemy_Interface_Damage>(out var damageable))
             {
-                Log($"Aplicando {_aoeDamageAmount} de daño a '{hit.gameObject.name}'.");
+                if (!alreadyDamaged.Add(damageable))
+                    continue; // ya le pegamos a este mismo enemigo con otro collider
+
+                Log($"Aplicando {_aoeDamageAmount} de daño a '{hit.gameObject.name}' (Chest).");
                 damageable.TakeDamage(_aoeDamageAmount);
 
                 // Libera el stun de cualquier enemigo golpeado por el AOE
@@ -205,6 +215,7 @@ public class Player_CounterAttack : MonoBehaviour
             }
         }
     }
+
     private IEnumerator ReturnRigToOne()
     {
         while (_playerRig.weight < 1f)
