@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class UIVictoryHandler : MonoBehaviour
 {
     [Header("Target Enemy Reference")]
-    [SerializeField] private Enemy_SUPERHEALTHSYSTEM _targetEnemy;
+    [SerializeField] private Enemy_HealthSystem_Base _targetEnemy;
 
     [Header("Victory UI Settings")]
     [SerializeField] private string _sceneToLoadAfterVictory = "MainMenu";
@@ -85,7 +85,7 @@ public class UIVictoryHandler : MonoBehaviour
         Cursor.visible = true;
     }
 
-    public void SetupTargetEnemy(Enemy_SUPERHEALTHSYSTEM enemy)
+    public void SetupTargetEnemy(Enemy_HealthSystem_Base enemy)
     {
         // Si ya hab�a uno, nos desuscribimos primero
         if (_targetEnemy != null) _targetEnemy.OnDeath -= HandleEnemyDeath;

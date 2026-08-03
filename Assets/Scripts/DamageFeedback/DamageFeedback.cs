@@ -29,6 +29,7 @@ public class DamageFeedback : MonoBehaviour
     void OnEnable()
     {
       EventManager.SubscribeToEvent(EventsType.Event_PausePlayer, StopMovingMethod);
+      
 
         BloodEffect.transform.position = transform.up * 9; // solo el componente, no el gameObject
     }
