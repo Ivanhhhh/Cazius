@@ -18,6 +18,7 @@ public class Player_Parry : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private Animator _animator;
     private static readonly int ParryTrigger = Animator.StringToHash("IsBlocking");
+    [SerializeField] private ParryCounterVisuals _combatVisuals;
 
     public event Action _onParryActivated;
     public event Action _onParryEnded; 
@@ -72,6 +73,7 @@ public class Player_Parry : MonoBehaviour
                 Debug.Log("parry encontrado");
                 _animator.SetTrigger("TakeDamage");
                 //aca meter particulas
+                _combatVisuals.PlayParryVisuals();
                 scriptEnemigo.Execute();
             }
         }

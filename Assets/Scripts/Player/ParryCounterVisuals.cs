@@ -25,6 +25,9 @@ public class ParryCounterVisuals : MonoBehaviour
 
         [Min(0f)]
         public float actionFrameDuration = 0.04f;
+
+        public DamageFeedback damageFeedback;
+        public CameraShake cameraShake;
     }
 
     [Header("Parry")]
@@ -98,6 +101,9 @@ public class ParryCounterVisuals : MonoBehaviour
                 settings.actionFrameDuration
             );
         }
+
+        _parryEffects.damageFeedback.ParryAttack();
+        _parryEffects.cameraShake.DamageShake();
 
         if (settings.effectLifetime > 0f)
         {

@@ -40,7 +40,7 @@ public class DamageFeedback : MonoBehaviour
     }
 
     
-    private IEnumerator MovingLerp()
+    private IEnumerator MovingLerp(float time)
     {
 
         _PlayerMovement.enabled = false;
@@ -49,7 +49,7 @@ public class DamageFeedback : MonoBehaviour
         _rb.linearVelocity = Vector3.zero;
         _rb.AddForce(-transform.forward * BackAmount, ForceMode.VelocityChange);
 
-        yield return new WaitForSeconds(TimeStop);
+        yield return new WaitForSeconds(time);
 
         _PlayerMovement.enabled = true;
     }
@@ -63,9 +63,16 @@ public class DamageFeedback : MonoBehaviour
 
         SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.HurtedSFX);
        
-         StartCoroutine(MovingLerp());
+         StartCoroutine(MovingLerp(TimeStop));
         
          BloodEffect.transform.position = transform.position;
          BloodEffect.Play();
+    }
+
+    public void ParryAttack(params object[] parameters)
+    {
+        Debug.Log("Ejecutado");
+
+        StartCoroutine(MovingLerp(0.6f));
     }
 }
