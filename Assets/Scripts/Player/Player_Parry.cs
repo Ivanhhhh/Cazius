@@ -24,12 +24,12 @@ public class Player_Parry : MonoBehaviour
 
     void OnEnable()
     {
-        GameInputManager.Instance.Controls.Player.Interact.started += MakeParry;
+        GameInputManager.Instance.Controls.Player.Parry.started += MakeParry;
     }
 
     void OnDisable()
     {
-        GameInputManager.Instance.Controls.Player.Interact.started -= MakeParry;
+        GameInputManager.Instance.Controls.Player.Parry.started -= MakeParry;
     }
 
     void MakeParry(InputAction.CallbackContext context)
@@ -71,6 +71,7 @@ public class Player_Parry : MonoBehaviour
             {
                 Debug.Log("parry encontrado");
                 _animator.SetTrigger("TakeDamage");
+                //aca meter particulas
                 scriptEnemigo.Execute();
             }
         }

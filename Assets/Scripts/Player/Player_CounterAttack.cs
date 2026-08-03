@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
 using System.Collections.Generic;
+using System.Collections;
+
 public class Player_CounterAttack : MonoBehaviour
 {
     [Header("Detection")]
@@ -21,6 +23,7 @@ public class Player_CounterAttack : MonoBehaviour
     [Header("IK / Rig")]
     [SerializeField] private Rig _playerRig;
     [SerializeField] private float _velocidadTransicionRig = 2f;
+    private Coroutine _rigReturnCoroutine;
 
     [Header("State")]
     [SerializeField] private bool _isExecuting;
@@ -77,6 +80,11 @@ public class Player_CounterAttack : MonoBehaviour
         if (_isExecuting)
         {
             // Corte instantáneo apenas arranca la ejecución
+            if (_rigReturnCoroutine != null)
+            {
+                StopCoroutine(_rigReturnCoroutine);
+                _rigReturnCoroutine = null;
+            }
             _playerRig.weight = 0f;
         }
     }
@@ -147,10 +155,17 @@ public class Player_CounterAttack : MonoBehaviour
     {
         Log($"Timer de ejecución terminado. Target actual: {(_currentTarget != null ? _currentTarget.gameObject.name : "null")}");
 
-        DamageAllInArea(); // ahora el daño se aplica al terminar la animación, no al presionar el input
+        DamageAllInArea();
 
         _isExecuting = false;
         _currentTarget = null;
+
+        // Dispara la vuelta a 1 una sola vez, acá, en la transición true -> false
+        if (_playerRig != null)
+        {
+            if (_rigReturnCoroutine != null) StopCoroutine(_rigReturnCoroutine);
+            _rigReturnCoroutine = StartCoroutine(ReturnRigToOne());
+        }
     }
 
     private void Log(string message)
@@ -189,5 +204,14 @@ public class Player_CounterAttack : MonoBehaviour
                 }
             }
         }
+    }
+    private IEnumerator ReturnRigToOne()
+    {
+        while (_playerRig.weight < 1f)
+        {
+            _playerRig.weight = Mathf.MoveTowards(_playerRig.weight, 1f, Time.deltaTime * _velocidadTransicionRig);
+            yield return null;
+        }
+        _rigReturnCoroutine = null;
     }
 }

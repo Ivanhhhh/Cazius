@@ -4,6 +4,8 @@ public class Enemy_QToParry : MonoBehaviour
 {
     [SerializeField] private Enemy_MeleeEnemy_Data _enemyData;
     [SerializeField] private GameObject _QImage;
+    [SerializeField] private Animator _animator; // corregido: Animator, no Animatio
+    private static readonly int IsStunnedParam = Animator.StringToHash("IsStunned");
 
     private Camera _mainCamera;
     private Renderer _qImageRenderer;
@@ -11,6 +13,7 @@ public class Enemy_QToParry : MonoBehaviour
     void Awake()
     {
         if (_enemyData == null) _enemyData = GetComponent<Enemy_MeleeEnemy_Data>();
+        if (_animator == null) _animator = GetComponent<Animator>();
         _mainCamera = Camera.main;
 
         if (_QImage != null) _qImageRenderer = _QImage.GetComponent<Renderer>();
@@ -35,6 +38,12 @@ public class Enemy_QToParry : MonoBehaviour
         if (_qImageRenderer.enabled && _mainCamera != null)
         {
             _QImage.transform.rotation = _mainCamera.transform.rotation;
+        }
+
+        // Sincroniza el parámetro del Animator con el estado de stun
+        if (_animator != null)
+        {
+            _animator.SetBool(IsStunnedParam, _enemyData._isStunned);
         }
     }
 }
