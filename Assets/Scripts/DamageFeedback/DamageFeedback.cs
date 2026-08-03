@@ -11,6 +11,8 @@ public class DamageFeedback : MonoBehaviour
     [SerializeField] Rigidbody _rb;
     [SerializeField] VisualEffect BloodEffect;
     [SerializeField] Animator _animator;
+    private GameInputManager _gameInputManager;
+
     private Animator _Animator;
 
     private PlayerMovement _PlayerMovement;
@@ -24,6 +26,8 @@ public class DamageFeedback : MonoBehaviour
         _PlayerMovement = GetComponent<PlayerMovement>();
 
         _Animator = GetComponent<Animator>();
+            
+        _gameInputManager = GameInputManager.Instance;
     }
 
     void OnEnable()
@@ -44,13 +48,14 @@ public class DamageFeedback : MonoBehaviour
     {
 
         _PlayerMovement.enabled = false;
+        _gameInputManager.DisablePlayerMovement();
 
                  //poner animacion;
         _rb.linearVelocity = Vector3.zero;
         _rb.AddForce(-transform.forward * BackAmount, ForceMode.VelocityChange);
 
         yield return new WaitForSeconds(time);
-
+        _gameInputManager.EnablePlayerMovement();
         _PlayerMovement.enabled = true;
     }
 
