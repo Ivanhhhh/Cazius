@@ -26,6 +26,7 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
     [SerializeField] private float _secondAttackDuration = 5f;
     [SerializeField] private float _speedBoostMultiplier = 2f;
     [SerializeField, Range(0f, 1f)] private float _secondAttackChance = 0.3f;
+    [SerializeField] private float _secondAttackCooldown = 8f; // NUEVO: tiempo mínimo entre intentos de segundo ataque
  
     // EVENTO PURO C#
     public event Action OnRequireProjectiles;
@@ -40,6 +41,7 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
     public float SecondAttackDuration => _secondAttackDuration;
     public float SpeedBoostMultiplier => _speedBoostMultiplier;
     public float SecondAttackChance => _secondAttackChance;
+    public float SecondAttackCooldown => _secondAttackCooldown; // NUEVO
  
     public IReadOnlyList<GameObject> EnemiesAlive => _enemiesAlive;
     public bool HasEnemiesAlive => _enemiesAlive.Count > 0;

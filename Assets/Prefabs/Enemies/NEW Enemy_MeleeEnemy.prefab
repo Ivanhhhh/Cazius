@@ -1,60 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1579883429852394567
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2552637922894749332}
-  - component: {fileID: 7617304693503416767}
-  m_Layer: 0
-  m_Name: HitBox
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2552637922894749332
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1579883429852394567}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.018, y: 0.063, z: 0.091}
-  m_LocalScale: {x: 2, y: 1, z: 2}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 912681512838086180}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &7617304693503416767
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1579883429852394567}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.03
-  m_Height: 1.8
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1589750323712136146
 GameObject:
   m_ObjectHideFlags: 0
@@ -66,6 +11,7 @@ GameObject:
   - component: {fileID: 912681512838086180}
   - component: {fileID: 8992226062549267390}
   - component: {fileID: 6471424217615281546}
+  - component: {fileID: 8703331862291431716}
   - component: {fileID: 6583817609841896493}
   - component: {fileID: 7856561298644488502}
   - component: {fileID: 4172276672993563538}
@@ -110,7 +56,6 @@ Transform:
   - {fileID: 3388970716064740380}
   - {fileID: 7224519753724775464}
   - {fileID: 3021722960380316014}
-  - {fileID: 2552637922894749332}
   - {fileID: 6999377732425451575}
   - {fileID: 8499254203505254891}
   m_Father: {fileID: 0}
@@ -172,6 +117,29 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &8703331862291431716
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589750323712136146}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.11
+  m_Height: 2.07
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.11, z: 0}
 --- !u!195 &6583817609841896493
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -229,7 +197,7 @@ MonoBehaviour:
   _spinTime: 4
   _objectSpeedWhileSpinning: 3
   _spinSpeed: 300
-  _stunDuration: 0
+  _stunDuration: 3
   _isStunned: 0
   _playerTransform: {fileID: 0}
   _selfObjectTransform: {fileID: 912681512838086180}
@@ -965,7 +933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2000d5cd22f0b394db9cd8acbc7a6df2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Parry
-  _enemyData: {fileID: 0}
+  _enemyData: {fileID: 7856561298644488502}
 --- !u!1 &6814700054873584148
 GameObject:
   m_ObjectHideFlags: 0

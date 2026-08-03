@@ -1771,6 +1771,8 @@ GameObject:
   - component: {fileID: 3174045011109103550}
   - component: {fileID: 5220773759243473399}
   - component: {fileID: 1459797701796833764}
+  - component: {fileID: 2201994483692894092}
+  - component: {fileID: 7065230446201761485}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -2039,11 +2041,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player_IK_modifier
   animator: {fileID: 6574353094920213590}
   brazoIK: {fileID: 0}
-  nombreEstadoObjetivo: Playerreload
-  capaAnimator: 0
+  nombreBoolAnimator: 
   velocidadTransicion: 50
-  apagarAlInstante: 0
-  momentoRetorno: 0.93
 --- !u!114 &5220773759243473399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2092,6 +2091,50 @@ MonoBehaviour:
   BloodEffect: {fileID: 4196859127346311044}
   _animator: {fileID: 6574353094920213590}
   BloodPosition: {x: 0, y: -9, z: 0}
+--- !u!114 &2201994483692894092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6030904365159062577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a9464610d0d02c44843fec67b0293a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player_Parry
+  _timeToParrying: 0.5
+  _isParrying: 0
+  _parryRadius: 1.28
+  _enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 524288
+  _detectionOrigin: {fileID: 7387972506014328012}
+  _animator: {fileID: 6574353094920213590}
+--- !u!114 &7065230446201761485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6030904365159062577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ee4bdbf1b09a244d9d31bfc2b532497, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player_CounterAttack
+  _detectionRadius: 2.14
+  _enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  _detectionOrigin: {fileID: 6189969909263246771}
+  _animator: {fileID: 6574353094920213590}
+  _executionDuration: 0.4
+  _playerRig: {fileID: 5432808516007594086}
+  _velocidadTransicionRig: 10
+  _isExecuting: 0
+  _showDebugLogs: 1
+  _aoeDamageAmount: 40
 --- !u!1 &6119423554470236197
 GameObject:
   m_ObjectHideFlags: 0
@@ -2788,74 +2831,6 @@ VFXRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
---- !u!1 &8742710645340216778
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 492516708161337260}
-  - component: {fileID: 221405417934632131}
-  - component: {fileID: 2989328621096967040}
-  m_Layer: 0
-  m_Name: ParryObject(Prototype)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &492516708161337260
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8742710645340216778}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.14490476, y: -0.68577915, z: 0.12583382, w: 0.702051}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 919.8122, y: 919.81256, z: 919.81213}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7387972506014328012}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &221405417934632131
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8742710645340216778}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2989328621096967040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8742710645340216778}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a9464610d0d02c44843fec67b0293a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Player_Parry
-  _timeToParrying: 0.5
-  _isParrying: 0
 --- !u!1 &8812747552347616685
 GameObject:
   m_ObjectHideFlags: 0
@@ -4568,9 +4543,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: f5feb311974f12e44be09233b31483a7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5702145798201336742}
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: f5feb311974f12e44be09233b31483a7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 492516708161337260}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5feb311974f12e44be09233b31483a7, type: 3}
 --- !u!4 &7387972506014328012 stripped

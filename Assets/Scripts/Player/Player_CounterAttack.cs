@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Animations.Rigging;
 using System.Collections.Generic;
 public class Player_CounterAttack : MonoBehaviour
 {
@@ -10,13 +11,25 @@ public class Player_CounterAttack : MonoBehaviour
 
     [Header("Animation")]
     [SerializeField] private Animator _animator;
-    [SerializeField] private string _executionAnimTrigger = "Execute";
+    private static readonly int HeadbuttTrigger = Animator.StringToHash("Headbutt");
+
+    [Header("Duración de la ejecución")]
+    [Tooltip("Tiempo en segundos que dura la animación de Headbutt. Tiene que matchear la duración real del clip.")]
+    [SerializeField] private float _executionDuration = 1.2f;
+    private float _executionTimer;
+
+    [Header("IK / Rig")]
+    [SerializeField] private Rig _playerRig;
+    [SerializeField] private float _velocidadTransicionRig = 2f;
 
     [Header("State")]
     [SerializeField] private bool _isExecuting;
 
     [Header("Debug")]
     [SerializeField] private bool _showDebugLogs = true;
+
+    [Header("AOE Damage")]
+    [SerializeField] private float _aoeDamageAmount;
 
     private Enemy_MeleeEnemy_Data _currentTarget;
 
@@ -32,12 +45,40 @@ public class Player_CounterAttack : MonoBehaviour
 
     void Awake()
     {
-        // chequeos de referencias faltantes apenas arranca, para no descubrirlo recién al tocar el input
         if (_animator == null)
             Debug.LogError($"[Player_CounterAttack] Falta asignar el Animator en {gameObject.name}");
 
         if (_enemyLayerMask.value == 0)
             Debug.LogWarning($"[Player_CounterAttack] _enemyLayerMask está vacío en {gameObject.name}, nunca va a detectar nada");
+    }
+
+    void Update()
+    {
+        ActualizarRig();
+        ActualizarTimerEjecucion();
+    }
+
+    private void ActualizarTimerEjecucion()
+    {
+        if (!_isExecuting) return;
+
+        _executionTimer -= Time.deltaTime;
+
+        if (_executionTimer <= 0f)
+        {
+            FinishExecution();
+        }
+    }
+
+    private void ActualizarRig()
+    {
+        if (_playerRig == null) return;
+
+        if (_isExecuting)
+        {
+            // Corte instantáneo apenas arranca la ejecución
+            _playerRig.weight = 0f;
+        }
     }
 
     private void TryCounterAttack(InputAction.CallbackContext context)
@@ -61,8 +102,6 @@ public class Player_CounterAttack : MonoBehaviour
             return;
         }
 
-        bool foundStunnedTarget = false;
-
         foreach (var hit in hits)
         {
             Enemy_MeleeEnemy_Data enemyData = hit.GetComponent<Enemy_MeleeEnemy_Data>();
@@ -77,16 +116,13 @@ public class Player_CounterAttack : MonoBehaviour
 
             if (enemyData._isStunned)
             {
-                foundStunnedTarget = true;
+                Log($"Target encontrado: {hit.gameObject.name}. Ejecutando.");
                 StartExecution(enemyData);
-                break; // ejecutamos al primero que encontramos y cortamos
+                return;
             }
         }
 
-        if (!foundStunnedTarget)
-        {
-            Log("Había enemigos en rango, pero ninguno estaba stuneado.");
-        }
+        Log("Había enemigos en rango, pero ninguno estaba stuneado.");
     }
 
     private void StartExecution(Enemy_MeleeEnemy_Data target)
@@ -95,10 +131,11 @@ public class Player_CounterAttack : MonoBehaviour
 
         _isExecuting = true;
         _currentTarget = target;
+        _executionTimer = _executionDuration;
 
         if (_animator != null)
         {
-            _animator.SetTrigger(_executionAnimTrigger);
+            _animator.SetTrigger(HeadbuttTrigger);
         }
         else
         {
@@ -106,19 +143,11 @@ public class Player_CounterAttack : MonoBehaviour
         }
     }
 
-    // llamado desde Animation Event al final del clip
-    public void OnExecutionAnimationEnd()
+    private void FinishExecution()
     {
-        Log($"Animation Event recibido: OnExecutionAnimationEnd. Target actual: {(_currentTarget != null ? _currentTarget.gameObject.name : "null")}");
+        Log($"Timer de ejecución terminado. Target actual: {(_currentTarget != null ? _currentTarget.gameObject.name : "null")}");
 
-        if (_currentTarget != null)
-        {
-            _currentTarget._isStunned = false;
-        }
-        else
-        {
-            Debug.LogWarning("[Player_CounterAttack] OnExecutionAnimationEnd llamado pero _currentTarget ya era null. ¿Se llamó dos veces el Animation Event?");
-        }
+        DamageAllInArea(); // ahora el daño se aplica al terminar la animación, no al presionar el input
 
         _isExecuting = false;
         _currentTarget = null;
@@ -137,5 +166,28 @@ public class Player_CounterAttack : MonoBehaviour
         Vector3 origin = _detectionOrigin != null ? _detectionOrigin.position : transform.position;
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(origin, _detectionRadius);
+    }
+
+    private void DamageAllInArea()
+    {
+        Vector3 origin = _detectionOrigin != null ? _detectionOrigin.position : transform.position;
+        Collider[] hits = Physics.OverlapSphere(origin, _detectionRadius, _enemyLayerMask);
+
+        Log($"DamageAllInArea: {hits.Length} collider(s) detectado(s) en el área.");
+
+        foreach (var hit in hits)
+        {
+            if (hit.TryGetComponent<Enemy_Interface_Damage>(out var damageable))
+            {
+                Log($"Aplicando {_aoeDamageAmount} de daño a '{hit.gameObject.name}'.");
+                damageable.TakeDamage(_aoeDamageAmount);
+
+                // Libera el stun de cualquier enemigo golpeado por el AOE
+                if (hit.TryGetComponent<Enemy_MeleeEnemy_Data>(out var enemyData))
+                {
+                    enemyData._isStunned = false;
+                }
+            }
+        }
     }
 }

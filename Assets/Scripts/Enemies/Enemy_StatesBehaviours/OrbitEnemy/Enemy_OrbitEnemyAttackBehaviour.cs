@@ -7,6 +7,7 @@ public class Enemy_FlyingOrbitAttackBehaviour : Enemy_FlyingChasingBehaviour
     private Enemy_OrbitEnemySecondAttackBehaviour _secondAttack;
 
     private bool _hasAttackedOnce = false;
+    private float _secondAttackReadyTime = 0f;
 
     public Enemy_FlyingOrbitAttackBehaviour(Transform transform, Rigidbody rb, Transform player, Enemy_FieldOfViewBehaviour fov, Enemy_ObstacleAvoidanceBehaviour avoidance, FlyingEnemyStatsSO stats, Enemy_OrbitEnemyData orbitData)
         : base(transform, rb, player, fov, avoidance, stats)
@@ -19,24 +20,27 @@ public class Enemy_FlyingOrbitAttackBehaviour : Enemy_FlyingChasingBehaviour
     {
         base.EnterChase();
         _hasAttackedOnce = false;
+        _secondAttackReadyTime = 0f;
     }
 
     protected override void ExecuteAttack()
     {
         Vector3 targetCenter = _playerTransform.position + (Vector3.up * _stats.aimOffset);
 
-        // Primer ataque: siempre spawnea enemigos
         if (!_hasAttackedOnce)
         {
             _hasAttackedOnce = true;
             _secondAttack.SpawnEnemies();
+            _secondAttackReadyTime = Time.time + _orbitData.SecondAttackCooldown;
             return;
         }
 
-        // De ahí en más: se gira la ruleta en cada ataque
-        if (Random.value <= _orbitData.SecondAttackChance)
+        bool canRollSecondAttack = Time.time >= _secondAttackReadyTime;
+
+        if (canRollSecondAttack && Random.value <= _orbitData.SecondAttackChance)
         {
             _secondAttack.SpawnEnemies();
+            _secondAttackReadyTime = Time.time + _orbitData.SecondAttackCooldown;
         }
         else
         {

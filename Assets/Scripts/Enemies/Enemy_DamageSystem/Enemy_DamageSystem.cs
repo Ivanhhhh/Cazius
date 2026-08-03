@@ -20,7 +20,7 @@ public class Enemy_DamageSystem : MonoBehaviour
             {
                 hitable.Hit(_damageAmount);
                 Debug.Log("aplicar daño");
-                EventManager.TriggerEvent(EventsType.Event_PausePlayer);
+                //EventManager.TriggerEvent(EventsType.Event_PausePlayer);
             }
 
             if (_destroyOnImpact)

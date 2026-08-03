@@ -15,7 +15,12 @@ public class Player_Parry : MonoBehaviour
     [SerializeField] private LayerMask _enemyLayerMask;
     [SerializeField] private Transform _detectionOrigin; // podría ser el propio transform o un punto adelante del jugador
 
+    [Header("Animation")]
+    [SerializeField] private Animator _animator;
+    private static readonly int ParryTrigger = Animator.StringToHash("IsBlocking");
+
     public event Action _onParryActivated;
+    public event Action _onParryEnded; 
 
     void OnEnable()
     {
@@ -36,10 +41,12 @@ public class Player_Parry : MonoBehaviour
         }
     }
 
+
     private IEnumerator ParryWindow()
     {
         _isParrying = true;
         _onParryActivated?.Invoke();
+        _animator.SetBool(ParryTrigger, true);
 
         float elapsed = 0f;
         while (elapsed < _timeToParrying)
@@ -50,8 +57,9 @@ public class Player_Parry : MonoBehaviour
         }
 
         _isParrying = false;
-    }
-
+        _animator.SetBool(ParryTrigger, false);
+        _onParryEnded?.Invoke(); // NUEVO
+    }  
     private void CheckForParryTargets()
     {
         Collider[] hits = Physics.OverlapSphere(_detectionOrigin.position, _parryRadius, _enemyLayerMask);
@@ -62,6 +70,7 @@ public class Player_Parry : MonoBehaviour
             if (scriptEnemigo != null)
             {
                 Debug.Log("parry encontrado");
+                _animator.SetTrigger("TakeDamage");
                 scriptEnemigo.Execute();
             }
         }

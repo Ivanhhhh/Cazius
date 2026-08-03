@@ -47,10 +47,9 @@ public class OrbitManager : MonoBehaviour
     {
         if (!_orbitingObjects.Contains(newObj))
         {
-            // ¡MAGIA!: Al entrar a la órbita, le sorteamos su ángulo de inclinación
             ApplyRandomTilt(newObj);
-            
             _orbitingObjects.Add(newObj);
+            RearrangeOrbit(); // asigna _manager y _centerPoint al nuevo, y reacomoda a todos
         }
     }
 
