@@ -16,7 +16,7 @@ public class Enemy_FlyingPatrollingBehaviour
 
     public Vector3 CurrentTarget => _currentTarget;
 
-    private Enemy_SUPERHEALTHSYSTEM _healthSystem; // Referencia al sistema de vida
+    private Enemy_HealthSystem_Base _healthSystem; // Referencia al sistema de vida
     public bool TookDamage { get; private set; } // Propiedad pública para que el State la lea
 
     public Enemy_FlyingPatrollingBehaviour(
@@ -28,7 +28,7 @@ public class Enemy_FlyingPatrollingBehaviour
         float rotationSpeed,
         float patrolAcceleration,
         float waypointTolerance,
-        Enemy_SUPERHEALTHSYSTEM healthSystem)
+        Enemy_HealthSystem_Base healthSystem)
     {
         _transform = enemyTransform;
         _rb = enemyRb;

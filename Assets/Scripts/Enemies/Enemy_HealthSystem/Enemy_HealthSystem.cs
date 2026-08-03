@@ -36,7 +36,9 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 
     public void TakeDamageFromPart(float amount, BodyPartType part)
     {
+        Debug.Log($"[Enemy_HealthSystem] TakeDamage llamado. Amount: {amount}, Vida antes: {_currentHealth}");
         _currentHealth -= amount;
+        Debug.Log($"[Enemy_HealthSystem] Vida después: {_currentHealth}");
         SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.EnemyGruntSFX, transform.position);
         OnDamaged?.Invoke(_currentHealth);
 

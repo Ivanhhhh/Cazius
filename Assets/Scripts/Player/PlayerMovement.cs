@@ -357,7 +357,6 @@ public class PlayerMovement : MonoBehaviour
             Gizmos.DrawWireSphere(desiredPosition, _sphereCollisionRadius);
         }
 
-        // Pivot
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(pivotPosition, 0.05f);
 

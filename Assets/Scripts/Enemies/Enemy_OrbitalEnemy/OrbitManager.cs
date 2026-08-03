@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+
 using System.Collections.Generic;
 public class OrbitManager : MonoBehaviour
 {
@@ -15,6 +17,10 @@ public class OrbitManager : MonoBehaviour
 
     [Header("Lista Dinámica (Solo lectura)")]
     [SerializeField] private List<OrbitMovement> _orbitingObjects = new List<OrbitMovement>(); 
+
+    [Header("Boost de velocidad de las piedras")]
+    [SerializeField] private float _originalSharedSpeed;
+    [SerializeField] private Coroutine _speedBoostCoroutine;
 
     public bool HasProjectiles => _orbitingObjects.Count > 0;
 
@@ -41,10 +47,9 @@ public class OrbitManager : MonoBehaviour
     {
         if (!_orbitingObjects.Contains(newObj))
         {
-            // ¡MAGIA!: Al entrar a la órbita, le sorteamos su ángulo de inclinación
             ApplyRandomTilt(newObj);
-            
             _orbitingObjects.Add(newObj);
+            RearrangeOrbit(); // asigna _manager y _centerPoint al nuevo, y reacomoda a todos
         }
     }
 
@@ -89,4 +94,37 @@ public class OrbitManager : MonoBehaviour
             );
         }
     }
+
+
+    public void BoostSharedSpeed(float multiplier, float duration)
+    {
+        if (_speedBoostCoroutine != null)
+            StopCoroutine(_speedBoostCoroutine);
+
+        _speedBoostCoroutine = StartCoroutine(SpeedBoostRoutine(multiplier, duration));
+    }
+
+    private IEnumerator SpeedBoostRoutine(float multiplier, float duration)
+    {
+        _originalSharedSpeed = _sharedSpeed;
+        SetSharedSpeed(_originalSharedSpeed * multiplier);
+
+        yield return new WaitForSeconds(duration);
+
+        SetSharedSpeed(_originalSharedSpeed);
+        _speedBoostCoroutine = null;
+    }
+
+    // Actualiza la velocidad sin resetear ángulo ni estado de merge
+    private void SetSharedSpeed(float newSpeed)
+    {
+        _sharedSpeed = newSpeed;
+
+        foreach (var obj in _orbitingObjects)
+        {
+            if (obj != null)
+                obj._orbitSpeed = _sharedSpeed;
+        }
+    }
+
 }
