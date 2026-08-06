@@ -54,7 +54,7 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
     [SerializeField] private bool _showVelocityRay = true;     
 
     [Header("Health System")] 
-    [SerializeField] private Enemy_SUPERHEALTHSYSTEM _healthSystem;
+    [SerializeField] private Enemy_HealthSystem_Base _healthSystem;
 
     [Header("Behaviours (Read Only)")]
     public Enemy_FlyingPatrollingBehaviour _patrolling { get; private set; }

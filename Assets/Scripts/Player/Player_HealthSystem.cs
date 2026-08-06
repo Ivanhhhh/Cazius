@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Patterns.Observer.EventManager_Delegates; // <-- esto arriba del todo
+
 
 public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
 {
@@ -29,6 +31,9 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     [SerializeField] private Image _deathFadeImage;
     [SerializeField] private float _fadeDuration = 2.0f;
     [SerializeField] private float _delayBeforeLoad = 2000.0f;
+    [Header("Parry Integration")]
+    [SerializeField] private Player_Parry _parryScript;
+    private bool _isInvulnerableByParry = false;
 
     private Coroutine _hideUICoroutine;
     [SerializeField] private CameraShake _cameraShakeScript;
@@ -36,14 +41,25 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     // --- INTEGRACIÓN CON EL INVENTARIO (OBSERVER PATTERN) ---
     private void OnEnable()
     {
-        // Nos suscribimos al evento cuando este script se activa
         InventoryInputHandler.OnInventoryToggled += HandleInventoryState;
+
+        if (_parryScript == null) _parryScript = GetComponent<Player_Parry>();
+        if (_parryScript != null)
+        {
+            _parryScript._onParryActivated += HandleParryStarted;
+            _parryScript._onParryEnded += HandleParryEnded;
+        }
     }
 
     private void OnDisable()
     {
-        // Nos desuscribimos para evitar errores de memoria si el jugador se destruye
         InventoryInputHandler.OnInventoryToggled -= HandleInventoryState;
+
+        if (_parryScript != null)
+        {
+            _parryScript._onParryActivated -= HandleParryStarted;
+            _parryScript._onParryEnded -= HandleParryEnded;
+        }
     }
 
     private void HandleInventoryState(bool isInventoryOpen)
@@ -89,6 +105,10 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
 
     public void Hit(int amount)
     {
+        if (_isInvulnerableByParry) return;
+        EventManager.TriggerEvent(EventsType.Event_PausePlayer);
+
+
         if (Time.time < _lastHitTime + _invincibilityDuration)
         {
             return;
@@ -206,6 +226,21 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
+    
+    private void HandleParryStarted()
+    {
+        _isInvulnerableByParry = true;
+    }
+
+    private void HandleParryEnded()
+    {
+        _isInvulnerableByParry = false;
+    }
+
+
+
+
+
 }
 
 public enum HealthStates

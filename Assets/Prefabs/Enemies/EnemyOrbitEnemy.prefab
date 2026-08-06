@@ -14,7 +14,10 @@ GameObject:
   - component: {fileID: 6052035504325333865}
   - component: {fileID: 7989828774317554653}
   - component: {fileID: 1086035628948181878}
-  - component: {fileID: 7407197699040580248}
+  - component: {fileID: 3597665577665271042}
+  - component: {fileID: 5573082704658427126}
+  - component: {fileID: 1869273562020226015}
+  - component: {fileID: 1173453813647744086}
   m_Layer: 0
   m_Name: EnemyOrbitEnemy
   m_TagString: Untagged
@@ -36,6 +39,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3234438715025435785}
+  - {fileID: 8136635448045868217}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5634189857298853632
@@ -89,7 +93,12 @@ MonoBehaviour:
   _flightZone: {fileID: 0}
   _flyingStats: {fileID: 11400000, guid: 64655927891179e478348dfda2e6782a, type: 2}
   _orbitManager: {fileID: 1086035628948181878}
-  _bulletSpeed: 1
+  _bulletSpeed: 10
+  _enemiesAlive: []
+  _secondAttackDuration: 3
+  _speedBoostMultiplier: 2
+  _secondAttackChance: 0.05
+  _secondAttackCooldown: 90
   _patrolSpeed: 3
   _patrollingRotationSpeed: 2
   _patrolAcceleration: 3
@@ -107,7 +116,7 @@ MonoBehaviour:
     m_Bits: 129
   _interiorSensorLength: 1.5
   _interiorAvoidanceForce: 5
-  _healthSystem: {fileID: 7407197699040580248}
+  _healthSystem: {fileID: 3597665577665271042}
 --- !u!114 &7989828774317554653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,12 +144,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OrbitManager
   _centerPoint: {fileID: 2242555410895999047}
   _sharedRadius: 5
-  _sharedSpeed: 0.3
+  _sharedSpeed: 2
   _randomizeTilt: 1
   _minTilt: {x: -45, y: 0, z: -45}
   _maxTilt: {x: 45, y: 0, z: 45}
   _orbitingObjects: []
---- !u!114 &7407197699040580248
+  _originalSharedSpeed: 0
+--- !u!114 &3597665577665271042
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,12 +159,60 @@ MonoBehaviour:
   m_GameObject: {fileID: 981654006732462316}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7ba49f19cc795145897f56bdb3bef0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 1e32dd50a799b944bbe12d02c3c970ff, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy_SUPERHEALTHSYSTEM
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_HealthSystem_Base
   _maxHealth: 200
   _currentHealth: 0
-  enemy_ShakeDamageScript: {fileID: 0}
+  _deathBehavior: 0
+  _deathDelay: 0
+--- !u!114 &5573082704658427126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981654006732462316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c038ad07d92044447a53e949566472a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_HealthSystem_Hit_VFX
+  _onDamageSFX: 13
+  _playCriticalOnHeadshot: 1
+  _criticalSFX: 2
+  _playDeathSFX: 1
+  _onDeathSFX: 13
+--- !u!114 &1869273562020226015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981654006732462316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdc0c62317312694395f0868a44cf15b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_HealthSystem_InvulnerabilityReason_Orbitenemy
+  _orbitData: {fileID: 6052035504325333865}
+  _invulnerabilityVisual: {fileID: 9218457213816270215}
+--- !u!114 &1173453813647744086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981654006732462316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49a2a05e0c2130643b991fc9d1d94a40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_OrbitEnemy_RayaSinchronizer
+  _orbitData: {fileID: 6052035504325333865}
+  _linkPrefab: {fileID: 6184047914470484035, guid: 26b47a89e4801eb4eb31890927bd3fbb, type: 3}
+  _startOffset: 0.5
+  _endOffset: 2
 --- !u!1 &7896231117780104954
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,7 +225,7 @@ GameObject:
   - component: {fileID: 2697272633727929754}
   - component: {fileID: 6858161732042375754}
   - component: {fileID: 736274526940076425}
-  - component: {fileID: 3808390674047338976}
+  - component: {fileID: 7895222948468054120}
   m_Layer: 0
   m_Name: Bodypart
   m_TagString: Untagged
@@ -269,7 +327,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3808390674047338976
+--- !u!114 &7895222948468054120
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -278,11 +336,124 @@ MonoBehaviour:
   m_GameObject: {fileID: 7896231117780104954}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b35a200b25482ee438a4662a1585cb4b, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ea7ebd47ab42b04ba93be41ab97c697, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy_SUPERHEALTH_BODYPART
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_HealthSystem_BodyPart
   _damageMultiplier: 1
   _bodyPart: 1
+  _healthSystem: {fileID: 0}
+--- !u!1 &9218457213816270215
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8136635448045868217}
+  - component: {fileID: 39086859533992713}
+  - component: {fileID: 53103536328830992}
+  - component: {fileID: 6702636838111931539}
+  m_Layer: 0
+  m_Name: Forceshield
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8136635448045868217
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9218457213816270215}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3.56593, y: 3.56593, z: 3.56593}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 2242555410895999047}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &39086859533992713
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9218457213816270215}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &53103536328830992
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9218457213816270215}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 0ea0b721a67ff5e4bad8439ef39ad0de, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &6702636838111931539
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9218457213816270215}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &5441740827946521232
 PrefabInstance:
   m_ObjectHideFlags: 0
