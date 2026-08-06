@@ -2129,6 +2129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a291a96c052dba4599ed4dd4907b6dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player_AimAndShoot
+  LengthAnim: 1.1
   _playerCamera: {fileID: 651653032407350410}
   _movement: {fileID: 7436610461006387000}
   _recoil: {fileID: 8989134539119359854}
@@ -2144,9 +2145,9 @@ MonoBehaviour:
   _shootView: {fileID: 5424936700762992262}
   _maxBullets: 6
   _minSpread: 0
-  _maxSpread: 4
+  _maxSpread: 2
   _spreadPerShot: 3
-  _maxSpreadClamp: 5
+  _maxSpreadClamp: 2
   _spreadIncreaseSpeed: 6
   _spreadDecreaseSpeed: 4
   _crossHair: {fileID: 0}
@@ -5014,7 +5015,14 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 0c3a7b0b31490b842aff2148e77a8791, type: 2}
     - target: {fileID: 2916142497743821422, guid: d0b724c195a0ce644b558f092adc3cda, type: 3}
       propertyPath: m_WarningMessage
-      value: 
+      value: "\nBinding warning: Some generic clip(s) animate transforms that are
+        already bound by a Humanoid avatar. These transforms can only be changed
+        by Humanoid clips.\n\tTransform 'QuickRigCharacter_RightHand'\n\tTransform
+        'QuickRigCharacter_RightForeArm'\n\tTransform 'QuickRigCharacter_Spine1'\n\tTransform
+        'QuickRigCharacter_Spine2'\n\tTransform 'QuickRigCharacter_Neck'\n\tTransform
+        'QuickRigCharacter_Spine'\n\tTransform 'QuickRigCharacter_RightHand'\n\tTransform
+        'QuickRigCharacter_RightForeArm'\n\tTransform 'QuickRigCharacter_Spine1'\n\tTransform
+        'QuickRigCharacter_Spine2'\n\tand more ..."
       objectReference: {fileID: 0}
     - target: {fileID: 7709843193589670610, guid: d0b724c195a0ce644b558f092adc3cda, type: 3}
       propertyPath: m_Name
