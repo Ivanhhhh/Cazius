@@ -37,6 +37,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
 
     private Coroutine _hideUICoroutine;
     [SerializeField] private CameraShake _cameraShakeScript;
+    [SerializeField] private Player_Damage playerDamageScript;
 
     // --- INTEGRACIÓN CON EL INVENTARIO (OBSERVER PATTERN) ---
     private void OnEnable()
@@ -119,6 +120,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
         _currentHealth -= amount;
         _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
         _cameraShakeScript.DamageShake();
+        playerDamageScript.TakeDamageEffect();
 
         UpdateHealthState();
         ModifyUI();
@@ -226,7 +228,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
-    
+
     private void HandleParryStarted()
     {
         _isInvulnerableByParry = true;
