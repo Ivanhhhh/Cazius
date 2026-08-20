@@ -1,9 +1,13 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
-public class ShaderLogo : MonoBehaviour
+class ShaderLogo : MonoBehaviour
 {
-    public Material _SafeLogoShader;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] Material _SafeLogoShader;
+    [SerializeField] VisualEffect _SafeLogoParticles;
+
+
+    // Start is Xcalled once before the first execution of Update after the MonoBehaviour is created
 
     void OnEnable()
     {
