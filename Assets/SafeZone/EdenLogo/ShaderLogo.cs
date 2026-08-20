@@ -26,7 +26,7 @@ class ShaderLogo : MonoBehaviour
 
     void Start()
     {
-        
+        _SafeLogoParticles.enabled = false;
     }
 
     // Update is called once per frame
@@ -38,12 +38,14 @@ class ShaderLogo : MonoBehaviour
     public void EnableLogoVisuals()
     {
         _SafeLogoShader.SetFloat("_EmissionMultiply",7f);
+        _SafeLogoParticles.enabled = true;
         print ("7SAHDER");
     }
 
      public void DisableLogoVisuals()
     {
         _SafeLogoShader.SetFloat("_EmissionMultiply",1f);
+        _SafeLogoParticles.enabled = false;
         print ("7SAHDERoff");
     }
 }
