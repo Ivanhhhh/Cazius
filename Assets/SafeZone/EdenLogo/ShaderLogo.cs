@@ -1,38 +1,40 @@
 using UnityEngine;
 using UnityEngine.VFX;
+using System.Collections;
+
 
 class ShaderLogo : MonoBehaviour
 {
-    [SerializeField] Material _SafeLogoShader;
-    [SerializeField] VisualEffect _SafeLogoParticles;
+    [SerializeField] GameObject GameObjectWShader;
+
+    [SerializeField] GameObject _GameObjectWithParticles;
 
 
-    // Start is Xcalled once before the first execution of Update after the MonoBehaviour is created
 
+     Material _SafeLogoShader;
+     VisualEffect _SafeLogoParticles;
+
+    
     void OnEnable()
     {
+        StartCoroutine(SubscribeWhenReady());
         WorldScanManager.Instance.ScanActive += EnableLogoVisuals;
         WorldScanManager.Instance.ScanDeactivate += DisableLogoVisuals;
-    }   
-
-
+    }
 
     void OnDisable()
     {
        WorldScanManager.Instance.ScanActive -= EnableLogoVisuals;
        WorldScanManager.Instance.ScanDeactivate -= DisableLogoVisuals;
-
     }
 
     void Start()
     {
-        _SafeLogoParticles.enabled = false;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+         _SafeLogoShader = GameObjectWShader.GetComponent<Renderer>().material;            
+           
+         _SafeLogoParticles = _GameObjectWithParticles.GetComponent<VisualEffect>();    
+         
+          _SafeLogoParticles.enabled = false;
     }
 
     public void EnableLogoVisuals()
@@ -44,8 +46,20 @@ class ShaderLogo : MonoBehaviour
 
      public void DisableLogoVisuals()
     {
-        _SafeLogoShader.SetFloat("_EmissionMultiply",1f);
+        _SafeLogoShader.SetFloat("_EmissionMultiply",0f);
         _SafeLogoParticles.enabled = false;
         print ("7SAHDERoff");
+    }
+
+
+    private IEnumerator SubscribeWhenReady()
+    {
+        while (WorldScanManager.Instance == null)
+            yield return null; // espera un frame y reintenta
+
+        WorldScanManager.Instance.ScanActive += EnableLogoVisuals;
+        WorldScanManager.Instance.ScanDeactivate += DisableLogoVisuals;
+
+        if (WorldScanManager.Instance != null) print ("Suscrito");
     }
 }
