@@ -115,8 +115,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294965106
-  m_fontColor: {r: 0.4481132, g: 0.9676089, b: 1, a: 1}
+    rgba: 16775026
+  m_fontColor: {r: 0.4481132, g: 0.9676089, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -191,7 +191,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7820161382702626807}
   - component: {fileID: 5928735879126276765}
-  - component: {fileID: 5049524265459616493}
   - component: {fileID: 6507342783459783219}
   m_Layer: 0
   m_Name: BulletsHologramUI
@@ -232,22 +231,6 @@ MonoBehaviour:
   _objectToFollow: {fileID: 0}
   _smoothTime: 0.03
   _rotationSpeed: 10
---- !u!114 &5049524265459616493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 279451476286882966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65649f389dfc0114f918dd2b8fb1c9fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TextWorldScan
-  _mesh:
-  - {fileID: 1467361872231432268}
-  - {fileID: 5178143007874021610}
-  lookAtCam: 0
 --- !u!114 &6507342783459783219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,7 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DiageticAmmoUIManager
   _backgroundMat: {fileID: 1467361872231432268}
   textComponent: {fileID: 8966687576042873058}
-  _fadeDuration: 1
+  _fadeDuration: 0.5
 --- !u!1 &3688442897458574530
 GameObject:
   m_ObjectHideFlags: 0

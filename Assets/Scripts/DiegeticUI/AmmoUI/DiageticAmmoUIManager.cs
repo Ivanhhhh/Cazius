@@ -82,6 +82,7 @@ public class DiageticAmmoUIManager : MonoBehaviour
 
         while (elapsed < duration)
         {
+
             elapsed += Time.deltaTime;
 
             float value = Mathf.Lerp(start,end, elapsed / duration);
