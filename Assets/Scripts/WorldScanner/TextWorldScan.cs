@@ -3,10 +3,12 @@ using System.Collections;
 
 public class TextWorldScan : MonoBehaviour
 {
-    [SerializeField] MeshRenderer _mesh;
+    [SerializeField] MeshRenderer[] _mesh;
 
     private Camera _camera;
     private bool _subscribed;
+
+    public bool lookAtCam = true;
 
     private void Awake()
     {
@@ -63,17 +65,23 @@ public class TextWorldScan : MonoBehaviour
 
     private void EnableObject()
     {
-        _mesh.enabled = true;
+        foreach (var obj in _mesh)
+        {
+            obj.enabled = true;
+        }
     }
 
     private void DisableObject()
     {
-        _mesh.enabled = false;
+        foreach (var obj in _mesh)
+        {
+            obj.enabled = false;
+        }
     }
 
     private void LateUpdate()
     {
-        if (_camera == null)
+        if (_camera == null || lookAtCam == false)
             return;
 
         Vector3 directionToCamera =
