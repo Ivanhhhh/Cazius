@@ -9,7 +9,13 @@ public class DiageticAmmoUIManager : MonoBehaviour
     [SerializeField] MeshRenderer _backgroundMat;
     [SerializeField] TMP_Text textComponent;
 
-    [SerializeField] float _fadeDuration = 1.0f;
+    [SerializeField] float _fadeDuration = 0.2f;
+
+    [SerializeField] private Material _alwaysOnTopTextMaterial;
+
+    [SerializeField] private float _hiddenVertexOffset = 0.2f;
+    [SerializeField] private float _visibleVertexOffset = 0f;
+
 
     private Coroutine _fadeCoroutine;
 

@@ -14,6 +14,14 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private Animator _playerAnimator;
 
+    [SerializeField] private Transform _interactionUIPoint;
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
+
     public void Interact(Transform interactorTransform)
     {
         if (_isOpen) return;

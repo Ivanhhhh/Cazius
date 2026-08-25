@@ -14,6 +14,16 @@ public class Key : MonoBehaviour, IEInteractable
 
     [SerializeField] private ObjectsActivator _objectsToActivate;
 
+
+    [SerializeField] private Transform _interactionUIPoint;
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
+
+
     public void Interact(Transform interactorTransform)
     {
         if (_isPurgatoryKey)
