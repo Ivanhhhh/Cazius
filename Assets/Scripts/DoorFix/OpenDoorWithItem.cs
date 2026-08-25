@@ -23,6 +23,14 @@ public class OpenDoorWithItem : MonoBehaviour, IEInteractable
         _inventory = Inventory.Instance;
     }
 
+    [SerializeField] private Transform _interactionUIPoint;
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
+
     public void Interact(Transform interactorTransform)
     {
         if (IsRunning) return;

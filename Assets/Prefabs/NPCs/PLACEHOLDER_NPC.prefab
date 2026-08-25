@@ -31,7 +31,39 @@ Transform:
   m_Children:
   - {fileID: 1234062663125935476}
   - {fileID: 2499841015107811669}
+  - {fileID: 8601896732252793923}
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1905547273567713507
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8601896732252793923}
+  m_Layer: 0
+  m_Name: UIInteractionPlace
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8601896732252793923
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1905547273567713507}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.148, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8776130559922324971}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2300900430627276236
 GameObject:
@@ -353,9 +385,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 943c3dd92f4165e40bf35545edc8465f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 664993198399504474}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 943c3dd92f4165e40bf35545edc8465f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3512742297041317391}
   m_SourcePrefab: {fileID: 100100000, guid: 943c3dd92f4165e40bf35545edc8465f, type: 3}
 --- !u!4 &1234062663125935476 stripped
 Transform:
@@ -390,19 +419,3 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0.98, z: 0}
---- !u!114 &3512742297041317391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1903780025400950734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c60cc5510f713f4a90aaf8a67b665d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NPCItemQuestGiver
-  quest: {fileID: 11400000, guid: a8ba0962e345e334da6112d4191f98a7, type: 2}
-  _interactText: F to talk
-  _wavingTrigger: Waving
-  _questPrizeItem: {fileID: 11400000, guid: 33d5c6a2c4a26c645b85e9080f8eea8c, type: 2}
