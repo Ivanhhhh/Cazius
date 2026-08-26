@@ -10,8 +10,8 @@ public class Player_AimAndShoot : MonoBehaviour
 {
     IEnumerator RechargeC;
     bool CanShoot;
-    float LengthAnim;
-    private string AnimName = "ReloadAnim";
+    [SerializeField] float LengthAnim;
+    private string AnimName = "Reload";
     [Header("References")]
     [SerializeField] private Camera _playerCamera;
     [SerializeField] private PlayerMovement _movement;
@@ -111,12 +111,12 @@ public class Player_AimAndShoot : MonoBehaviour
         flashLight.intensity = 0f;
         flashLight.range = flashRange;
 
-
+        /*
         foreach (AnimationClip clip in _playerAnimator.runtimeAnimatorController.animationClips)
         {
             if (clip.name == AnimName) LengthAnim = clip.length;
 
-        }
+        }*/
     }
 
     private void Update()
@@ -321,7 +321,7 @@ public class Player_AimAndShoot : MonoBehaviour
         CanShoot = false;
         _playerAnimator.SetTrigger("Reload");
 
-        yield return new WaitForSeconds(LengthAnim-1); //LengthAnim
+        yield return new WaitForSeconds(LengthAnim); //LengthAnim
         UpdateUI();
 
         CanShoot = true;

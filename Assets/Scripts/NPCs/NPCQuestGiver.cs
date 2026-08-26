@@ -26,6 +26,14 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
 
     private Animator _animator;
 
+    [SerializeField] private Transform _interactionUIPoint;
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();

@@ -10,6 +10,14 @@ public class InteractToPurgatory : MonoBehaviour, IEInteractable
         WorldChangeManager.Instance.SwapToPurgatory(scenesToLoad);
     }
 
+    [SerializeField] private Transform _interactionUIPoint;
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
+
     public string GetInteractText() { return _interactText; }
 
     public Transform GetTransform() { return transform; }

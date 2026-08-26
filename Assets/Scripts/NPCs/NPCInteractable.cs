@@ -8,6 +8,7 @@ public class NPCInteractable : MonoBehaviour, IEInteractable
     [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
     [SerializeField] private ItemData _itemToGive;
+    [SerializeField] private Transform _interactionUIPoint;
     private Animator _animator;
 
     private void Awake()
@@ -32,6 +33,13 @@ public class NPCInteractable : MonoBehaviour, IEInteractable
     public string GetInteractText() { return _interactText; }
 
     public Transform GetTransform() { return transform; }
+
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
 
     private void RotateTowardsPlayer(Transform interactorTransform)
     {
