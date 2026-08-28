@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
 
 [System.Serializable]
 public struct CraftingIngredient
@@ -17,8 +18,8 @@ public class CraftingButton : MonoBehaviour
 
     [Header("UI References")]
     public Button craftButton;
-    public Image buttonImage; 
-
+    public Image buttonImage;
+    public List<TextMeshProUGUI> _ingredientsAvailableTextList_;
     void Awake()
     {
         if (craftButton == null) Debug.LogError("[Crafting] ERROR: Falta asignar el craftButton en el Inspector.", gameObject);
@@ -67,31 +68,69 @@ public class CraftingButton : MonoBehaviour
         {
             Debug.Log("[Crafting] -> Faltan materiales. Botón APAGADO.");
             craftButton.interactable = false;
-            currentColor.a = 0.4f; 
+            currentColor.a = 0.1f; 
         }
 
         buttonImage.color = currentColor;
+
+        UpdateIngredientsTextList();
     }
 
+    private int GetItemCount(string itemName)
+    {
+        int totalInInventory = 0;
+
+        foreach (ItemData item in Inventory.Instance.items)
+        {
+            string currentItemName = item.name.Trim();
+            string requiredItemName = itemName.Trim();
+
+            if (currentItemName == requiredItemName)
+            {
+                totalInInventory += item.value;
+            }
+        }
+
+        return totalInInventory;
+    }
+
+    private void UpdateIngredientsTextList()
+    {
+        // Verificar que la lista de textos no esté vacía
+        if (_ingredientsAvailableTextList_ == null || _ingredientsAvailableTextList_.Count == 0)
+        {
+            Debug.LogWarning("[Crafting] No hay TextMeshProUGUI asignados en la lista ingredientsTextList.");
+            return;
+        }
+
+        // Recorrer la lista de ingredientes
+        for (int i = 0; i < ingredients.Count; i++)
+        {
+            // Verificar que exista un texto en el mismo índice
+            if (i < _ingredientsAvailableTextList_.Count && _ingredientsAvailableTextList_[i] != null)
+            {
+                // Obtener la cantidad actual en el inventario
+                int totalInInventory = GetItemCount(ingredients[i].itemName);
+                int requiredAmount = ingredients[i].requiredAmount;
+
+                // Actualizar el texto con el formato que prefieras
+                _ingredientsAvailableTextList_[i].text = $"{totalInInventory}/{requiredAmount}";
+
+                Debug.Log($"[Crafting] Texto[{i}] actualizado: {ingredients[i].itemName} = {totalInInventory}/{requiredAmount}");
+            }
+            else
+            {
+                Debug.LogWarning($"[Crafting] No hay TextMeshProUGUI asignado en el índice {i} de ingredientsTextList.");
+            }
+        }
+    }
     private bool HasAllIngredients()
     {
         Debug.Log("--- [Crafting] Iniciando chequeo de ingredientes ---");
 
         foreach (CraftingIngredient req in ingredients)
         {
-            int totalInInventory = 0;
-
-            foreach (ItemData item in Inventory.Instance.items)
-            {
-                // Agregamos un pequeño fix visual: quitamos espacios extra por si acaso
-                string currentItemName = item.name.Trim();
-                string requiredItemName = req.itemName.Trim();
-
-                if (currentItemName == requiredItemName) 
-                {
-                    totalInInventory += item.value; 
-                }
-            }
+            int totalInInventory = GetItemCount(req.itemName);
 
             Debug.Log($"[Crafting] Chequeando '{req.itemName}': Tienes {totalInInventory} / Necesitas {req.requiredAmount}");
 
