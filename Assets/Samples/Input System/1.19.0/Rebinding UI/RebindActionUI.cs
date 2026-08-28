@@ -365,9 +365,9 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
             // Configure the rebind.
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
-            .WithControlsExcluding("<Mouse>")
-            .WithControlsExcluding("Mouse/leftbutton")
-            .WithCancelingThrough("<Keyboard>/escape")
+            .WithControlsExcluding("<Mouse>")  //Modificado
+            .WithControlsExcluding("Mouse/leftbutton") //Modificado
+            .WithCancelingThrough("<Keyboard>/escape") //Modificado
             .OnCancel(
                     operation =>
                     {
@@ -626,38 +626,38 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
     
 
 
-     private bool CheckDuplicateBindings (InputAction action , int bindingIndex, bool AllCompositeParts = false)
+     private bool CheckDuplicateBindings (InputAction action , int bindingIndex, bool AllCompositeParts = false)  //Modificado
             {
-              InputBinding newBinding = action.bindings[bindingIndex];
+              InputBinding newBinding = action.bindings[bindingIndex]; //Modificado
 
-              foreach (InputBinding binding in action.actionMap.bindings)
+              foreach (InputBinding binding in action.actionMap.bindings) //Modificado
               {
-                if (binding.action == newBinding.action)
+                if (binding.action == newBinding.action) //Modificado
                 {
-                    continue;
+                    continue; //Modificado
                 }
 
-                if (binding.effectivePath == newBinding.effectivePath)
+                if (binding.effectivePath == newBinding.effectivePath) //Modificado
                 {
-                    Debug.LogError("Duplicate binding found: " + newBinding.effectivePath);
-                    return true;
+                    Debug.LogError("Duplicate binding found: " + newBinding.effectivePath); //Modificado
+                    return true; //Modificado
                 }
               }
 
-               if (AllCompositeParts)
-               {
-                  for (int f = 1; f < bindingIndex; f++)
+               if (AllCompositeParts) //Modificado
+               { 
+                  for (int f = 1; f < bindingIndex; f++)  //Modificado
                   {
-                    if (action.bindings[f].effectivePath == newBinding.overridePath)
+                    if (action.bindings[f].effectivePath == newBinding.overridePath)  //Modificado
                     {
-                        Debug.Log("Duplicate binding found: " + newBinding.effectivePath);
-                        return true;
+                        Debug.Log("Duplicate binding found: " + newBinding.effectivePath); //Modificado
+                        return true; //Modificado
                     }
                     
                   }
                }
 
-               return false;
+               return false;  //Modificado
 
             }
 
