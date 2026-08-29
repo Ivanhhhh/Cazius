@@ -670,12 +670,9 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
 
     private bool CheckDuplicateBindings(InputAction action, int bindingIndex, bool AllCompositeParts = false)
-  {    
+{
     InputBinding newBinding = action.bindings[bindingIndex];
 
-    // En vez de recorrer solo action.actionMap.bindings, recorremos
-    // todos los Action Maps del asset para comparar entre acciones
-    // que estan en mapas distintos.
     var asset = action.actionMap.asset;
     IEnumerable<InputActionMap> mapsToCheck = asset != null ? asset.actionMaps : new[] { action.actionMap };
 
@@ -683,13 +680,17 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
     {
         foreach (InputBinding binding in map.bindings)
         {
-            // Saltamos los bindings que pertenecen a la misma accion
+            // Ignoramos la propia accion que se esta reasignando
             if (binding.action == newBinding.action && map == action.actionMap)
                 continue;
 
-            if (binding.effectivePath == newBinding.effectivePath)
+            // Ignoramos bindings que siguen en su tecla original (nunca fueron reasignados)
+            if (string.IsNullOrEmpty(binding.overridePath))
+                continue;
+
+            if (binding.overridePath == newBinding.overridePath)
             {
-                Debug.LogError("Duplicate binding found: " + newBinding.effectivePath);
+                Debug.LogError("Duplicate binding found: " + newBinding.overridePath);
                 return true;
             }
         }
@@ -699,16 +700,19 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
     {
         for (int f = 1; f < bindingIndex; f++)
         {
-            if (action.bindings[f].effectivePath == newBinding.overridePath)
+            // Tambien ignoramos las partes del composite que siguen en su default
+            if (string.IsNullOrEmpty(action.bindings[f].overridePath))
+                continue;
+
+            if (action.bindings[f].overridePath == newBinding.overridePath)
             {
-                Debug.Log("Duplicate binding found: " + newBinding.effectivePath);
+                Debug.Log("Duplicate binding found: " + newBinding.overridePath);
                 return true;
             }
         }
     }
 
     return false;
-   }
-
+}
     }
 }
