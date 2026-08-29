@@ -327,6 +327,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
        
         private void PerformInteractiveRebind(InputAction action, int bindingIndex, bool allCompositeParts = false)
         {
+            action.Disable(); //Modificado
             m_RebindOperation?.Cancel(); // Will null out m_RebindOperation.
 
             // Extract enabled state to allow restoring enabled state after rebind completes
@@ -350,17 +351,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             }
 
             
-
-            // An "InvalidOperationException: Cannot rebind action x while it is enabled" will
-            // be thrown if rebinding is attempted on an action that is enabled.
-            //
-            // On top of disabling the target action while rebinding, it is recommended to
-            // disable any actions (or action maps) that could interact with the rebinding UI
-            // or gameplay - it would be undesirable for rebinding to cause the player
-            // character to jump.
-            //
-            // In this example, we explicitly disable both the UI input action map and
-            // the action map containing the target action if it was initially enabled.
             if (actionWasEnabledPriorToRebind)
                 action.actionMap.Disable();
 
@@ -378,11 +368,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                         UpdateBindingDisplay();
                         CleanUp();
                     })
-                // We want matching events to be suppressed during rebinding (this is also default).
-                //.WithMatchingEventsBeingSuppressed()
-                // Since this sample has no interactable UI during rebinding we also want to suppress non-matching events.
-                //.WithNonMatchingEventsBeingSuppressed()
-                // We want device state to update but not actions firing during rebinding.
+                
                 .WithActionEventNotificationsBeingSuppressed()
                 // We use a timeout to illustrate that its possible to skip cancel buttons and let rebind timeout.
                 .WithTimeout(m_RebindTimeout)
@@ -444,8 +430,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 UpdateRebindInfo(m_RebindStartTime);
             }
 
-            // If we have no rebind overlay and no callback but we have a binding text label,
-            // temporarily set the binding text label to "<Waiting>".
+           
             if (m_RebindOverlay == null && m_RebindText == null && m_RebindStartEvent == null && m_BindingText != null)
                 m_BindingText.text = "<Waiting...>";
 
@@ -647,7 +632,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
     
 
 
-     private bool CheckDuplicateBindings (InputAction action , int bindingIndex, bool AllCompositeParts = false)  //Modificado
+     private bool CheckDuplicateBindings2 (InputAction action , int bindingIndex, bool AllCompositeParts = false)  //Modificado
             {
               InputBinding newBinding = action.bindings[bindingIndex]; //Modificado
 
@@ -681,6 +666,49 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                return false;  //Modificado
 
             }
+
+
+
+    private bool CheckDuplicateBindings(InputAction action, int bindingIndex, bool AllCompositeParts = false)
+  {    
+    InputBinding newBinding = action.bindings[bindingIndex];
+
+    // En vez de recorrer solo action.actionMap.bindings, recorremos
+    // todos los Action Maps del asset para comparar entre acciones
+    // que estan en mapas distintos.
+    var asset = action.actionMap.asset;
+    IEnumerable<InputActionMap> mapsToCheck = asset != null ? asset.actionMaps : new[] { action.actionMap };
+
+    foreach (var map in mapsToCheck)
+    {
+        foreach (InputBinding binding in map.bindings)
+        {
+            // Saltamos los bindings que pertenecen a la misma accion
+            if (binding.action == newBinding.action && map == action.actionMap)
+                continue;
+
+            if (binding.effectivePath == newBinding.effectivePath)
+            {
+                Debug.LogError("Duplicate binding found: " + newBinding.effectivePath);
+                return true;
+            }
+        }
+    }
+
+    if (AllCompositeParts)
+    {
+        for (int f = 1; f < bindingIndex; f++)
+        {
+            if (action.bindings[f].effectivePath == newBinding.overridePath)
+            {
+                Debug.Log("Duplicate binding found: " + newBinding.effectivePath);
+                return true;
+            }
+        }
+    }
+
+    return false;
+   }
 
     }
 }
