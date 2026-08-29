@@ -346,6 +346,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 // Restore action enabled state based on state prior to rebind
                 if (actionWasEnabledPriorToRebind)
                     action.actionMap.Enable();
+                    SaveActionBinding(); //Modificado
             }
 
             
@@ -613,6 +614,26 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 m_ActionLabel.text = action != null ? action.name : string.Empty;
             }
         }
+
+        private void Start()
+        {
+            LoadActionBinding(); //Modificado
+        }
+
+        private void SaveActionBinding() //Modificado
+        { //Modificado
+            var currentBindings = actionReference.action.actionMap.SaveBindingOverridesAsJson(); //Modificado
+            PlayerPrefs.SetString(m_Action.action.name + bindingId, currentBindings); //Modificado
+        } //Modificado
+
+        private void LoadActionBinding() //Modificado
+        { //Modificado
+            var SavedBindings = PlayerPrefs.GetString(m_Action.action.name + bindingId); //Modificado
+            if (!string.IsNullOrEmpty(SavedBindings)) //Modificado
+            { //Modificado
+                actionReference.action.actionMap.LoadBindingOverridesFromJson(SavedBindings); //Modificado
+            } //Modificado
+        } //Modificado 
 
         [Serializable]
         public class UpdateBindingUIEvent : UnityEvent<RebindActionUI, string, string, string>
