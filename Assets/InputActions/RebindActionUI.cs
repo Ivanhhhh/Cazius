@@ -25,6 +25,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             set
             {
                 m_Action = value;
+                m_RuntimeAction = null; // invalida el cache si cambia la referencia
                 UpdateActionLabel();
                 UpdateBindingDisplay();
             }
@@ -175,6 +176,23 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         /// </summary>
         public InputActionRebindingExtensions.RebindingOperation ongoingRebind => m_RebindOperation;
 
+        // ---- NUEVO ----
+        // Cache de la accion RUNTIME real (la misma instancia que usa GameInputManager / PlayerMovement),
+        // resuelta de forma perezosa la primera vez que hace falta.
+        private InputAction m_RuntimeAction;
+
+        private InputAction RuntimeAction
+        {
+            get
+            {
+                if (m_RuntimeAction == null && m_Action?.action != null && GameInputManager.Instance != null)
+                    m_RuntimeAction = GameInputManager.Instance.Controls.asset.FindAction(m_Action.action.name);
+
+                return m_RuntimeAction;
+            }
+        }
+        // ---- FIN NUEVO ----
+
         /// <summary>
         /// Return the action and binding index for the binding that is targeted by the component
         /// according to the binding ID property.
@@ -184,13 +202,17 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         /// <returns>true if able to resolve, otherwise false.</returns>
         public bool ResolveActionAndBinding(out InputAction action, out int bindingIndex)
         {
-            action = m_Action?.action;
+            bindingIndex = -1;
+            action = RuntimeAction; // Modificado: usamos la accion runtime, no m_Action.action
+
+            if (action == null)
+                return false;
 
             bindingIndex = action.FindBindingById(m_BindingId);
             if (bindingIndex >= 0)
                 return true;
 
-            if (action != null && !string.IsNullOrEmpty(m_BindingId))
+            if (!string.IsNullOrEmpty(m_BindingId))
                 Debug.LogError($"Cannot find binding with ID '{m_BindingId}' on '{action}'", this);
             return false;
         }
@@ -205,7 +227,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             var controlPath = default(string);
 
             // Get display string from action.
-            var action = m_Action?.action;
+            var action = RuntimeAction; // Modificado
             if (action != null)
             {
                 var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == m_BindingId);
@@ -229,18 +251,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             if (!ResolveActionAndBinding(out var action, out var bindingIndex))
                 return;
 
-                ResetBinding(action, bindingIndex); //Modificado
+            ResetBinding(action, bindingIndex); //Modificado
 
-            //if (action.bindings[bindingIndex].isComposite)
-            //{
-                // It's a composite. Remove overrides from part bindings.
-                //for (var i = bindingIndex + 1; i < action.bindings.Count && action.bindings[i].isPartOfComposite; ++i)
-                    //action.RemoveBindingOverride(i);
-           // }
-           // else
-           // {
-               // action.RemoveBindingOverride(bindingIndex);
-            //}
             UpdateBindingDisplay();
         }
 
@@ -251,14 +263,14 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
             action.RemoveBindingOverride(bindingIndex); //Modificado
 
-            foreach(InputAction otheraction in action.actionMap.actions) //Modificado
+            foreach (InputAction otheraction in action.actionMap.actions) //Modificado
             {
                 if (otheraction == action) //Modificado
                 {
                     continue;  //Modificado
                 }
 
-                for(int i = 0; i < otheraction.bindings.Count; i++)  //Modificado
+                for (int i = 0; i < otheraction.bindings.Count; i++)  //Modificado
                 {
                     InputBinding binding = otheraction.bindings[i];  //Modificado
                     if (binding.overridePath == newBinding.path)  //Modificado
@@ -267,7 +279,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                     }
                 }
             }
-            
+
+            SaveActionBinding(); //Modificado: persistir tambien al resetear
         }
 
         /// <summary>
@@ -292,6 +305,9 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             var otherEffectivePath = otherAction.bindings[otherBindingIndex].effectivePath;
             action.ApplyBindingOverride(bindingIndex, otherEffectivePath);
             otherAction.ApplyBindingOverride(otherBindingIndex, effectivePath);
+
+            SaveActionBinding(); //Modificado
+            other.SaveActionBinding(); //Modificado
         }
 
         /// <summary>
@@ -300,10 +316,10 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         /// </summary>
         public void StartInteractiveRebind()
         {
-            m_Action.action.Disable(); //Modificado
-
             if (!ResolveActionAndBinding(out var action, out var bindingIndex))
                 return;
+
+            action.Disable(); //Modificado: deshabilitamos la accion RUNTIME correcta
 
             // If the binding is a composite, we need to rebind each part in turn.
             if (action.bindings[bindingIndex].isComposite)
@@ -318,13 +334,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             }
         }
 
-
-
-
-
-
-
-       
         private void PerformInteractiveRebind(InputAction action, int bindingIndex, bool allCompositeParts = false)
         {
             action.Disable(); //Modificado
@@ -335,7 +344,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
             void CleanUp()
             {
-                m_Action.action.Enable(); //Modificado
+                action.Enable(); //Modificado: antes decia m_Action.action.Enable() (instancia equivocada)
 
                 // Restore monitoring cancel button clicks
                 if (m_RebindCancelButton != null)
@@ -347,17 +356,16 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 // Restore action enabled state based on state prior to rebind
                 if (actionWasEnabledPriorToRebind)
                     action.actionMap.Enable();
-                    SaveActionBinding(); //Modificado
+
+                SaveActionBinding(); //Modificado
             }
 
-            
+
             if (actionWasEnabledPriorToRebind)
                 action.actionMap.Disable();
 
             // Configure the rebind.
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
-            //.WithControlsExcluding("<Mouse>")  //Modificado
-            //.WithControlsExcluding("Mouse/leftbutton") //Modificado
             .WithCancelingThrough("<Keyboard>/escape") //Modificado
             .OnCancel(
                     operation =>
@@ -368,7 +376,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                         UpdateBindingDisplay();
                         CleanUp();
                     })
-                
+
                 .WithActionEventNotificationsBeingSuppressed()
                 // We use a timeout to illustrate that its possible to skip cancel buttons and let rebind timeout.
                 .WithTimeout(m_RebindTimeout)
@@ -379,15 +387,15 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                             m_RebindOverlay.SetActive(false);
                         m_RebindStopEvent?.Invoke(this, operation);
 
+                        Debug.Log($"Rebind completo -> Accion: {action.name} | bindingIndex: {bindingIndex} | overridePath: {action.bindings[bindingIndex].overridePath}"); //Modificado
+
                         if (CheckDuplicateBindings(action, bindingIndex, allCompositeParts)) //Modificado
                         {
-                          action.RemoveBindingOverride(bindingIndex); //Modificado
-                          CleanUp();  //Modificado
-                          PerformInteractiveRebind(action, bindingIndex, allCompositeParts);  //Modificado
-                          return; //Modificado
-
+                            action.RemoveBindingOverride(bindingIndex); //Modificado
+                            CleanUp();  //Modificado
+                            PerformInteractiveRebind(action, bindingIndex, allCompositeParts);  //Modificado
+                            return; //Modificado
                         }
-
 
                         UpdateBindingDisplay();
                         CleanUp();
@@ -430,7 +438,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 UpdateRebindInfo(m_RebindStartTime);
             }
 
-           
+
             if (m_RebindOverlay == null && m_RebindText == null && m_RebindStartEvent == null && m_BindingText != null)
                 m_BindingText.text = "<Waiting...>";
 
@@ -508,7 +516,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             for (var i = 0; i < s_RebindActionUIs.Count; ++i)
             {
                 var component = s_RebindActionUIs[i];
-                var referencedAction = component.actionReference?.action;
+                var referencedAction = component.RuntimeAction;
                 if (referencedAction == null)
                     continue;
 
@@ -532,7 +540,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         [Tooltip("Text label that will receive the name of the action. Optional. Set to None to have the "
             + "rebind UI not show a label for the action.")]
         [SerializeField]
-        private TextMeshProUGUI  m_ActionLabel;
+        private TextMeshProUGUI m_ActionLabel;
 
         [Tooltip("Text label that will receive the current, formatted binding string.")]
         [SerializeField]
@@ -544,11 +552,11 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
         [Tooltip("Optional text label that will be updated with prompt for user input.")]
         [SerializeField]
-        private TextMeshProUGUI  m_RebindText;
+        private TextMeshProUGUI m_RebindText;
 
         [Tooltip("Optional text label that will be updated with relevant information during rebinding.")]
         [SerializeField]
-        private TextMeshProUGUI  m_RebindInfo;
+        private TextMeshProUGUI m_RebindInfo;
 
         [Tooltip("Optional cancellation UI button for rebinding overlay.")]
         [SerializeField]
@@ -582,14 +590,14 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
         // We want the label for the action name to update in edit mode, too, so
         // we kick that off from here.
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         protected void OnValidate()
         {
             UpdateActionLabel();
             UpdateBindingDisplay();
         }
 
-        #endif
+#endif
 
         private void UpdateActionLabel()
         {
@@ -603,22 +611,31 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         private void Start()
         {
             LoadActionBinding(); //Modificado
+            UpdateBindingDisplay();
         }
 
-        private void SaveActionBinding() //Modificado
-        { //Modificado
-            var currentBindings = actionReference.action.actionMap.SaveBindingOverridesAsJson(); //Modificado
-            PlayerPrefs.SetString(m_Action.action.name + bindingId, currentBindings); //Modificado
-        } //Modificado
+        private void SaveActionBinding()
+        {
+            var action = RuntimeAction; //Modificado
+            if (action == null || GameInputManager.Instance == null)
+                return;
 
-        private void LoadActionBinding() //Modificado
-        { //Modificado
-            var SavedBindings = PlayerPrefs.GetString(m_Action.action.name + bindingId); //Modificado
-            if (!string.IsNullOrEmpty(SavedBindings)) //Modificado
-            { //Modificado
-                actionReference.action.actionMap.LoadBindingOverridesFromJson(SavedBindings); //Modificado
-            } //Modificado
-        } //Modificado 
+            var map = action.actionMap;
+            var currentBindings = map.SaveBindingOverridesAsJson();
+            PlayerPrefs.SetString(map.name, currentBindings); // una key por Action Map, no por binding
+        }
+
+        private void LoadActionBinding()
+        {
+            var action = RuntimeAction; //Modificado
+            if (action == null || GameInputManager.Instance == null)
+                return;
+
+            var map = action.actionMap;
+            var savedBindings = PlayerPrefs.GetString(map.name);
+            if (!string.IsNullOrEmpty(savedBindings))
+                map.LoadBindingOverridesFromJson(savedBindings);
+        }
 
         [Serializable]
         public class UpdateBindingUIEvent : UnityEvent<RebindActionUI, string, string, string>
@@ -629,90 +646,51 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         public class InteractiveRebindEvent : UnityEvent<RebindActionUI, InputActionRebindingExtensions.RebindingOperation>
         {
         }
-    
 
+        private bool CheckDuplicateBindings(InputAction action, int bindingIndex, bool AllCompositeParts = false)
+        {
+            InputBinding newBinding = action.bindings[bindingIndex];
 
-     private bool CheckDuplicateBindings2 (InputAction action , int bindingIndex, bool AllCompositeParts = false)  //Modificado
+            var asset = action.actionMap.asset;
+            IEnumerable<InputActionMap> mapsToCheck = asset != null ? asset.actionMaps : new[] { action.actionMap };
+
+            foreach (var map in mapsToCheck)
             {
-              InputBinding newBinding = action.bindings[bindingIndex]; //Modificado
-
-              foreach (InputBinding binding in action.actionMap.bindings) //Modificado
-              {
-                if (binding.action == newBinding.action) //Modificado
+                foreach (InputBinding binding in map.bindings)
                 {
-                    continue; //Modificado
-                }
+                    // Ignoramos la propia accion que se esta reasignando
+                    if (binding.action == newBinding.action && map == action.actionMap)
+                        continue;
 
-                if (binding.effectivePath == newBinding.effectivePath) //Modificado
-                {
-                    Debug.LogError("Duplicate binding found: " + newBinding.effectivePath); //Modificado
-                    return true; //Modificado
-                }
-              }
+                    // Ignoramos bindings que siguen en su tecla original (nunca fueron reasignados)
+                    if (string.IsNullOrEmpty(binding.overridePath))
+                        continue;
 
-               if (AllCompositeParts) //Modificado
-               { 
-                  for (int f = 1; f < bindingIndex; f++)  //Modificado
-                  {
-                    if (action.bindings[f].effectivePath == newBinding.overridePath)  //Modificado
+                    if (binding.overridePath == newBinding.overridePath)
                     {
-                        Debug.Log("Duplicate binding found: " + newBinding.effectivePath); //Modificado
-                        return true; //Modificado
+                        Debug.LogError("Duplicate binding found: " + newBinding.overridePath);
+                        return true;
                     }
-                    
-                  }
-               }
-
-               return false;  //Modificado
-
+                }
             }
 
-
-
-    private bool CheckDuplicateBindings(InputAction action, int bindingIndex, bool AllCompositeParts = false)
-{
-    InputBinding newBinding = action.bindings[bindingIndex];
-
-    var asset = action.actionMap.asset;
-    IEnumerable<InputActionMap> mapsToCheck = asset != null ? asset.actionMaps : new[] { action.actionMap };
-
-    foreach (var map in mapsToCheck)
-    {
-        foreach (InputBinding binding in map.bindings)
-        {
-            // Ignoramos la propia accion que se esta reasignando
-            if (binding.action == newBinding.action && map == action.actionMap)
-                continue;
-
-            // Ignoramos bindings que siguen en su tecla original (nunca fueron reasignados)
-            if (string.IsNullOrEmpty(binding.overridePath))
-                continue;
-
-            if (binding.overridePath == newBinding.overridePath)
+            if (AllCompositeParts)
             {
-                Debug.LogError("Duplicate binding found: " + newBinding.overridePath);
-                return true;
+                for (int f = 1; f < bindingIndex; f++)
+                {
+                    // Tambien ignoramos las partes del composite que siguen en su default
+                    if (string.IsNullOrEmpty(action.bindings[f].overridePath))
+                        continue;
+
+                    if (action.bindings[f].overridePath == newBinding.overridePath)
+                    {
+                        Debug.Log("Duplicate binding found: " + newBinding.overridePath);
+                        return true;
+                    }
+                }
             }
+
+            return false;
         }
-    }
-
-    if (AllCompositeParts)
-    {
-        for (int f = 1; f < bindingIndex; f++)
-        {
-            // Tambien ignoramos las partes del composite que siguen en su default
-            if (string.IsNullOrEmpty(action.bindings[f].overridePath))
-                continue;
-
-            if (action.bindings[f].overridePath == newBinding.overridePath)
-            {
-                Debug.Log("Duplicate binding found: " + newBinding.overridePath);
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
     }
 }
