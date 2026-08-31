@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform _cameraTransform;
     [SerializeField] private Transform _cameraTarget;
     [SerializeField] private Animator _animator;
+    [SerializeField] private Camera playerCamera;
 
     [Header("Movement")]
     [SerializeField] public float _moveSpeed = 10f;
@@ -89,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody _rb;
     private Camera _camera;
+    public Transform CameraTransform => _cameraTransform;
     public PlayerControls _controls;
     private Quaternion _targetRotation;
     private Vector2 _moveInput;
@@ -107,6 +109,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        GameManager.Instance.RegisterPlayer(this);
         _camera = _cameraTransform.GetComponent<Camera>();
         _rb = GetComponent<Rigidbody>();
         _aimSpeed = _moveSpeed / 2;
@@ -287,7 +290,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float targetFOV = _isAiming ? _aimFOV : _normalFOV;
 
-            _animator.SetBool("IsAiming", _isAiming);
+        _animator.SetBool("IsAiming", _isAiming);
 
         _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, targetFOV, Time.deltaTime * _fovSpeed);
     }

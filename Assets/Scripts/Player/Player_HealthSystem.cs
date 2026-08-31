@@ -21,6 +21,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI _currentHealthText;
     [SerializeField] private Image _healthStateImage;
+    [SerializeField] private DiageticHealthBarUIManager _healthBarUIManager;
 
     [Header("Display Settings")]
     [SerializeField] private float _displayDuration = 2.5f;
@@ -144,6 +145,9 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
 
     private void ModifyUI()
     {
+
+        _healthBarUIManager.ChangeHealthBarPercentage(_currentHealth / _maxHealth);
+
         int colorIndex = (int)_healthState;
         Color targetColor = Color.white;
 

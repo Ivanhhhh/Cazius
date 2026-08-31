@@ -11,8 +11,6 @@ public class DiageticAmmoUIManager : MonoBehaviour
 
     [SerializeField] float _fadeDuration = 0.2f;
 
-    [SerializeField] private Material _alwaysOnTopTextMaterial;
-
     [SerializeField] private float _hiddenVertexOffset = 0.2f;
     [SerializeField] private float _visibleVertexOffset = 0f;
 
