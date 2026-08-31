@@ -692,5 +692,42 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
             return false;
         }
+
+
+                  /// <summary>
+/// Restablece TODOS los bindings de TODOS los Action Maps a su configuracion original
+/// (la que vino con el .inputactions), y borra lo guardado en PlayerPrefs para que no
+/// se vuelva a cargar el override viejo la proxima vez que arranque el juego.
+/// Engancha este metodo al OnClick de un boton "Restablecer todo" en tu UI.
+/// </summary>
+public void ResetAllBindingsToDefault()
+{
+    if (GameInputManager.Instance == null || GameInputManager.Instance.Controls == null)
+    {
+        Debug.LogWarning("No se pudo resetear: GameInputManager.Instance o Controls es null.");
+        return;
     }
+
+    var asset = GameInputManager.Instance.Controls.asset;
+
+    foreach (var map in asset.actionMaps)
+    {
+        map.RemoveAllBindingOverrides(); // saca los overrides en memoria (vuelve al binding original)
+        PlayerPrefs.DeleteKey(map.name); // borra lo guardado en disco para ese mapa
+    }
+
+    PlayerPrefs.Save();
+
+    // Refresca todas las filas de rebind de la escena para que muestren el default actualizado
+    foreach (var ui in FindObjectsByType<RebindActionUI>(FindObjectsSortMode.None))
+    {
+        ui.m_RuntimeAction = null; // invalida el cache por si acaso
+        ui.UpdateBindingDisplay();
+    }
+
+    Debug.Log("Todos los bindings fueron restablecidos a su valor original.");
+}
+    }
+
+  
 }
