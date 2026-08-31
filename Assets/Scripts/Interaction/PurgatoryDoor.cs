@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.ProBuilder.Shapes;
 
 public class PurgatoryDoor : MonoBehaviour, IEInteractable
 {
@@ -11,10 +9,16 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
 
     [Header("Open Door Anim")]
     [SerializeField] private WhenOpenDoor _whenOpenDoor;
-    [SerializeField] private PlayerMovement _playerMovement;
-    [SerializeField] private Animator _playerAnimator;
 
     [SerializeField] private Transform _interactionUIPoint;
+
+    private PlayerMovement player;
+
+    private void Start()
+    {
+        player = GameManager.Instance.Player;
+    }
+
     public Transform GetInteractionUIPoint()
     {
         return _interactionUIPoint != null
@@ -24,31 +28,42 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
 
     public void Interact(Transform interactorTransform)
     {
-        if (_isOpen) return;
+        if (_isOpen)
+            return;
 
         if (KeyInventorySystem.Instance.HasPurgatoryKey)
         {
             StartCoroutine(OpenDoor());
         }
     }
+
     public IEnumerator OpenDoor()
     {
-        _playerMovement.enabled = false;
-        _playerAnimator.speed = 0f;
+        player.enabled = false;
 
-        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.DoorPurgatory, transform.position);
+        SFXManager.Instance.PlaySFXAtPosition(
+            SFXManager.SFXCategoryType.DoorPurgatory,
+            transform.position
+        );
 
-        yield return StartCoroutine(_whenOpenDoor.WhenKeyOpenDoor("PurgatoryDoor"));
+        yield return StartCoroutine(
+            _whenOpenDoor.WhenKeyOpenDoor("PurgatoryDoor")
+        );
 
         transform.Rotate(0, _openAngle, 0);
+
         _isOpen = true;
 
-        _playerMovement.enabled = true;
-        _playerAnimator.speed = 1f;
+        player.enabled = true;
     }
 
-    public string GetInteractText() { return _interactText; }
+    public string GetInteractText()
+    {
+        return _interactText;
+    }
 
-    public Transform GetTransform() { return transform; }
-
+    public Transform GetTransform()
+    {
+        return transform;
+    }
 }

@@ -2869,6 +2869,7 @@ MonoBehaviour:
   _invincibilityDuration: 1.5
   _currentHealthText: {fileID: 0}
   _healthStateImage: {fileID: 0}
+  _healthBarUIManager: {fileID: 6403262184576979430}
   _displayDuration: 2.5
   _sceneToLoadAfterDeath: MainMenu
   _deathPanel: {fileID: 0}
@@ -6061,6 +6062,103 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -3153535790306996272, guid: f57cb6b7dbe7c2e40a63c922a77f1799, type: 3}
   m_PrefabInstance: {fileID: 3145333835517444815}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3209954794125754640
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 147724339557688749}
+    m_Modifications:
+    - target: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.0076271975
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.004778837
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.048889082
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.94898325
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.09366846
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.29816818
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.041865833
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -8.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 35.491
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -7.87
+      objectReference: {fileID: 0}
+    - target: {fileID: 7307529664755536616, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: m_Name
+      value: HealthBarDiegetic
+      objectReference: {fileID: 0}
+    - target: {fileID: 8381473678068191478, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: _takeDamageFadeDur
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8381473678068191478, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: _hiddenVertexOffset
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8381473678068191478, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+      propertyPath: _takeDamageVertexOffset
+      value: 0.8
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+--- !u!4 &948172649051041526 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2424232790531780582, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+  m_PrefabInstance: {fileID: 3209954794125754640}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6403262184576979430 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8381473678068191478, guid: a08d4eddf5fed8546acd9a80d01cbba4, type: 3}
+  m_PrefabInstance: {fileID: 3209954794125754640}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 132349824c627d547a836230708bd899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DiageticHealthBarUIManager
 --- !u!1001 &4796906059827708410
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6299,9 +6397,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -1.224
       objectReference: {fileID: 0}
+    - target: {fileID: 8966687576042873058, guid: 46ec2e3c091721d4fb299b52062ddbf8, type: 3}
+      propertyPath: m_fontColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966687576042873058, guid: 46ec2e3c091721d4fb299b52062ddbf8, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294965106
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7820161382702626807, guid: 46ec2e3c091721d4fb299b52062ddbf8, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 948172649051041526}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46ec2e3c091721d4fb299b52062ddbf8, type: 3}
 --- !u!4 &147724339557688749 stripped

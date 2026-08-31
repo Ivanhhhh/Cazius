@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class NPCQuestGiver : MonoBehaviour, IEInteractable
@@ -77,12 +78,19 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     public string GetInteractText() { return _interactText; }
     public Transform GetTransform() { return transform; }
 
+    // --- Localization helper ---
+
+    private string[] Translate(string[] ids)
+    {
+        return ids.Select(id => LocalizationManager.Instance.GetTranslate(id)).ToArray();
+    }
+
     // --- Dialog openers ---
 
     private void OpenOfferDialog()
     {
         DialogUIController.Instance.OpenDialog(
-            pages: quest.offerDialog,
+            pages: Translate(quest.offerDialog),
             onAccept: () => QuestManager.Instance.StartQuest(quest.questID),
             onClose: null
         );
@@ -91,7 +99,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     private void OpenActiveDialog()
     {
         DialogUIController.Instance.OpenDialog(
-            pages: quest.activeDialog,
+            pages: Translate(quest.activeDialog),
             onAccept: null,
             onClose: null
         );
@@ -113,7 +121,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     private void OpenFirstCompletionDialog()
     {
         DialogUIController.Instance.OpenDialog(
-            pages: quest.firstCompletionDialog,
+            pages: Translate(quest.firstCompletionDialog),
             onAccept: null,
             onClose: () =>
             {
@@ -131,7 +139,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     private void OpenCompletedDialog()
     {
         DialogUIController.Instance.OpenDialog(
-            pages: quest.completedDialog,
+            pages: Translate(quest.completedDialog),
             onAccept: null,
             onClose: null
         );
