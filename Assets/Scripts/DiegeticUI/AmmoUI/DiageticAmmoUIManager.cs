@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class DiageticAmmoUIManager : MonoBehaviour
 {
 
     [SerializeField] MeshRenderer _backgroundMat;
-    [SerializeField] TMP_Text textComponent;
+    [SerializeField] TMP_Text[] textComponent;
 
     [SerializeField] float _fadeDuration = 0.2f;
 
@@ -90,12 +91,18 @@ public class DiageticAmmoUIManager : MonoBehaviour
             elapsed += Time.deltaTime;
 
             float value = Mathf.Lerp(start,end, elapsed / duration);
-            textComponent.alpha = value;
+            foreach (TMP_Text txtComp in textComponent)
+            {
+                txtComp.alpha = value;
+            }
 
             yield return null;
         }
 
-        textComponent.alpha = end;
+        foreach (TMP_Text txtComp in textComponent)
+        {
+            txtComp.alpha = end;
+        }
 
         yield return null;
     }

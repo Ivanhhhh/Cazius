@@ -6,6 +6,7 @@ using System.Collections;
 public class InventoryInputHandler : MonoBehaviour
 {
 
+
     [SerializeField] private GameObject _inventoryCanvas;
     [SerializeField] private InventoryFadeController _fadeController;
 
@@ -21,18 +22,17 @@ public class InventoryInputHandler : MonoBehaviour
 
     [SerializeField] private AnimationCurve _cameraCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
-    [SerializeField] private Player_AimAndShoot _cameraLookController;
+    [SerializeField] private PlayerMovement _cameraLookController;
 
     public static event Action<bool> OnInventoryToggled;
+    public static event Action<bool> OnInventoryVisibilityChanged;
 
     private bool _inventoryOpen;
     private bool _transitioning;
 
-    private void Awake()
-    {
-        _normalCameraPosition = _cameraParent.localPosition;
-        _normalCameraRotation = _cameraParent.localRotation;
-    }
+    private Vector3 _cameraPositionBeforeInventory;
+    private Quaternion _cameraRotationBeforeInventory;
+
 
     void Start() => GameInputManager.Instance.Controls.UI.InventoryMenu.performed += OnInventory;
 
@@ -76,11 +76,18 @@ public class InventoryInputHandler : MonoBehaviour
     {
         _transitioning = true;
 
+        _cameraPositionBeforeInventory = _cameraParent.localPosition;
+        _cameraRotationBeforeInventory = _cameraParent.localRotation;
+
+        OnInventoryVisibilityChanged?.Invoke(true);
+
+        if (WorldScanManager.Instance != null)
+            WorldScanManager.Instance.SetInventoryActive(true);
+
         if (_cameraLookController != null)
-            _cameraLookController.enabled = false;
+            _cameraLookController.BeginInventoryCamera();
 
         _inventoryCanvas.SetActive(true);
-
         _fadeController.SetFade(0f);
 
         yield return StartCoroutine(TransitionCamera(true));
@@ -99,12 +106,17 @@ public class InventoryInputHandler : MonoBehaviour
 
         PauseManager.Instance.Toggle();
 
+        OnInventoryVisibilityChanged?.Invoke(false);
+
         yield return StartCoroutine(TransitionCamera(false));
 
         _inventoryCanvas.SetActive(false);
 
         if (_cameraLookController != null)
-            _cameraLookController.enabled = true;
+            _cameraLookController.EndInventoryCamera();
+
+        if (WorldScanManager.Instance != null)
+            WorldScanManager.Instance.SetInventoryActive(false);
 
         _inventoryOpen = false;
         _transitioning = false;
@@ -122,14 +134,14 @@ public class InventoryInputHandler : MonoBehaviour
 
         if (opening)
         {
-            targetPosition = _normalCameraPosition + _inventoryPositionOffset;
+            targetPosition = _cameraPositionBeforeInventory + _inventoryPositionOffset;
 
-            targetRotation = _normalCameraRotation * Quaternion.Euler(_inventoryRotationOffset);
+            targetRotation = _cameraRotationBeforeInventory * Quaternion.Euler(_inventoryRotationOffset);
         }
         else
         {
-            targetPosition = _normalCameraPosition;
-            targetRotation = _normalCameraRotation;
+            targetPosition = _cameraPositionBeforeInventory;
+            targetRotation = _cameraRotationBeforeInventory;
         }
 
         float elapsed = 0f;
@@ -145,6 +157,11 @@ public class InventoryInputHandler : MonoBehaviour
             _cameraParent.localPosition = Vector3.Lerp(startPosition, targetPosition, curvedT);
 
             _cameraParent.localRotation = Quaternion.Slerp(startRotation, targetRotation, curvedT);
+
+            if (opening && _cameraLookController != null)
+            {
+                _cameraLookController.SetInventoryCameraBlend(curvedT);
+            }
 
             float fade = opening ? Mathf.Lerp(0f, 1f, curvedT) : Mathf.Lerp(1f, 0f, curvedT);
 
