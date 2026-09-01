@@ -15,12 +15,17 @@ public class DiageticAmmoUIManager : MonoBehaviour
     [SerializeField] private float _hiddenVertexOffset = 0.2f;
     [SerializeField] private float _visibleVertexOffset = 0f;
 
+    private bool _scanWantsVisible;
+    private bool _inventoryWantsVisible;
+    private bool _currentlyVisible;
 
     private Coroutine _fadeCoroutine;
 
     private bool _subscribed;
     private void OnEnable()
     {
+        InventoryInputHandler.OnInventoryVisibilityChanged += OnInventoryVisibilityChanged;
+
         StartCoroutine(SubscribeWhenReady());
     }
 
@@ -31,24 +36,70 @@ public class DiageticAmmoUIManager : MonoBehaviour
             yield return null;
         }
 
-        WorldScanManager.Instance.ScanActive += EnableObject;
-        WorldScanManager.Instance.ScanDeactivate += DisableObject;
+        WorldScanManager.Instance.ScanActive += OnScanActive;
+        WorldScanManager.Instance.ScanDeactivate += OnScanDeactivate;
+
+        _scanWantsVisible =
+            WorldScanManager.Instance.IsScanActive;
 
         _subscribed = true;
+
+        RefreshVisibility();
     }
 
     private void OnDisable()
     {
+        InventoryInputHandler.OnInventoryVisibilityChanged -= OnInventoryVisibilityChanged;
+
         if (!_subscribed)
             return;
 
         if (WorldScanManager.Instance != null)
         {
-            WorldScanManager.Instance.ScanActive -= EnableObject;
-            WorldScanManager.Instance.ScanDeactivate -= DisableObject;
+            WorldScanManager.Instance.ScanActive -= OnScanActive;
+
+            WorldScanManager.Instance.ScanDeactivate -= OnScanDeactivate;
         }
 
         _subscribed = false;
+    }
+
+    private void OnScanActive()
+    {
+        _scanWantsVisible = true;
+
+        RefreshVisibility();
+    }
+
+    private void OnScanDeactivate()
+    {
+        _scanWantsVisible = false;
+
+        RefreshVisibility();
+    }
+
+    private void OnInventoryVisibilityChanged(bool visible)
+    {
+        _inventoryWantsVisible = visible;
+
+        RefreshVisibility();
+    }
+
+    private void RefreshVisibility()
+    {
+        bool shouldBeVisible =
+            _scanWantsVisible ||
+            _inventoryWantsVisible;
+
+        if (shouldBeVisible == _currentlyVisible)
+            return;
+
+        _currentlyVisible = shouldBeVisible;
+
+        if (shouldBeVisible)
+            EnableObject();
+        else
+            DisableObject();
     }
 
     private void EnableObject()
@@ -72,7 +123,7 @@ public class DiageticAmmoUIManager : MonoBehaviour
 
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             float value = Mathf.Lerp(start, end, elapsed / duration);
             mat.material.SetFloat(property, value);
             yield return null;
@@ -88,7 +139,7 @@ public class DiageticAmmoUIManager : MonoBehaviour
         while (elapsed < duration)
         {
 
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
 
             float value = Mathf.Lerp(start,end, elapsed / duration);
             foreach (TMP_Text txtComp in textComponent)

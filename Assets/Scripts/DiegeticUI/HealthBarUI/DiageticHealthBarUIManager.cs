@@ -15,10 +15,16 @@ public class DiageticHealthBarUIManager : MonoBehaviour
     [SerializeField] float _takeDamageVertexOffset = 0.3f;
     private float _oldPercentage = 1.0f;
 
+    private bool _scanWantsVisible;
+    private bool _inventoryWantsVisible;
+    private bool _currentlyVisible;
+
 
     private bool _subscribed;
     private void OnEnable()
     {
+        InventoryInputHandler.OnInventoryVisibilityChanged += OnInventoryVisibilityChanged;
+
         StartCoroutine(SubscribeWhenReady());
     }
 
@@ -29,26 +35,72 @@ public class DiageticHealthBarUIManager : MonoBehaviour
             yield return null;
         }
 
-        WorldScanManager.Instance.ScanActive += EnableObject;
-        WorldScanManager.Instance.ScanDeactivate += DisableObject;
+        WorldScanManager.Instance.ScanActive += OnScanActive;
+        WorldScanManager.Instance.ScanDeactivate += OnScanDeactivate;
+
+        _scanWantsVisible =
+            WorldScanManager.Instance.IsScanActive;
 
         _subscribed = true;
+
+        RefreshVisibility();
     }
 
     private void OnDisable()
     {
+        InventoryInputHandler.OnInventoryVisibilityChanged -= OnInventoryVisibilityChanged;
+
         if (!_subscribed)
             return;
 
         if (WorldScanManager.Instance != null)
         {
-            WorldScanManager.Instance.ScanActive -= EnableObject;
-            WorldScanManager.Instance.ScanDeactivate -= DisableObject;
+            WorldScanManager.Instance.ScanActive -= OnScanActive;
+
+            WorldScanManager.Instance.ScanDeactivate -= OnScanDeactivate;
         }
 
         _subscribed = false;
     }
 
+
+    private void OnScanActive()
+    {
+        _scanWantsVisible = true;
+
+        RefreshVisibility();
+    }
+
+    private void OnScanDeactivate()
+    {
+        _scanWantsVisible = false;
+
+        RefreshVisibility();
+    }
+
+    private void OnInventoryVisibilityChanged(bool visible)
+    {
+        _inventoryWantsVisible = visible;
+
+        RefreshVisibility();
+    }
+
+    private void RefreshVisibility()
+    {
+        bool shouldBeVisible =
+            _scanWantsVisible ||
+            _inventoryWantsVisible;
+
+        if (shouldBeVisible == _currentlyVisible)
+            return;
+
+        _currentlyVisible = shouldBeVisible;
+
+        if (shouldBeVisible)
+            EnableObject();
+        else
+            DisableObject();
+    }
     private void EnableObject()
     {
         StartCoroutine(FadeShader(_material, "_OpacityMult", 0f, 1f, _fadeDuration));
@@ -83,7 +135,7 @@ public class DiageticHealthBarUIManager : MonoBehaviour
 
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             float value = Mathf.Lerp(start, end, elapsed / duration);
             mat.material.SetFloat(property, value);
             yield return null;
