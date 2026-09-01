@@ -11,6 +11,7 @@ public class UIMainMenu : MonoBehaviour
     [Header("Sub Panels")]
     [SerializeField] private GameObject _controlsPanel;
     [SerializeField] private GameObject _soundPanel;
+    [SerializeField] private GameObject _languagePanel;
 
     [Header("Main Panel - Buttons")]
     [SerializeField] private string _startGameScene = "LoadToGameFromMenu";
@@ -21,6 +22,7 @@ public class UIMainMenu : MonoBehaviour
     [Header("Options Panel - Buttons")]
     [SerializeField] private Button _controlsButton;
     [SerializeField] private Button _soundConfigButton;
+    [SerializeField] private Button _languageButton;
     [SerializeField] private Button _backToMainButton;
 
     private GameObject _currentPanel;
@@ -36,6 +38,7 @@ public class UIMainMenu : MonoBehaviour
         // Options panel listeners
         _controlsButton.onClick.AddListener(OnOpenControls);
         _soundConfigButton.onClick.AddListener(OnOpenSoundConfig);
+        _languageButton.onClick.AddListener(OnOpenLanguage);
         _backToMainButton.onClick.AddListener(OnBackToMain);
 
         // Start on main panel
@@ -87,6 +90,7 @@ public class UIMainMenu : MonoBehaviour
     // Options Panel Handlers
     private void OnOpenControls() => ShowSubPanel(_controlsPanel);
     private void OnOpenSoundConfig() => ShowSubPanel(_soundPanel);
+    private void OnOpenLanguage() => ShowSubPanel(_languagePanel);
     private void OnBackToMain() => ShowPanel(_mainPanel);
 
 }
