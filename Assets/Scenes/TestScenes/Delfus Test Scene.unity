@@ -330,7 +330,7 @@ GameObject:
   - component: {fileID: 160876303}
   - component: {fileID: 160876302}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -638,7 +638,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!135 &2084048745
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -740,9 +740,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3551400110651172152, guid: 453dd28abcc932f4a9c6d00a1411354d, type: 3}
-      propertyPath: _flightZone
-      value: 
+    - target: {fileID: 3908467240159419038, guid: 453dd28abcc932f4a9c6d00a1411354d, type: 3}
+      propertyPath: m_Range
+      value: 233.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3908467240159419038, guid: 453dd28abcc932f4a9c6d00a1411354d, type: 3}
+      propertyPath: m_Intensity
+      value: 175.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3908467240159419038, guid: 453dd28abcc932f4a9c6d00a1411354d, type: 3}
+      propertyPath: m_SpotAngle
+      value: 179
+      objectReference: {fileID: 0}
+    - target: {fileID: 3908467240159419038, guid: 453dd28abcc932f4a9c6d00a1411354d, type: 3}
+      propertyPath: m_InnerSpotAngle
+      value: 115.00004
       objectReference: {fileID: 0}
     - target: {fileID: 4628032032835187159, guid: 453dd28abcc932f4a9c6d00a1411354d, type: 3}
       propertyPath: m_LocalScale.x
