@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 
 public class ButtonsBehaviours : MonoBehaviour
 {
+    [SerializeField] GameObject RebindPanel;
+
     [SerializeField] PauseInputHandler _PauseInputHandler;
 
     [SerializeField] Canvas _OptionsMenu;
@@ -14,6 +17,11 @@ public class ButtonsBehaviours : MonoBehaviour
 
     [SerializeField] Button _QuitGameButton;
 
+    [SerializeField] Button _RebindButton;
+
+    private bool TogglePanelRebind = false;
+
+    private byte OpenedAmount = 0;
 
 
     void Start()
@@ -21,6 +29,8 @@ public class ButtonsBehaviours : MonoBehaviour
         _ResumeButton.onClick.AddListener(ResumeGame);
         _OptionsButton.onClick.AddListener(OptionsMenu);
         _QuitGameButton.onClick.AddListener(ShowConfirmationPopup);
+        _RebindButton.onClick.AddListener(RebindPanelMethod);
+
     }
 
     void Update()
@@ -28,11 +38,21 @@ public class ButtonsBehaviours : MonoBehaviour
         //_ResumeButton.onClick.AddListener(ResumeGame);
         //_OptionsButton.onClick.AddListener(OptionsMenu);
         //_QuitGameButton.onClick.AddListener(QuitGame);
+
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            OpenedAmount = 2;
+           RebindPanel.SetActive(false);
+            OpenedAmount = 0;
+
+        }
     }
 
     public void ResumeGame()
     {
         _PauseInputHandler.OnPause(default);
+        OpenedAmount = 0;
+        RebindPanel.SetActive(false);
     }
 
     public void OptionsMenu()
@@ -65,5 +85,25 @@ public class ButtonsBehaviours : MonoBehaviour
 #else
             Application.Quit();
 #endif
+    }
+
+    public void RebindPanelMethod()
+    {
+         Debug.Log(OpenedAmount);
+        OpenedAmount += 1;
+
+        if (OpenedAmount <= 1) TogglePanelRebind = true;
+
+        
+
+        if (OpenedAmount >= 2)
+        {
+            TogglePanelRebind = false;
+            OpenedAmount = 0;
+        }
+        if (TogglePanelRebind) RebindPanel.SetActive(true);
+
+        else if (TogglePanelRebind != true) RebindPanel.SetActive(false);
+        print ("Ejecutado");
     }
 }

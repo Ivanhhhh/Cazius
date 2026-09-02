@@ -14,8 +14,8 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
     [SerializeField] private FlyingEnemyStatsSO _flyingStats; // <--- El SO
 
     [Header("Projectile Settings")]
-    [SerializeField] private GameObject _projectilePrefab; 
-    [SerializeField] private Transform _muzzlePoint;       
+    [SerializeField] private GameObject _projectilePrefab;
+    [SerializeField] private Transform _muzzlePoint;
     [SerializeField] private float _projectileSpeed = 20f;
 
     [Header("Attack Warning VFX")]
@@ -32,28 +32,28 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
 
     [Header("Field of View Variables")]
     [SerializeField] private float _radiusVision = 15f;
-    [Range(0, 360)] [SerializeField] private float _horizontalAngleVision = 90f;
-    [Range(0, 360)] [SerializeField] private float _verticalAngleVision = 180f; 
+    [Range(0, 360)][SerializeField] private float _horizontalAngleVision = 90f;
+    [Range(0, 360)][SerializeField] private float _verticalAngleVision = 180f;
     [SerializeField] private LayerMask _lineOfSightLayerMask;
 
     [Header("Obstacle Avoidance Variables")]
     [SerializeField] private float _sensorLength = 4f;
     [SerializeField] private float _avoidanceForce = 15f;
     [SerializeField] private LayerMask _obstacleMask;
-    
+
     [Header("Obstacle Avoidance - Interior Mode")]
     [SerializeField] private float _interiorSensorLength = 1.5f;
     [SerializeField] private float _interiorAvoidanceForce = 5f;
 
     [Header("Visual Debugging (Rays)")]
-    [SerializeField] private bool _showTargetingRay = true;     
-    [SerializeField] private bool _showWanderRay = true;        
-    [SerializeField] private bool _showIdealMovementRay = true; 
-    [SerializeField] private bool _showAvoidanceRay = true;     
+    [SerializeField] private bool _showTargetingRay = true;
+    [SerializeField] private bool _showWanderRay = true;
+    [SerializeField] private bool _showIdealMovementRay = true;
+    [SerializeField] private bool _showAvoidanceRay = true;
     [SerializeField] private bool _showFinalDirectionRay = true;
-    [SerializeField] private bool _showVelocityRay = true;     
+    [SerializeField] private bool _showVelocityRay = true;
 
-    [Header("Health System")] 
+    [Header("Health System")]
     [SerializeField] private Enemy_HealthSystem_Base _healthSystem;
 
     [Header("Behaviours (Read Only)")]
@@ -65,9 +65,9 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _rb.useGravity = false; 
-        _rb.isKinematic = false; 
-        _rb.constraints = RigidbodyConstraints.FreezeRotation; 
+        _rb.useGravity = false;
+        _rb.isKinematic = false;
+        _rb.constraints = RigidbodyConstraints.FreezeRotation;
         _rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
         StartCoroutine(WaitForPlayer());
@@ -92,10 +92,10 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
     {
         _fieldOfView = new Enemy_FieldOfViewBehaviour(_playerTransform, _radiusVision, _objectTransform, _horizontalAngleVision, _verticalAngleVision, _lineOfSightLayerMask, _flyingStats.aimOffset);
         _obstacleBehaviour = new Enemy_ObstacleAvoidanceBehaviour(_objectTransform, _sensorLength, _avoidanceForce, _obstacleMask, _interiorSensorLength, _interiorAvoidanceForce);
-        
-        _patrolling = new Enemy_FlyingPatrollingBehaviour(_objectTransform, _rb, _flightZone, _obstacleBehaviour, 
+
+        _patrolling = new Enemy_FlyingPatrollingBehaviour(_objectTransform, _rb, _flightZone, _obstacleBehaviour,
         _patrolSpeed, _patrollingRotationSpeed, _patrolAcceleration, _waypointTolerance, _healthSystem);
-        
+
         // Inyectamos "this" al final para que el comportamiento tenga acceso a instanciar proyectiles
         _chasing = new Enemy_FlyingCasterAttackBehaviour(_objectTransform, _rb, _playerTransform, _fieldOfView, _obstacleBehaviour, _flyingStats, this);
     }
@@ -110,6 +110,8 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
             Debug.LogWarning("Falta asignar el Prefab del Proyectil en el Inspector.");
             return;
         }
+
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.ScannerSFX, transform.position);
 
         // Si asignaste un cañón, el disparo sale de ahí; si no, sale del centro del enemigo
         Vector3 spawnPosition = (_muzzlePoint != null) ? _muzzlePoint.position : _objectTransform.position;

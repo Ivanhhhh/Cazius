@@ -34,6 +34,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _minPitch = -40f;
     [SerializeField] private float _maxPitch = 40f;
     [SerializeField] private float _cameraVerticalTilt = 0.3f;
+    private bool _inventoryCameraLocked;
+    private float _pitchBeforeInventory;
+
+    [SerializeField] private float _inventoryPitch = 0f;
 
     [Header("Camera Target Dynamic")]
     [SerializeField] private float _minTargetY = 0.2f;
@@ -234,20 +238,46 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleLook()
     {
+        if (_inventoryCameraLocked)
+            return;
+
         float mouseX = _lookInput.x * _mouseSensitivityX;
         float mouseY = _lookInput.y * _mouseSensitivityY;
 
         _yaw += mouseX;
 
         _cameraPitch -= mouseY;
-        _cameraPitch = Mathf.Clamp(_cameraPitch, _minPitch, _maxPitch);
-        _cameraTarget.localRotation = Quaternion.Euler(_cameraPitch, 0f, 0f);
 
-        float pitchT = Mathf.InverseLerp(_minPitch, _maxPitch, _cameraPitch);
-        float dynamicTargetY = Mathf.Lerp(_minTargetY, _maxTargetY, pitchT);
+        ApplyCameraPitch();
+    }
+
+    private void ApplyCameraPitch()
+    {
+        _cameraPitch = Mathf.Clamp(
+            _cameraPitch,
+            _minPitch,
+            _maxPitch
+        );
+
+        _cameraTarget.localRotation =
+            Quaternion.Euler(_cameraPitch, 0f, 0f);
+
+        float pitchT = Mathf.InverseLerp(
+            _minPitch,
+            _maxPitch,
+            _cameraPitch
+        );
+
+        float dynamicTargetY = Mathf.Lerp(
+            _minTargetY,
+            _maxTargetY,
+            pitchT
+        );
 
         Vector3 localPos = _cameraTarget.localPosition;
+
         localPos.y = dynamicTargetY;
+
         _cameraTarget.localPosition = localPos;
     }
 
@@ -469,5 +499,36 @@ public class PlayerMovement : MonoBehaviour
 
         return rotationPivot +
                yawRotation * directionToTarget;
+    }
+
+    public void BeginInventoryCamera()
+    {
+        _pitchBeforeInventory = _cameraPitch;
+
+        _inventoryCameraLocked = true;
+
+        _lookInput = Vector2.zero;
+    }
+
+    public void SetInventoryCameraBlend(float blend)
+    {
+        blend = Mathf.Clamp01(blend);
+
+        _cameraPitch = Mathf.Lerp(
+            _pitchBeforeInventory,
+            _inventoryPitch,
+            blend
+        );
+
+        ApplyCameraPitch();
+    }
+
+    public void EndInventoryCamera()
+    {
+        _cameraPitch = _inventoryPitch;
+
+        ApplyCameraPitch();
+
+        _inventoryCameraLocked = false;
     }
 }

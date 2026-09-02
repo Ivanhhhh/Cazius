@@ -1,9 +1,10 @@
-using UnityEngine;
 using System.Collections;
+using TMPro;
+using UnityEngine;
 
 public class TextWorldScan : MonoBehaviour
 {
-    [SerializeField] MeshRenderer[] _mesh;
+    [SerializeField] TMP_Text[] _mesh;
 
     private Camera _camera;
     private bool _subscribed;
@@ -67,7 +68,7 @@ public class TextWorldScan : MonoBehaviour
     {
         foreach (var obj in _mesh)
         {
-            obj.enabled = true;
+            StartCoroutine(FadeText(0f, 0.8f, 1f, obj));
         }
     }
 
@@ -75,7 +76,7 @@ public class TextWorldScan : MonoBehaviour
     {
         foreach (var obj in _mesh)
         {
-            obj.enabled = false;
+            StartCoroutine(FadeText(0.8f, 0f, 1f, obj));
         }
     }
 
@@ -91,5 +92,27 @@ public class TextWorldScan : MonoBehaviour
         {
             transform.rotation = Quaternion.LookRotation(directionToCamera);
         }
+    }
+
+    private IEnumerator FadeText(float start, float end, float duration, TMP_Text text)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+
+            elapsed += Time.unscaledDeltaTime;
+
+            float value = Mathf.Lerp(start, end, elapsed / duration);
+
+                text.alpha = value;
+
+            yield return null;
+        }
+
+
+            text.alpha = end;
+
+        yield return null;
     }
 }
