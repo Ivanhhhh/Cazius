@@ -48,9 +48,9 @@ public class Player_AimAndShoot : MonoBehaviour
     [SerializeField] private float _crosshairBaseOffset;
 
     [Header("UI")]
-    [SerializeField] private TextMeshProUGUI _remainingBulletsUI;
-    [SerializeField] private TextMeshProUGUI _maxBulletsUI;
-    [SerializeField] private TextMeshProUGUI _pressR;
+    [SerializeField] private TMP_Text _remainingBulletsUI;
+    [SerializeField] private TMP_Text _maxBulletsUI;
+    [SerializeField] private TMP_Text _pressR;
 
     [Header("Light Flash Settings")]
     [SerializeField] private Light flashLight;
