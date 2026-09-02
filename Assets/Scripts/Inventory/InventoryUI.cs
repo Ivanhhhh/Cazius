@@ -10,6 +10,7 @@ public class InventoryUI : MonoBehaviour
     public GameObject slotPrefab;
     [SerializeField] private GameObject _questPanel;
     [SerializeField] private bool _savePanelOpenClose = true;
+    [SerializeField] private Material _alwaysOnTopMaterial;
 
     void OnEnable()
     {
@@ -76,6 +77,7 @@ public class InventoryUI : MonoBehaviour
             bool hasItem = i < Inventory.Instance.items.Count;
 
             var icon = slot.GetComponent<Image>();
+            icon.material = _alwaysOnTopMaterial;
             icon.enabled = hasItem;
 
             // BUSCAMOS EL TEXTO DENTRO DEL PREFAB
