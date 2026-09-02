@@ -647,51 +647,57 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         {
         }
 
-        private bool CheckDuplicateBindings(InputAction action, int bindingIndex, bool AllCompositeParts = false)
+private bool CheckDuplicateBindings(InputAction action, int bindingIndex, bool AllCompositeParts = false)
+{
+    InputBinding newBinding = action.bindings[bindingIndex];
+    // Modificado: usamos effectivePath (override si existe, sino el default) en vez de
+    // overridePath a secas. Antes, si la otra accion nunca habia sido reasignada, su
+    // overridePath estaba vacio y el chequeo la saltaba entera -> por eso "a veces andaba
+    // y a veces no": solo detectaba choques contra teclas que el jugador YA habia
+    // reasignado antes, nunca contra una tecla que seguia siendo la default de fabrica.
+    var newEffectivePath = newBinding.effectivePath;
+
+    var asset = action.actionMap.asset;
+    IEnumerable<InputActionMap> mapsToCheck = asset != null ? asset.actionMaps : new[] { action.actionMap };
+
+    foreach (var map in mapsToCheck)
+    {
+        foreach (InputBinding binding in map.bindings)
         {
-            InputBinding newBinding = action.bindings[bindingIndex];
+            // Ignoramos el binding que se esta reasignando (comparado por id, no por accion entera,
+            // para no saltear otras partes de un composite que si podrian chocar entre si)
+            if (binding.id == newBinding.id)
+                continue;
 
-            var asset = action.actionMap.asset;
-            IEnumerable<InputActionMap> mapsToCheck = asset != null ? asset.actionMaps : new[] { action.actionMap };
+            // Ignoramos composites/separadores sin path propio
+            if (binding.isComposite || string.IsNullOrEmpty(binding.effectivePath))
+                continue;
 
-            foreach (var map in mapsToCheck)
+            if (binding.effectivePath == newEffectivePath)
             {
-                foreach (InputBinding binding in map.bindings)
-                {
-                    // Ignoramos la propia accion que se esta reasignando
-                    if (binding.action == newBinding.action && map == action.actionMap)
-                        continue;
-
-                    // Ignoramos bindings que siguen en su tecla original (nunca fueron reasignados)
-                    if (string.IsNullOrEmpty(binding.overridePath))
-                        continue;
-
-                    if (binding.overridePath == newBinding.overridePath)
-                    {
-                        Debug.LogError("Duplicate binding found: " + newBinding.overridePath);
-                        return true;
-                    }
-                }
+                Debug.LogError("Duplicate binding found: " + newEffectivePath);
+                return true;
             }
-
-            if (AllCompositeParts)
-            {
-                for (int f = 1; f < bindingIndex; f++)
-                {
-                    // Tambien ignoramos las partes del composite que siguen en su default
-                    if (string.IsNullOrEmpty(action.bindings[f].overridePath))
-                        continue;
-
-                    if (action.bindings[f].overridePath == newBinding.overridePath)
-                    {
-                        Debug.Log("Duplicate binding found: " + newBinding.overridePath);
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
+    }
+
+    if (AllCompositeParts)
+    {
+        for (int f = 1; f < bindingIndex; f++)
+        {
+            if (string.IsNullOrEmpty(action.bindings[f].effectivePath))
+                continue;
+
+            if (action.bindings[f].effectivePath == newEffectivePath)
+            {
+                Debug.Log("Duplicate binding found: " + newEffectivePath);
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
 
 
                   /// <summary>
