@@ -2,63 +2,74 @@ using UnityEngine;
 
 public class EnemyVelocity : MonoBehaviour
 {
-    //[SerializeField] float Distance;
-
     [Header("Distance Settings")]
-    [Tooltip("The distance threshold. If the player is further than this, the enemy speeds up.")]
     [SerializeField] private float distanceThreshold;
 
     [Header("Multipliers")]
     [SerializeField] private float animSpeedMultiplier = 2f;
     [SerializeField] private float movementSpeedMultiplier = 2f;
 
-    [Header("Base Values")]
-    [SerializeField] private float baseMovementSpeed = 3.5f;
+    [Header("References")]
+    [SerializeField] private Animator enemyAnimator;
+    [SerializeField] private Enemy_MeleeEnemy_Data enemyData;
 
-    [SerializeField] Animator enemyAnimator;
-    private float currentMovementSpeed;
+    private float baseMovementSpeed;
 
-    // Cache the hash for performance rather than using string lookups every frame
-    //private static readonly int AnimSpeedHash = Animator.StringToHash("AnimSpeed");
+    private bool _isSpeedBoosted;
 
-    void Start()
+    private void Start()
     {
-        enemyAnimator = GetComponent<Animator>();
-        currentMovementSpeed = baseMovementSpeed; // la velocidad actual es la
+        if (enemyAnimator == null)
+            enemyAnimator = GetComponent<Animator>();
+
+        if (enemyData == null)
+            enemyData = GetComponent<Enemy_MeleeEnemy_Data>();
+
+        // Save the ORIGINAL chase speed
+        baseMovementSpeed = enemyData.GetChaseSpeed();
     }
 
-    void Update()
+    private void Update()
     {
-        // Ensure the player is registered before running distance checks
-        if (GameManager.Instance != null && GameManager.Instance.Player != null)
-        {
-            CheckDistanceToPlayer();
-        }
+        if (GameManager.Instance == null ||
+            GameManager.Instance.Player == null)
+            return;
+
+        CheckDistanceToPlayer();
     }
 
-  private void CheckDistanceToPlayer()
+    private void CheckDistanceToPlayer()
     {
-        // 1. Calculate the distance to the player using your GameManager instance
-        float distanceToPlayer = Vector3.Distance(transform.position, GameManager.Instance.Player.transform.position);
+        float distanceToPlayer = Vector3.Distance(
+            transform.position,
+            GameManager.Instance.Player.transform.position
+        );
 
-        // 2. Check if the player is further than the parameterized threshold
-        if (distanceToPlayer > distanceThreshold)
+        bool shouldBoost = distanceToPlayer > distanceThreshold;
+
+        if (shouldBoost == _isSpeedBoosted)
+            return;
+
+        _isSpeedBoosted = shouldBoost;
+
+        if (_isSpeedBoosted)
         {
-            // Apply multipliers
-            currentMovementSpeed = baseMovementSpeed * movementSpeedMultiplier;
-            //enemyAnimator.SetFloat(AnimSpeedHash, animSpeedMultiplier);
-            enemyAnimator.speed = 2f;
+            float boostedSpeed =
+                baseMovementSpeed * movementSpeedMultiplier;
 
-            Debug.LogWarning("velocidadAumentada");
+            enemyData.SetChaseSpeed(boostedSpeed);
+
+            enemyAnimator.speed = animSpeedMultiplier;
+
+            Debug.Log("Enemy speed increased");
         }
         else
         {
-            // Revert back to normal values
-            currentMovementSpeed = baseMovementSpeed;
-            //enemyAnimator.SetFloat(AnimSpeedHash, 1f); // 1f is normal default speed
-            enemyAnimator.speed = 1f;
-            Debug.LogWarning("velocidadNormal");
-        }
+            enemyData.SetChaseSpeed(baseMovementSpeed);
 
+            enemyAnimator.speed = 1f;
+
+            Debug.Log("Enemy speed normal");
+        }
     }
 }
