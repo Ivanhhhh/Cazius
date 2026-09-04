@@ -11,6 +11,7 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
     [SerializeField] private int _MaximumAmountOfNodes;
 
     [Header("Chasing")]
+    [SerializeField] private float _SprintRadius;
     [SerializeField] private float _attackRadius;
     [SerializeField] private float _chaseSpeed;
     [SerializeField] private float _attackCooldown;

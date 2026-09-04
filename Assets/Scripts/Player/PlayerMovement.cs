@@ -143,11 +143,11 @@ public class PlayerMovement : MonoBehaviour
         HandleLook();
         HandleAim();
         _smoothedMoveInput = Vector2.Lerp(_smoothedMoveInput, _moveInput, Time.deltaTime * 10f);
+        ApplyRotation();
     }
 
     private void FixedUpdate()
     {
-        ApplyRotation();
         HandleMovement();
     }
 
@@ -327,7 +327,7 @@ public class PlayerMovement : MonoBehaviour
 
     void ApplyRotation()
     {
-        _rb.MoveRotation(Quaternion.Euler(0f, _yaw, 0f));
+        _rb.rotation = Quaternion.Euler(0f, _yaw, 0f);
     }
 
     public void ResetInput()
