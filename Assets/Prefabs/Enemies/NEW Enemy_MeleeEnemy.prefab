@@ -3675,7 +3675,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 967262772417994786, guid: 5e052ea7fb60e1f499691d6304d97daf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7224519753724775464}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5e052ea7fb60e1f499691d6304d97daf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7112688730029598184}
   m_SourcePrefab: {fileID: 100100000, guid: 5e052ea7fb60e1f499691d6304d97daf, type: 3}
 --- !u!4 &980771682084015753 stripped
 Transform:
@@ -3747,6 +3750,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -5020670375205845761, guid: 5e052ea7fb60e1f499691d6304d97daf, type: 3}
   m_PrefabInstance: {fileID: 7933563375819586136}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7122658360713496329 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5e052ea7fb60e1f499691d6304d97daf, type: 3}
+  m_PrefabInstance: {fileID: 7933563375819586136}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7112688730029598184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7122658360713496329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc164b50a6f640f489ff97b73511892e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyVelocity
+  distanceThreshold: 5
+  animSpeedMultiplier: 2
+  movementSpeedMultiplier: 20
+  baseMovementSpeed: 3.5
+  enemyAnimator: {fileID: 4572060112092841929}
 --- !u!4 &7166851564041755258 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 967262772417994786, guid: 5e052ea7fb60e1f499691d6304d97daf, type: 3}
