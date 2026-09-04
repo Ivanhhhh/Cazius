@@ -25,17 +25,13 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             set
             {
                 m_Action = value;
-                m_RuntimeAction = null; // invalida el cache si cambia la referencia
+                m_RuntimeAction = null;
                 UpdateActionLabel();
                 UpdateBindingDisplay();
             }
         }
 
-        /// <summary>
-        /// ID (in string form) of the binding that is to be rebound on the action.
-        /// </summary>
-        /// <seealso cref="InputBinding.id"/>
-        public string bindingId
+                public string bindingId
         {
             get => m_BindingId;
             set
@@ -113,17 +109,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             set => m_RebindCancelButton = value;
         }
 
-        /// <summary>
-        /// Optional UI that is activated when an interactive rebind is started and deactivated when the rebind
-        /// is finished. This is normally used to display an overlay over the current UI while the system is
-        /// waiting for a control to be actuated.
-        /// </summary>
-        /// <remarks>
-        /// If neither <see cref="rebindPrompt"/> nor <c>rebindOverlay</c> is set, the component will temporarily
-        /// replaced the <see cref="bindingText"/> (if not <c>null</c>) with <c>"Waiting..."</c>.
-        /// </remarks>
-        /// <seealso cref="startRebindEvent"/>
-        /// <seealso cref="rebindPrompt"/>
+        
         public GameObject rebindOverlay
         {
             get => m_RebindOverlay;
@@ -157,9 +143,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             }
         }
 
-        /// <summary>
-        /// Event that is triggered when an interactive rebind has been completed or canceled.
-        /// </summary>
+        
         public InteractiveRebindEvent stopRebindEvent
         {
             get
@@ -170,15 +154,10 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             }
         }
 
-        /// <summary>
-        /// When an interactive rebind is in progress, this is the rebind operation controller.
-        /// Otherwise, it is <c>null</c>.
-        /// </summary>
+        
         public InputActionRebindingExtensions.RebindingOperation ongoingRebind => m_RebindOperation;
 
-        // ---- NUEVO ----
-        // Cache de la accion RUNTIME real (la misma instancia que usa GameInputManager / PlayerMovement),
-        // resuelta de forma perezosa la primera vez que hace falta.
+       
         private InputAction m_RuntimeAction;
 
         private InputAction RuntimeAction
@@ -191,15 +170,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 return m_RuntimeAction;
             }
         }
-        // ---- FIN NUEVO ----
-
-        /// <summary>
-        /// Return the action and binding index for the binding that is targeted by the component
-        /// according to the binding ID property.
-        /// </summary>
-        /// <param name="action">The action returned by reference.</param>
-        /// <param name="bindingIndex">The binding index returned by reference.</param>
-        /// <returns>true if able to resolve, otherwise false.</returns>
+        
         public bool ResolveActionAndBinding(out InputAction action, out int bindingIndex)
         {
             bindingIndex = -1;
@@ -217,9 +188,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             return false;
         }
 
-        /// <summary>
-        /// Trigger a refresh of the currently displayed binding.
-        /// </summary>
+       
         public void UpdateBindingDisplay()
         {
             var displayString = string.Empty;
@@ -235,17 +204,15 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                     displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
             }
 
-            // Set on label (if any).
+            
             if (m_BindingText != null)
                 m_BindingText.text = displayString;
 
-            // Give listeners a chance to configure UI in response.
+            
             m_UpdateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
         }
 
-        /// <summary>
-        /// Remove currently applied binding overrides.
-        /// </summary>
+        
         public void ResetToDefault()
         {
             if (!ResolveActionAndBinding(out var action, out var bindingIndex))
@@ -283,12 +250,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             SaveActionBinding(); //Modificado: persistir tambien al resetear
         }
 
-        /// <summary>
-        /// Attempts to swap associated binding of this instance with another instance.
-        /// </summary>
-        /// <remarks>It is expected that the other control is of a compatible type.</remarks>
-        /// <param name="other">The other instance to swap binding with.</param>
-        /// <returns>true if successfully swapped, else false.</returns>
+        
         public void SwapBinding(RebindActionUI other)
         {
             if (this == other)
@@ -300,7 +262,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             if (!other.ResolveActionAndBinding(out var otherAction, out var otherBindingIndex))
                 throw new Exception("Failed to resolve action and binding index");
 
-            // Apply binding override to target binding based on swapped effective binding paths.
             var effectivePath = action.bindings[bindingIndex].effectivePath;
             var otherEffectivePath = otherAction.bindings[otherBindingIndex].effectivePath;
             action.ApplyBindingOverride(bindingIndex, otherEffectivePath);
@@ -310,10 +271,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             other.SaveActionBinding(); //Modificado
         }
 
-        /// <summary>
-        /// Initiate an interactive rebind that lets the player actuate a control to choose a new binding
-        /// for the action.
-        /// </summary>
+       
         public void StartInteractiveRebind()
         {
             if (!ResolveActionAndBinding(out var action, out var bindingIndex))
@@ -321,7 +279,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
             action.Disable(); //Modificado: deshabilitamos la accion RUNTIME correcta
 
-            // If the binding is a composite, we need to rebind each part in turn.
             if (action.bindings[bindingIndex].isComposite)
             {
                 var firstPartIndex = bindingIndex + 1;
@@ -339,14 +296,12 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             action.Disable(); //Modificado
             m_RebindOperation?.Cancel(); // Will null out m_RebindOperation.
 
-            // Extract enabled state to allow restoring enabled state after rebind completes
             var actionWasEnabledPriorToRebind = action.enabled;
 
             void CleanUp()
             {
                 action.Enable(); //Modificado: antes decia m_Action.action.Enable() (instancia equivocada)
 
-                // Restore monitoring cancel button clicks
                 if (m_RebindCancelButton != null)
                     m_RebindCancelButton.onClick.RemoveListener(CancelRebind);
 
@@ -378,7 +333,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                     })
 
                 .WithActionEventNotificationsBeingSuppressed()
-                // We use a timeout to illustrate that its possible to skip cancel buttons and let rebind timeout.
                 .WithTimeout(m_RebindTimeout)
                 .OnComplete(
                     operation =>
@@ -410,12 +364,10 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                         }
                     });
 
-            // If it's a part binding, show the name of the part in the UI.
             var partName = default(string);
             if (action.bindings[bindingIndex].isPartOfComposite)
                 partName = $"Binding '{action.bindings[bindingIndex].name}'. ";
 
-            // Bring up rebind overlay, if we have one.
             m_RebindOverlay?.SetActive(true);
             if (m_RebindText != null)
             {
@@ -425,7 +377,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 m_RebindText.text = text;
             }
 
-            // Optionally allow canceling rebind via a button if it applicable for the use-case
             if (m_RebindCancelButton != null)
             {
                 m_RebindCancelButton.onClick.AddListener(CancelRebind);
@@ -473,18 +424,37 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         protected void Update()
         {
             if (m_RebindInfo != null)
-                UpdateRebindInfo(Time.realtimeSinceStartupAsDouble);
+                UpdateRebindInfo(Time.realtimeSinceStartupAsDouble);  
+    
         }
 
         protected void OnEnable()
-        {
-            if (s_RebindActionUIs == null)
-                s_RebindActionUIs = new List<RebindActionUI>();
-            s_RebindActionUIs.Add(this);
-            if (s_RebindActionUIs.Count == 1)
-                InputSystem.onActionChange += OnActionChange;
-            UpdateBindingDisplay();
-        }
+{
+    if (s_RebindActionUIs == null)
+        s_RebindActionUIs = new List<RebindActionUI>();
+    s_RebindActionUIs.Add(this);
+    if (s_RebindActionUIs.Count == 1)
+        InputSystem.onActionChange += OnActionChange;
+
+    if (GameInputManager.Instance != null)
+    {
+        UpdateBindingDisplay();
+    }
+    else
+    {
+        StartCoroutine(WaitForInputManagerThenRefresh());
+    }
+}
+
+private System.Collections.IEnumerator WaitForInputManagerThenRefresh()
+{
+    // Espera hasta que el singleton exista (frame a frame)
+    while (GameInputManager.Instance == null)
+        yield return null;
+
+    m_RuntimeAction = null; // por si quedó cacheado en null
+    UpdateBindingDisplay();
+}
 
         protected void OnDisable()
         {
@@ -500,10 +470,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             UpdateBindingDisplay();
         }
 
-        // When the action system re-resolves bindings, we want to update our UI in response. While this will
-        // also trigger from changes we made ourselves, it ensures that we react to changes made elsewhere. If
-        // the user changes keyboard layout, for example, we will get a BoundControlsChanged notification and
-        // will update our UI to reflect the current keyboard layout.
+        
         private static void OnActionChange(object obj, InputActionChange change)
         {
             if (change != InputActionChange.BoundControlsChanged)
@@ -588,8 +555,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         private double m_RebindStartTime = -1;
         private int m_LastRemainingTimeoutSeconds;
 
-        // We want the label for the action name to update in edit mode, too, so
-        // we kick that off from here.
+       
 #if UNITY_EDITOR
         protected void OnValidate()
         {
@@ -699,13 +665,6 @@ private bool CheckDuplicateBindings(InputAction action, int bindingIndex, bool A
     return false;
 }
 
-
-                  /// <summary>
-/// Restablece TODOS los bindings de TODOS los Action Maps a su configuracion original
-/// (la que vino con el .inputactions), y borra lo guardado en PlayerPrefs para que no
-/// se vuelva a cargar el override viejo la proxima vez que arranque el juego.
-/// Engancha este metodo al OnClick de un boton "Restablecer todo" en tu UI.
-/// </summary>
 public void ResetAllBindingsToDefault()
 {
     if (GameInputManager.Instance == null || GameInputManager.Instance.Controls == null)
@@ -734,6 +693,4 @@ public void ResetAllBindingsToDefault()
     Debug.Log("Todos los bindings fueron restablecidos a su valor original.");
 }
     }
-
-  
 }
