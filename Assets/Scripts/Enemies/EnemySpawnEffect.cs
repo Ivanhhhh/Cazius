@@ -60,6 +60,12 @@ public class EnemySpawnEffect : MonoBehaviour
     {
         _propertyBlock = new MaterialPropertyBlock();
 
+        SetFloorAlpha(0f);
+
+        SetEnemyEffect(_enemyEffectStart);
+
+        DisableBloodVFX();
+
         if (_willSpawn)
         {
         PrepareEffect();
