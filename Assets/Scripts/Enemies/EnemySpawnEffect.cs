@@ -5,12 +5,13 @@ using UnityEngine.VFX;
 
 public class EnemySpawnEffect : MonoBehaviour
 {
-    private static readonly int AlphaClipMultID =
-        Shader.PropertyToID("_AlphaClipMult");
+    private static readonly int AlphaClipMultID = Shader.PropertyToID("_AlphaClipMult");
 
-    private static readonly int EffectAmountID =
-        Shader.PropertyToID("_EffectAmount");
+    private static readonly int EffectAmountID = Shader.PropertyToID("_EffectAmount");
 
+    [Header("SpawnOnFloor")]
+
+    [SerializeField] private bool _willSpawn;
 
     [Header("Floor")]
     [SerializeField] private List<MeshRenderer> _floorRenderers = new();
@@ -59,13 +60,14 @@ public class EnemySpawnEffect : MonoBehaviour
     {
         _propertyBlock = new MaterialPropertyBlock();
 
+        if (_willSpawn)
+        {
         PrepareEffect();
-
-        PlaySpawnEffect();
+        }
     }
 
 
-    private void PrepareEffect()
+    public void PrepareEffect()
     {
         SetFloorAlpha(0f);
 
@@ -89,9 +91,6 @@ public class EnemySpawnEffect : MonoBehaviour
 
     private IEnumerator SpawnRoutine()
     {
-        // ---------------------------------------------------------
-        // RESET
-        // ---------------------------------------------------------
 
         SetFloorAlpha(0f);
         SetEnemyEffect(_enemyEffectStart);
@@ -100,16 +99,8 @@ public class EnemySpawnEffect : MonoBehaviour
             _enemyModel.position = _startPosition.position;
 
 
-        // ---------------------------------------------------------
-        // BLOOD EFFECT START
-        // ---------------------------------------------------------
-
         EnableBloodVFX();
 
-
-        // ---------------------------------------------------------
-        // FLOOR APPEARS
-        // ---------------------------------------------------------
 
         StartCoroutine(
             LerpFloorAlpha(
@@ -121,10 +112,6 @@ public class EnemySpawnEffect : MonoBehaviour
 
         yield return new WaitForSeconds(_delayBeforeRise);
 
-
-        // ---------------------------------------------------------
-        // ENEMY RISES
-        // ---------------------------------------------------------
 
         Vector3 startPos = _startPosition.position;
         Vector3 endPos = _endPosition.position;
@@ -145,17 +132,12 @@ public class EnemySpawnEffect : MonoBehaviour
                 _riseCurve.Evaluate(normalizedTime);
 
 
-            // Enemy movement
             _enemyModel.position = Vector3.Lerp(
                 startPos,
                 endPos,
                 movementTime
             );
 
-
-            // -----------------------------------------------------
-            // BLOOD REMOVAL
-            // -----------------------------------------------------
 
             if (normalizedTime >= _bloodRemovalStart)
             {
@@ -181,13 +163,8 @@ public class EnemySpawnEffect : MonoBehaviour
         }
 
 
-        // Make sure enemy reaches exact final position
         _enemyModel.position = endPos;
 
-
-        // ---------------------------------------------------------
-        // CONTINUE REMOVING BLOOD AFTER RISE IF NECESSARY
-        // ---------------------------------------------------------
 
         if (bloodRemovalStarted)
         {
@@ -214,23 +191,11 @@ public class EnemySpawnEffect : MonoBehaviour
         SetEnemyEffect(_enemyEffectEnd);
 
 
-        // ---------------------------------------------------------
-        // KEEP BLOOD AROUND FOR A MOMENT
-        // ---------------------------------------------------------
-
         yield return new WaitForSeconds(_delayBeforeCleanup);
 
 
-        // ---------------------------------------------------------
-        // STOP BLOOD VFX
-        // ---------------------------------------------------------
-
         StopBloodVFX();
 
-
-        // ---------------------------------------------------------
-        // FLOOR DISAPPEARS
-        // ---------------------------------------------------------
 
         yield return StartCoroutine(
             LerpFloorAlpha(
@@ -278,11 +243,6 @@ public class EnemySpawnEffect : MonoBehaviour
         SetFloorAlpha(endValue);
     }
 
-
-    // ============================================================
-    // FLOOR SHADER
-    // ============================================================
-
     private void SetFloorAlpha(float value)
     {
         foreach (MeshRenderer renderer in _floorRenderers)
@@ -303,11 +263,6 @@ public class EnemySpawnEffect : MonoBehaviour
         }
     }
 
-
-    // ============================================================
-    // ENEMY SHADER
-    // ============================================================
-
     private void SetEnemyEffect(float value)
     {
         foreach (SkinnedMeshRenderer renderer in _enemyRenderers)
@@ -327,11 +282,6 @@ public class EnemySpawnEffect : MonoBehaviour
             _propertyBlock.Clear();
         }
     }
-
-
-    // ============================================================
-    // VFX
-    // ============================================================
 
     private void EnableBloodVFX()
     {
