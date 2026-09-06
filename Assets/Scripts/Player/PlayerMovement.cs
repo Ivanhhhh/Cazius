@@ -111,6 +111,8 @@ public class PlayerMovement : MonoBehaviour
 
     public float _currentSpeed { get; set; }
 
+    private bool _canAim = true;
+
     private void Awake()
     {
         GameManager.Instance.RegisterPlayer(this);
@@ -132,8 +134,15 @@ public class PlayerMovement : MonoBehaviour
         _controls.Player.Look.performed += ctx => _lookInput = ctx.ReadValue<Vector2>();
         _controls.Player.Look.canceled += _ => _lookInput = Vector2.zero;
 
-        _controls.Player.Aim.performed += _ => _isAiming = true;
-        _controls.Player.Aim.canceled += _ => _isAiming = false;
+        _controls.Player.Aim.performed += _ =>
+    {
+        if (_canAim) _isAiming = true;
+    };
+
+        _controls.Player.Aim.canceled += _ =>
+        {
+            _isAiming = false;
+        };
 
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -530,5 +539,16 @@ public class PlayerMovement : MonoBehaviour
         ApplyCameraPitch();
 
         _inventoryCameraLocked = false;
+    }
+
+    public void SetCanAim(bool canAim)
+    {
+        _canAim = canAim;
+
+        if (!canAim)
+        {
+            _isAiming = false;
+            _animator.SetBool("IsAiming", false);
+        }
     }
 }
