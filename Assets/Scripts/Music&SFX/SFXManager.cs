@@ -14,6 +14,7 @@ public class SFXManager : MonoBehaviour
         PlayerShootingSFX,
         CriticalHitSFX,
         MaleHeySFX,
+        KidHeySFX,
         RechargingGun,
         Heal,
         Cat,

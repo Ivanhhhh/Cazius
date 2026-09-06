@@ -100,11 +100,11 @@ public class AngelDemonAnim : MonoBehaviour
 
         float slowedSpeed = Mathf.Max(0f, originalSpeed - _slowAmount);
 
-        _enemyData.SetChaseSpeed(slowedSpeed);
+        //_enemyData.SetChaseSpeed(slowedSpeed);
 
         yield return new WaitForSeconds(_slowDuration);
 
-        _enemyData.SetChaseSpeed(originalSpeed);
+        //_enemyData.SetChaseSpeed(originalSpeed);
 
         _slowCoroutine = null;
     }

@@ -6,6 +6,7 @@ public class Enemy_MeleeEnemy_ChasingState : Enemy_Interface_StateMachine
     Enemy_MeleeEnemy_Data _data;
     AngelDemonAnim _angelDemonAnim;
 
+
     public Enemy_MeleeEnemy_ChasingState(Enemy_MeleeEnemy_StateMachine stateMachine, Enemy_MeleeEnemy_Data data)
     {
         _stateMachine = stateMachine;

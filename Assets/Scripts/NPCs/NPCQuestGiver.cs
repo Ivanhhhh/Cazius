@@ -9,6 +9,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [Header("NPC Behavior")]
     [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
+    [SerializeField] private SFXManager.SFXCategoryType _interactSFX = SFXManager.SFXCategoryType.MaleHeySFX;
 
     [Header("Reward")]
     [SerializeField] private ItemData _questPrizeItem;
@@ -44,7 +45,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     {
         RotateTowardsPlayer(interactorTransform);
         _animator.SetTrigger(_wavingTrigger);
-        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.MaleHeySFX, transform.position);
+        SFXManager.Instance.PlaySFXAtPosition(_interactSFX, transform.position);
 
         QuestManager.Instance.RegisterQuest(quest);
         QuestStatus status = QuestManager.Instance.GetStatus(quest.questID);
