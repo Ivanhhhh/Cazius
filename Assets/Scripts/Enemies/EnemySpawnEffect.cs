@@ -62,7 +62,7 @@ public class EnemySpawnEffect : MonoBehaviour
 
         SetFloorAlpha(0f);
 
-        SetEnemyEffect(_enemyEffectStart);
+        SetEnemyEffect(_enemyEffectEnd);
 
         DisableBloodVFX();
 
