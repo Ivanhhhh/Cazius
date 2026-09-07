@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-
 namespace Patterns.Observer.EventManager_Delegates
 {
     public enum EventsType
     {
         Event_PauseGame,
         Event_ResumeGame,
-        Event_PausePlayer
+        Event_PausePlayer,
+        Event_UpdateSoulEnergy
        
     }
 
