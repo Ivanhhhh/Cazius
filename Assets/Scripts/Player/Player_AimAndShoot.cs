@@ -10,6 +10,8 @@ public class Player_AimAndShoot : MonoBehaviour
 {
     IEnumerator RechargeC;
     bool CanShoot;
+    private bool _canUseWeapon = true;
+
     [SerializeField] float LengthAnim;
     private string AnimName = "Reload";
     [Header("References")]
@@ -67,7 +69,7 @@ public class Player_AimAndShoot : MonoBehaviour
     [SerializeField] private VisualEffect _bloodHitVFX;
     [SerializeField] private float _bloodVFXDestroyDelay = 2f;
     [SerializeField] private float _bloodSurfaceOffset = 0.03f;
-     private string _bloodPlayEventName = "OnPlay";
+    private string _bloodPlayEventName = "OnPlay";
 
     [Header("Decals")]
     [SerializeField] private BulletDecalSpawner _bulletDecalSpawner;
@@ -79,6 +81,8 @@ public class Player_AimAndShoot : MonoBehaviour
     public float _currentSpread;
 
     public bool _hasBullets => _remainingBullets > 0;
+
+
 
     void Start()
     {
@@ -121,7 +125,7 @@ public class Player_AimAndShoot : MonoBehaviour
 
     private void Update()
     {
-       
+
     }
 
     void OnDestroy()
@@ -181,6 +185,9 @@ public class Player_AimAndShoot : MonoBehaviour
 
     private void OnShootStarted(InputAction.CallbackContext context)
     {
+        if (!_canUseWeapon)
+            return;
+
         if (CanShoot)
         {
             // 🛠️ CORRECCIÓN DE AIM: Si el jugador intenta disparar sin presionar el botón de apuntar, cancelamos el tiro.
@@ -266,7 +273,7 @@ public class Player_AimAndShoot : MonoBehaviour
             StartCoroutine(nameof(HideRay));
 
         }
-      
+
     }
 
     void HandleHit(RaycastHit weaponHit)
@@ -342,7 +349,11 @@ public class Player_AimAndShoot : MonoBehaviour
     //}
 
     void Recharge(InputAction.CallbackContext context)
-    {   if (_remainingBullets < 6)
+    {
+        if (!_canUseWeapon)
+            return;
+
+        if (_remainingBullets < 6)
         {
             StartCoroutine(WaitTime());
             int totalReserve = Inventory.Instance.GetTotalAmmo();
@@ -359,10 +370,10 @@ public class Player_AimAndShoot : MonoBehaviour
 
 
         }
-        
+
     }
 
-    void NewRecharge ()
+    void NewRecharge()
     {
         StartCoroutine(WaitTime());
         int totalReserve = Inventory.Instance.GetTotalAmmo();
@@ -376,7 +387,7 @@ public class Player_AimAndShoot : MonoBehaviour
 
         SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
 
-       
+
     }
 
     void UpdateUI()
@@ -385,7 +396,7 @@ public class Player_AimAndShoot : MonoBehaviour
 
         _remainingBulletsUI.text = $"{_remainingBullets}";
         _maxBulletsUI.text = $"{currentReserve}";
-        
+
         _pressR.enabled = _remainingBullets < _maxBullets && currentReserve > 0;
     }
 
@@ -433,5 +444,28 @@ public class Player_AimAndShoot : MonoBehaviour
         VisualEffect bloodVFX = Instantiate(_bloodHitVFX, spawnPosition, spawnRotation);
         bloodVFX.SendEvent(_bloodPlayEventName);
         Destroy(bloodVFX.gameObject, _bloodVFXDestroyDelay);
+    }
+
+    public void SetCanUseWeapon(bool canUse)
+    {
+        _canUseWeapon = canUse;
+
+        if (!canUse)
+        {
+            CanShoot = false;
+
+            if (RechargeC != null)
+            {
+                StopCoroutine(RechargeC);
+                RechargeC = null;
+            }
+
+            _playerAnimator.ResetTrigger("Shoot");
+            _playerAnimator.ResetTrigger("Reload");
+        }
+        else
+        {
+            CanShoot = true;
+        }
     }
 }
