@@ -56,7 +56,7 @@ public class EnemySpawnEffect : MonoBehaviour
     private MaterialPropertyBlock _propertyBlock;
 
 
-    private void Awake()
+    private void Start()
     {
         _propertyBlock = new MaterialPropertyBlock();
 
@@ -69,6 +69,7 @@ public class EnemySpawnEffect : MonoBehaviour
         if (_willSpawn)
         {
         PrepareEffect();
+            PlaySpawnEffect();
         }
     }
 
@@ -88,9 +89,10 @@ public class EnemySpawnEffect : MonoBehaviour
 
     public void PlaySpawnEffect()
     {
-        if (_spawnCoroutine != null)
-            StopCoroutine(_spawnCoroutine);
 
+        if (_spawnCoroutine != null)
+        StopCoroutine(_spawnCoroutine);
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.EnemySpawnSFX, transform.position);
         _spawnCoroutine = StartCoroutine(SpawnRoutine());
     }
 

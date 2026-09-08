@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using UnityEngine.Rendering;
 
 public class Enemy_MeleeEnemy_Data : MonoBehaviour
 {
@@ -42,6 +43,10 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
     [SerializeField] private Transform _playerTransform;
     [SerializeField] private Transform _selfObjectTransform;
     [SerializeField] private NavMeshAgent _agent;
+    [SerializeField] public float _timeBeforeReaction;
+    [SerializeField] public bool _isAggresiveOnStart;
+    [SerializeField] public bool _needTimeForFirstReaction;
+
     [Header("Health")]
     [SerializeField] public Enemy_HealthSystem _healthSystem;
 
@@ -82,6 +87,37 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
         _secondAttack= new Enemy_SecondAttackBehaviour(_spinSpeed,_objectSpeedWhileSpinning,_secondAttackPreparationTime, _spinTime,_playerTransform,_selfObjectTransform,_agent);
     }
 
+
+    private Vector3 DirFromAngle(float angleInDegrees)
+    {
+        angleInDegrees += transform.eulerAngles.y;
+        return new Vector3(
+            Mathf.Sin(angleInDegrees * Mathf.Deg2Rad),
+            0,
+            Mathf.Cos(angleInDegrees * Mathf.Deg2Rad)
+        );
+    }
+
+    public float GetChaseSpeed()
+    {
+        return _chaseSpeed;
+    }
+
+    public void SetChaseSpeed(float newSpeed)
+    {
+        _chaseSpeed = newSpeed;
+
+        if (_chasing != null)
+        {
+            _chasing.SetChaseSpeed(newSpeed);
+        }
+    }
+    public IEnumerator WaitForFirstReaction()
+    {
+        yield return new WaitForSeconds(_timeBeforeReaction);
+        Debug.Log($"Tiempo de espera inicial: {_timeBeforeReaction}");
+    }
+
     private void OnDrawGizmosSelected()
     {
         // Radio de visión
@@ -116,29 +152,5 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
         // Radio de detección de nodos
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, _detectionRadius);
-    }
-    private Vector3 DirFromAngle(float angleInDegrees)
-    {
-        angleInDegrees += transform.eulerAngles.y;
-        return new Vector3(
-            Mathf.Sin(angleInDegrees * Mathf.Deg2Rad),
-            0,
-            Mathf.Cos(angleInDegrees * Mathf.Deg2Rad)
-        );
-    }
-
-    public float GetChaseSpeed()
-    {
-        return _chaseSpeed;
-    }
-
-    public void SetChaseSpeed(float newSpeed)
-    {
-        _chaseSpeed = newSpeed;
-
-        if (_chasing != null)
-        {
-            _chasing.SetChaseSpeed(newSpeed);
-        }
     }
 }
