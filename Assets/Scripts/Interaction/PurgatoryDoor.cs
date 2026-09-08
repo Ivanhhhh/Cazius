@@ -66,4 +66,16 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
     {
         return transform;
     }
+
+    public bool IsLocked()
+    {
+        if (KeyInventorySystem.Instance.HasPurgatoryKey)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 }

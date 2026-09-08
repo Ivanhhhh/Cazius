@@ -46,6 +46,8 @@ public class SoulEnergy : MonoBehaviour, IEInteractable
 
     public Transform GetTransform() { return transform; }
 
+    public bool IsLocked() { return false; }
+
 }
 
 

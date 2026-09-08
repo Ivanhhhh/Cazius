@@ -26,4 +26,9 @@ public class PickableItem : MonoBehaviour, IEInteractable
     public string GetInteractText() { return _interactText; }
 
     public Transform GetTransform() { return transform; }
+
+    public bool IsLocked()
+    {
+        return false;
+    }
 }

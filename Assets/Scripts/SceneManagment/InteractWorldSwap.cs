@@ -151,6 +151,8 @@ public class InteractWorldSwap : MonoBehaviour, IEInteractable
         return transform;
     }
 
+    public bool IsLocked() { return false; }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
