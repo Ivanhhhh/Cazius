@@ -79,4 +79,9 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     {
         return this.transform;
     }
+
+    public bool IsLocked()
+    {
+        return false;
+    }
 }

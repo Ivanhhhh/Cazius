@@ -57,4 +57,9 @@ public class NPCDialog : MonoBehaviour, IEInteractable
         dir.y = 0;
         transform.rotation = Quaternion.LookRotation(dir);
     }
+
+    public bool IsLocked()
+    {
+        return false;
+    }
 }

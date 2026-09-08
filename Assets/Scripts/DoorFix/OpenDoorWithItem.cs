@@ -91,4 +91,13 @@ public class OpenDoorWithItem : MonoBehaviour, IEInteractable
     public string GetInteractText() { return OpenDoorText; }
     public Transform GetTransform() { return this.transform; }
 
+    public bool IsLocked()
+    {
+        if (_inventory.HasItem(_itemIDNeededToOpen))
+        {
+            return false;
+        }
+        else { return true; }
+    }
+
 }

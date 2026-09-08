@@ -1,6 +1,7 @@
+using System.Collections;
+using System.Net.Sockets;
 using TMPro;
 using UnityEngine;
-using System.Collections;
 
 public class UIInteraction : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class UIInteraction : MonoBehaviour
     [SerializeField] private MeshRenderer _backgroundRenderer;
 
     [SerializeField] private Material _alwaysOnTopTextMaterial;
+    [SerializeField] private Material _lockMaterial;
+
+    private bool _currentLockedInteractableState = false;
 
     [SerializeField] private float _fadeDuration = 0.2f;
 
@@ -28,6 +32,8 @@ public class UIInteraction : MonoBehaviour
 
     private bool _shouldBeVisible;
 
+    private bool _isLockShown = false;
+
     private void Awake()
     {
         _backgroundMaterial = _backgroundRenderer.material;
@@ -38,6 +44,7 @@ public class UIInteraction : MonoBehaviour
 
     private void OnEnable()
     {
+        _lockMaterial.SetFloat("_AlphaMult", 0f);
         PlayerInteract.OnInteractableChanged += OnInteractableChanged;
 
         DialogUIController.OnDialogOpened += OnDialogOpened;
@@ -83,7 +90,7 @@ public class UIInteraction : MonoBehaviour
         _currentInteractable = interactable;
         _currentTarget = interactable.GetInteractionUIPoint();
 
-        _interactText.text = "F";
+        _interactText.text = IsInteractableLocked(interactable.IsLocked());
 
         if (_alwaysOnTopTextMaterial != null && _interactText.fontSharedMaterial != _alwaysOnTopTextMaterial)
         {
@@ -94,6 +101,7 @@ public class UIInteraction : MonoBehaviour
 
         _shouldBeVisible = true;
         StartTransition(true);
+
     }
 
     private void Hide()
@@ -109,13 +117,32 @@ public class UIInteraction : MonoBehaviour
         if (_currentTarget == null || _camera == null)
             return;
 
-        _containerUI.transform.position = _currentTarget.position;
+
+            _containerUI.transform.position = _currentTarget.position;
 
         Vector3 direction = _camera.transform.position - _containerUI.transform.position;
 
         Quaternion lookRotation = Quaternion.LookRotation(direction, _camera.transform.up);
 
         _containerUI.transform.rotation = lookRotation * Quaternion.Euler(_rotationOffset);
+    }
+
+    private string IsInteractableLocked(bool locked)
+    {
+        _currentLockedInteractableState = locked;
+
+        if (locked == true)
+        {
+            _isLockShown = true;
+            return "Locked";
+                //_lockImage.SetActive(true);
+        }
+        else
+        {
+            _isLockShown = false;
+            return "F";
+                //_lockImage.SetActive(false);
+        }
     }
 
     private void StartTransition(bool show)
@@ -129,14 +156,13 @@ public class UIInteraction : MonoBehaviour
     private IEnumerator TransitionPrompt(bool show)
     {
 
-        float startOpacity =
-            _backgroundMaterial.GetFloat("_OpacityMultiplier");
+        float startOpacity = _backgroundMaterial.GetFloat("_OpacityMultiplier");
 
-        float startVertexOffset =
-            _backgroundMaterial.GetFloat("_VertexOffset");
+        float startVertexOffset = _backgroundMaterial.GetFloat("_VertexOffset");
 
-        float startTextAlpha =
-            _interactText.alpha;
+        float startTextAlpha = _interactText.alpha;
+
+        float lockStartOpacity = _lockMaterial.GetFloat("_AlphaMult");
 
 
         float targetOpacity = show ? 1f : 0f;
@@ -145,8 +171,17 @@ public class UIInteraction : MonoBehaviour
 
         float targetTextAlpha = show ? 1f : 0f;
 
+        if (!_isLockShown)
+        {
+            _lockMaterial.SetFloat("_AlphaMult", 0f);
+        }
+        else
+        {
+            _interactText.alpha = 0f;
+        }
 
-        float elapsed = 0f;
+
+            float elapsed = 0f;
 
         while (elapsed < _fadeDuration)
         {
@@ -166,9 +201,17 @@ public class UIInteraction : MonoBehaviour
 
             _backgroundMaterial.SetFloat("_OpacityMultiplier", opacity);
 
+            if (_isLockShown)
+            {
+                _lockMaterial.SetFloat("_AlphaMult", opacity);
+            }
+            else
+            {
+                _interactText.alpha = textAlpha;
+            }
+
             _backgroundMaterial.SetFloat("_VertexOffset", vertexOffset);
 
-            _interactText.alpha = textAlpha;
 
             yield return null;
         }
@@ -177,7 +220,7 @@ public class UIInteraction : MonoBehaviour
 
         _backgroundMaterial.SetFloat("_VertexOffset", targetVertexOffset);
 
-        _interactText.alpha = targetTextAlpha;
+        if (!_isLockShown) { _interactText.alpha = targetTextAlpha; }
 
         if (!show && !_shouldBeVisible)
         {
