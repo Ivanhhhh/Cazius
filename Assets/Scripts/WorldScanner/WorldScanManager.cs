@@ -11,6 +11,8 @@ public class WorldScanManager : MonoBehaviour
     public event Action ScanActive;
     public event Action ScanDeactivate;
 
+    [SerializeField] private float _scanDuration = 5f;
+
     [SerializeField] private List<SpheresScan> _spheres = new List<SpheresScan>();
     [SerializeField] private float _spheresMaxScale;
     [SerializeField] private float _spheresMinScale;
@@ -57,6 +59,7 @@ public class WorldScanManager : MonoBehaviour
     private void OnDisable()
     {
         _controls.Player.Scan.performed -= OnScanPerformed;
+        _scanLinesFCShader.SetFloat("_LinesEndFade", 0);
     }
 
     public void SetInventoryActive(bool active)
@@ -96,20 +99,20 @@ public class WorldScanManager : MonoBehaviour
     private void DoScan()
     {
         if (_scanCoroutine != null)
-            StopCoroutine(_scanCoroutine);
+            return;
 
-        if (!_scanActive)
-        {
-            _scanCoroutine = StartCoroutine(
-                ActivateScan(_spheres)
-            );
-        }
+        if (_scanTransitioning == true)
+            return;
+
+        _scanCoroutine = StartCoroutine(ActivateScan(_spheres));
+
+        /*
         else
         {
             _scanCoroutine = StartCoroutine(
                 DeactivateScan(_spheres)
             );
-        }
+        }*/
     }
 
     private IEnumerator ActivateScan(List<SpheresScan> spheres)
@@ -132,8 +135,11 @@ public class WorldScanManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(_timeBetweenSphere);
         }
 
-        _scanTransitioning = false;
+        yield return new WaitForSecondsRealtime(_scanDuration);
+
         _scanCoroutine = null;
+
+        _scanCoroutine = StartCoroutine(DeactivateScan(_spheres));
     }
 
     private IEnumerator DeactivateScan(List<SpheresScan> spheres)
