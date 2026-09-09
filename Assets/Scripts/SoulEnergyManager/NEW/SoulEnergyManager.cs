@@ -6,9 +6,9 @@ public class SoulEnergyManager : MonoBehaviour
 {
     public static SoulEnergyManager Instance {get; private set;}
 
-     [SerializeField] private long _maxSoulEnergyValue;
+     [SerializeField] private int _maxSoulEnergyValue;
       
-    public long MaxSoulEnergyValue
+    public int MaxSoulEnergyValue
     {
         get
         {
@@ -20,8 +20,8 @@ public class SoulEnergyManager : MonoBehaviour
         }
     }
 
-private long _currentSoulEnergy;
-public long CurrentSoulEnergy
+private int _currentSoulEnergy;
+public int CurrentSoulEnergy
 {
     get
     { 
@@ -50,7 +50,7 @@ public long CurrentSoulEnergy
         if (Instance == this) Instance = null;
     }
 
-    public void AddSoulEnergy(long AmountToAdd)
+    public void AddSoulEnergy(int AmountToAdd)
     {   if (AmountToAdd <= 0) return;
         else
         {
@@ -61,7 +61,7 @@ public long CurrentSoulEnergy
         EventManager.TriggerEvent(EventsType.Event_SoulEnergyChanged, CurrentSoulEnergy);
     }
 
-    public void RemoveSoulEnergy(long AmountToRemove)
+    public void RemoveSoulEnergy(int AmountToRemove)
     {
       if (AmountToRemove <= 0) return;
       else

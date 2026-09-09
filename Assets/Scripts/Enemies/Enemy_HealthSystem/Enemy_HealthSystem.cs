@@ -76,7 +76,6 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
         Debug.Log("Headshot");
         anim.HeadshotAnim();
         SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.CriticalHitSFX, transform.position);
-        _RandomAmount.OnEnemyDeath();
     }
 
     void LeftArmShotEffect()

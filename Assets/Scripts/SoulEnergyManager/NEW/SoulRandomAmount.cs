@@ -1,16 +1,14 @@
 using UnityEngine;
 
-public class SoulRandomAmount : MonoBehaviour
+public class SoulRandomAmount : MonoBehaviour,IRandomSoul
 {
     [SerializeField] private int _minDrop;
     [SerializeField] private int _maxDrop;
 
-    public void OnEnemyDeath()
+    public void RandomSoul()
     {
         int randomAmount = Random.Range(_minDrop, _maxDrop + 1);
-        long amountToGive = randomAmount;
-
-        SoulEnergyManager.Instance.AddSoulEnergy(amountToGive);
-        Debug.LogWarning(amountToGive);
+        SoulEnergyManager.Instance.AddSoulEnergy(randomAmount);
+        Debug.LogError(randomAmount + "DROPPED");
     }
 }
