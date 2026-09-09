@@ -27,7 +27,8 @@ public class SFXManager : MonoBehaviour
         CasterDamgeSFX,
         HurtedSFX,
         ScannerSFX,
-        ScanningSFX,
+        EnemySpawnSFX,
+        ScanningSFX
         // Add Categories here
     }
 
