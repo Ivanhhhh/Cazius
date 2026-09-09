@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using Patterns.Observer.EventManager_Delegates;
 
 public class SoulEnergyManager : MonoBehaviour
 {
@@ -57,7 +58,7 @@ public long CurrentSoulEnergy
           var Add = Plus > MaxSoulEnergyValue? Plus = MaxSoulEnergyValue : Plus = CurrentSoulEnergy + AmountToAdd;
           CurrentSoulEnergy = Add;
         }
-        
+        EventManager.TriggerEvent(EventsType.Event_SoulEnergyChanged, CurrentSoulEnergy);
     }
 
     public void RemoveSoulEnergy(long AmountToRemove)
@@ -68,5 +69,6 @@ public long CurrentSoulEnergy
         var Change = CurrentSoulEnergy >= AmountToRemove? CurrentSoulEnergy = CurrentSoulEnergy - AmountToRemove: CurrentSoulEnergy = CurrentSoulEnergy;
         CurrentSoulEnergy = Change;
       }
+      EventManager.TriggerEvent(EventsType.Event_SoulEnergyChanged, CurrentSoulEnergy);
     }
 }

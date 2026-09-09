@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 {
+    private SoulRandomAmount _RandomAmount;
     [SerializeField] private float _maxHealth = 100f;
     [SerializeField] private float _currentHealth;
 
@@ -27,6 +28,7 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
         _currentHealth = _maxHealth;
         OnDeath += Death;
         anim = GetComponent<AngelDemonAnim>();
+        _RandomAmount = GetComponent<SoulRandomAmount>();
     }
 
     public void TakeDamage(float amount)
@@ -74,6 +76,7 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
         Debug.Log("Headshot");
         anim.HeadshotAnim();
         SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.CriticalHitSFX, transform.position);
+        _RandomAmount.OnEnemyDeath();
     }
 
     void LeftArmShotEffect()
@@ -128,5 +131,6 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
         Debug.Log("Soul Energy Drop");
 
         gameObject.SetActive(false);
+
     }
 }

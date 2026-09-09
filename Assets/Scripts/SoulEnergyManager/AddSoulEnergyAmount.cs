@@ -25,7 +25,6 @@ public class AddSoulEnergyAmount : MonoBehaviour
               _SoulEnergyAmount = value;
             }
 
-            EventManager.TriggerEvent(EventsType.Event_UpdateSoulEnergy, _SoulEnergyAmount);
         }
     }
 }
