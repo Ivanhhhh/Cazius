@@ -123,8 +123,8 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 
         yield return new WaitForSeconds(1.2f);
 
-        _soulEnergyPrefab.SetActive(true);
-        _soulEnergyPrefab.transform.position = transform.position;
+        //_soulEnergyPrefab.SetActive(true);
+        //_soulEnergyPrefab.transform.position = transform.position;
         Debug.Log("Soul Energy Drop");
 
         gameObject.SetActive(false);
