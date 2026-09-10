@@ -8,10 +8,8 @@ public class SoulEnergyUI : MonoBehaviour
 
     private void OnEnable()
     {
-        // me anoto para escuchar cambios
         EventManager.SubscribeToEvent(EventsType.Event_SoulEnergyChanged, OnSoulEnergyChanged);
 
-        // muestro el valor actual apenas se prende esta UI
         UpdateText(SoulEnergyManager.Instance.CurrentSoulEnergy);
     }
 
@@ -29,10 +27,5 @@ public class SoulEnergyUI : MonoBehaviour
     private void UpdateText(int value)
     {
         _soulEnergyText.text = "Soul Energy:  "+value.ToString();
-    }
-
-    void Update()
-    {
-      UpdateText(SoulEnergyManager.Instance.CurrentSoulEnergy);
     }
 }
