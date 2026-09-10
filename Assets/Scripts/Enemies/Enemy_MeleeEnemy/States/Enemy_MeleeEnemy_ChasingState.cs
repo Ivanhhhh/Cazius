@@ -24,6 +24,7 @@ public class Enemy_MeleeEnemy_ChasingState : Enemy_Interface_StateMachine
     public void OnUpdate()
     {
         _data._chasing.Tick();
+        _data._speedBoost.Tick();
         _angelDemonAnim.AttackFalse();
         if (_data._chasing.CanAttack) 
         {

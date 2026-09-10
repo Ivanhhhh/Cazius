@@ -6510,7 +6510,6 @@ GameObject:
   m_Component:
   - component: {fileID: 570112606231792159}
   - component: {fileID: 3889174477887518829}
-  - component: {fileID: 3798231386595641385}
   m_Layer: 0
   m_Name: Angel Rig5
   m_TagString: Untagged
@@ -6567,23 +6566,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3798231386595641385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1240337241232805203}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc164b50a6f640f489ff97b73511892e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyVelocity
-  distanceThreshold: 4
-  animSpeedMultiplier: 2
-  movementSpeedMultiplier: 2.5
-  enemyAnimator: {fileID: 3889174477887518829}
-  enemyData: {fileID: 1632009764336472365}
 --- !u!1 &1389050021304681044
 GameObject:
   m_ObjectHideFlags: 0
@@ -9106,6 +9088,10 @@ MonoBehaviour:
   _isAggresiveOnStart: 1
   _needTimeForFirstReaction: 1
   _healthSystem: {fileID: 6558827155833743160}
+  _distanceThreshold: 4
+  _movementSpeedMultiplier: 2
+  _enemyAnimator: {fileID: 3889174477887518829}
+  _animSpeedMultiplier: 2
 --- !u!114 &5257676754998547151
 MonoBehaviour:
   m_ObjectHideFlags: 0

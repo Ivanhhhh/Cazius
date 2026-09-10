@@ -5,35 +5,41 @@ public class AngelDemonAnim : MonoBehaviour
 {
     [SerializeField] private Animator animator;
 
+    [Header("Slow Effect")]
     [SerializeField] private float _slowAmount = 2f;
     [SerializeField] private float _slowDuration = 1.5f;
 
     private Enemy_MeleeEnemy_Data _enemyData;
     private Coroutine _slowCoroutine;
-    private float originalSpeed;
-
 
     void Start()
     {
         _enemyData = GetComponent<Enemy_MeleeEnemy_Data>();
-        originalSpeed = _enemyData.GetChaseSpeed();
-        //animator = GetComponentInChildren<Animator>();
+
+        if (_enemyData == null)
+            Debug.LogError($"{nameof(AngelDemonAnim)}: No se encontró Enemy_MeleeEnemy_Data en el mismo GameObject.");
+
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
     }
+
+    // ====== ANIMACIONES ======
 
     public void WalkAnim(float speed)
     {
-        /*animator.SetBool("IsAttacking", false);
-        animator.SetBool("IsHeadshot", false);
-        animator.SetBool("IsDead", false);*/
+        // (Opcional) Aquí podrías controlar el blend tree de caminata usando 'speed'
+        // animator.SetFloat("Speed", speed);
     }
 
     public void AttackAnim()
-    {/*
-        animator.SetBool("IsAttacking", true);
-        animator.SetBool("IsHeadshot", false);
-        animator.SetBool("IsDead", false);*/
+    {
         animator.SetBool("Attacking", true);
         animator.SetTrigger("Attack");
+    }
+
+    public void AttackFalse()
+    {
+        animator.SetBool("Attacking", false);
     }
 
     public void HeadshotAnim()
@@ -71,6 +77,7 @@ public class AngelDemonAnim : MonoBehaviour
         SlowChaseSpeed();
         animator.SetTrigger("LeftLeg");
     }
+
     public void DieAnim()
     {
         SlowChaseSpeed();
@@ -78,34 +85,42 @@ public class AngelDemonAnim : MonoBehaviour
         animator.SetTrigger("Die");
     }
 
-    public void AttackFalse()
-    {
-        animator.SetBool("Attacking", false);
-    }
+    // ====== SLOW ======
 
     private void SlowChaseSpeed()
     {
         if (_enemyData == null) return;
 
+        // Si ya hay un slow activo, lo reiniciamos
         if (_slowCoroutine != null)
-        {
             StopCoroutine(_slowCoroutine);
-        }
 
         _slowCoroutine = StartCoroutine(SlowChaseSpeedCoroutine());
     }
 
     private IEnumerator SlowChaseSpeedCoroutine()
     {
-
-        float slowedSpeed = Mathf.Max(0f, originalSpeed - _slowAmount);
-
-        _enemyData.SetChaseSpeed(slowedSpeed);
+        // Registrar el modificador aditivo negativo identificado por 'this'
+        _enemyData.AddSpeedAdditive(this, -_slowAmount);
 
         yield return new WaitForSeconds(_slowDuration);
 
-        _enemyData.SetChaseSpeed(originalSpeed);
+        // Quitar el modificador (el enemy data recalcula la velocidad final)
+        _enemyData.RemoveSpeedAdditive(this);
 
         _slowCoroutine = null;
+    }
+
+    private void OnDisable()
+    {
+        // Seguridad: si el objeto se desactiva con un slow activo, lo limpiamos
+        if (_enemyData != null)
+            _enemyData.RemoveSpeedAdditive(this);
+
+        if (_slowCoroutine != null)
+        {
+            StopCoroutine(_slowCoroutine);
+            _slowCoroutine = null;
+        }
     }
 }
