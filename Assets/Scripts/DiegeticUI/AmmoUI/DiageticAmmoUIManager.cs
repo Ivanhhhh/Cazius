@@ -22,6 +22,7 @@ public class DiageticAmmoUIManager : MonoBehaviour
     private Coroutine _fadeCoroutine;
 
     private bool _subscribed;
+    private bool _onPurgatory = false;
     private void OnEnable()
     {
         InventoryInputHandler.OnInventoryVisibilityChanged += OnInventoryVisibilityChanged;
@@ -39,8 +40,10 @@ public class DiageticAmmoUIManager : MonoBehaviour
         WorldScanManager.Instance.ScanActive += OnScanActive;
         WorldScanManager.Instance.ScanDeactivate += OnScanDeactivate;
 
-        _scanWantsVisible =
-            WorldScanManager.Instance.IsScanActive;
+        WorldChangeManager.Instance.SwapToEdenEvent += SwapEden;
+        WorldChangeManager.Instance.SwapToPurgatoryEvent += SwapPurgatory;
+
+        _scanWantsVisible = WorldScanManager.Instance.IsScanActive;
 
         _subscribed = true;
 
@@ -50,6 +53,9 @@ public class DiageticAmmoUIManager : MonoBehaviour
     private void OnDisable()
     {
         InventoryInputHandler.OnInventoryVisibilityChanged -= OnInventoryVisibilityChanged;
+
+        WorldChangeManager.Instance.SwapToEdenEvent -= SwapEden;
+        WorldChangeManager.Instance.SwapToPurgatoryEvent -= SwapPurgatory;
 
         if (!_subscribed)
             return;
@@ -62,6 +68,20 @@ public class DiageticAmmoUIManager : MonoBehaviour
         }
 
         _subscribed = false;
+    }
+
+    private void SwapEden()
+    {
+        _onPurgatory = false;
+
+        RefreshVisibility();
+    }
+
+    private void SwapPurgatory()
+    {
+        _onPurgatory = true;
+
+        RefreshVisibility();
     }
 
     private void OnScanActive()
@@ -87,14 +107,19 @@ public class DiageticAmmoUIManager : MonoBehaviour
 
     private void RefreshVisibility()
     {
-        bool shouldBeVisible =
-            _scanWantsVisible ||
-            _inventoryWantsVisible;
+        bool shouldBeVisible = _scanWantsVisible || _inventoryWantsVisible;
+
+        if (_onPurgatory)
+        {
+            shouldBeVisible = true;
+        }
+
 
         if (shouldBeVisible == _currentlyVisible)
             return;
 
         _currentlyVisible = shouldBeVisible;
+
 
         if (shouldBeVisible)
             EnableObject();

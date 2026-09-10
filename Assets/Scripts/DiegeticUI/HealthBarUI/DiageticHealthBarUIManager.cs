@@ -19,7 +19,7 @@ public class DiageticHealthBarUIManager : MonoBehaviour
     private bool _inventoryWantsVisible;
     private bool _currentlyVisible;
 
-
+    private bool _onPurgatory;
     private bool _subscribed;
     private void OnEnable()
     {
@@ -38,6 +38,9 @@ public class DiageticHealthBarUIManager : MonoBehaviour
         WorldScanManager.Instance.ScanActive += OnScanActive;
         WorldScanManager.Instance.ScanDeactivate += OnScanDeactivate;
 
+        WorldChangeManager.Instance.SwapToEdenEvent += SwapEden;
+        WorldChangeManager.Instance.SwapToPurgatoryEvent += SwapPurgatory;
+
         _scanWantsVisible =
             WorldScanManager.Instance.IsScanActive;
 
@@ -49,6 +52,9 @@ public class DiageticHealthBarUIManager : MonoBehaviour
     private void OnDisable()
     {
         InventoryInputHandler.OnInventoryVisibilityChanged -= OnInventoryVisibilityChanged;
+
+        WorldChangeManager.Instance.SwapToEdenEvent -= SwapEden;
+        WorldChangeManager.Instance.SwapToPurgatoryEvent -= SwapPurgatory;
 
         if (!_subscribed)
             return;
@@ -63,6 +69,19 @@ public class DiageticHealthBarUIManager : MonoBehaviour
         _subscribed = false;
     }
 
+    private void SwapEden()
+    {
+        _onPurgatory = false;
+
+        RefreshVisibility();
+    }
+
+    private void SwapPurgatory()
+    {
+        _onPurgatory = true;
+
+        RefreshVisibility();
+    }
 
     private void OnScanActive()
     {
@@ -87,9 +106,12 @@ public class DiageticHealthBarUIManager : MonoBehaviour
 
     private void RefreshVisibility()
     {
-        bool shouldBeVisible =
-            _scanWantsVisible ||
-            _inventoryWantsVisible;
+        bool shouldBeVisible = _scanWantsVisible || _inventoryWantsVisible;
+
+        if (_onPurgatory)
+        {
+            shouldBeVisible = true;
+        }
 
         if (shouldBeVisible == _currentlyVisible)
             return;
