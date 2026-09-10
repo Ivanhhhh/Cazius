@@ -98,17 +98,17 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
         _firstAttack = new Enemy_FirstAttackBehaviour(_firsAttackPreparationTime, _firstAttackDuration, _stunDuration, _agent, _attackCollider, this);
         _secondAttack = new Enemy_SecondAttackBehaviour(_spinSpeed, _objectSpeedWhileSpinning, _secondAttackPreparationTime, _spinTime, _playerTransform, _selfObjectTransform, _agent);
         _speedBoost = new Enemy_SpeedBoostBehaviour
-            (
-            _selfObjectTransform,
+             (
+             _selfObjectTransform,
             _playerTransform,
-            this,
-            _distanceThreshold,
-            _movementSpeedMultiplier,
-            _enemyAnimator,
-            _animSpeedMultiplier
-            );
+             this,
+             _distanceThreshold,
+             _movementSpeedMultiplier,
+             _enemyAnimator,
+             _animSpeedMultiplier
+             );
 
-        RecalculateSpeed();
+         RecalculateSpeed();
     }
 
     // ====== SISTEMA DE MODIFICADORES DE VELOCIDAD ======

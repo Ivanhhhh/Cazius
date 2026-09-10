@@ -55,26 +55,27 @@ public class KeyInventorySystem : MonoBehaviour // Lo tiene Inventory
     {
         CurrentSoulEnergy++;
         Debug.Log("Soul Energy + " + CurrentSoulEnergy);
+
     }
 
     public void RemoveSoulEnergy()
     {
-        if (CurrentSoulEnergy > 0)
-        {
-            CurrentSoulEnergy--;
-            Debug.Log("Soul Energy has consumed " + CurrentSoulEnergy);
-        }
+         if (CurrentSoulEnergy > 0)
+         {
+             CurrentSoulEnergy--;
+             Debug.Log("Soul Energy has consumed " + CurrentSoulEnergy);
+         }
     }
 
     private void ConsumeSoulEnergy()
     {
-        if (!_isInventoryOpen) return;
+         if (!_isInventoryOpen) return;
 
-        if (CurrentSoulEnergy > 0)
-        {
-            RemoveSoulEnergy();
-            SoulUIManager.Instance.UpdateUI(CurrentSoulEnergy);
-        }
+         if (CurrentSoulEnergy > 0)
+         {
+             RemoveSoulEnergy();
+             SoulUIManager.Instance.UpdateUI(CurrentSoulEnergy);
+         }
     }
 
 }
