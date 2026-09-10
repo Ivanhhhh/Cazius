@@ -27,12 +27,6 @@ public class PickSoulEnergy : MonoBehaviour, IEInteractable
         _sra.RandomSoul();
         print ("Door");
 
-        // if (SoulUIManager.Instance != null)
-        // {
-        //     SoulUIManager.Instance.UpdateUI(KeyInventorySystem.Instance.CurrentSoulEnergy);
-        // }
-
-
         if (_grabSoulEnergyVFX != null)
         {
             GameObject vfx = Instantiate(_grabSoulEnergyVFX, transform.position, transform.rotation);

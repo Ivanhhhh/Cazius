@@ -28,11 +28,11 @@ public class SoulEnergyUI : MonoBehaviour
 
     private void UpdateText(int value)
     {
-        _soulEnergyText.text = value.ToString();
+        _soulEnergyText.text = "Soul Energy:  "+value.ToString();
     }
 
     void Update()
     {
-        UpdateText(SoulEnergyManager.Instance.CurrentSoulEnergy);
+      UpdateText(SoulEnergyManager.Instance.CurrentSoulEnergy);
     }
 }
