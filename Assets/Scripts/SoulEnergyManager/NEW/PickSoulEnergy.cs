@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PickSoulEnergy : MonoBehaviour, IEInteractable
 {
+    [Header("Soul Energy")]
+    [SerializeField] private float _maxSoulEnergy;
 
     [Header("UI")]
     [SerializeField] private string _interactText = "F to Grab Soul Energy";
@@ -11,10 +13,9 @@ public class PickSoulEnergy : MonoBehaviour, IEInteractable
     [SerializeField] private float _vfxDestroyDelay = 1f;
 
     [SerializeField] private Transform _interactionUIPoint;
-     
-     [SerializeField] SoulRandomAmount _randomAmountSoulEnergy;
 
-      public Transform GetInteractionUIPoint()
+    [SerializeField]SoulRandomAmount _sra;
+    public Transform GetInteractionUIPoint()
     {
         return _interactionUIPoint != null
             ? _interactionUIPoint
@@ -23,13 +24,13 @@ public class PickSoulEnergy : MonoBehaviour, IEInteractable
 
     public void Interact(Transform interactorTransform)
     {
-        print ("interact");
-         _randomAmountSoulEnergy.RandomSoul();
+        _sra.RandomSoul();
+        print ("Door");
 
-        if (SoulUIManager.Instance != null)
-        {
-            SoulUIManager.Instance.UpdateUI(SoulEnergyManager.Instance.CurrentSoulEnergy);
-        }
+        // if (SoulUIManager.Instance != null)
+        // {
+        //     SoulUIManager.Instance.UpdateUI(KeyInventorySystem.Instance.CurrentSoulEnergy);
+        // }
 
 
         if (_grabSoulEnergyVFX != null)
@@ -49,5 +50,7 @@ public class PickSoulEnergy : MonoBehaviour, IEInteractable
     public bool IsLocked() { return false; }
 
 }
+
+
 
 

@@ -10,5 +10,6 @@ public class SoulRandomAmount : MonoBehaviour,IRandomSoul
         int randomAmount = Random.Range(_minDrop, _maxDrop + 1);
         SoulEnergyManager.Instance.AddSoulEnergy(randomAmount);
         Debug.LogError(randomAmount + "DROPPED");
+        Debug.LogWarning(SoulEnergyManager.Instance.CurrentSoulEnergy);
     }
 }
