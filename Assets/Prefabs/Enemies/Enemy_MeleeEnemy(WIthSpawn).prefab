@@ -8936,6 +8936,7 @@ GameObject:
   - component: {fileID: 849216641521607007}
   - component: {fileID: 2345920454096334748}
   - component: {fileID: 758454031172152826}
+  - component: {fileID: 8827346932092847336}
   m_Layer: 12
   m_Name: Enemy_MeleeEnemy(WIthSpawn)
   m_TagString: Untagged
@@ -9088,10 +9089,6 @@ MonoBehaviour:
   _isAggresiveOnStart: 1
   _needTimeForFirstReaction: 1
   _healthSystem: {fileID: 6558827155833743160}
-  _distanceThreshold: 4
-  _movementSpeedMultiplier: 2
-  _enemyAnimator: {fileID: 3889174477887518829}
-  _animSpeedMultiplier: 2
 --- !u!114 &5257676754998547151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9119,7 +9116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_HealthSystem
   _maxHealth: 150
   _currentHealth: 0
-  _soulEnergyPrefab: {fileID: 0}
+  _soulEnergyPrefab: {fileID: 2289487535517808948, guid: c780d67e91957004fae9c46001d6285d, type: 3}
   anim: {fileID: 1160971636179893175}
   _ditheredTransparencies:
   - {fileID: 6361583643444521407}
@@ -9347,6 +9344,20 @@ CapsuleCollider:
   m_Height: 2.1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8827346932092847336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3884849601280153241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c7231ae1e3afe646a1ab4cba89f6262, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoulRandomAmount
+  _minDrop: 1
+  _maxDrop: 20
 --- !u!1 &3928488622556137293
 GameObject:
   m_ObjectHideFlags: 0
