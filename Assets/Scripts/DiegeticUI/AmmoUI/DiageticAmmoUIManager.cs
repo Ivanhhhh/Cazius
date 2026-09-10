@@ -1,28 +1,35 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
 public class DiageticAmmoUIManager : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] private MeshRenderer _backgroundMat;
+    [SerializeField] private TMP_Text[] textComponent;
 
-    [SerializeField] MeshRenderer _backgroundMat;
-    [SerializeField] TMP_Text[] textComponent;
-
-    [SerializeField] float _fadeDuration = 0.2f;
-
+    [Header("Fade")]
+    [SerializeField] private float _fadeDuration = 0.2f;
     [SerializeField] private float _hiddenVertexOffset = 0.2f;
     [SerializeField] private float _visibleVertexOffset = 0f;
 
+    // Fuentes de visibilidad internas
     private bool _scanWantsVisible;
     private bool _inventoryWantsVisible;
+
+    // Peticiones externas (aim, reload, etc.)
+    private readonly HashSet<object> _visibilityRequests = new HashSet<object>();
+
+    // Estado actual
     private bool _currentlyVisible;
 
-    private Coroutine _fadeCoroutine;
-
     private bool _subscribed;
-    private bool _onPurgatory = false;
+
+    // ====== LIFECYCLE ======
+
     private void OnEnable()
     {
         InventoryInputHandler.OnInventoryVisibilityChanged += OnInventoryVisibilityChanged;
@@ -30,19 +37,28 @@ public class DiageticAmmoUIManager : MonoBehaviour
         StartCoroutine(SubscribeWhenReady());
     }
 
+    private void OnDisable()
+    {
+        InventoryInputHandler.OnInventoryVisibilityChanged -= OnInventoryVisibilityChanged;
+
+        if (_subscribed && WorldScanManager.Instance != null)
+        {
+            WorldScanManager.Instance.ScanActive -= OnScanActive;
+            WorldScanManager.Instance.ScanDeactivate -= OnScanDeactivate;
+        }
+
+        _subscribed = false;
+    }
+
     private IEnumerator SubscribeWhenReady()
     {
         while (WorldScanManager.Instance == null)
-        {
             yield return null;
-        }
 
         WorldScanManager.Instance.ScanActive += OnScanActive;
         WorldScanManager.Instance.ScanDeactivate += OnScanDeactivate;
 
-        WorldChangeManager.Instance.SwapToEdenEvent += SwapEden;
-        WorldChangeManager.Instance.SwapToPurgatoryEvent += SwapPurgatory;
-
+        // Sincronizar estado inicial
         _scanWantsVisible = WorldScanManager.Instance.IsScanActive;
 
         _subscribed = true;
@@ -50,76 +66,56 @@ public class DiageticAmmoUIManager : MonoBehaviour
         RefreshVisibility();
     }
 
-    private void OnDisable()
+    // ====== API PÚBLICA (peticiones externas) ======
+
+    public void RequestVisibility(object source, bool visible)
     {
-        InventoryInputHandler.OnInventoryVisibilityChanged -= OnInventoryVisibilityChanged;
+        if (source == null) return;
 
-        WorldChangeManager.Instance.SwapToEdenEvent -= SwapEden;
-        WorldChangeManager.Instance.SwapToPurgatoryEvent -= SwapPurgatory;
+        bool changed = visible
+            ? _visibilityRequests.Add(source)
+            : _visibilityRequests.Remove(source);
 
-        if (!_subscribed)
-            return;
-
-        if (WorldScanManager.Instance != null)
-        {
-            WorldScanManager.Instance.ScanActive -= OnScanActive;
-
-            WorldScanManager.Instance.ScanDeactivate -= OnScanDeactivate;
-        }
-
-        _subscribed = false;
+        if (changed)
+            RefreshVisibility();
     }
 
-    private void SwapEden()
-    {
-        _onPurgatory = false;
+    public void RequestShow(object source) => RequestVisibility(source, true);
+    public void RequestHide(object source) => RequestVisibility(source, false);
 
-        RefreshVisibility();
-    }
-
-    private void SwapPurgatory()
-    {
-        _onPurgatory = true;
-
-        RefreshVisibility();
-    }
+    // ====== EVENTOS INTERNOS ======
 
     private void OnScanActive()
     {
         _scanWantsVisible = true;
-
         RefreshVisibility();
     }
 
     private void OnScanDeactivate()
     {
         _scanWantsVisible = false;
-
         RefreshVisibility();
     }
 
     private void OnInventoryVisibilityChanged(bool visible)
     {
         _inventoryWantsVisible = visible;
-
         RefreshVisibility();
     }
 
+    // ====== LÓGICA DE VISIBILIDAD ======
+
     private void RefreshVisibility()
     {
-        bool shouldBeVisible = _scanWantsVisible || _inventoryWantsVisible;
-
-        if (_onPurgatory)
-        {
-            shouldBeVisible = true;
-        }
-
+        bool shouldBeVisible =
+            _scanWantsVisible ||
+            _inventoryWantsVisible ||
+            _visibilityRequests.Count > 0;
 
         if (shouldBeVisible == _currentlyVisible)
             return;
 
         _currentlyVisible = shouldBeVisible;
-
 
         if (shouldBeVisible)
             EnableObject();
@@ -130,16 +126,18 @@ public class DiageticAmmoUIManager : MonoBehaviour
     private void EnableObject()
     {
         StartCoroutine(FadeShader(_backgroundMat, "_OpacityMultiplier", 0f, 1f, _fadeDuration));
-        StartCoroutine(FadeShader(_backgroundMat, "_VertexOffset", 0.2f, 0f, _fadeDuration));
+        StartCoroutine(FadeShader(_backgroundMat, "_VertexOffset", _hiddenVertexOffset, _visibleVertexOffset, _fadeDuration));
         StartCoroutine(FadeText(0f, 1f, _fadeDuration));
     }
 
     private void DisableObject()
     {
         StartCoroutine(FadeShader(_backgroundMat, "_OpacityMultiplier", 1f, 0f, _fadeDuration));
-        StartCoroutine(FadeShader(_backgroundMat, "_VertexOffset", 0f, 0.2f, _fadeDuration));
+        StartCoroutine(FadeShader(_backgroundMat, "_VertexOffset", _visibleVertexOffset, _hiddenVertexOffset, _fadeDuration));
         StartCoroutine(FadeText(1f, 0f, _fadeDuration));
     }
+
+    // ====== FADES ======
 
     private IEnumerator FadeShader(MeshRenderer mat, string property, float start, float end, float duration)
     {
@@ -163,24 +161,16 @@ public class DiageticAmmoUIManager : MonoBehaviour
 
         while (elapsed < duration)
         {
-
             elapsed += Time.unscaledDeltaTime;
+            float value = Mathf.Lerp(start, end, elapsed / duration);
 
-            float value = Mathf.Lerp(start,end, elapsed / duration);
             foreach (TMP_Text txtComp in textComponent)
-            {
                 txtComp.alpha = value;
-            }
 
             yield return null;
         }
 
         foreach (TMP_Text txtComp in textComponent)
-        {
             txtComp.alpha = end;
-        }
-
-        yield return null;
     }
-
 }
