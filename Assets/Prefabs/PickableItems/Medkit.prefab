@@ -33,6 +33,7 @@ Transform:
   m_Children:
   - {fileID: 8103543731397728733}
   - {fileID: 9103016049187592183}
+  - {fileID: 5705439919330340367}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4592070178067349863
@@ -50,6 +51,7 @@ MonoBehaviour:
   _itemScriptableObject: {fileID: 11400000, guid: 590ca367f9b41fb44b1a23e02dd4351d, type: 2}
   _interactText: F to Grab Medkit
   sfxType: 7
+  _interactionUIPoint: {fileID: 5705439919330340367}
 --- !u!65 &5804000432671649955
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -71,6 +73,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.72724915, y: 2.3206859, z: 0.3979988}
   m_Center: {x: -0.0061950684, y: 1.1902142, z: 0.031166077}
+--- !u!1 &2729095749974832077
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5705439919330340367}
+  m_Layer: 0
+  m_Name: InteractionUIPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5705439919330340367
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2729095749974832077}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.269, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2532742716090202206}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7184089665867367974
 GameObject:
   m_ObjectHideFlags: 0

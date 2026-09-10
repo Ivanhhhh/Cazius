@@ -21,6 +21,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI _currentHealthText;
     [SerializeField] private Image _healthStateImage;
+    [SerializeField] private DiageticHealthBarUIManager _healthBarUIManager;
 
     [Header("Display Settings")]
     [SerializeField] private float _displayDuration = 2.5f;
@@ -37,6 +38,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
 
     private Coroutine _hideUICoroutine;
     [SerializeField] private CameraShake _cameraShakeScript;
+    [SerializeField] private Player_Damage playerDamageScript;
 
     // --- INTEGRACIÓN CON EL INVENTARIO (OBSERVER PATTERN) ---
     private void OnEnable()
@@ -119,6 +121,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
         _currentHealth -= amount;
         _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
         _cameraShakeScript.DamageShake();
+        playerDamageScript.TakeDamageEffect();
 
         UpdateHealthState();
         ModifyUI();
@@ -142,6 +145,9 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
 
     private void ModifyUI()
     {
+
+        _healthBarUIManager.ChangeHealthBarPercentage(_currentHealth / _maxHealth);
+
         int colorIndex = (int)_healthState;
         Color targetColor = Color.white;
 
@@ -226,7 +232,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
-    
+
     private void HandleParryStarted()
     {
         _isInvulnerableByParry = true;

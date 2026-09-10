@@ -13,20 +13,16 @@ MonoBehaviour:
   m_Name: PurgatoryKeyQuest
   m_EditorClassIdentifier: Assembly-CSharp::QuestDefinition
   questID: PurgatoryKeyQuest01
-  questTitle: Get New Safe Zone Key
+  questTitle: quest_key_title
   questType: 0
   condition: {fileID: 11400000, guid: a3fb9851cb6dcff46bfcffb679782c4d, type: 2}
   conditionTargetID: PurgatoryKey
   offerDialog:
-  - Buddy, <b><color=red>Angels</b></color> are everywhere. We need to get to the
-    <b><color=blue>Safe Zone</b></color> across the street.
-  - Would you make good use of your gun and get the <b><color=yellow>Key</b></color>
-    in the building around the corner?
+  - quest_key_offer_01
+  - quest_key_offer_02
   activeDialog:
-  - 'Take care, <b><color=red>Angels</b></color> don''t forgive us.. '
+  - quest_key_active_01
   firstCompletionDialog:
-  - 'I knew I could count on you! Hurry and open the <b><color=blue>Safe Zone</b></color>
-    across the street. '
+  - quest_key_firstcompletion_01
   completedDialog:
-  - Now we can get more resources, here! Grab some <b><color=yellow>ammo</b></color>,
-    Thanks a lot!
+  - quest_key_completed_01

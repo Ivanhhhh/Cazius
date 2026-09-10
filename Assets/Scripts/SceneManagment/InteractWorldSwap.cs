@@ -29,6 +29,15 @@ public class InteractWorldSwap : MonoBehaviour, IEInteractable
     private bool _isActivating;
     private Material _runeMaterialInstance;
 
+
+    [SerializeField] private Transform _interactionUIPoint;
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
+
     private void Awake()
     {
         if (_animator == null)
@@ -141,6 +150,8 @@ public class InteractWorldSwap : MonoBehaviour, IEInteractable
     {
         return transform;
     }
+
+    public bool IsLocked() { return false; }
 
     private void OnDrawGizmosSelected()
     {

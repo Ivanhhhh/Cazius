@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class NPCQuestGiver : MonoBehaviour, IEInteractable
@@ -8,6 +9,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [Header("NPC Behavior")]
     [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
+    [SerializeField] private SFXManager.SFXCategoryType _interactSFX = SFXManager.SFXCategoryType.MaleHeySFX;
 
     [Header("Reward")]
     [SerializeField] private ItemData _questPrizeItem;
@@ -26,6 +28,14 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
 
     private Animator _animator;
 
+    [SerializeField] private Transform _interactionUIPoint;
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -35,7 +45,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     {
         RotateTowardsPlayer(interactorTransform);
         _animator.SetTrigger(_wavingTrigger);
-        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.MaleHeySFX, transform.position);
+        SFXManager.Instance.PlaySFXAtPosition(_interactSFX, transform.position);
 
         QuestManager.Instance.RegisterQuest(quest);
         QuestStatus status = QuestManager.Instance.GetStatus(quest.questID);
@@ -69,12 +79,21 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     public string GetInteractText() { return _interactText; }
     public Transform GetTransform() { return transform; }
 
+    public bool IsLocked() { return false; }
+
+    // --- Localization helper ---
+
+    private string[] Translate(string[] ids)
+    {
+        return ids.Select(id => LocalizationManager.Instance.GetTranslate(id)).ToArray();
+    }
+
     // --- Dialog openers ---
 
     private void OpenOfferDialog()
     {
         DialogUIController.Instance.OpenDialog(
-            pages: quest.offerDialog,
+            pages: Translate(quest.offerDialog),
             onAccept: () => QuestManager.Instance.StartQuest(quest.questID),
             onClose: null
         );
@@ -83,7 +102,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     private void OpenActiveDialog()
     {
         DialogUIController.Instance.OpenDialog(
-            pages: quest.activeDialog,
+            pages: Translate(quest.activeDialog),
             onAccept: null,
             onClose: null
         );
@@ -105,7 +124,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     private void OpenFirstCompletionDialog()
     {
         DialogUIController.Instance.OpenDialog(
-            pages: quest.firstCompletionDialog,
+            pages: Translate(quest.firstCompletionDialog),
             onAccept: null,
             onClose: () =>
             {
@@ -123,7 +142,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     private void OpenCompletedDialog()
     {
         DialogUIController.Instance.OpenDialog(
-            pages: quest.completedDialog,
+            pages: Translate(quest.completedDialog),
             onAccept: null,
             onClose: null
         );

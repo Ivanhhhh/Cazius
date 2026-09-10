@@ -5,7 +5,7 @@ public class WhenOpenDoor : MonoBehaviour
 {
     [Header("Door Animation")]
     [SerializeField] private Animator _doorAnimator;
-    [SerializeField] private Transform _currentCamera;
+    private Transform _currentCamera;
 
     [Header("Camera Position")]
     [SerializeField] private Transform _cameraPoint;
@@ -16,6 +16,7 @@ public class WhenOpenDoor : MonoBehaviour
     void Awake()
     {
         _doorAnimator.enabled = false;
+        _currentCamera = GameManager.Instance.Player.CameraTransform;
     }
 
     public IEnumerator WhenKeyOpenDoor(string animationName)

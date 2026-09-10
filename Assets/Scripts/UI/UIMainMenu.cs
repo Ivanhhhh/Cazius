@@ -1,30 +1,40 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+
 
 public class UIMainMenu : MonoBehaviour
 {
     [Header("Panels")]
+    [SerializeField] private GameObject _RebindPanel;
     [SerializeField] private GameObject _mainPanel;
     [SerializeField] private GameObject _optionsPanel;
 
     [Header("Sub Panels")]
     [SerializeField] private GameObject _controlsPanel;
     [SerializeField] private GameObject _soundPanel;
+    [SerializeField] private GameObject _languagePanel;
 
     [Header("Main Panel - Buttons")]
     [SerializeField] private string _startGameScene = "LoadToGameFromMenu";
     [SerializeField] private Button _startGameButton;
     [SerializeField] private Button _optionsButton;
     [SerializeField] private Button _exitButton;
+    [SerializeField] private Button _RebindButton;
 
     [Header("Options Panel - Buttons")]
     [SerializeField] private Button _controlsButton;
     [SerializeField] private Button _soundConfigButton;
+    [SerializeField] private Button _languageButton;
     [SerializeField] private Button _backToMainButton;
 
     private GameObject _currentPanel;
     private GameObject _currentSubPanel;
+
+    private bool TogglePanelRebind = false;
+
+    private byte OpenedAmount = 0;
 
     private void Start()
     {
@@ -36,10 +46,24 @@ public class UIMainMenu : MonoBehaviour
         // Options panel listeners
         _controlsButton.onClick.AddListener(OnOpenControls);
         _soundConfigButton.onClick.AddListener(OnOpenSoundConfig);
+        _languageButton.onClick.AddListener(OnOpenLanguage);
         _backToMainButton.onClick.AddListener(OnBackToMain);
+        _RebindButton.onClick.AddListener(RebindPanelMethod);
+
 
         // Start on main panel
         ShowPanel(_mainPanel);
+    }
+
+    void Update()
+    {
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            OpenedAmount = 2;
+           _RebindPanel.SetActive(false);
+            OpenedAmount = 0;
+
+        }
     }
 
     // Panel Navigation
@@ -87,6 +111,27 @@ public class UIMainMenu : MonoBehaviour
     // Options Panel Handlers
     private void OnOpenControls() => ShowSubPanel(_controlsPanel);
     private void OnOpenSoundConfig() => ShowSubPanel(_soundPanel);
+    private void OnOpenLanguage() => ShowSubPanel(_languagePanel);
     private void OnBackToMain() => ShowPanel(_mainPanel);
+
+    public void RebindPanelMethod()
+    {
+         Debug.Log(OpenedAmount);
+        OpenedAmount += 1;
+
+        if (OpenedAmount <= 1) TogglePanelRebind = true;
+
+        
+
+        if (OpenedAmount >= 2)
+        {
+            TogglePanelRebind = false;
+            OpenedAmount = 0;
+        }
+        if (TogglePanelRebind) _RebindPanel.SetActive(true);
+
+        else if (TogglePanelRebind != true) _RebindPanel.SetActive(false);
+        print ("Ejecutado");
+    }
 
 }

@@ -23,6 +23,14 @@ public class OpenDoorWithItem : MonoBehaviour, IEInteractable
         _inventory = Inventory.Instance;
     }
 
+    [SerializeField] private Transform _interactionUIPoint;
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
+
     public void Interact(Transform interactorTransform)
     {
         if (IsRunning) return;
@@ -82,5 +90,14 @@ public class OpenDoorWithItem : MonoBehaviour, IEInteractable
 
     public string GetInteractText() { return OpenDoorText; }
     public Transform GetTransform() { return this.transform; }
+
+    public bool IsLocked()
+    {
+        if (_inventory.HasItem(_itemIDNeededToOpen))
+        {
+            return false;
+        }
+        else { return true; }
+    }
 
 }

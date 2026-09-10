@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform _cameraTransform;
     [SerializeField] private Transform _cameraTarget;
     [SerializeField] private Animator _animator;
+    [SerializeField] private Camera playerCamera;
 
     [Header("Movement")]
     [SerializeField] public float _moveSpeed = 10f;
@@ -33,6 +34,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _minPitch = -40f;
     [SerializeField] private float _maxPitch = 40f;
     [SerializeField] private float _cameraVerticalTilt = 0.3f;
+    private bool _inventoryCameraLocked;
+    private float _pitchBeforeInventory;
+
+    [SerializeField] private float _inventoryPitch = 0f;
 
     [Header("Camera Target Dynamic")]
     [SerializeField] private float _minTargetY = 0.2f;
@@ -89,6 +94,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody _rb;
     private Camera _camera;
+    public Transform CameraTransform => _cameraTransform;
     public PlayerControls _controls;
     private Quaternion _targetRotation;
     private Vector2 _moveInput;
@@ -105,8 +111,11 @@ public class PlayerMovement : MonoBehaviour
 
     public float _currentSpeed { get; set; }
 
+    private bool _canAim = true;
+
     private void Awake()
     {
+        GameManager.Instance.RegisterPlayer(this);
         _camera = _cameraTransform.GetComponent<Camera>();
         _rb = GetComponent<Rigidbody>();
         _aimSpeed = _moveSpeed / 2;
@@ -125,8 +134,15 @@ public class PlayerMovement : MonoBehaviour
         _controls.Player.Look.performed += ctx => _lookInput = ctx.ReadValue<Vector2>();
         _controls.Player.Look.canceled += _ => _lookInput = Vector2.zero;
 
-        _controls.Player.Aim.performed += _ => _isAiming = true;
-        _controls.Player.Aim.canceled += _ => _isAiming = false;
+        _controls.Player.Aim.performed += _ =>
+    {
+        if (_canAim) _isAiming = true;
+    };
+
+        _controls.Player.Aim.canceled += _ =>
+        {
+            _isAiming = false;
+        };
 
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -136,11 +152,11 @@ public class PlayerMovement : MonoBehaviour
         HandleLook();
         HandleAim();
         _smoothedMoveInput = Vector2.Lerp(_smoothedMoveInput, _moveInput, Time.deltaTime * 10f);
+        ApplyRotation();
     }
 
     private void FixedUpdate()
     {
-        ApplyRotation();
         HandleMovement();
     }
 
@@ -231,20 +247,46 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleLook()
     {
+        if (_inventoryCameraLocked)
+            return;
+
         float mouseX = _lookInput.x * _mouseSensitivityX;
         float mouseY = _lookInput.y * _mouseSensitivityY;
 
         _yaw += mouseX;
 
         _cameraPitch -= mouseY;
-        _cameraPitch = Mathf.Clamp(_cameraPitch, _minPitch, _maxPitch);
-        _cameraTarget.localRotation = Quaternion.Euler(_cameraPitch, 0f, 0f);
 
-        float pitchT = Mathf.InverseLerp(_minPitch, _maxPitch, _cameraPitch);
-        float dynamicTargetY = Mathf.Lerp(_minTargetY, _maxTargetY, pitchT);
+        ApplyCameraPitch();
+    }
+
+    private void ApplyCameraPitch()
+    {
+        _cameraPitch = Mathf.Clamp(
+            _cameraPitch,
+            _minPitch,
+            _maxPitch
+        );
+
+        _cameraTarget.localRotation =
+            Quaternion.Euler(_cameraPitch, 0f, 0f);
+
+        float pitchT = Mathf.InverseLerp(
+            _minPitch,
+            _maxPitch,
+            _cameraPitch
+        );
+
+        float dynamicTargetY = Mathf.Lerp(
+            _minTargetY,
+            _maxTargetY,
+            pitchT
+        );
 
         Vector3 localPos = _cameraTarget.localPosition;
+
         localPos.y = dynamicTargetY;
+
         _cameraTarget.localPosition = localPos;
     }
 
@@ -287,14 +329,14 @@ public class PlayerMovement : MonoBehaviour
     {
         float targetFOV = _isAiming ? _aimFOV : _normalFOV;
 
-            _animator.SetBool("IsAiming", _isAiming);
+        _animator.SetBool("IsAiming", _isAiming);
 
         _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, targetFOV, Time.deltaTime * _fovSpeed);
     }
 
     void ApplyRotation()
     {
-        _rb.MoveRotation(Quaternion.Euler(0f, _yaw, 0f));
+        _rb.rotation = Quaternion.Euler(0f, _yaw, 0f);
     }
 
     public void ResetInput()
@@ -466,5 +508,47 @@ public class PlayerMovement : MonoBehaviour
 
         return rotationPivot +
                yawRotation * directionToTarget;
+    }
+
+    public void BeginInventoryCamera()
+    {
+        _pitchBeforeInventory = _cameraPitch;
+
+        _inventoryCameraLocked = true;
+
+        _lookInput = Vector2.zero;
+    }
+
+    public void SetInventoryCameraBlend(float blend)
+    {
+        blend = Mathf.Clamp01(blend);
+
+        _cameraPitch = Mathf.Lerp(
+            _pitchBeforeInventory,
+            _inventoryPitch,
+            blend
+        );
+
+        ApplyCameraPitch();
+    }
+
+    public void EndInventoryCamera()
+    {
+        _cameraPitch = _inventoryPitch;
+
+        ApplyCameraPitch();
+
+        _inventoryCameraLocked = false;
+    }
+
+    public void SetCanAim(bool canAim)
+    {
+        _canAim = canAim;
+
+        if (!canAim)
+        {
+            _isAiming = false;
+            _animator.SetBool("IsAiming", false);
+        }
     }
 }

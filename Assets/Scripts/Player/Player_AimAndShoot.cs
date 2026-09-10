@@ -10,8 +10,10 @@ public class Player_AimAndShoot : MonoBehaviour
 {
     IEnumerator RechargeC;
     bool CanShoot;
-    float LengthAnim;
-    private string AnimName = "ReloadAnim";
+    private bool _canUseWeapon = true;
+
+    [SerializeField] float LengthAnim;
+    private string AnimName = "Reload";
     [Header("References")]
     [SerializeField] private Camera _playerCamera;
     [SerializeField] private PlayerMovement _movement;
@@ -48,9 +50,9 @@ public class Player_AimAndShoot : MonoBehaviour
     [SerializeField] private float _crosshairBaseOffset;
 
     [Header("UI")]
-    [SerializeField] private TextMeshProUGUI _remainingBulletsUI;
-    [SerializeField] private TextMeshProUGUI _maxBulletsUI;
-    [SerializeField] private TextMeshProUGUI _pressR;
+    [SerializeField] private TMP_Text _remainingBulletsUI;
+    [SerializeField] private TMP_Text _maxBulletsUI;
+    [SerializeField] private TMP_Text _pressR;
 
     [Header("Light Flash Settings")]
     [SerializeField] private Light flashLight;
@@ -67,7 +69,7 @@ public class Player_AimAndShoot : MonoBehaviour
     [SerializeField] private VisualEffect _bloodHitVFX;
     [SerializeField] private float _bloodVFXDestroyDelay = 2f;
     [SerializeField] private float _bloodSurfaceOffset = 0.03f;
-     private string _bloodPlayEventName = "OnPlay";
+    private string _bloodPlayEventName = "OnPlay";
 
     [Header("Decals")]
     [SerializeField] private BulletDecalSpawner _bulletDecalSpawner;
@@ -79,6 +81,8 @@ public class Player_AimAndShoot : MonoBehaviour
     public float _currentSpread;
 
     public bool _hasBullets => _remainingBullets > 0;
+
+
 
     void Start()
     {
@@ -111,17 +115,17 @@ public class Player_AimAndShoot : MonoBehaviour
         flashLight.intensity = 0f;
         flashLight.range = flashRange;
 
-
+        /*
         foreach (AnimationClip clip in _playerAnimator.runtimeAnimatorController.animationClips)
         {
             if (clip.name == AnimName) LengthAnim = clip.length;
 
-        }
+        }*/
     }
 
     private void Update()
     {
-       
+
     }
 
     void OnDestroy()
@@ -181,6 +185,9 @@ public class Player_AimAndShoot : MonoBehaviour
 
     private void OnShootStarted(InputAction.CallbackContext context)
     {
+        if (!_canUseWeapon)
+            return;
+
         if (CanShoot)
         {
             // 🛠️ CORRECCIÓN DE AIM: Si el jugador intenta disparar sin presionar el botón de apuntar, cancelamos el tiro.
@@ -266,7 +273,7 @@ public class Player_AimAndShoot : MonoBehaviour
             StartCoroutine(nameof(HideRay));
 
         }
-      
+
     }
 
     void HandleHit(RaycastHit weaponHit)
@@ -321,7 +328,7 @@ public class Player_AimAndShoot : MonoBehaviour
         CanShoot = false;
         _playerAnimator.SetTrigger("Reload");
 
-        yield return new WaitForSeconds(LengthAnim-1); //LengthAnim
+        yield return new WaitForSeconds(LengthAnim); //LengthAnim
         UpdateUI();
 
         CanShoot = true;
@@ -342,7 +349,11 @@ public class Player_AimAndShoot : MonoBehaviour
     //}
 
     void Recharge(InputAction.CallbackContext context)
-    {   if (_remainingBullets < 6)
+    {
+        if (!_canUseWeapon)
+            return;
+
+        if (_remainingBullets < 6)
         {
             StartCoroutine(WaitTime());
             int totalReserve = Inventory.Instance.GetTotalAmmo();
@@ -359,10 +370,10 @@ public class Player_AimAndShoot : MonoBehaviour
 
 
         }
-        
+
     }
 
-    void NewRecharge ()
+    void NewRecharge()
     {
         StartCoroutine(WaitTime());
         int totalReserve = Inventory.Instance.GetTotalAmmo();
@@ -376,7 +387,7 @@ public class Player_AimAndShoot : MonoBehaviour
 
         SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RechargingGun);
 
-       
+
     }
 
     void UpdateUI()
@@ -385,7 +396,7 @@ public class Player_AimAndShoot : MonoBehaviour
 
         _remainingBulletsUI.text = $"{_remainingBullets}";
         _maxBulletsUI.text = $"{currentReserve}";
-        
+
         _pressR.enabled = _remainingBullets < _maxBullets && currentReserve > 0;
     }
 
@@ -433,5 +444,28 @@ public class Player_AimAndShoot : MonoBehaviour
         VisualEffect bloodVFX = Instantiate(_bloodHitVFX, spawnPosition, spawnRotation);
         bloodVFX.SendEvent(_bloodPlayEventName);
         Destroy(bloodVFX.gameObject, _bloodVFXDestroyDelay);
+    }
+
+    public void SetCanUseWeapon(bool canUse)
+    {
+        _canUseWeapon = canUse;
+
+        if (!canUse)
+        {
+            CanShoot = false;
+
+            if (RechargeC != null)
+            {
+                StopCoroutine(RechargeC);
+                RechargeC = null;
+            }
+
+            _playerAnimator.ResetTrigger("Shoot");
+            _playerAnimator.ResetTrigger("Reload");
+        }
+        else
+        {
+            CanShoot = true;
+        }
     }
 }

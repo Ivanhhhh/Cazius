@@ -12,6 +12,14 @@ public class SoulEnergy : MonoBehaviour, IEInteractable
     [SerializeField] private GameObject _grabSoulEnergyVFX;
     [SerializeField] private float _vfxDestroyDelay = 1f;
 
+    [SerializeField] private Transform _interactionUIPoint;
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
+
     public void Interact(Transform interactorTransform)
     {
         if (KeyInventorySystem.Instance.CurrentSoulEnergy >= _maxSoulEnergy) return;
@@ -37,6 +45,8 @@ public class SoulEnergy : MonoBehaviour, IEInteractable
     public string GetInteractText() { return _interactText; }
 
     public Transform GetTransform() { return transform; }
+
+    public bool IsLocked() { return false; }
 
 }
 

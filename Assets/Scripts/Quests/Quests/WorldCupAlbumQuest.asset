@@ -13,20 +13,18 @@ MonoBehaviour:
   m_Name: WorldCupAlbumQuest
   m_EditorClassIdentifier: Assembly-CSharp::QuestDefinition
   questID: WorldCupAlbumQuest
-  questTitle: Retrieve Soul Energy Investigation Notes from Crows
+  questTitle: quest_notes_title
   questType: 0
   condition: {fileID: 11400000, guid: 3e5c4ca02ef60124ca28af946b347d90, type: 2}
   conditionTargetID: WorldCupAlbum
   offerDialog:
-  - 'Those fucking crows, they''ve stolen my <b><color=yellow>Soul Energy Investigation
-    Notes</b></color>. '
-  - I need that for my new weapons research...
+  - quest_notes_offer_01
+  - quest_notes_offer_02
   activeDialog:
-  - It seems they know they took something valuable.
+  - quest_notes_active_01
   firstCompletionDialog:
-  - You're our hero, thanks a lot!
-  - Please, take this <b><color=green>Depot Key</b></color>, it's around the corner.
-  - 'Feel free to grab anything you want and get equiped in this <b><color=blue>Safe
-    Zone</b></color> '
+  - quest_notes_firstcompletion_01
+  - quest_notes_firstcompletion_02
+  - quest_notes_firstcompletion_03
   completedDialog:
-  - 'Do you know how intelligent crows are? Some are more intelligent than people. '
+  - quest_notes_completed_01

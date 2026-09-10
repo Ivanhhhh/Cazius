@@ -15,7 +15,20 @@ public class PickableItem : MonoBehaviour, IEInteractable
         Destroy(gameObject);
     }
 
+    [SerializeField] private Transform _interactionUIPoint;
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
+
     public string GetInteractText() { return _interactText; }
 
     public Transform GetTransform() { return transform; }
+
+    public bool IsLocked()
+    {
+        return false;
+    }
 }

@@ -308,6 +308,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.88, y: 1.9196233, z: 0.77}
   m_Center: {x: 0, y: 0.019426068, z: 0}
+--- !u!1 &5806092603203954755
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2812440751092682593}
+  m_Layer: 0
+  m_Name: InteractionUIPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2812440751092682593
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5806092603203954755}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.0000016391277, y: 0.7071099, z: -0.000000834465, w: -0.7071037}
+  m_LocalPosition: {x: 92.8, y: 105.1, z: 5.4}
+  m_LocalScale: {x: 41.250427, y: 121.3914, z: 27.026417}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4830602863778955598}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6778745224734082424
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,6 +574,7 @@ MonoBehaviour:
   _rigidbody: {fileID: 4651472797793194644}
   _Anim: {fileID: 6174878515940514445}
   OpenDoorText: F To Open/Close
+  _interactionUIPoint: {fileID: 2812440751092682593}
 --- !u!65 &833650186568962099
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -742,12 +774,20 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: -7877255077317427979, guid: 486ef02b280577f479033e7df1f0664e, type: 3}
     - {fileID: -4749545934768851824, guid: 486ef02b280577f479033e7df1f0664e, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -173505512265860905, guid: 486ef02b280577f479033e7df1f0664e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2812440751092682593}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: -5645937942226959685, guid: 486ef02b280577f479033e7df1f0664e, type: 3}
 --- !u!4 &1737871197511560809 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2774220344278030320, guid: 486ef02b280577f479033e7df1f0664e, type: 3}
+  m_PrefabInstance: {fileID: 4512090133005449625}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4830602863778955598 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -173505512265860905, guid: 486ef02b280577f479033e7df1f0664e, type: 3}
   m_PrefabInstance: {fileID: 4512090133005449625}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7835251378816833848

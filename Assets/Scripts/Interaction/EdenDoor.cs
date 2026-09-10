@@ -22,6 +22,14 @@ public class EdenDoor : MonoBehaviour, IEInteractable
         }
     }
 
+    [SerializeField] private Transform _interactionUIPoint;
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
+
     public IEnumerator OpenDoor()
     {
         _playerMovement.enabled = false;
@@ -41,5 +49,17 @@ public class EdenDoor : MonoBehaviour, IEInteractable
     public string GetInteractText() { return _interactText; }
 
     public Transform GetTransform() { return transform; }
+
+    public bool IsLocked()
+    {
+        if (KeyInventorySystem.Instance.HasEdenKey)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 
 }

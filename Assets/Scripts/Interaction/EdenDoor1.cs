@@ -6,6 +6,16 @@ public class EdenDoor1 : MonoBehaviour, IEInteractable
     [SerializeField] private float _openAngle;
     [SerializeField] private string _interactText = "You need Eden Key";
 
+
+    [SerializeField] private Transform _interactionUIPoint;
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
+
+
     public void Interact(Transform interactorTransform)
     {
         if (_isOpen) return;
@@ -20,5 +30,17 @@ public class EdenDoor1 : MonoBehaviour, IEInteractable
     public string GetInteractText() { return _interactText; }
 
     public Transform GetTransform() { return transform; }
+
+    public bool IsLocked()
+    {
+        if (KeyInventorySystem.Instance.HasEdenKey)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 
 }

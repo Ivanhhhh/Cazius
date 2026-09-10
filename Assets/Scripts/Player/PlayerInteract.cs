@@ -8,7 +8,6 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField] private float _interactAngle = 60f;
     [SerializeField] private float _interactOffset = 0.5f;
 
-    // Fires whenever the best interactable in cone changes — null means none
     public static event Action<IEInteractable> OnInteractableChanged;
 
     private PlayerControls _controls;
@@ -24,7 +23,6 @@ public class PlayerInteract : MonoBehaviour
     {
         IEInteractable best = GetInteractableObject();
 
-        // Only fire event when the best interactable actually changes
         if (best != _currentInteractable)
         {
             _currentInteractable = best;

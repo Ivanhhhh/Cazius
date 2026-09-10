@@ -9,6 +9,14 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     [SerializeField] Animator _Anim;
     [SerializeField] string OpenDoorText = "F To Interact";
     private bool IsRunning;
+
+    [SerializeField] private Transform _interactionUIPoint;
+    public Transform GetInteractionUIPoint()
+    {
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
     public IEnumerator OpenDoorMethod()
     {  
         IsRunning = true;
@@ -70,5 +78,10 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     public Transform GetTransform()
     {
         return this.transform;
+    }
+
+    public bool IsLocked()
+    {
+        return false;
     }
 }
