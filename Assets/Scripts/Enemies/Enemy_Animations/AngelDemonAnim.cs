@@ -8,12 +8,15 @@ public class AngelDemonAnim : MonoBehaviour
     [Header("Slow Effect")]
     [SerializeField] private float _slowAmount = 2f;
     [SerializeField] private float _slowDuration = 1.5f;
+    [SerializeField] private float _flyDistanceThreshold;
 
     private Enemy_MeleeEnemy_Data _enemyData;
     private Coroutine _slowCoroutine;
+    private Transform _playerTransform;
 
     void Start()
     {
+        StartCoroutine(WaitForPlayer());
         _enemyData = GetComponent<Enemy_MeleeEnemy_Data>();
 
         if (_enemyData == null)
@@ -21,6 +24,20 @@ public class AngelDemonAnim : MonoBehaviour
 
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
+    }
+    private IEnumerator WaitForPlayer()
+    {
+        while (_playerTransform == null)
+        {
+            var player = FindFirstObjectByType<PlayerMovement>();
+            if (player != null)
+            {
+                _playerTransform = player.transform;
+                yield break;
+            }
+
+            yield return null;
+        }
     }
 
     // ====== ANIMACIONES ======
@@ -100,14 +117,22 @@ public class AngelDemonAnim : MonoBehaviour
 
     private IEnumerator SlowChaseSpeedCoroutine()
     {
-        // Registrar el modificador aditivo negativo identificado por 'this'
-        _enemyData.AddSpeedAdditive(this, -_slowAmount);
+        if (_playerTransform != null)
+        {
+            float distance = Vector3.Distance(transform.position, _playerTransform.position);
+            bool shouldBoost = distance > _flyDistanceThreshold;
 
-        yield return new WaitForSeconds(_slowDuration);
+            if (shouldBoost == false)
+            {
+                // Registrar el modificador aditivo negativo identificado por 'this'
+                _enemyData.AddSpeedAdditive(this, -_slowAmount);
 
-        // Quitar el modificador (el enemy data recalcula la velocidad final)
-        _enemyData.RemoveSpeedAdditive(this);
+                yield return new WaitForSeconds(_slowDuration);
 
+                // Quitar el modificador (el enemy data recalcula la velocidad final)
+                _enemyData.RemoveSpeedAdditive(this);
+            }
+        }
         _slowCoroutine = null;
     }
 

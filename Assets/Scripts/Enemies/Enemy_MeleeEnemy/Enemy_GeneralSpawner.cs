@@ -103,7 +103,7 @@
                 if (_maxSpawnedObjects > 0 && _spawnedObjects.Count >= _maxSpawnedObjects)
                     break;
 
-                GameObject newObj = Instantiate(_objectToSpawn, spawnPos, Quaternion.identity);
+                GameObject newObj = Instantiate(_objectToSpawn, spawnPos, transform.rotation);
                 _spawnedObjects.Add(newObj);
             }
         }
