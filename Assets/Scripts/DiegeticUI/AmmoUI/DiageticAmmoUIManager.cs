@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
@@ -22,6 +23,9 @@ public class DiageticAmmoUIManager : MonoBehaviour
     private Coroutine _fadeCoroutine;
 
     private bool _subscribed;
+
+    private readonly HashSet<object> _visibilityRequests = new HashSet<object>();
+
     private void OnEnable()
     {
         InventoryInputHandler.OnInventoryVisibilityChanged += OnInventoryVisibilityChanged;
@@ -89,7 +93,8 @@ public class DiageticAmmoUIManager : MonoBehaviour
     {
         bool shouldBeVisible =
             _scanWantsVisible ||
-            _inventoryWantsVisible;
+            _inventoryWantsVisible ||
+            _visibilityRequests.Count > 0;
 
         if (shouldBeVisible == _currentlyVisible)
             return;
@@ -101,6 +106,25 @@ public class DiageticAmmoUIManager : MonoBehaviour
         else
             DisableObject();
     }
+
+    public void RequestVisibility(object source, bool visible)
+    {
+        if (source == null) return;
+
+        bool changed = visible
+            ? _visibilityRequests.Add(source)
+            : _visibilityRequests.Remove(source);
+
+        if (changed)
+            RefreshVisibility();
+    }
+    public void RequestShow(object source) => RequestVisibility(source, true);
+
+    public void RequestHide(object source) => RequestVisibility(source, false);
+
+
+
+
 
     private void EnableObject()
     {
