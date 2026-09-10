@@ -50,7 +50,10 @@ public class Enemy_SpeedBoostBehaviour : MonoBehaviour
 
             // Opcional: acelerar la animación
             if (_animator != null)
+            {
                 _animator.speed = _animSpeedMultiplier;
+                _animator.SetBool("IsFlying", true);
+            }
 
             Debug.Log("Speed boost activado");
         }
@@ -61,7 +64,10 @@ public class Enemy_SpeedBoostBehaviour : MonoBehaviour
 
             // Restaurar animación
             if (_animator != null)
+            {
                 _animator.speed = 1f;
+                _animator.SetBool("IsFlying", false);
+            }
 
             Debug.Log("Speed boost desactivado");
         }
