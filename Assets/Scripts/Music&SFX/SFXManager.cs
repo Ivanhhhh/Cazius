@@ -28,7 +28,10 @@ public class SFXManager : MonoBehaviour
         HurtedSFX,
         ScannerSFX,
         EnemySpawnSFX,
-        ScanningSFX
+        ScanningSFX,
+        LeavesSFX,
+        BouncingSFX,
+        HitTree
         // Add Categories here
     }
 
