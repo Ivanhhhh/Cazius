@@ -5,6 +5,7 @@ public class TreeInteractable : MonoBehaviour, IEInteractable
 {
     [Header("Interaction")]
     [SerializeField] private string _interactText = "F to shake";
+    [SerializeField] private ParticleSystem _leavesParticles;
     [SerializeField] private SFXManager.SFXCategoryType _hitSFX;
     [SerializeField] private SFXManager.SFXCategoryType _leavesSFX;
     [SerializeField] private SFXManager.SFXCategoryType _bounceSFX;
@@ -33,10 +34,11 @@ public class TreeInteractable : MonoBehaviour, IEInteractable
             if (rb == null) continue;
             rb.transform.SetParent(null);
             rb.isKinematic = false;
-            SFXManager.Instance.PlaySFXAtPosition(_leavesSFX, transform.position);
         }
 
         _dropped = true;
+        if (_leavesParticles != null) { _leavesParticles.Play(); }
+        SFXManager.Instance.PlaySFXAtPosition(_leavesSFX, transform.position);
         SFXManager.Instance.PlaySFXAtPosition(_bounceSFX, transform.position);
     }
 
