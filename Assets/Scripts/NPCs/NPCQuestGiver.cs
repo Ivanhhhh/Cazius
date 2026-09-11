@@ -79,6 +79,8 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     public string GetInteractText() { return _interactText; }
     public Transform GetTransform() { return transform; }
 
+    public bool IsLocked() { return false; }
+
     // --- Localization helper ---
 
     private string[] Translate(string[] ids)

@@ -26,7 +26,7 @@ public class EnemyVelocity : MonoBehaviour
             enemyData = GetComponent<Enemy_MeleeEnemy_Data>();
 
         // Save the ORIGINAL chase speed
-        baseMovementSpeed = enemyData.GetChaseSpeed();
+        //baseMovementSpeed = enemyData.GetChaseSpeed();
     }
 
     private void Update()

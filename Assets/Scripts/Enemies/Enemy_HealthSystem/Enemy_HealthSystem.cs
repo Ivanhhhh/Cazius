@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 {
+    private SoulRandomAmount _RandomAmount;
     [SerializeField] private float _maxHealth = 100f;
     [SerializeField] private float _currentHealth;
 
@@ -27,6 +28,7 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
         _currentHealth = _maxHealth;
         OnDeath += Death;
         anim = GetComponent<AngelDemonAnim>();
+        _RandomAmount = GetComponent<SoulRandomAmount>();
     }
 
     public void TakeDamage(float amount)
@@ -123,10 +125,11 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 
         yield return new WaitForSeconds(1.2f);
 
-        _soulEnergyPrefab.SetActive(true);
-        _soulEnergyPrefab.transform.position = transform.position;
+        //_soulEnergyPrefab.SetActive(true);
+        //_soulEnergyPrefab.transform.position = transform.position;
         Debug.Log("Soul Energy Drop");
 
         gameObject.SetActive(false);
+
     }
 }

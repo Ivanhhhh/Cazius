@@ -55,7 +55,8 @@ public class OpenDoor : MonoBehaviour, IEInteractable
         IsRunning = false;
     }
     public void Interact(Transform interactorTransform)
-    {
+    { 
+        print("SOULPICKED");
         if (IsRunning) return;
         if (_SideOpen.Opened == true && _canClose == false)
         {
@@ -78,5 +79,10 @@ public class OpenDoor : MonoBehaviour, IEInteractable
     public Transform GetTransform()
     {
         return this.transform;
+    }
+
+    public bool IsLocked()
+    {
+        return false;
     }
 }

@@ -76,6 +76,10 @@ public class Player_AimAndShoot : MonoBehaviour
 
     [SerializeField] private LayerMask _shootLayerMask = ~0;
 
+    [Header("ShowUIAmmo")]
+
+    [SerializeField] private DiageticAmmoUIManager _ammoUI;
+
     private int _remainingBullets;
     private float _shootTimer;
     public float _currentSpread;
@@ -328,10 +332,16 @@ public class Player_AimAndShoot : MonoBehaviour
         CanShoot = false;
         _playerAnimator.SetTrigger("Reload");
 
+        if (_ammoUI != null)
+            _ammoUI.RequestShow(this);
+
         yield return new WaitForSeconds(LengthAnim); //LengthAnim
         UpdateUI();
 
         CanShoot = true;
+
+        if (_ammoUI != null)
+            _ammoUI.RequestHide(this);
 
     }
 

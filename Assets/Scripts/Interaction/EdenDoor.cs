@@ -50,4 +50,16 @@ public class EdenDoor : MonoBehaviour, IEInteractable
 
     public Transform GetTransform() { return transform; }
 
+    public bool IsLocked()
+    {
+        if (KeyInventorySystem.Instance.HasEdenKey)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
 }

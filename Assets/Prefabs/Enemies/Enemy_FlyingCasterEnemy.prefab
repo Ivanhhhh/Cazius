@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3707801742642735601}
   - component: {fileID: 264267488977718705}
+  - component: {fileID: 4546415306388946581}
   m_Layer: 0
   m_Name: Scanner Pivot
   m_TagString: Untagged
@@ -55,6 +56,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4546415306388946581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182927110750297329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23012c4bdeaa68419a749cbe4ea0684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_FlyingCasterEnemy_Scanner
+  _scannerAnimator: {fileID: 264267488977718705}
+  _scannerMesh: {fileID: 1694201451319337414}
 --- !u!1 &1209211017855422598
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,6 +684,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: caf0551a98484084696349d479179630, type: 3}
+--- !u!1 &1694201451319337414 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: caf0551a98484084696349d479179630, type: 3}
+  m_PrefabInstance: {fileID: 1964249964495903895}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2074140256607107964 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: caf0551a98484084696349d479179630, type: 3}
