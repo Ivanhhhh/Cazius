@@ -90,6 +90,11 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float _aimTargetYawSpeed = 10f;
 
+    [Header("ShowUIAmmo")]
+
+    [SerializeField] private DiageticAmmoUIManager _ammoUI;
+
+
     private float _currentAimTargetYawOffset;
 
     private Rigidbody _rb;
@@ -145,6 +150,13 @@ public class PlayerMovement : MonoBehaviour
         };
 
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void OnDisable()
+    {
+        // Liberar la petición de visibilidad para no dejar la UI colgada
+        if (_ammoUI != null)
+            _ammoUI.RequestHide(this);
     }
 
     private void Update()
@@ -332,6 +344,15 @@ public class PlayerMovement : MonoBehaviour
         _animator.SetBool("IsAiming", _isAiming);
 
         _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, targetFOV, Time.deltaTime * _fovSpeed);
+
+        // NUEVO: pedir mostrar/ocultar la UI de munición según el estado de aim
+        if (_ammoUI != null)
+        {
+            if (_isAiming)
+                _ammoUI.RequestShow(this);
+            else
+                _ammoUI.RequestHide(this);
+        }
     }
 
     void ApplyRotation()
