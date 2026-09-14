@@ -54,14 +54,8 @@ public class PlayerModelMovement : MonoBehaviour
 
     private void RotateSmooth()
     {
-        Debug.Log("ROTATE SMOOTH IS RUNNING");
 
         transform.rotation = Quaternion.Slerp(transform.rotation, _modelPos.rotation, Time.deltaTime * _rotationSpeed);
-
-        Debug.Log(
-    $"Current: {transform.eulerAngles.y:F2} | " +
-    $"Target: {_modelPos.eulerAngles.y:F2}"
-);
 
         if (AngleDifference(transform, _modelPos) < _rotationOffset)
         {
@@ -72,8 +66,6 @@ public class PlayerModelMovement : MonoBehaviour
     private void ShouldRotate()
     {
         float rotationDiff = AngleDifference(transform, _modelPos);
-
-        //Debug.Log(rotationDiff);
 
         if (rotationDiff >  _maxAngle)
         {
@@ -88,7 +80,6 @@ public class PlayerModelMovement : MonoBehaviour
 
     private float AngleDifference (Transform a, Transform b)
     {
-       // return  Mathf.Abs(a.eulerAngles.y - b.eulerAngles.y);
 
         return Mathf.Abs(Mathf.DeltaAngle(a.eulerAngles.y, b.eulerAngles.y));
     }
