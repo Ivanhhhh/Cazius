@@ -7764,6 +7764,10 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6125540418220423461, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1a5a61647abbea641bdcf964bcad59c8, type: 2}
     - target: {fileID: 7073372512799279751, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -7826,12 +7830,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
       propertyPath: _maxAngle
-      value: 50
+      value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
       propertyPath: _modelPos
       value: 
       objectReference: {fileID: 9174304713106157730}
+    - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _rotationSpeed
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -34665,6 +34673,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3564048592477410900, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: m_Height
+      value: 4.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 3564048592477410900, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: m_Radius
+      value: 0.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 3564048592477410900, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: m_Center.y
+      value: -0.19
+      objectReference: {fileID: 0}
     - target: {fileID: 3633520149688193157, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -34750,6 +34770,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8905742557673542835}
     - target: {fileID: 3915939884766231080, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _maxSpread
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3915939884766231080, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: _crosshairTop
       value: 
       objectReference: {fileID: 4243241300588008343}
@@ -34762,9 +34786,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 180247202752861231}
     - target: {fileID: 3915939884766231080, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _shootInterval
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3915939884766231080, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: _crosshairRight
       value: 
       objectReference: {fileID: 6155911670591358476}
+    - target: {fileID: 3915939884766231080, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _maxSpreadClamp
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3915939884766231080, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: _playerAnimator
       value: 
@@ -34785,6 +34817,10 @@ PrefabInstance:
       propertyPath: _remainingBulletsUI
       value: 
       objectReference: {fileID: 1921140035}
+    - target: {fileID: 3915939884766231080, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _spreadDecreaseSpeed
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4135944680551331908, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: m_fontStyle
       value: 1
@@ -34803,7 +34839,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4381158046531520711, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: _smoothTime
-      value: 0.03
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 4381158046531520711, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: _objectToFollow
