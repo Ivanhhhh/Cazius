@@ -85,7 +85,7 @@ public class Player_AimAndShoot : MonoBehaviour
     public float _currentSpread;
 
     public bool _hasBullets => _remainingBullets > 0;
-
+    private bool _rigIsAim = true;
 
 
     void Start()
@@ -158,6 +158,7 @@ public class Player_AimAndShoot : MonoBehaviour
     {
         bool isAiming = GameInputManager.Instance.Controls.Player.Aim.IsPressed();
 
+        UpdatePlayerRig(isAiming);
         UpdateSpread();
 
         _crosshairTop.gameObject.SetActive(isAiming);
@@ -477,5 +478,23 @@ public class Player_AimAndShoot : MonoBehaviour
         {
             CanShoot = true;
         }
+    }
+
+    private void UpdatePlayerRig(bool isAim)
+    {
+        if (isAim == _rigIsAim)
+            { return; }
+
+        _rigIsAim = isAim;
+
+        if (isAim)
+        {
+            GameManager.Instance.playerRig.SetAimingConstraints();
+        }
+        else
+        {
+            GameManager.Instance.playerRig.SetwalkingConstraints();
+        }
+
     }
 }
