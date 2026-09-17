@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class OpenTheDoor : MonoBehaviour
+public class OpenTheDoor : MonoBehaviour, IEInteractable
 {
     public Transform player;
     public bool isOpen;
@@ -9,6 +9,10 @@ public class OpenTheDoor : MonoBehaviour
 
     private Quaternion initialAngle;
     private Quaternion targetAngle;
+
+    [Header("Interact")]
+    [SerializeField] private string _interactText = "F to Open Door";
+    [SerializeField] private Transform _interactionUIPoint;
 
     void Start()
     {
@@ -91,5 +95,38 @@ public class OpenTheDoor : MonoBehaviour
             playerInside = false;
             player = null;
         }
+    }
+
+    public void Interact(Transform interactorTransform)
+    {
+        OpenDoor(default);
+    }
+
+    public Transform GetInteractionUIPoint()
+    {
+        Debug.Log(
+            "OPEN DOOR UI POINT: " +
+            (_interactionUIPoint != null
+                ? _interactionUIPoint.name
+                : "NULL")
+        );
+
+        return _interactionUIPoint != null
+            ? _interactionUIPoint
+            : transform;
+    }
+    public string GetInteractText()
+    {
+        return _interactText;
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
+    }
+
+    public bool IsLocked()
+    {
+        return false;
     }
 }
