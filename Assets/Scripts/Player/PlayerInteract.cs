@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
-    [SerializeField] private float _interactRange = 1f;
+    [SerializeField] private float _interactRange = 10f;
     [SerializeField] private float _interactAngle = 60f;
-    [SerializeField] private float _interactOffset = 0.5f;
+    [SerializeField] private float _interactOffset = 5f;
 
     public static event Action<IEInteractable> OnInteractableChanged;
 
@@ -44,11 +44,16 @@ public class PlayerInteract : MonoBehaviour
 
         foreach (Collider collider in colliderArray)
         {
-            if (collider.TryGetComponent(out IEInteractable interactable))
+            IEInteractable interactable = collider.GetComponentInParent<IEInteractable>();
+
+            if (interactable != null)
             {
                 Vector3 dir = collider.transform.position - origin;
+
                 if (Vector3.Angle(transform.forward, dir) < _interactAngle)
+                {
                     interactableList.Add(interactable);
+                }
             }
         }
 
