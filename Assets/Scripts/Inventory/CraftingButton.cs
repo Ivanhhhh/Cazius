@@ -1,7 +1,8 @@
-using UnityEngine;
-using UnityEngine.UI;
+using Patterns.Observer.EventManager_Delegates;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public struct CraftingIngredient
@@ -14,7 +15,9 @@ public class CraftingButton : MonoBehaviour
 {
     [Header("Crafting Recipe")]
     public ItemData itemToCraft; 
-    public List<CraftingIngredient> ingredients; 
+    public List<CraftingIngredient> ingredients;
+    [Tooltip("Costo en Soul Energy para craftear. 0 = no consume.")]
+    public int soulEnergyCost = 30;
 
     [Header("UI References")]
     public Button craftButton;
@@ -30,31 +33,32 @@ public class CraftingButton : MonoBehaviour
 
     void OnEnable()
     {
-        Debug.Log($"[Crafting] OnEnable ejecutado en el botón para craftear: {(itemToCraft != null ? itemToCraft.name : "NADA")}");
-
         if (Inventory.Instance != null)
         {
             Inventory.Instance.onInventoryChanged.AddListener(UpdateCraftState);
-            UpdateCraftState(); 
+            UpdateCraftState();
         }
-        else
-        {
-            Debug.LogError("[Crafting] ERROR: Inventory.Instance es NULL. ¿Hay un inventario en la escena?");
-        }
+
+        // Nuevo: escuchar cambios de energía
+        EventManager.SubscribeToEvent(EventsType.Event_SoulEnergyChanged, OnSoulEnergyChanged);
     }
 
     void OnDisable()
     {
         if (Inventory.Instance != null)
-        {
             Inventory.Instance.onInventoryChanged.RemoveListener(UpdateCraftState);
-        }
+
+        EventManager.UnsubscribeToEvent(EventsType.Event_SoulEnergyChanged, OnSoulEnergyChanged);
+    }
+    private void OnSoulEnergyChanged(params object[] p)
+    {
+        UpdateCraftState();
     }
 
     public void UpdateCraftState()
     {
         Debug.Log("[Crafting] Actualizando estado visual del botón...");
-        bool canCraft = HasAllIngredients();
+        bool canCraft = HasAllIngredients() && HasEnoughSoulEnergy(); 
 
         Color currentColor = buttonImage.color;
 
@@ -124,6 +128,13 @@ public class CraftingButton : MonoBehaviour
             }
         }
     }
+    private bool HasEnoughSoulEnergy()
+    {
+        if (soulEnergyCost <= 0) return true;
+        if (SoulEnergyManager.Instance == null) return false;
+
+        return SoulEnergyManager.Instance.CurrentSoulEnergy >= soulEnergyCost;
+    }
     private bool HasAllIngredients()
     {
         Debug.Log("--- [Crafting] Iniciando chequeo de ingredientes ---");
@@ -147,21 +158,29 @@ public class CraftingButton : MonoBehaviour
 
     public void CraftItem()
     {
-        Debug.Log("[Crafting] Botón presionado. Intentando craftear...");
-
         if (!HasAllIngredients())
         {
-            Debug.LogWarning("[Crafting] Intento de crafteo bloqueado: Faltan ingredientes (Esto no debería pasar si el botón está apagado).");
-            return; 
+            Debug.LogWarning("[Crafting] Faltan ingredientes.");
+            return;
         }
 
-        foreach (CraftingIngredient req in ingredients)
+        if (!HasEnoughSoulEnergy())
         {
-            ConsumeIngredient(req.itemName, req.requiredAmount);
+            Debug.LogWarning("[Crafting] No hay suficiente Soul Energy.");
+            return;
         }
 
-        Debug.Log($"[Crafting] Crafteo exitoso. Agregando '{itemToCraft.name}' al inventario.");
+        // Consumir ingredientes
+        foreach (CraftingIngredient req in ingredients)
+            ConsumeIngredient(req.itemName, req.requiredAmount);
+
+        // Consumir Soul Energy
+        if (soulEnergyCost > 0 && SoulEnergyManager.Instance != null)
+            SoulEnergyManager.Instance.RemoveSoulEnergy(soulEnergyCost);
+
+        // Craftear
         Inventory.Instance.AddItem(itemToCraft);
+        Debug.Log($"[Crafting] Crafteado '{itemToCraft.name}'. -{soulEnergyCost} Soul Energy.");
     }
 
     private void ConsumeIngredient(string targetItemName, int amountToConsume)
