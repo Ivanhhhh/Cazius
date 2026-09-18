@@ -118,7 +118,7 @@ public class UIInteraction : MonoBehaviour
             return;
 
 
-            _containerUI.transform.position = _currentTarget.position;
+        _containerUI.transform.position = _currentTarget.position;
 
         Vector3 direction = _camera.transform.position - _containerUI.transform.position;
 
@@ -135,13 +135,13 @@ public class UIInteraction : MonoBehaviour
         {
             _isLockShown = true;
             return "Locked";
-                //_lockImage.SetActive(true);
+            //_lockImage.SetActive(true);
         }
         else
         {
             _isLockShown = false;
             return "F";
-                //_lockImage.SetActive(false);
+            //_lockImage.SetActive(false);
         }
     }
 
@@ -181,7 +181,7 @@ public class UIInteraction : MonoBehaviour
         }
 
 
-            float elapsed = 0f;
+        float elapsed = 0f;
 
         while (elapsed < _fadeDuration)
         {

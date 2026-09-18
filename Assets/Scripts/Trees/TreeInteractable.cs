@@ -26,6 +26,9 @@ public class TreeInteractable : MonoBehaviour, IEInteractable
     public void Interact(Transform interactorTransform)
     {
         SFXManager.Instance.PlaySFXAtPosition(_hitSFX, transform.position);
+        if (_leavesParticles != null) { _leavesParticles.Play(); }
+
+        GameManager.Instance.playerRig.TryHeadbutt();
 
         if (_dropped) return;
 
@@ -37,7 +40,6 @@ public class TreeInteractable : MonoBehaviour, IEInteractable
         }
 
         _dropped = true;
-        if (_leavesParticles != null) { _leavesParticles.Play(); }
         SFXManager.Instance.PlaySFXAtPosition(_leavesSFX, transform.position);
         SFXManager.Instance.PlaySFXAtPosition(_bounceSFX, transform.position);
     }
