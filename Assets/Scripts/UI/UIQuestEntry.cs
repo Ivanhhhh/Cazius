@@ -18,7 +18,7 @@ public class UIQuestEntry : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     [Header("Tooltip Animation")]
     [SerializeField] private float _animDuration = 0.15f;
-    [SerializeField] private AnimationCurve _scaleCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+    //[SerializeField] private AnimationCurve _scaleCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
     private string _questID;
     private string _questTitleID;
@@ -95,15 +95,13 @@ public class UIQuestEntry : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private IEnumerator AnimateTooltip(Vector3 from, Vector3 to)
     {
         float elapsed = 0f;
-
         while (elapsed < _animDuration)
         {
             elapsed += Time.unscaledDeltaTime;
-            float t = _scaleCurve.Evaluate(elapsed / _animDuration);
-            _tooltip.transform.localScale = Vector3.LerpUnclamped(from, to, t);
+            float t = Mathf.Clamp01(elapsed / _animDuration);
+            _tooltip.transform.localScale = Vector3.Lerp(from, to, t);
             yield return null;
         }
-
         _tooltip.transform.localScale = to;
     }
 }
