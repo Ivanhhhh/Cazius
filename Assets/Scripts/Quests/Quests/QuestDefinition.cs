@@ -9,6 +9,7 @@ public class QuestDefinition : ScriptableObject
     [Header("Identity")]
     public string questID;
     public string questTitle;
+    public string questTooltip;
     public QuestType questType;
 
     [Header("Required Condition")]
