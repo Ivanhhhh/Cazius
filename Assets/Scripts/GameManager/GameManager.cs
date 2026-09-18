@@ -7,6 +7,10 @@ public class GameManager : MonoBehaviour
     [Header("Reference")]
     public PlayerMovement Player { get; private set; }
 
+    public PlayerRigManager playerRig;
+
+    public CameraShake cameraShake;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
