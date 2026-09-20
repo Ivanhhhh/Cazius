@@ -48,4 +48,9 @@ public class Key : MonoBehaviour, IEInteractable
 
     public Transform GetTransform() { return transform; }
 
+    public bool IsLocked()
+    {
+        return false;
+    }
+
 }

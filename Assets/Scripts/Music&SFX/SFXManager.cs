@@ -14,6 +14,7 @@ public class SFXManager : MonoBehaviour
         PlayerShootingSFX,
         CriticalHitSFX,
         MaleHeySFX,
+        KidHeySFX,
         RechargingGun,
         Heal,
         Cat,
@@ -24,7 +25,13 @@ public class SFXManager : MonoBehaviour
         DoorEden,
         CrowDeath,
         CasterDamgeSFX,
-        HurtedSFX
+        HurtedSFX,
+        ScannerSFX,
+        EnemySpawnSFX,
+        ScanningSFX,
+        LeavesSFX,
+        BouncingSFX,
+        HitTree
         // Add Categories here
     }
 

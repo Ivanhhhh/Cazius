@@ -10,7 +10,7 @@ public class PlayerPause : MonoBehaviour, IPausable
 
     private void Awake()
     {
-        _animator = GetComponentInChildren<Animator>();
+        //_animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()

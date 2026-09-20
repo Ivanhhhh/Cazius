@@ -18,6 +18,11 @@ public class InteractToEden : MonoBehaviour, IEInteractable
         WorldChangeManager.Instance.SwapToEden(scenesToLoad);
     }
 
+    public bool IsLocked()
+    {
+        return false;
+    }
+
     public string GetInteractText() { return _interactText; }
 
     public Transform GetTransform() { return transform; }

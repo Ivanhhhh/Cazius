@@ -11,6 +11,8 @@ public class WorldScanManager : MonoBehaviour
     public event Action ScanActive;
     public event Action ScanDeactivate;
 
+    [SerializeField] private float _scanDuration = 5f;
+
     [SerializeField] private List<SpheresScan> _spheres = new List<SpheresScan>();
     [SerializeField] private float _spheresMaxScale;
     [SerializeField] private float _spheresMinScale;
@@ -24,6 +26,13 @@ public class WorldScanManager : MonoBehaviour
 
 
     private bool _scanActive = false;
+
+    private bool _inventoryActive;
+    private bool _scanTransitioning;
+
+    private Coroutine _scanCoroutine;
+
+    public bool IsScanActive => _scanActive;
 
     public PlayerControls _controls;
 
@@ -50,29 +59,67 @@ public class WorldScanManager : MonoBehaviour
     private void OnDisable()
     {
         _controls.Player.Scan.performed -= OnScanPerformed;
+        _scanLinesFCShader.SetFloat("_LinesEndFade", 0);
+    }
+
+    public void SetInventoryActive(bool active)
+    {
+        _inventoryActive = active;
+
+        if (active)
+        {
+            ForceDeactivateScan();
+        }
+    }
+
+    public void ForceDeactivateScan()
+    {
+        if (_scanCoroutine != null)
+        {
+            StopCoroutine(_scanCoroutine);
+            _scanCoroutine = null;
+        }
+
+        if (_scanActive) 
+        _scanCoroutine = StartCoroutine(DeactivateScan(_spheres));
     }
 
     private void OnScanPerformed(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        if (_inventoryActive)
+            return;
+
+        if (_scanTransitioning)
+            return;
+
         DoScan();
     }
 
 
     private void DoScan()
     {
-        if (!_scanActive)
-        {
-            StartCoroutine(ActivateScan(_spheres));
-        }
+        if (_scanCoroutine != null)
+            return;
+
+        if (_scanTransitioning == true)
+            return;
+
+        _scanCoroutine = StartCoroutine(ActivateScan(_spheres));
+
+        /*
         else
         {
-            StartCoroutine(DeactivateScan(_spheres));
-        }
+            _scanCoroutine = StartCoroutine(
+                DeactivateScan(_spheres)
+            );
+        }*/
     }
 
     private IEnumerator ActivateScan(List<SpheresScan> spheres)
     {
-        
+        _scanTransitioning = true;
+        _scanActive = true;
+
         StartCoroutine(FadeShader(_scanLinesFCShader, "_LinesEndFade", 0f, _scanLinesDistance, _scanLinesTransitionDuration));
 
         ScanActive?.Invoke();
@@ -85,15 +132,20 @@ public class WorldScanManager : MonoBehaviour
 
             spheresScale -= _spheresScaleOffset;
 
-            yield return new WaitForSeconds(_timeBetweenSphere);
+            yield return new WaitForSecondsRealtime(_timeBetweenSphere);
         }
 
+        yield return new WaitForSecondsRealtime(_scanDuration);
 
-        _scanActive = true;
+        _scanCoroutine = null;
+
+        _scanCoroutine = StartCoroutine(DeactivateScan(_spheres));
     }
 
     private IEnumerator DeactivateScan(List<SpheresScan> spheres)
     {
+        _scanTransitioning = true;
+        _scanActive = false;
 
         StartCoroutine(FadeShader(_scanLinesFCShader, "_LinesEndFade", _scanLinesDistance, 0f, _scanLinesTransitionDuration));
 
@@ -103,11 +155,11 @@ public class WorldScanManager : MonoBehaviour
         {
             spheres[i].Contract(_spheresTransitionDuration, _spheresMinScale);
 
-            yield return new WaitForSeconds(_timeBetweenSphere);
+            yield return new WaitForSecondsRealtime(_timeBetweenSphere);
         }
 
-
-        _scanActive = false;
+        _scanTransitioning = false;
+        _scanCoroutine = null;
     }
 
     private IEnumerator FadeShader(Material mat, string property, float start, float end, float duration)
@@ -117,7 +169,7 @@ public class WorldScanManager : MonoBehaviour
 
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             float value = Mathf.Lerp(start, end, elapsed / duration);
             mat.SetFloat(property, value);
             yield return null;

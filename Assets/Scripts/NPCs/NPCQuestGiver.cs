@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [Header("NPC Behavior")]
     [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
+    [SerializeField] private float _rotationSpeed = 5f;
+    [SerializeField] private SFXManager.SFXCategoryType _interactSFX = SFXManager.SFXCategoryType.MaleHeySFX;
 
     [Header("Reward")]
     [SerializeField] private ItemData _questPrizeItem;
@@ -44,7 +47,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     {
         RotateTowardsPlayer(interactorTransform);
         _animator.SetTrigger(_wavingTrigger);
-        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.MaleHeySFX, transform.position);
+        SFXManager.Instance.PlaySFXAtPosition(_interactSFX, transform.position);
 
         QuestManager.Instance.RegisterQuest(quest);
         QuestStatus status = QuestManager.Instance.GetStatus(quest.questID);
@@ -77,6 +80,8 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
 
     public string GetInteractText() { return _interactText; }
     public Transform GetTransform() { return transform; }
+
+    public bool IsLocked() { return false; }
 
     // --- Localization helper ---
 
@@ -151,6 +156,22 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     {
         Vector3 dir = interactorTransform.position - transform.position;
         dir.y = 0;
-        transform.rotation = Quaternion.LookRotation(dir);
+        if (dir == Vector3.zero) return;
+        StartCoroutine(RotateCoroutine(Quaternion.LookRotation(dir)));
     }
+
+    private IEnumerator RotateCoroutine(Quaternion targetRotation)
+    {
+        while (Quaternion.Angle(transform.rotation, targetRotation) > 0.1f)
+        {
+            transform.rotation = Quaternion.Lerp(
+                transform.rotation,
+                targetRotation,
+                _rotationSpeed * Time.deltaTime
+            );
+            yield return null;
+        }
+        transform.rotation = targetRotation;
+    }
+
 }

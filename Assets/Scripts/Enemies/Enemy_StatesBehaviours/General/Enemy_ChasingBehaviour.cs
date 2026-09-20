@@ -33,6 +33,7 @@ public class Enemy_ChasingBehaviour
     public void EnterChase()
     {
         _agent.speed = _chaseSpeed;
+        _agent.acceleration = 50f;
     }
 
     public void Tick()

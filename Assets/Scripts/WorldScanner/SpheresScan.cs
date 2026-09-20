@@ -53,7 +53,7 @@ public class SpheresScan : MonoBehaviour
 
         while (elapsedTime < time)
         {
-            elapsedTime += Time.deltaTime;
+            elapsedTime += Time.unscaledDeltaTime;
 
             transform.localScale  = Vector3.Lerp(startScale, endScale, elapsedTime / time);
 

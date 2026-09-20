@@ -33,6 +33,7 @@ public class NPCInteractable : MonoBehaviour, IEInteractable
     public string GetInteractText() { return _interactText; }
 
     public Transform GetTransform() { return transform; }
+    public bool IsLocked() { return false; }
 
     public Transform GetInteractionUIPoint()
     {
@@ -47,6 +48,5 @@ public class NPCInteractable : MonoBehaviour, IEInteractable
         dir.y = 0;
         transform.rotation = Quaternion.LookRotation(dir);
     }
-
 
 }

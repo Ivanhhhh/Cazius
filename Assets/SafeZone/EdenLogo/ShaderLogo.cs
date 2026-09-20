@@ -5,7 +5,7 @@ using System.Collections;
 
 class ShaderLogo : MonoBehaviour
 {
-    [SerializeField] GameObject GameObjectWShader;
+    [SerializeField] GameObject _GameObjectWShader;
 
     [SerializeField] GameObject _GameObjectWithParticles;
 
@@ -30,7 +30,8 @@ class ShaderLogo : MonoBehaviour
 
     void Start()
     {
-         _SafeLogoShader = GameObjectWShader.GetComponent<Renderer>().material;            
+        _GameObjectWShader.SetActive(false);
+         _SafeLogoShader = _GameObjectWShader.GetComponent<Renderer>().material;            
            
          _SafeLogoParticles = _GameObjectWithParticles.GetComponent<VisualEffect>();    
          
@@ -41,6 +42,7 @@ class ShaderLogo : MonoBehaviour
     {
         _SafeLogoShader.SetFloat("_EmissionMultiply",7f);
         _SafeLogoParticles.enabled = true;
+        _GameObjectWShader.SetActive(true);
         print ("7SAHDER");
     }
 
@@ -48,6 +50,8 @@ class ShaderLogo : MonoBehaviour
     {
         _SafeLogoShader.SetFloat("_EmissionMultiply",0f);
         _SafeLogoParticles.enabled = false;
+        _GameObjectWShader.SetActive(false);
+
         print ("7SAHDERoff");
     }
 
