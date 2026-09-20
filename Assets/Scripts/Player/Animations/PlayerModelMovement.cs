@@ -6,6 +6,8 @@ public class PlayerModelMovement : MonoBehaviour
 
     [Header("GlobalSettings")]
 
+    public Vector3 modelOffset;
+
     public bool forceLookForward = false;
 
     private Transform _foreLookTowardsTransform;
@@ -30,7 +32,7 @@ public class PlayerModelMovement : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.position = _modelPos.position;
+        transform.position = _modelPos.position - modelOffset;
 
         if (!forceLookForward)
         {

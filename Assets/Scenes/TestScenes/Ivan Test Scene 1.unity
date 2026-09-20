@@ -2966,8 +2966,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1085536938}
-  - {fileID: 4034724384393966964}
   - {fileID: 802973267}
   - {fileID: 976462828}
   - {fileID: 1890514370}
@@ -5091,7 +5089,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 498992425}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 231735413204039970, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: _parryEffects.spawnPoint
@@ -5593,11 +5591,11 @@ PrefabInstance:
       objectReference: {fileID: 697623700}
     - target: {fileID: 6189969909263246771, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.40780002
+      value: 0.4078001
       objectReference: {fileID: 0}
     - target: {fileID: 6189969909263246771, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.40780002
+      value: 0.4078001
       objectReference: {fileID: 0}
     - target: {fileID: 6189969909263246771, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7538,6 +7536,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a22d645a4453fa4a8c632e5deaa7510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  playerRig: {fileID: 0}
+  cameraShake: {fileID: 0}
 --- !u!4 &1457025581
 Transform:
   m_ObjectHideFlags: 0
@@ -10239,7 +10239,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 498992425}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1757538884074162663, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
       propertyPath: m_Name
@@ -10263,11 +10263,11 @@ PrefabInstance:
       objectReference: {fileID: 1744839255}
     - target: {fileID: 7410321554664465077, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.40780002
+      value: 0.4078001
       objectReference: {fileID: 0}
     - target: {fileID: 7410321554664465077, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.40780002
+      value: 0.4078001
       objectReference: {fileID: 0}
     - target: {fileID: 7410321554664465077, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10318,11 +10318,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
---- !u!4 &4034724384393966964 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7410321554664465077, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
-  m_PrefabInstance: {fileID: 4034724384393966963}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4437993743228232833
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11313,4 +11308,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 2007822036}
   - {fileID: 498992425}
+  - {fileID: 1085536936}
+  - {fileID: 4034724384393966963}
   - {fileID: 6600131747541194858}
