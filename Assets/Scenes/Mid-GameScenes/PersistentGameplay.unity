@@ -7736,7 +7736,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3646322560594695130, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 938199748}
   m_SourcePrefab: {fileID: 100100000, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
 --- !u!114 &372027580 stripped
 MonoBehaviour:
@@ -14282,6 +14285,28 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 935103878}
   m_Mesh: {fileID: 1273371391728916064, guid: b5e59165a8cfa12419904784a1f9bc94, type: 3}
+--- !u!1 &938199747 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3646322560594695130, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+  m_PrefabInstance: {fileID: 372027579}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &938199748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938199747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f3b8bbf598b28b4f88e3d2f2c49bf76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootPlacementAnimation
+  _animator: {fileID: 372027585}
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 4194047
+  _distanceToGround: 0.081
 --- !u!1001 &945038597
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33380,7 +33405,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3564048592477410900, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: m_Center.y
-      value: -0.19
+      value: 0.34
       objectReference: {fileID: 0}
     - target: {fileID: 3633520149688193157, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
