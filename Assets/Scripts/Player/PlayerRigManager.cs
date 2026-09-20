@@ -7,6 +7,7 @@ public class PlayerRigManager : MonoBehaviour
 
     [SerializeField] Rig _rig;
     [SerializeField] Animator _animator;
+    [SerializeField] PlayerModelMovement _playerModelMovement;
 
     [Header("MultiAimConstraints")]
 
@@ -38,7 +39,6 @@ public class PlayerRigManager : MonoBehaviour
         _hipsAim.weight = _hipsAimingWeight;
         _hipsAim2.weight = _hips2AimingWeight;
         _headAim.weight = _headAimingWeight;
-        //_headAim.data.sourceObjects.SetWeight(0, _HeadAimingSourceObjWeight);
 
         var headSource = _headAim.data.sourceObjects;
 
@@ -52,7 +52,6 @@ public class PlayerRigManager : MonoBehaviour
         _hipsAim.weight = _hipsWalkingWeight;
         _hipsAim2.weight = _hips2WalkingWeight;
         _headAim.weight = _headWalkingWeight;
-        //_headAim.data.sourceObjects.SetWeight(0, _HeadWalkingSourceObjWeight);
 
         var headSource = _headAim.data.sourceObjects;
 
@@ -71,12 +70,24 @@ public class PlayerRigManager : MonoBehaviour
         _rig.weight = 1f;
     }
 
-    public void TryHeadbutt()
+    public void TryHeadbutt(bool lookTowards, Transform posToLookTowards)
     {
         if (_headbuttCoroutine != null)
             { return; }
 
-        _headbuttCoroutine = StartCoroutine(HeadbuttCoroutine());
+        if (lookTowards)
+        {
+            _headbuttCoroutine = StartCoroutine(HeadbuttCoroutineWithLookTowards(posToLookTowards));
+        }
+        else
+        {
+            _headbuttCoroutine = StartCoroutine(HeadbuttCoroutine());
+        }
+    }
+
+    public void ForceLookTowards(bool force, Transform towards)
+    {
+        _playerModelMovement.ForceToLookForward(force, towards);
     }
 
     private IEnumerator HeadbuttCoroutine()
@@ -90,6 +101,30 @@ public class PlayerRigManager : MonoBehaviour
         GameManager.Instance.cameraShake.DamageShake();
 
         yield return new WaitForSeconds(_headbuttDuration / 2f);
+
+        EnableRig();
+
+        _headbuttCoroutine = null;
+
+    }
+
+    private IEnumerator HeadbuttCoroutineWithLookTowards(Transform posToLookTowards)
+    {
+        DisableRig();
+
+        _playerModelMovement.ForceToLookForward(true, posToLookTowards);
+
+
+        _animator.SetTrigger("Headbutt");
+
+        yield return new WaitForSeconds(_headbuttDuration / 2f);
+
+        GameManager.Instance.cameraShake.DamageShake();
+
+        yield return new WaitForSeconds(_headbuttDuration / 2f);
+
+
+        _playerModelMovement.ForceToLookForward(false, null);
 
         EnableRig();
 

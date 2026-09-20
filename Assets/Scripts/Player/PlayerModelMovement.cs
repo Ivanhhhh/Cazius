@@ -4,6 +4,14 @@ public class PlayerModelMovement : MonoBehaviour
 {
     [SerializeField] Transform _modelPos;
 
+    [Header("GlobalSettings")]
+
+    public bool forceLookForward = false;
+
+    private Transform _foreLookTowardsTransform;
+
+    [SerializeField] float _forceLookOffset = 30f;
+
     [Header("AimingParams")]
 
     [SerializeField] float _aimSmoothTime = 0.1f;
@@ -24,20 +32,31 @@ public class PlayerModelMovement : MonoBehaviour
     {
         transform.position = _modelPos.position;
 
-        if (_isAiming)
+        if (!forceLookForward)
         {
 
-            AimingSmooth();
+
+            if (_isAiming)
+            {
+
+                AimingSmooth();
+
+            }
+            else
+            {
+
+                LookingSmooth();
+
+            }
 
         }
         else
         {
-
-            LookingSmooth();
-
+            LookForward();
         }
 
     }
+
 
     private void LookingSmooth()
     {
@@ -63,6 +82,26 @@ public class PlayerModelMovement : MonoBehaviour
         }
     }
 
+    private void RotateSmoothTowards()
+    {
+
+        Vector3 dir = _foreLookTowardsTransform.position - transform.position;
+
+        Quaternion targetRotation = Quaternion.LookRotation(dir);
+
+        targetRotation.x = 0;
+        targetRotation.z = 0;
+
+        targetRotation *= Quaternion.Euler(0f, _forceLookOffset, 0f);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * _rotationSpeed);
+
+        if (AngleDifference(transform, _modelPos) < _rotationOffset)
+        {
+            _shouldRotateModel = false;
+        }
+    }
+
     private void ShouldRotate()
     {
         float rotationDiff = AngleDifference(transform, _modelPos);
@@ -71,6 +110,11 @@ public class PlayerModelMovement : MonoBehaviour
         {
             _shouldRotateModel = true;
         }
+    }
+
+    private void LookForward()
+    {
+        RotateSmoothTowards();
     }
 
     private void AimingSmooth()
@@ -82,5 +126,19 @@ public class PlayerModelMovement : MonoBehaviour
     {
 
         return Mathf.Abs(Mathf.DeltaAngle(a.eulerAngles.y, b.eulerAngles.y));
+    }
+
+    public void ForceToLookForward(bool force, Transform lookAT)
+    {
+        if (force)
+        {
+            forceLookForward = true;
+
+            _foreLookTowardsTransform = lookAT;
+        }
+        else
+        {
+            forceLookForward = false;
+        }
     }
 }

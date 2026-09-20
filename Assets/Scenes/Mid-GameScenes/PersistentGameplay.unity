@@ -7757,6 +7757,10 @@ PrefabInstance:
       propertyPath: _rotationSpeed
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _forceLookOffset
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -15878,6 +15882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRigManager
   _rig: {fileID: 372027580}
   _animator: {fileID: 372027585}
+  _playerModelMovement: {fileID: 1424107512}
   _hipsAim: {fileID: 2132873257}
   _hipsAim2: {fileID: 2132873256}
   _headAim: {fileID: 2132873255}
@@ -20253,6 +20258,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 688576044626275278, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
   m_PrefabInstance: {fileID: 1422172172}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1424107512 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+  m_PrefabInstance: {fileID: 372027579}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081331373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e14636345f8ca5468b2f8f77c8437d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerModelMovement
 --- !u!1001 &1439857670
 PrefabInstance:
   m_ObjectHideFlags: 0
