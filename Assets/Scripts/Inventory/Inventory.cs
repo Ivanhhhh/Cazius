@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,6 +10,8 @@ public class Inventory : MonoBehaviour
     public int maxSlots = 12;
     public List<ItemData> items = new();
     public UnityEvent onInventoryChanged;
+    public event Action<ItemData> OnItemAdded;
+
     public ItemData itemToAdd;
 
     void Awake()
@@ -30,6 +33,8 @@ public class Inventory : MonoBehaviour
         clonedItem.name = item.name;
         items.Add(clonedItem);
         onInventoryChanged?.Invoke();
+        OnItemAdded?.Invoke(clonedItem);
+
         return true;
     }
 
