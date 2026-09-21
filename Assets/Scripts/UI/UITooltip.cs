@@ -11,6 +11,9 @@ public class UITooltip : MonoBehaviour
     [SerializeField] private TMP_Text _tooltipText;
     [SerializeField] private RectTransform _tooltipRect;
 
+    [Header("Offset")]
+    [SerializeField] private Vector2 _offset = new Vector2(250f, 0f);
+
     [Header("Settings")]
     [SerializeField] private float _animDuration = 0.15f;
     [SerializeField] private AnimationCurve _scaleCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
@@ -26,9 +29,17 @@ public class UITooltip : MonoBehaviour
         _tooltipRect.localScale = Vector3.zero;
     }
 
-    public void Show(string text)
+    public void Show(string text, RectTransform targetRect)
     {
         _tooltipText.text = text;
+
+        Vector3 targetPos = targetRect.position
+                          + (targetRect.right * (_offset.x * targetRect.lossyScale.x))
+                          + (targetRect.up * (_offset.y * targetRect.lossyScale.y));
+
+        _tooltipRect.position = targetPos;
+        _tooltipRect.rotation = targetRect.rotation;
+
         _tooltipPanel.SetActive(true);
         _tooltipRect.localScale = Vector3.zero;
 

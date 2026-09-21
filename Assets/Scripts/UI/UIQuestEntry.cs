@@ -61,7 +61,7 @@ public class UIQuestEntry : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         }
 
         string tooltipText = LocalizationManager.Instance.GetTranslate(_questTooltipID);
-        UITooltip.Instance.Show(tooltipText);
+        UITooltip.Instance.Show(tooltipText, GetComponent<RectTransform>());
     }
 
     public void OnPointerExit(PointerEventData eventData)
