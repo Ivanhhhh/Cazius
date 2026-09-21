@@ -5,7 +5,7 @@ public class RandomAnimationStart : MonoBehaviour
     [SerializeField] private string _animationName;
     private Animator animator;
 
-    void Start()
+    void OnEnable()
     {
         animator = GetComponent<Animator>();
 
