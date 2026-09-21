@@ -3050,6 +3050,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 546396341}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &489508726 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5779461112973178493, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+  m_PrefabInstance: {fileID: 4034724384393966963}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &498992424
 GameObject:
   m_ObjectHideFlags: 0
@@ -4906,6 +4911,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2742322404129138800, guid: 5493f59df4b2c824daa124c3be035a2a, type: 3}
   m_PrefabInstance: {fileID: 976462827}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &994037318 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 7499502484473894369, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+  m_PrefabInstance: {fileID: 1085536936}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &995116099
 GameObject:
   m_ObjectHideFlags: 0
@@ -5798,6 +5808,10 @@ PrefabInstance:
       propertyPath: _targetObject
       value: 
       objectReference: {fileID: 2031002034}
+    - target: {fileID: 7436610461006387000, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _headWallOrigin
+      value: 
+      objectReference: {fileID: 489508726}
     - target: {fileID: 7436610461006387000, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: _mouseSensitivityY
       value: 0.115
@@ -7884,6 +7898,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   playerRig: {fileID: 0}
   cameraShake: {fileID: 0}
+  gunActive: 0
 --- !u!4 &1457025581
 Transform:
   m_ObjectHideFlags: 0
@@ -10072,6 +10087,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2108165248174138489, guid: ef5258c5909ce4f4cba2d110c8a59083, type: 3}
   m_PrefabInstance: {fileID: 1943109902}
   m_PrefabAsset: {fileID: 0}
+--- !u!20 &1977273418 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 651653032407350410, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+  m_PrefabInstance: {fileID: 1085536936}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2004616734
 GameObject:
   m_ObjectHideFlags: 0
@@ -10931,6 +10951,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerModel
       objectReference: {fileID: 0}
+    - target: {fileID: 2885729043663346338, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: m_Weight
+      value: 0.414
+      objectReference: {fileID: 0}
+    - target: {fileID: 5527048744491854777, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: m_Weight
+      value: 0.414
+      objectReference: {fileID: 0}
     - target: {fileID: 7073372512799279751, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
       propertyPath: aimAndShoot
       value: 
@@ -10995,6 +11023,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8330625792840198888, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _hipsWalkingWeight
+      value: 0.742
+      objectReference: {fileID: 0}
+    - target: {fileID: 8330625792840198888, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _hips2WalkingWeight
+      value: 0.742
+      objectReference: {fileID: 0}
+    - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _rb
+      value: 
+      objectReference: {fileID: 994037318}
+    - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _camera
+      value: 
+      objectReference: {fileID: 1977273418}
     - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
       propertyPath: _modelPos
       value: 
@@ -11002,6 +11046,18 @@ PrefabInstance:
     - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
       propertyPath: modelOffset.y
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _walkingRotationSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _walkingRotateMaxAngle
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _walkingRotateHalfAngle
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
