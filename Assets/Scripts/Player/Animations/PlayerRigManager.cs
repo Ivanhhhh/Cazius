@@ -18,6 +18,7 @@ public class PlayerRigManager : MonoBehaviour
     [Header("AimingSettings")]
 
     [SerializeField] float _hipsAimingWeight = 1f;
+    [SerializeField] float _hipsAimingMaxLimit = 31f;
     [SerializeField] float _hips2AimingWeight = 1f;
     [SerializeField] float _headAimingWeight = 1f;
     [SerializeField] float _HeadAimingSourceObjWeight = 0.42f;
@@ -25,6 +26,7 @@ public class PlayerRigManager : MonoBehaviour
     [Header("WalkingSettings")]
 
     [SerializeField] float _hipsWalkingWeight = 0.742f;
+    [SerializeField] float _hipsWalkingMaxLimit = 10f;
     [SerializeField] float _hips2WalkingWeight = 0.742f;
     [SerializeField] float _headWalkingWeight = 1f;
     [SerializeField] float _HeadWalkingSourceObjWeight = 0.58f;
@@ -40,6 +42,12 @@ public class PlayerRigManager : MonoBehaviour
         _hipsAim2.weight = _hips2AimingWeight;
         _headAim.weight = _headAimingWeight;
 
+        Vector2 hipsSource = _hipsAim.data.limits;
+
+        hipsSource = new Vector2(hipsSource.x, _hipsAimingMaxLimit);
+
+        _hipsAim.data.limits = hipsSource;
+
         var headSource = _headAim.data.sourceObjects;
 
         headSource.SetWeight(0, _HeadAimingSourceObjWeight);
@@ -52,6 +60,12 @@ public class PlayerRigManager : MonoBehaviour
         _hipsAim.weight = _hipsWalkingWeight;
         _hipsAim2.weight = _hips2WalkingWeight;
         _headAim.weight = _headWalkingWeight;
+
+        Vector2 hipsSource = _hipsAim.data.limits;
+
+        hipsSource = new Vector2(hipsSource.x, _hipsWalkingMaxLimit);
+
+        _hipsAim.data.limits = hipsSource;
 
         var headSource = _headAim.data.sourceObjects;
 
