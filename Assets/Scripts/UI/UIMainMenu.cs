@@ -41,7 +41,7 @@ public class UIMainMenu : MonoBehaviour
         // Main panel listeners
         _startGameButton.onClick.AddListener(OnStartGame);
         _optionsButton.onClick.AddListener(OnOpenOptions);
-        _exitButton.onClick.AddListener(OnExit);
+        _exitButton.onClick.AddListener(ShowConfirmationPopup);
 
         // Options panel listeners
         _controlsButton.onClick.AddListener(OnOpenControls);
@@ -99,6 +99,25 @@ public class UIMainMenu : MonoBehaviour
         ShowSubPanel(_controlsPanel); // Controls open by default
     }
 
+    public void ShowConfirmationPopup()
+    {
+        if (ConfirmationPopup.Instance != null)
+        {
+            ConfirmationPopup.Instance.Show
+                (
+                yesAction: OnExit,
+                message: "",
+                noAction: null,
+                yes: "",
+                no: ""
+                );
+        }
+        else
+        {
+            Debug.LogError("ConfirmationPopup Not Found");
+            OnExit();
+        }
+    }
     private void OnExit()
     {
 #if UNITY_EDITOR
