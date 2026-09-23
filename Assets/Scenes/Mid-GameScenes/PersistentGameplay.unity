@@ -7174,6 +7174,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3758573805739257388, guid: 1284c8d8aa25f774b91cd0d890f5a27b, type: 3}
+--- !u!54 &317318080 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 7499502484473894369, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+  m_PrefabInstance: {fileID: 9174304713106157729}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &318487752
 GameObject:
   m_ObjectHideFlags: 0
@@ -7731,9 +7736,29 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _rb
+      value: 
+      objectReference: {fileID: 317318080}
+    - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _camera
+      value: 
+      objectReference: {fileID: 9174304713106157731}
+    - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
       propertyPath: _modelPos
       value: 
       objectReference: {fileID: 9174304713106157730}
+    - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _walkingRotationSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _walkingRotateMaxAngle
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8767502138739023901, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
+      propertyPath: _walkingRotateHalfAngle
+      value: 35
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
