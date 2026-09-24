@@ -67,6 +67,14 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float _minimumVisualAimDistance = 10f;
 
+    [SerializeField] Transform _headWallOrigin;
+    [SerializeField] float _headWallRadius = 0.15f;
+    [SerializeField] float _headWallDistance = 0.35f;
+    [SerializeField] float _minimumBlockedAimYOffset = -0.05f;
+    [SerializeField] float _headWallBlendSpeed = 12f;
+
+    private float _headWallBlend;
+
     private Vector3 _currentAimPoint;
 
     public Vector3 CurrentAimPoint => _currentAimPoint;
@@ -487,8 +495,9 @@ public class PlayerMovement : MonoBehaviour
         float interpolation =
             1f - Mathf.Exp(-_followSpeed * Time.deltaTime);
 
-        Vector3 adjustedVisualAimPoint =
-            ApplyVisualAimTargetOffset(_visualAimPoint);
+        Vector3 adjustedVisualAimPoint = ApplyVisualAimTargetOffset(_visualAimPoint);
+
+        adjustedVisualAimPoint = ApplyHeadWallLimit(adjustedVisualAimPoint);
 
         _targetObject.position = Vector3.Lerp(
             _targetObject.position,
@@ -529,6 +538,41 @@ public class PlayerMovement : MonoBehaviour
 
         return rotationPivot +
                yawRotation * directionToTarget;
+    }
+
+    private Vector3 ApplyHeadWallLimit(Vector3 aimPoint)
+    {
+        bool wallAhead = Physics.SphereCast(_headWallOrigin.position, _headWallRadius, _headWallOrigin.forward, out RaycastHit hit, _headWallDistance, _aimCollisionMask, QueryTriggerInteraction.Ignore);
+
+        float targetBlend = wallAhead ? 1f : 0f;
+
+        float interpolation = 1f - Mathf.Exp(-_headWallBlendSpeed * Time.deltaTime);
+
+        _headWallBlend = Mathf.Lerp(_headWallBlend, targetBlend, interpolation);
+
+        if (_headWallBlend <= 0.001f)
+            return aimPoint;
+
+        Vector3 limitedAimPoint = aimPoint;
+
+        float minimumAimY = _headWallOrigin.position.y + _minimumBlockedAimYOffset;
+
+        if (limitedAimPoint.y < minimumAimY)
+        {
+            limitedAimPoint.y = minimumAimY;
+        }
+
+        return Vector3.Lerp(aimPoint, limitedAimPoint, _headWallBlend);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (_headWallOrigin == null)
+            return;
+
+        Gizmos.DrawWireSphere(_headWallOrigin.position, _headWallRadius);
+        Gizmos.DrawLine(_headWallOrigin.position, _headWallOrigin.position + _headWallOrigin.forward * _headWallDistance);
+        Gizmos.DrawWireSphere(_headWallOrigin.position + _headWallOrigin.forward * _headWallDistance, _headWallRadius);
     }
 
     public void BeginInventoryCamera()
