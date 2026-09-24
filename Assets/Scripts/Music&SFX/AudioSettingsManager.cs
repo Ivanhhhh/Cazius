@@ -26,7 +26,7 @@ public class AudioSettingsManager : MonoBehaviour
 
     public void SetMusicVolume(float volume)
     {
-        // Volume expected in dB, so convert from 0–1 range
+        // Volume expected in dB, so convert from 0ï¿½1 range
         mixer.SetFloat("MusicVolume", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20);
     }
 
