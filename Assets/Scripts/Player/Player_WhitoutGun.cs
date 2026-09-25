@@ -10,11 +10,20 @@ public class Player_WhitoutGun : MonoBehaviour
     [SerializeField] private Player_AimAndShoot aimAndShoot;
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private GameObject[] Gameobjects;
+    [SerializeField] private bool _setWithGun;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
-        SetWithoutGun();
+        if( _setWithGun)
+        {
+            SetWithGun();
+        }
+        else
+        {
+            SetWithoutGun();
+
+        }
     }
 
     private void OnEnable()

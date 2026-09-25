@@ -68,12 +68,13 @@ public class Player_Parry : MonoBehaviour
         foreach (var hit in hits)
         {
             Enemy_Parry scriptEnemigo = hit.GetComponent<Enemy_Parry>();
-            if (scriptEnemigo != null)
-            {
                 Debug.Log("parry encontrado");
                 _animator.SetTrigger("TakeDamage");
                 //aca meter particulas
                 _combatVisuals.PlayParryVisuals();
+            if (scriptEnemigo != null)
+            {
+
                 scriptEnemigo.Execute();
             }
         }
