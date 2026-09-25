@@ -31,7 +31,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             }
         }
 
-                public string bindingId
+        public string bindingId
         {
             get => m_BindingId;
             set
@@ -109,7 +109,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             set => m_RebindCancelButton = value;
         }
 
-        
+
         public GameObject rebindOverlay
         {
             get => m_RebindOverlay;
@@ -143,7 +143,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             }
         }
 
-        
+
         public InteractiveRebindEvent stopRebindEvent
         {
             get
@@ -154,10 +154,10 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             }
         }
 
-        
+
         public InputActionRebindingExtensions.RebindingOperation ongoingRebind => m_RebindOperation;
 
-       
+
         private InputAction m_RuntimeAction;
 
         private InputAction RuntimeAction
@@ -170,7 +170,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 return m_RuntimeAction;
             }
         }
-        
+
         public bool ResolveActionAndBinding(out InputAction action, out int bindingIndex)
         {
             bindingIndex = -1;
@@ -188,7 +188,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             return false;
         }
 
-       
+
         public void UpdateBindingDisplay()
         {
             var displayString = string.Empty;
@@ -204,15 +204,15 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                     displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
             }
 
-            
+
             if (m_BindingText != null)
                 m_BindingText.text = displayString;
 
-            
+
             m_UpdateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
         }
 
-        
+
         public void ResetToDefault()
         {
             if (!ResolveActionAndBinding(out var action, out var bindingIndex))
@@ -250,7 +250,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             SaveActionBinding(); //Modificado: persistir tambien al resetear
         }
 
-        
+
         public void SwapBinding(RebindActionUI other)
         {
             if (this == other)
@@ -271,7 +271,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             other.SaveActionBinding(); //Modificado
         }
 
-       
+
         public void StartInteractiveRebind()
         {
             if (!ResolveActionAndBinding(out var action, out var bindingIndex))
@@ -424,37 +424,37 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         protected void Update()
         {
             if (m_RebindInfo != null)
-                UpdateRebindInfo(Time.realtimeSinceStartupAsDouble);  
-    
+                UpdateRebindInfo(Time.realtimeSinceStartupAsDouble);
+
         }
 
         protected void OnEnable()
-{
-    if (s_RebindActionUIs == null)
-        s_RebindActionUIs = new List<RebindActionUI>();
-    s_RebindActionUIs.Add(this);
-    if (s_RebindActionUIs.Count == 1)
-        InputSystem.onActionChange += OnActionChange;
+        {
+            if (s_RebindActionUIs == null)
+                s_RebindActionUIs = new List<RebindActionUI>();
+            s_RebindActionUIs.Add(this);
+            if (s_RebindActionUIs.Count == 1)
+                InputSystem.onActionChange += OnActionChange;
 
-    if (GameInputManager.Instance != null)
-    {
-        UpdateBindingDisplay();
-    }
-    else
-    {
-        StartCoroutine(WaitForInputManagerThenRefresh());
-    }
-}
+            if (GameInputManager.Instance != null)
+            {
+                UpdateBindingDisplay();
+            }
+            else
+            {
+                StartCoroutine(WaitForInputManagerThenRefresh());
+            }
+        }
 
-private System.Collections.IEnumerator WaitForInputManagerThenRefresh()
-{
-    // Espera hasta que el singleton exista (frame a frame)
-    while (GameInputManager.Instance == null)
-        yield return null;
+        private System.Collections.IEnumerator WaitForInputManagerThenRefresh()
+        {
+            // Espera hasta que el singleton exista (frame a frame)
+            while (GameInputManager.Instance == null)
+                yield return null;
 
-    m_RuntimeAction = null; // por si quedó cacheado en null
-    UpdateBindingDisplay();
-}
+            m_RuntimeAction = null; // por si quedó cacheado en null
+            UpdateBindingDisplay();
+        }
 
         protected void OnDisable()
         {
@@ -470,7 +470,7 @@ private System.Collections.IEnumerator WaitForInputManagerThenRefresh()
             UpdateBindingDisplay();
         }
 
-        
+
         private static void OnActionChange(object obj, InputActionChange change)
         {
             if (change != InputActionChange.BoundControlsChanged)
@@ -555,7 +555,7 @@ private System.Collections.IEnumerator WaitForInputManagerThenRefresh()
         private double m_RebindStartTime = -1;
         private int m_LastRemainingTimeoutSeconds;
 
-       
+
 #if UNITY_EDITOR
         protected void OnValidate()
         {
@@ -613,84 +613,84 @@ private System.Collections.IEnumerator WaitForInputManagerThenRefresh()
         {
         }
 
-private bool CheckDuplicateBindings(InputAction action, int bindingIndex, bool AllCompositeParts = false)
-{
-    InputBinding newBinding = action.bindings[bindingIndex];
-    // Modificado: usamos effectivePath (override si existe, sino el default) en vez de
-    // overridePath a secas. Antes, si la otra accion nunca habia sido reasignada, su
-    // overridePath estaba vacio y el chequeo la saltaba entera -> por eso "a veces andaba
-    // y a veces no": solo detectaba choques contra teclas que el jugador YA habia
-    // reasignado antes, nunca contra una tecla que seguia siendo la default de fabrica.
-    var newEffectivePath = newBinding.effectivePath;
-
-    var asset = action.actionMap.asset;
-    IEnumerable<InputActionMap> mapsToCheck = asset != null ? asset.actionMaps : new[] { action.actionMap };
-
-    foreach (var map in mapsToCheck)
-    {
-        foreach (InputBinding binding in map.bindings)
+        private bool CheckDuplicateBindings(InputAction action, int bindingIndex, bool AllCompositeParts = false)
         {
-            // Ignoramos el binding que se esta reasignando (comparado por id, no por accion entera,
-            // para no saltear otras partes de un composite que si podrian chocar entre si)
-            if (binding.id == newBinding.id)
-                continue;
+            InputBinding newBinding = action.bindings[bindingIndex];
+            // Modificado: usamos effectivePath (override si existe, sino el default) en vez de
+            // overridePath a secas. Antes, si la otra accion nunca habia sido reasignada, su
+            // overridePath estaba vacio y el chequeo la saltaba entera -> por eso "a veces andaba
+            // y a veces no": solo detectaba choques contra teclas que el jugador YA habia
+            // reasignado antes, nunca contra una tecla que seguia siendo la default de fabrica.
+            var newEffectivePath = newBinding.effectivePath;
 
-            // Ignoramos composites/separadores sin path propio
-            if (binding.isComposite || string.IsNullOrEmpty(binding.effectivePath))
-                continue;
+            var asset = action.actionMap.asset;
+            IEnumerable<InputActionMap> mapsToCheck = asset != null ? asset.actionMaps : new[] { action.actionMap };
 
-            if (binding.effectivePath == newEffectivePath)
+            foreach (var map in mapsToCheck)
             {
-                Debug.LogError("Duplicate binding found: " + newEffectivePath);
-                return true;
-            }
-        }
-    }
+                foreach (InputBinding binding in map.bindings)
+                {
+                    // Ignoramos el binding que se esta reasignando (comparado por id, no por accion entera,
+                    // para no saltear otras partes de un composite que si podrian chocar entre si)
+                    if (binding.id == newBinding.id)
+                        continue;
 
-    if (AllCompositeParts)
-    {
-        for (int f = 1; f < bindingIndex; f++)
+                    // Ignoramos composites/separadores sin path propio
+                    if (binding.isComposite || string.IsNullOrEmpty(binding.effectivePath))
+                        continue;
+
+                    if (binding.effectivePath == newEffectivePath)
+                    {
+                        Debug.LogError("Duplicate binding found: " + newEffectivePath);
+                        return true;
+                    }
+                }
+            }
+
+            if (AllCompositeParts)
+            {
+                for (int f = 1; f < bindingIndex; f++)
+                {
+                    if (string.IsNullOrEmpty(action.bindings[f].effectivePath))
+                        continue;
+
+                    if (action.bindings[f].effectivePath == newEffectivePath)
+                    {
+                        Debug.Log("Duplicate binding found: " + newEffectivePath);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public void ResetAllBindingsToDefault()
         {
-            if (string.IsNullOrEmpty(action.bindings[f].effectivePath))
-                continue;
-
-            if (action.bindings[f].effectivePath == newEffectivePath)
+            if (GameInputManager.Instance == null || GameInputManager.Instance.Controls == null)
             {
-                Debug.Log("Duplicate binding found: " + newEffectivePath);
-                return true;
+                Debug.LogWarning("No se pudo resetear: GameInputManager.Instance o Controls es null.");
+                return;
             }
+
+            var asset = GameInputManager.Instance.Controls.asset;
+
+            foreach (var map in asset.actionMaps)
+            {
+                map.RemoveAllBindingOverrides(); // saca los overrides en memoria (vuelve al binding original)
+                PlayerPrefs.DeleteKey(map.name); // borra lo guardado en disco para ese mapa
+            }
+
+            PlayerPrefs.Save();
+
+            // Refresca todas las filas de rebind de la escena para que muestren el default actualizado
+            foreach (var ui in FindObjectsByType<RebindActionUI>(FindObjectsSortMode.None))
+            {
+                ui.m_RuntimeAction = null; // invalida el cache por si acaso
+                ui.UpdateBindingDisplay();
+            }
+
+            Debug.Log("Todos los bindings fueron restablecidos a su valor original.");
         }
-    }
-
-    return false;
-}
-
-public void ResetAllBindingsToDefault()
-{
-    if (GameInputManager.Instance == null || GameInputManager.Instance.Controls == null)
-    {
-        Debug.LogWarning("No se pudo resetear: GameInputManager.Instance o Controls es null.");
-        return;
-    }
-
-    var asset = GameInputManager.Instance.Controls.asset;
-
-    foreach (var map in asset.actionMaps)
-    {
-        map.RemoveAllBindingOverrides(); // saca los overrides en memoria (vuelve al binding original)
-        PlayerPrefs.DeleteKey(map.name); // borra lo guardado en disco para ese mapa
-    }
-
-    PlayerPrefs.Save();
-
-    // Refresca todas las filas de rebind de la escena para que muestren el default actualizado
-    foreach (var ui in FindObjectsByType<RebindActionUI>(FindObjectsSortMode.None))
-    {
-        ui.m_RuntimeAction = null; // invalida el cache por si acaso
-        ui.UpdateBindingDisplay();
-    }
-
-    Debug.Log("Todos los bindings fueron restablecidos a su valor original.");
-}
     }
 }

@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 
     public CameraShake cameraShake;
 
+    public bool gunActive = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
