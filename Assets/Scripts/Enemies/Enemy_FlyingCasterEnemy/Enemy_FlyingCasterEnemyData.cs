@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-
+using FactoryPool;
 [RequireComponent(typeof(Rigidbody))]
 public class Enemy_FlyingCasterEnemyData : MonoBehaviour
 {
@@ -14,7 +14,7 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
     [SerializeField] private FlyingEnemyStatsSO _flyingStats; // <--- El SO
 
     [Header("Projectile Settings")]
-    [SerializeField] private GameObject _projectilePrefab;
+    [SerializeField] private string _projectilePoolId = "Bullet_Caster"; // <-- NUEVO
     [SerializeField] private Transform _muzzlePoint;
     [SerializeField] private float _projectileSpeed = 20f;
 
@@ -105,28 +105,25 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
     // ==========================================
     public void SpawnProjectile(Vector3 direction)
     {
-        if (_projectilePrefab == null)
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.ScannerSFX, transform.position);
+
+        // 1. Pedir la bala al pool
+        Bullet projectile = ObjectFactory.Instance.Get<Bullet>(_projectilePoolId);
+        if (projectile == null)
         {
-            Debug.LogWarning("Falta asignar el Prefab del Proyectil en el Inspector.");
+            Debug.LogWarning($"No se encontró pool con id: {_projectilePoolId}");
             return;
         }
 
-        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.ScannerSFX, transform.position);
-
-        // Si asignaste un cañón, el disparo sale de ahí; si no, sale del centro del enemigo
+        // 2. Posicionar y rotar
         Vector3 spawnPosition = (_muzzlePoint != null) ? _muzzlePoint.position : _objectTransform.position;
+        projectile.transform.SetPositionAndRotation(
+            spawnPosition,
+            Quaternion.LookRotation(direction)
+        );
 
-        // Instanciamos la bala mirando hacia donde va a viajar
-        GameObject projectile = Instantiate(_projectilePrefab, spawnPosition, Quaternion.LookRotation(direction));
-
-        // Le damos el empuje físico
-        Rigidbody projRb = projectile.GetComponent<Rigidbody>();
-        if (projRb != null)
-        {
-            // Resetear la velocidad por si acaso y aplicar la nueva dirección
-            projRb.linearVelocity = Vector3.zero;
-            projRb.linearVelocity = direction * _projectileSpeed;
-        }
+        // 3. Decirle a la bala hacia dónde va y con qué fuerza (una sola llamada)
+        projectile.Disparar(direction, _projectileSpeed);
     }
 
     public void SpawnProjectileWithWarning(Vector3 direction)
