@@ -49,24 +49,31 @@ public class NPCController : MonoBehaviour
 
         if (_animator == null)
             _animator = GetComponentInChildren<Animator>();
+
+        if (_waypoints.Count < 2)
+            Debug.LogWarning($"{name}: needs at least 2 Waypoints.", this);
+    }
+
+    private void OnEnable()
+    {
+        if (_waypoints.Count < 2)
+        {
+            enabled = false;
+            return;
+        }
+
+        // Reset per-activation state so a pooled/reactivated NPC starts clean
+        _waypointIndex = 0;
+        _direction = 1;
+        Velocity = Vector3.zero;
+
+        Machine.ChangeState(IdleState);
     }
 
     public void SetWalking(bool isWalking)
     {
         if (_animator != null)
             _animator.SetBool(_isWalkingHash, isWalking);
-    }
-
-    private void Start()
-    {
-        if (_waypoints.Count < 2)
-        {
-            Debug.LogWarning($"{name}: needs at least 2 Waypoints.", this);
-            enabled = false;
-            return;
-        }
-
-        Machine.ChangeState(IdleState);
     }
 
     private void Update()
