@@ -40,6 +40,8 @@ public class Player_WhitoutGun : MonoBehaviour
 
     private void SetWithoutGun()
     {
+        GameManager.Instance.gunActive = false;
+
         animator.SetFloat("HasGun", 0f);
 
         Gameobjects[0].SetActive(false);
@@ -55,6 +57,8 @@ public class Player_WhitoutGun : MonoBehaviour
 
     private void SetWithGun()
     {
+        GameManager.Instance.gunActive = true;
+
         animator.SetFloat("HasGun", 1f);
 
         Gameobjects[0].SetActive(true);

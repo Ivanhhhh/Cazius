@@ -19,7 +19,6 @@ public class OpenTheDoor : MonoBehaviour, IEInteractable
         initialAngle = transform.rotation;
         targetAngle = initialAngle;
 
-        GameInputManager.Instance.Controls.Player.Interact.started += OpenDoor;
     }
 
     void Update()
@@ -29,14 +28,6 @@ public class OpenTheDoor : MonoBehaviour, IEInteractable
             targetAngle,
             Time.deltaTime * 5f
         );
-    }
-
-    void OnDestroy()
-    {
-        if (GameInputManager.Instance != null)
-        {
-            GameInputManager.Instance.Controls.Player.Interact.started -= OpenDoor;
-        }
     }
 
     private void OpenDoor(InputAction.CallbackContext context)
@@ -104,13 +95,6 @@ public class OpenTheDoor : MonoBehaviour, IEInteractable
 
     public Transform GetInteractionUIPoint()
     {
-        Debug.Log(
-            "OPEN DOOR UI POINT: " +
-            (_interactionUIPoint != null
-                ? _interactionUIPoint.name
-                : "NULL")
-        );
-
         return _interactionUIPoint != null
             ? _interactionUIPoint
             : transform;
