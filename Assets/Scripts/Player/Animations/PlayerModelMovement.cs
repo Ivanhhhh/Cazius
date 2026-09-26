@@ -22,7 +22,7 @@ public class PlayerModelMovement : MonoBehaviour
 
     [SerializeField] float _aimSmoothTime = 0.1f;
 
-    private bool _isAiming = false;
+    public bool isAiming = false;
 
     [Header("LookingParams")]
 
@@ -49,7 +49,7 @@ public class PlayerModelMovement : MonoBehaviour
         {
 
 
-            if (_isAiming)
+            if (isAiming)
             {
 
                 AimingSmooth();
