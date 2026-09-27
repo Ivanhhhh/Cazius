@@ -6,7 +6,7 @@ public enum ItemType
     Heal,
     Ammo,
     Scrap,
-    Cat,
+    Teddybear,
     Herbs,
     WorldCupAlbum,
     DepotKey,

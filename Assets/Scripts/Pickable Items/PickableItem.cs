@@ -3,7 +3,7 @@ using UnityEngine;
 public class PickableItem : MonoBehaviour, IEInteractable
 {
     [SerializeField] private ItemData _itemScriptableObject;
-    [SerializeField] private string _interactText = "F to Take Cat";
+    [SerializeField] private string _interactText = "F to Take Teddy bear";
     [SerializeField] private SFXManager.SFXCategoryType sfxType;
 
     public void Interact(Transform interactorTransform)
