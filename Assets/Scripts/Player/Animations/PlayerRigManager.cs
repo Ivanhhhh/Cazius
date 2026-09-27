@@ -38,6 +38,8 @@ public class PlayerRigManager : MonoBehaviour
 
     public void SetAimingConstraints()
     {
+        _playerModelMovement.isAiming = true;
+
         _hipsAim.weight = _hipsAimingWeight;
         _hipsAim2.weight = _hips2AimingWeight;
         _headAim.weight = _headAimingWeight;
@@ -57,6 +59,8 @@ public class PlayerRigManager : MonoBehaviour
 
     public void SetwalkingConstraints()
     {
+        _playerModelMovement.isAiming = false;
+
         _hipsAim.weight = _hipsWalkingWeight;
         _hipsAim2.weight = _hips2WalkingWeight;
         _headAim.weight = _headWalkingWeight;
