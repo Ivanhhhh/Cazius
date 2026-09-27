@@ -7,6 +7,7 @@ public class PlayerModelMovement : MonoBehaviour
     [SerializeField] Transform _modelPos;
     [SerializeField] Rigidbody _rb;
     [SerializeField] Camera _camera;
+    [SerializeField] Animator _animator;
 
     [Header("GlobalSettings")]
 
@@ -33,6 +34,7 @@ public class PlayerModelMovement : MonoBehaviour
     [SerializeField] float _rotationSpeed = 3f;
 
     private bool _shouldRotateModel = false;
+    private bool _rotateAnimationTriggered = false;
 
     [Header("WalkingParams")]
 
@@ -97,12 +99,30 @@ public class PlayerModelMovement : MonoBehaviour
 
     private void RotateSmooth()
     {
+        if (!_rotateAnimationTriggered)
+        {
+            float direction = Mathf.DeltaAngle(transform.eulerAngles.y, _modelPos.eulerAngles.y);
+
+            if (direction > 0f)
+            {
+                _animator.ResetTrigger("RotateLeft");
+                _animator.SetTrigger("RotateRight");
+            }
+            else
+            {
+                _animator.ResetTrigger("RotateRight");
+                _animator.SetTrigger("RotateLeft");
+            }
+
+            _rotateAnimationTriggered = true;
+        }
 
         transform.rotation = Quaternion.Slerp(transform.rotation, _modelPos.rotation, Time.deltaTime * _rotationSpeed);
 
         if (AngleDifference(transform, _modelPos) < _rotationOffset)
         {
             _shouldRotateModel = false;
+            _rotateAnimationTriggered = false;
         }
     }
 
