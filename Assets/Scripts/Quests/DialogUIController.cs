@@ -101,7 +101,7 @@ public class DialogUIController : MonoBehaviour
 
     // --- Input handlers ---
 
-    // A key — skip typing > advance page > Accept or Close on last page
+    // A key ï¿½ skip typing > advance page > Accept or Close on last page
     private void OnAdvancePressed()
     {
         if (acceptButton.gameObject.activeSelf)
@@ -119,7 +119,7 @@ public class DialogUIController : MonoBehaviour
         OnNextPressed();
     }
 
-    // D key — Decline on offer, ignored otherwise
+    // D key ï¿½ Decline on offer, ignored otherwise
     private void OnDeclinePressed()
     {
         if (declineButton.gameObject.activeSelf)

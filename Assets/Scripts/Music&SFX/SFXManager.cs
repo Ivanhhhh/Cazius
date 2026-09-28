@@ -4,6 +4,7 @@ using UnityEngine;
 public class SFXManager : MonoBehaviour
 {
     public static SFXManager Instance;
+    [SerializeField] private AudioSource _backgroundMusicSource;
 
     //[SerializeField] AudioSource sfxMixerGroup;
 
@@ -31,7 +32,8 @@ public class SFXManager : MonoBehaviour
         ScanningSFX,
         LeavesSFX,
         BouncingSFX,
-        HitTree
+        HitTree,
+        NPCTalkSFX
         // Add Categories here
     }
 
@@ -136,6 +138,39 @@ public class SFXManager : MonoBehaviour
         else
         {
             Debug.LogWarning($"SFXManager: Sound effect category '{category}' not found!");
+        }
+    }
+
+    public void PlaySFXAtPositionAndPauseMusic(SFXCategoryType category, Vector3 position)
+    {
+        if (sfxDict.TryGetValue(category, out SFXCategory sfxCategory))
+        {
+            int randomIndex = Random.Range(0, sfxCategory.clips.Count);
+            AudioClip clip = sfxCategory.clips[randomIndex];
+
+            if (_backgroundMusicSource != null)
+            {
+                _backgroundMusicSource.Pause();
+            }
+
+            audioSource.transform.position = position;
+            audioSource.PlayOneShot(clip);
+
+            StartCoroutine(ResumeMusicAfterSFX(clip.length));
+        }
+        else
+        {
+            Debug.LogWarning($"SFXManager: Sound effect category '{category}' not found!");
+        }
+    }
+
+    private System.Collections.IEnumerator ResumeMusicAfterSFX(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        if (_backgroundMusicSource != null)
+        {
+            _backgroundMusicSource.UnPause();
         }
     }
 }

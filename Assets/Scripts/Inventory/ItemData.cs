@@ -6,12 +6,13 @@ public enum ItemType
     Heal,
     Ammo,
     Scrap,
-    Cat,
+    Teddybear,
     Herbs,
     WorldCupAlbum,
     DepotKey,
     Football,
-    LegendarySandwich
+    LegendarySandwich,
+    Recorder
 }
 
 [CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/Item")]
