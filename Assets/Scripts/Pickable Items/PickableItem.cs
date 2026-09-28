@@ -10,12 +10,16 @@ public class PickableItem : MonoBehaviour, IEInteractable
     {
         Inventory.Instance.AddItem(_itemScriptableObject);
 
-        SFXManager.Instance.PlaySFXAtPosition(sfxType, transform.position);
+        SFXManager.Instance.PlaySFXAtPositionAndPauseMusic(
+            sfxType,
+            transform.position
+        );
 
         Destroy(gameObject);
     }
 
     [SerializeField] private Transform _interactionUIPoint;
+
     public Transform GetInteractionUIPoint()
     {
         return _interactionUIPoint != null

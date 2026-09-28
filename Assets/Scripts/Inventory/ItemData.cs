@@ -11,7 +11,8 @@ public enum ItemType
     WorldCupAlbum,
     DepotKey,
     Football,
-    LegendarySandwich
+    LegendarySandwich,
+    Recorder
 }
 
 [CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/Item")]
