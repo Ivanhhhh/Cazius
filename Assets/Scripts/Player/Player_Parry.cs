@@ -10,18 +10,16 @@ public class Player_Parry : MonoBehaviour
     [SerializeField] float _timeToParrying;
     [SerializeField] bool _isParrying;
 
-    [Header("Detection")]
-    [SerializeField] private float _parryRadius;
-    [SerializeField] private LayerMask _enemyLayerMask;
-    [SerializeField] private Transform _detectionOrigin; // podría ser el propio transform o un punto adelante del jugador
-
     [Header("Animation")]
     [SerializeField] private Animator _animator;
     private static readonly int ParryTrigger = Animator.StringToHash("IsBlocking");
     [SerializeField] private ParryCounterVisuals _combatVisuals;
 
     public event Action _onParryActivated;
-    public event Action _onParryEnded; 
+    public event Action _onParryEnded;
+
+    // Propiedad pública para que Player_HealthSystem consulte el estado
+    public bool IsParrying => _isParrying;
 
     void OnEnable()
     {
@@ -35,13 +33,11 @@ public class Player_Parry : MonoBehaviour
 
     void MakeParry(InputAction.CallbackContext context)
     {
-        if (!_isParrying)
-        {
-            Debug.Log("Parry tried");
-            StartCoroutine(ParryWindow());
-        }
-    }
+        if (_animator.GetBool("IsAiming")) return;
 
+        if (!_isParrying)
+            StartCoroutine(ParryWindow());
+    }
 
     private IEnumerator ParryWindow()
     {
@@ -49,41 +45,34 @@ public class Player_Parry : MonoBehaviour
         _onParryActivated?.Invoke();
         _animator.SetBool(ParryTrigger, true);
 
-        float elapsed = 0f;
-        while (elapsed < _timeToParrying)
-        {
-            CheckForParryTargets();
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
+        yield return new WaitForSeconds(_timeToParrying);
 
         _isParrying = false;
         _animator.SetBool(ParryTrigger, false);
-        _onParryEnded?.Invoke(); // NUEVO
-    }  
-    private void CheckForParryTargets()
-    {
-        Collider[] hits = Physics.OverlapSphere(_detectionOrigin.position, _parryRadius, _enemyLayerMask);
-
-        foreach (var hit in hits)
-        {
-            Enemy_Parry scriptEnemigo = hit.GetComponent<Enemy_Parry>();
-                Debug.Log("parry encontrado");
-                _animator.SetTrigger("TakeDamage");
-                //aca meter particulas
-                _combatVisuals.PlayParryVisuals();
-            if (scriptEnemigo != null)
-            {
-
-                scriptEnemigo.Execute();
-            }
-        }
+        _onParryEnded?.Invoke();
     }
 
-    private void OnDrawGizmosSelected()
+    /// <summary>
+    /// Se llama desde Player_HealthSystem.Hit() cuando llega un golpe
+    /// mientras el parry está activo. Devuelve true si se paró.
+    /// </summary>
+    public bool TryExecuteParry(GameObject attacker)
     {
-        if (_detectionOrigin == null) return;
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(_detectionOrigin.position, _parryRadius);
+        if (!_isParrying) return false;
+
+        _animator.SetTrigger("TakeDamage");
+        _combatVisuals.PlayParryVisuals();
+
+        if (attacker != null)
+        {
+            Enemy_Parry enemyParry = attacker.GetComponent<Enemy_Parry>();
+            if (enemyParry != null)
+            {
+                enemyParry.Execute();
+                _combatVisuals.PlayCounterattackVisuals(); // opcional
+            }
+        }
+
+        return true;
     }
 }
