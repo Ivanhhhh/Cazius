@@ -1,9 +1,9 @@
+using Patterns.Observer.EventManager_Delegates; // <-- esto arriba del todo
+using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using UnityEngine.SceneManagement;
-using Patterns.Observer.EventManager_Delegates; // <-- esto arriba del todo
+using UnityEngine.UI;
 
 
 public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
@@ -32,9 +32,9 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     [SerializeField] private Image _deathFadeImage;
     [SerializeField] private float _fadeDuration = 2.0f;
     [SerializeField] private float _delayBeforeLoad = 2000.0f;
+
     [Header("Parry Integration")]
     [SerializeField] private Player_Parry _parryScript;
-    private bool _isInvulnerableByParry = false;
 
     private Coroutine _hideUICoroutine;
     [SerializeField] private CameraShake _cameraShakeScript;
@@ -46,22 +46,11 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
         InventoryInputHandler.OnInventoryToggled += HandleInventoryState;
 
         if (_parryScript == null) _parryScript = GetComponent<Player_Parry>();
-        if (_parryScript != null)
-        {
-            _parryScript._onParryActivated += HandleParryStarted;
-            _parryScript._onParryEnded += HandleParryEnded;
-        }
     }
 
     private void OnDisable()
     {
         InventoryInputHandler.OnInventoryToggled -= HandleInventoryState;
-
-        if (_parryScript != null)
-        {
-            _parryScript._onParryActivated -= HandleParryStarted;
-            _parryScript._onParryEnded -= HandleParryEnded;
-        }
     }
 
     private void HandleInventoryState(bool isInventoryOpen)
@@ -105,21 +94,31 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
         ModifyUI();
     }
 
-    public void Hit(int amount)
+    // --- Interfaz ---
+    // Sobrecarga por compatibilidad: si algo llama Hit(int) sin atacante, redirige.
+    public void Hit(int amount) => Hit(amount, null);
+
+    public void Hit(int amount, GameObject attacker)
     {
-        if (_isInvulnerableByParry) return;
-        EventManager.TriggerEvent(EventsType.Event_PausePlayer);
-
-
-        if (Time.time < _lastHitTime + _invincibilityDuration)
+        // 1) Si el parry está activo, ejecutar parry y NO recibir daño.
+        if (_parryScript != null && _parryScript.IsParrying)
         {
+            _parryScript.TryExecuteParry(attacker);
             return;
         }
+
+        // 2) Pausa global de gameplay al recibir golpe (tu comportamiento original)
+        EventManager.TriggerEvent(EventsType.Event_PausePlayer);
+
+        // 3) i-frames
+        if (Time.time < _lastHitTime + _invincibilityDuration)
+            return;
 
         _lastHitTime = Time.time;
 
         _currentHealth -= amount;
         _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
+
         _cameraShakeScript.DamageShake();
         playerDamageScript.TakeDamageEffect();
 
@@ -127,9 +126,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
         ModifyUI();
 
         if (_currentHealth <= 0)
-        {
             HandleDeath();
-        }
     }
 
     private void UpdateHealthState()
@@ -145,21 +142,16 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
 
     private void ModifyUI()
     {
-
         _healthBarUIManager.ChangeHealthBarPercentage(_currentHealth / _maxHealth);
 
         int colorIndex = (int)_healthState;
         Color targetColor = Color.white;
 
         if (_healthColors != null && colorIndex >= 0 && colorIndex < _healthColors.Length)
-        {
             targetColor = _healthColors[colorIndex];
-        }
 
         if (_currentHealthText != null)
-        {
             _currentHealthText.text = $"Health: {_currentHealth}";
-        }
 
         if (_healthStateImage != null)
         {
@@ -169,10 +161,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
 
         SetUIElementsVisibility(true);
 
-        if (_hideUICoroutine != null)
-        {
-            StopCoroutine(_hideUICoroutine);
-        }
+        if (_hideUICoroutine != null) StopCoroutine(_hideUICoroutine);
         _hideUICoroutine = StartCoroutine(HideUIRoutine());
     }
 
@@ -192,9 +181,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     private void HandleDeath()
     {
         this.enabled = false;
-
         if (_deathPanel != null) { _deathPanel.SetActive(true); }
-
         StartCoroutine(DeathSequenceRoutine());
     }
 
@@ -214,7 +201,6 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
             {
                 elapsedTime += Time.deltaTime;
                 float newAlpha = Mathf.Lerp(startAlpha, endAlpha, elapsedTime / _fadeDuration);
-
                 _deathFadeImage.color = new Color(initialColor.r, initialColor.g, initialColor.b, newAlpha);
                 yield return null;
             }
@@ -232,21 +218,6 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
-
-    private void HandleParryStarted()
-    {
-        _isInvulnerableByParry = true;
-    }
-
-    private void HandleParryEnded()
-    {
-        _isInvulnerableByParry = false;
-    }
-
-
-
-
-
 }
 
 public enum HealthStates
@@ -261,4 +232,5 @@ public enum HealthStates
 public interface IPlayerHitable
 {
     void Hit(int damage);
+    void Hit(int damage, GameObject attacker);
 }

@@ -19,7 +19,7 @@ public class Enemy_DamageSystem : MonoBehaviour
         {
             if (other.gameObject.TryGetComponent(out IPlayerHitable hitable))
             {
-                hitable.Hit(_damageAmount);
+                hitable.Hit(_damageAmount,gameObject);
                 Debug.Log("aplicar daño");
             }
 

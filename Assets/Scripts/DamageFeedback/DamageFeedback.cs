@@ -1,7 +1,8 @@
-using UnityEngine;
-using System.Collections.Generic;
-using System.Collections;
 using Patterns.Observer.EventManager_Delegates;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.VFX;
 
 public class DamageFeedback : MonoBehaviour
@@ -18,7 +19,9 @@ public class DamageFeedback : MonoBehaviour
     private PlayerMovement _PlayerMovement;
 
     [SerializeField] Vector3 BloodPosition;
-    
+    private bool _knockbackInProgress;
+
+
     void Start()
     {
          _rb = GetComponent<Rigidbody>();
@@ -44,31 +47,43 @@ public class DamageFeedback : MonoBehaviour
     }
 
     
-    private IEnumerator MovingLerp(float time)
+    private IEnumerator MovingLerp(float time, float backAmount)
     {
-
         _PlayerMovement.enabled = false;
         _gameInputManager.DisablePlayerMovement();
 
-                 //poner animacion;
-        _rb.linearVelocity = Vector3.zero;
-        _rb.AddForce(-transform.forward * BackAmount, ForceMode.VelocityChange);
+        Vector3 start = _rb.position;
+        Vector3 end = start - transform.forward * backAmount;
 
-        yield return new WaitForSeconds(time);
+        float elapsed = 0f;
+        while (elapsed < time)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / time);
+            Vector3 target = Vector3.Lerp(start, end, t);
+            target.y = _rb.position.y;
+            _rb.MovePosition(target);
+            yield return new WaitForFixedUpdate();
+        }
+
         _gameInputManager.EnablePlayerMovement();
         _PlayerMovement.enabled = true;
+        _knockbackInProgress = false;
+
     }
 
-    
+
     public void StopMovingMethod(params object[] parameters)
     {
+        if (_knockbackInProgress) return;
+        _knockbackInProgress = true;
         Debug.Log("Ejecutado");
 
         _animator.SetTrigger("TakeDamage");
 
         SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.HurtedSFX);
        
-         StartCoroutine(MovingLerp(TimeStop));
+         StartCoroutine(MovingLerp(TimeStop,BackAmount));
         
          BloodEffect.transform.position = transform.position;
          BloodEffect.Play();
@@ -76,8 +91,10 @@ public class DamageFeedback : MonoBehaviour
 
     public void ParryAttack(params object[] parameters)
     {
+        if (_knockbackInProgress) return;
+        _knockbackInProgress = true;
         Debug.Log("Ejecutado");
 
-        StartCoroutine(MovingLerp(0.6f));
+        StartCoroutine(MovingLerp(TimeStop,BackAmount));
     }
 }
