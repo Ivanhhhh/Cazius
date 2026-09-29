@@ -102,8 +102,11 @@ public class ParryCounterVisuals : MonoBehaviour
             );
         }
 
-        _parryEffects.damageFeedback.ParryAttack();
-        _parryEffects.cameraShake.DamageShake();
+        if (settings.damageFeedback != null)
+            settings.damageFeedback.ParryAttack();
+
+        if (settings.cameraShake != null)
+            settings.cameraShake.DamageShake();
 
         if (settings.effectLifetime > 0f)
         {
