@@ -24,6 +24,8 @@ public class PlayerModelMovement : MonoBehaviour
     [SerializeField] float _aimSmoothTime = 0.1f;
 
     public bool isAiming = false;
+    private bool _isInEden = true;
+    private bool _isInPurgatory = false;
 
     [Header("LookingParams")]
 
@@ -43,6 +45,29 @@ public class PlayerModelMovement : MonoBehaviour
     [SerializeField] float _walkingRotateMaxAngle = 20f;
     [SerializeField] float _walkingRotateHalfAngle = 15f;
 
+    private void OnEnable()
+    {
+        WorldChangeManager.Instance.SwapToEdenEvent += SwapEden;
+        WorldChangeManager.Instance.SwapToPurgatoryEvent += SwapPurgatory;  
+    }
+    private void OnDisable()
+    {
+        WorldChangeManager.Instance.SwapToEdenEvent -= SwapEden;
+        WorldChangeManager.Instance.SwapToPurgatoryEvent -= SwapPurgatory;
+    }
+
+    private void SwapEden()
+    {
+        _isInEden = true;
+        _isInPurgatory = false;
+    }
+
+    private void SwapPurgatory()
+    {
+        _isInPurgatory = true;
+        _isInEden = false;
+    }
+
     private void LateUpdate()
     {
         transform.position = _modelPos.position - modelOffset;
@@ -51,8 +76,10 @@ public class PlayerModelMovement : MonoBehaviour
         {
 
 
-            if (isAiming)
+            if (isAiming && !_isInEden)
             {
+
+                Debug.Log(_isInEden);
 
                 AimingSmooth();
 
