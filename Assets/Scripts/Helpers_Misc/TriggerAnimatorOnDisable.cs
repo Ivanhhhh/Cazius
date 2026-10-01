@@ -15,6 +15,10 @@ public class TriggerAnimatorOnDisable : MonoBehaviour
     [Header("Sound")]
     [SerializeField] private SFXManager.SFXCategoryType sfxType;
 
+
+    [Header("Camera Shake")]
+    [SerializeField] private float shakeStrength = 0.08f;
+
     private int _triggerHash;
     private bool _applicationQuitting;
     private bool _alreadyTriggered;
@@ -55,9 +59,11 @@ public class TriggerAnimatorOnDisable : MonoBehaviour
     {
         SFXManager.Instance.PlaySFXAtPositionAndPauseMusic(sfxType, transform.position);
 
-        CameraShake.Instance.ShakeCamera();
+        CameraShake.Instance.StartShake(shakeStrength);
 
         yield return new WaitForSeconds(delayAfterTrigger);
+
+        CameraShake.Instance.StopShake();
 
         if (objectToDisable != null)
             objectToDisable.SetActive(false);

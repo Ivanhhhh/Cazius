@@ -6,15 +6,21 @@ public class RainingRocksEditor : Editor
 {
     SerializedProperty actionType;
     SerializedProperty sfxType;
-    SerializedProperty gravityMultipler;
+    SerializedProperty gravityMultiplier;
     SerializedProperty rockTag;
+    SerializedProperty timeBetweenRocks;
+
+    SerializedProperty shakeStrength;
+
 
     private void OnEnable()
     {
         actionType = serializedObject.FindProperty("actionType");
         sfxType = serializedObject.FindProperty("sfxType");
-        gravityMultipler = serializedObject.FindProperty("gravityMultipler");
+        gravityMultiplier = serializedObject.FindProperty("gravityMultiplier");
         rockTag = serializedObject.FindProperty("rockTag");
+        timeBetweenRocks = serializedObject.FindProperty("timeBetweenRocks");
+        shakeStrength = serializedObject.FindProperty("shakeStrength");
     }
 
     public override void OnInspectorGUI()
@@ -33,14 +39,16 @@ public class RainingRocksEditor : Editor
             EditorGUILayout.LabelField("Sound", EditorStyles.boldLabel);
 
             EditorGUILayout.PropertyField(sfxType);
+            EditorGUILayout.PropertyField(shakeStrength);
         }
         else if (selectedAction == RainingRocks.ActionType.Physics)
         {
             EditorGUILayout.LabelField("Physics", EditorStyles.boldLabel);
 
             EditorGUILayout.PropertyField(sfxType);
-            EditorGUILayout.PropertyField(gravityMultipler);
+            EditorGUILayout.PropertyField(gravityMultiplier);
             EditorGUILayout.PropertyField(rockTag);
+            EditorGUILayout.PropertyField(timeBetweenRocks);
         }
 
         serializedObject.ApplyModifiedProperties();

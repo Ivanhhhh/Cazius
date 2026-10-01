@@ -17,18 +17,30 @@ public class RainingRocks : MonoBehaviour
 
     [Header("Physics")]
     [SerializeField] private string rockTag = "Rock";
-    [SerializeField] private float gravityMultipler;
-    private Rigidbody[] rigidbodies;
+    [SerializeField] private float gravityMultiplier = 10f;
+    [SerializeField] private float timeBetweenRocks = 0.5f;
+
+    [Header("Camera Shake")]
+    [SerializeField] private float shakeStrength = 0.08f;
+
+    private bool triggered = false;
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player"))
             return;
 
+        if (triggered)
+            return;
+
+        triggered = true;
+
         if (actionType == ActionType.Sound)
         {
-            SFXManager.Instance.PlaySFXAtPositionAndPauseMusic(sfxType, transform.position);
-            CameraShake.Instance.ShakeCamera();
+            SFXManager.Instance.PlaySFXAtPositionAndPauseMusic(
+                sfxType,
+                transform.position
+            );
         }
         else if (actionType == ActionType.Physics)
         {
@@ -40,19 +52,33 @@ public class RainingRocks : MonoBehaviour
     {
         GameObject[] rocks = GameObject.FindGameObjectsWithTag(rockTag);
 
+        CameraShake.Instance.StartShake(shakeStrength);
+
         foreach (GameObject rock in rocks)
         {
+            if (rock == null)
+                continue;
+
             Rigidbody rb = rock.GetComponent<Rigidbody>();
 
-            if (rb == null) continue;
+            if (rb == null)
+                continue;
 
             rb.useGravity = true;
-            rb.AddForce(Vector3.down * gravityMultipler, ForceMode.Acceleration);
 
-            // SFXManager.Instance.PlaySFXAtPosition(sfxType, transform.position);
+            rb.AddForce(
+                Vector3.down * gravityMultiplier,
+                ForceMode.Acceleration
+            );
 
-            yield return new WaitForSeconds(0.5f);
+            SFXManager.Instance.PlaySFXAtPosition(
+                sfxType,
+                rock.transform.position
+            );
+
+            yield return new WaitForSeconds(timeBetweenRocks);
         }
 
+        CameraShake.Instance.StopShake();
     }
 }
