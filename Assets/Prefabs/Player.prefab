@@ -1067,6 +1067,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraShake
   shake: {fileID: 4528295701250481471}
   preset: {fileID: 11400000, guid: d8a457f7dad96bb4aa3ede48b0e3fa98, type: 2}
+  shakeSmoothness: 2
+  returnDuration: 5
 --- !u!1 &2571330640586742583
 GameObject:
   m_ObjectHideFlags: 0
@@ -2924,6 +2926,11 @@ MonoBehaviour:
   _fallbackAimDistance: 30
   _followSpeed: 50
   _minimumVisualAimDistance: 10
+  _headWallOrigin: {fileID: 0}
+  _headWallRadius: 0.15
+  _headWallDistance: 0.35
+  _minimumBlockedAimYOffset: -0.05
+  _headWallBlendSpeed: 12
   _modelAimPivot: {fileID: 3198439039336233015}
   _aimYawOffset: 8
   _aimYawRotationSpeed: 12
@@ -3115,11 +3122,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player_Parry
   _timeToParrying: 0.5
   _isParrying: 0
-  _parryRadius: 1.28
-  _enemyLayerMask:
-    serializedVersion: 2
-    m_Bits: 524288
-  _detectionOrigin: {fileID: 7387972506014328012}
   _animator: {fileID: 6574353094920213590}
   _combatVisuals: {fileID: 231735413204039970}
 --- !u!114 &7065230446201761485
@@ -6841,6 +6843,7 @@ MonoBehaviour:
   - {fileID: 7911849782160031350}
   - {fileID: 345046012065337086}
   - {fileID: 0}
+  _setWithGun: 0
 --- !u!4 &592015394893390683 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8895649082029878627, guid: d0b724c195a0ce644b558f092adc3cda, type: 3}
