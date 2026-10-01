@@ -9,17 +9,27 @@ public class QuestWorldSwapCondition : QuestCondition
 
     private bool _triggeredForEden;
     private bool _triggeredForPurgatory;
+    private bool _subscribed;
 
-    private void EnsureSubscribed()
+    private void OnEnable()
     {
-        if (WorldChangeManager.Instance == null)
-            return;
+        _subscribed = false;
+        _triggeredForEden = false;
+        _triggeredForPurgatory = false;
+    }
 
-        WorldChangeManager.Instance.SwapToEdenEvent -= HandleEdenSwap;
+    public override void OnQuestActivated()
+    {
+        if (_subscribed) return;
+        if (WorldChangeManager.Instance == null) return;
+
         WorldChangeManager.Instance.SwapToEdenEvent += HandleEdenSwap;
-
-        WorldChangeManager.Instance.SwapToPurgatoryEvent -= HandlePurgatorySwap;
         WorldChangeManager.Instance.SwapToPurgatoryEvent += HandlePurgatorySwap;
+        _subscribed = true;
+
+        // Reset flags when stage activates so previous swaps don't count
+        _triggeredForEden = false;
+        _triggeredForPurgatory = false;
     }
 
     private void HandleEdenSwap()
@@ -36,13 +46,13 @@ public class QuestWorldSwapCondition : QuestCondition
 
     public override bool IsMet(string targetID)
     {
-        EnsureSubscribed();
+        if (!_subscribed) return false;
 
         if (string.Equals(targetID, "Eden", System.StringComparison.OrdinalIgnoreCase))
-            return _triggeredForEden || (WorldChangeManager.Instance != null && WorldChangeManager.Instance.IsInEden && triggerOnEdenSwap);
+            return _triggeredForEden;
 
         if (string.Equals(targetID, "Purgatory", System.StringComparison.OrdinalIgnoreCase))
-            return _triggeredForPurgatory || (WorldChangeManager.Instance != null && !WorldChangeManager.Instance.IsInEden && triggerOnPurgatorySwap);
+            return _triggeredForPurgatory;
 
         return _triggeredForEden || _triggeredForPurgatory;
     }

@@ -52,14 +52,33 @@ public class QuestManager : MonoBehaviour
             : 0;
     }
 
+    // --- Notify condition that its stage is now active ---
+
+    private void NotifyStageActivated(QuestDefinition quest, int stageIndex)
+    {
+        if (quest == null) return;
+
+        if (!quest.useStages || quest.stages == null || quest.stages.Count == 0)
+        {
+            quest.condition?.OnQuestActivated();
+            return;
+        }
+
+        if (stageIndex < 0 || stageIndex >= quest.stages.Count) return;
+
+        QuestStage stage = quest.stages[stageIndex];
+        stage?.condition?.OnQuestActivated();
+    }
+
+    // --- Stage item helpers ---
+
     private void GiveStageStartItem(QuestDefinition quest, int stageIndex)
     {
         if (quest == null || quest.stages == null || stageIndex < 0 || stageIndex >= quest.stages.Count)
             return;
 
         QuestStage stage = quest.stages[stageIndex];
-        if (stage == null || stage.itemGivenOnStageStart == null)
-            return;
+        if (stage == null || stage.itemGivenOnStageStart == null) return;
 
         if (Inventory.Instance != null)
             Inventory.Instance.AddItem(stage.itemGivenOnStageStart);
@@ -67,12 +86,15 @@ public class QuestManager : MonoBehaviour
 
     private void RemoveStageAdvanceItem(QuestStage stage)
     {
-        if (stage == null)
-            return;
+        if (stage == null) return;
 
-        if (stage.removeItemOnAdvance && stage.itemToRemoveOnAdvance != null && !string.IsNullOrEmpty(stage.itemToRemoveOnAdvance.itemID) && Inventory.Instance != null)
+        if (stage.removeItemOnAdvance && stage.itemToRemoveOnAdvance != null
+            && !string.IsNullOrEmpty(stage.itemToRemoveOnAdvance.itemID)
+            && Inventory.Instance != null)
             Inventory.Instance.RemoveItem(stage.itemToRemoveOnAdvance.itemID);
     }
+
+    // --- Condition checks ---
 
     public bool IsCurrentStageConditionMet(string questID)
     {
@@ -89,6 +111,8 @@ public class QuestManager : MonoBehaviour
         QuestStage stage = quest.stages[stageIndex];
         return stage == null || stage.condition == null || stage.condition.IsMet(stage.targetID);
     }
+
+    // --- Stage progression ---
 
     public bool TryAdvanceStage(string questID)
     {
@@ -109,8 +133,7 @@ public class QuestManager : MonoBehaviour
             return false;
 
         QuestStage stage = quest.stages[stageIndex];
-        if (stage == null)
-            return false;
+        if (stage == null) return false;
 
         if (stage.condition != null && !stage.condition.IsMet(stage.targetID))
             return false;
@@ -126,21 +149,19 @@ public class QuestManager : MonoBehaviour
         if (stageIndex >= quest.stages.Count)
         {
             _questStates[questID] = QuestStatus.JustCompleted;
-            if (SaveManager.Instance != null)
-                SaveManager.Instance.Save();
+            if (SaveManager.Instance != null) SaveManager.Instance.Save();
             OnQuestUpdated?.Invoke();
             return true;
         }
 
-        if (_questStates[questID] == QuestStatus.NotStarted)
-            _questStates[questID] = QuestStatus.Active;
-        else if (_questStates[questID] != QuestStatus.Active)
-            _questStates[questID] = QuestStatus.Active;
+        _questStates[questID] = QuestStatus.Active;
 
         GiveStageStartItem(quest, stageIndex);
 
-        if (SaveManager.Instance != null)
-            SaveManager.Instance.Save();
+        // Notify the new stage's condition that it is now active
+        NotifyStageActivated(quest, stageIndex);
+
+        if (SaveManager.Instance != null) SaveManager.Instance.Save();
         OnQuestUpdated?.Invoke();
         return true;
     }
@@ -152,11 +173,16 @@ public class QuestManager : MonoBehaviour
 
         _questStates[questID] = QuestStatus.Active;
 
-        if (_questDefinitions.TryGetValue(questID, out var quest) && quest != null && quest.useStages && quest.stages != null && quest.stages.Count > 0)
-            GiveStageStartItem(quest, GetStageIndex(questID));
+        if (_questDefinitions.TryGetValue(questID, out var quest) && quest != null)
+        {
+            if (quest.useStages && quest.stages != null && quest.stages.Count > 0)
+                GiveStageStartItem(quest, GetStageIndex(questID));
 
-        if (SaveManager.Instance != null)
-            SaveManager.Instance.Save();
+            // Notify stage 0 condition that it is now active
+            NotifyStageActivated(quest, GetStageIndex(questID));
+        }
+
+        if (SaveManager.Instance != null) SaveManager.Instance.Save();
         OnQuestUpdated?.Invoke();
     }
 
@@ -165,8 +191,7 @@ public class QuestManager : MonoBehaviour
         if (!_questStates.ContainsKey(questID)) return;
         if (_questStates[questID] != QuestStatus.Active) return;
         _questStates[questID] = QuestStatus.JustCompleted;
-        if (SaveManager.Instance != null)
-            SaveManager.Instance.Save();
+        if (SaveManager.Instance != null) SaveManager.Instance.Save();
         OnQuestUpdated?.Invoke();
     }
 
@@ -175,8 +200,7 @@ public class QuestManager : MonoBehaviour
         if (!_questStates.ContainsKey(questID)) return;
         if (_questStates[questID] != QuestStatus.JustCompleted) return;
         _questStates[questID] = QuestStatus.Completed;
-        if (SaveManager.Instance != null)
-            SaveManager.Instance.Save();
+        if (SaveManager.Instance != null) SaveManager.Instance.Save();
         OnQuestUpdated?.Invoke();
     }
 
@@ -196,48 +220,28 @@ public class QuestManager : MonoBehaviour
 
     // --- Kill tracking ---
 
-    public void RegisterKill(string enemyID)
-    {
-        _killedEnemies.Add(enemyID);
-    }
-
-    public bool WasKilled(string enemyID)
-    {
-        return _killedEnemies.Contains(enemyID);
-    }
+    public void RegisterKill(string enemyID) => _killedEnemies.Add(enemyID);
+    public bool WasKilled(string enemyID) => _killedEnemies.Contains(enemyID);
 
     // --- Location tracking ---
 
-    public void RegisterLocation(string locationID)
-    {
-        _reachedLocations.Add(locationID);
-    }
-
-    public bool WasReached(string locationID)
-    {
-        return _reachedLocations.Contains(locationID);
-    }
+    public void RegisterLocation(string locationID) => _reachedLocations.Add(locationID);
+    public bool WasReached(string locationID) => _reachedLocations.Contains(locationID);
 
     // --- Save / Load integration ---
 
     public Dictionary<string, QuestStatus> GetSaveData()
-    {
-        return new Dictionary<string, QuestStatus>(_questStates);
-    }
+        => new Dictionary<string, QuestStatus>(_questStates);
 
     public Dictionary<string, int> GetStageSaveData()
-    {
-        return new Dictionary<string, int>(_questStageIndexes);
-    }
+        => new Dictionary<string, int>(_questStageIndexes);
 
     public void LoadSaveData(Dictionary<string, QuestStatus> saved)
     {
         _questStates = new Dictionary<string, QuestStatus>(saved);
         foreach (var questID in _questDefinitions.Keys)
-        {
             if (!_questStageIndexes.ContainsKey(questID))
                 _questStageIndexes[questID] = 0;
-        }
     }
 
     public void LoadSaveData(Dictionary<string, QuestStatus> saved, Dictionary<string, int> stageIndexes)
@@ -248,9 +252,8 @@ public class QuestManager : MonoBehaviour
             : new Dictionary<string, int>();
 
         foreach (var questID in _questDefinitions.Keys)
-        {
             if (!_questStageIndexes.ContainsKey(questID))
                 _questStageIndexes[questID] = 0;
-        }
     }
+
 }

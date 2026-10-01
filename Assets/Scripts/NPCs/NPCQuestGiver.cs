@@ -143,8 +143,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
 
     private void OpenStageOfferDialog()
     {
-        if (!quest.useStages)
-            return;
+        if (!quest.useStages) return;
 
         int stageIndex = QuestManager.Instance.GetStageIndex(quest.questID);
         if (quest.stages == null || stageIndex < 0 || stageIndex >= quest.stages.Count)
@@ -204,8 +203,9 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                 : null;
 
             bool didAdvance = QuestManager.Instance.TryAdvanceStage(quest.questID);
-            if (!didAdvance)
-                return;
+            if (!didAdvance) return;
+
+            bool isNowJustCompleted = QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted;
 
             if (currentStage != null && currentStage.stageReadyDialog != null && currentStage.stageReadyDialog.Length > 0)
             {
@@ -215,7 +215,11 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                     onClose: () =>
                     {
                         if (QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted)
+                        {
+                            if (_questPrizeItem != null)
+                                Inventory.Instance.AddItem(_questPrizeItem);
                             OpenFirstCompletionDialog();
+                        }
                         else
                             OpenStageOfferDialog();
                     }
@@ -223,10 +227,15 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                 return;
             }
 
-            if (QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted)
+            if (isNowJustCompleted)
+            {
+                if (_questPrizeItem != null)
+                    Inventory.Instance.AddItem(_questPrizeItem);
                 OpenFirstCompletionDialog();
+            }
             else
                 OpenStageOfferDialog();
+
             return;
         }
 
