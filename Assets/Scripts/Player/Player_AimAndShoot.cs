@@ -482,6 +482,8 @@ public class Player_AimAndShoot : MonoBehaviour
 
     private void UpdatePlayerRig(bool isAim)
     {
+        if (!_canUseWeapon) { return; }
+
         if (isAim == _rigIsAim)
             { return; }
 
