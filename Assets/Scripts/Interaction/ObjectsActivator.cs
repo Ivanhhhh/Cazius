@@ -1,14 +1,28 @@
+using System.Collections;
 using UnityEngine;
 
 public class ObjectsActivator : MonoBehaviour
 {
     [SerializeField] private GameObject[] _ObjectsToActivate;
 
+    [SerializeField] private SFXManager.SFXCategoryType sfxType;
+
     public void Activate()
     {
-        foreach (GameObject objects in _ObjectsToActivate)
+        StartCoroutine(ActivateObjects());
+    }
+
+    private IEnumerator ActivateObjects()
+    {
+        SFXManager.Instance.PlaySFXAtPositionAndPauseMusic(sfxType, transform.position);
+
+        CameraShake.Instance.DamageShake();
+
+        yield return new WaitForSeconds(5f);
+
+        foreach (GameObject obj in _ObjectsToActivate)
         {
-            objects.SetActive(true);
+            obj.SetActive(true);
         }
     }
 }

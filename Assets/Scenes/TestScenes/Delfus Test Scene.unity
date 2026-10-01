@@ -130,7 +130,6 @@ GameObject:
   - component: {fileID: 10055011}
   - component: {fileID: 10055010}
   - component: {fileID: 10055012}
-  - component: {fileID: 10055013}
   m_Layer: 0
   m_Name: Zone 02
   m_TagString: Untagged
@@ -167,12 +166,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 10055009}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.12, y: 0.91, z: -3.83}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 5.37925, y: -4.31, z: -8.81907}
   m_LocalScale: {x: 2.2728, y: 2.2728, z: 2.2728}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2058326056}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &10055012
 MonoBehaviour:
@@ -191,20 +190,6 @@ MonoBehaviour:
   rockTag: Rock
   gravityMultipler: 10
   cameraShake: {fileID: 0}
---- !u!114 &10055013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 10055009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29907a027ab0eaa4fadd62c72c08b131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CameraShake
-  shake: {fileID: 0}
-  preset: {fileID: 11400000, guid: 44089c2b640259b42b7acf94a76647f9, type: 2}
 --- !u!1 &135723479
 GameObject:
   m_ObjectHideFlags: 0
@@ -2701,12 +2686,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 737974909}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.21, y: 0.64, z: 2.09}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 5.46925, y: -4.58, z: -2.89907}
   m_LocalScale: {x: 2.3523, y: 2.3523, z: 2.3523}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2058326056}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &737974912
 MonoBehaviour:
@@ -5500,6 +5485,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 607803060}
+  - {fileID: 737974911}
+  - {fileID: 10055011}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2143050609
@@ -5669,5 +5656,3 @@ SceneRoots:
   - {fileID: 160876305}
   - {fileID: 1679497493}
   - {fileID: 2058326056}
-  - {fileID: 737974911}
-  - {fileID: 10055011}

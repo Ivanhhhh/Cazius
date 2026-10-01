@@ -8,7 +8,6 @@ public class RainingRocksEditor : Editor
     SerializedProperty sfxType;
     SerializedProperty gravityMultipler;
     SerializedProperty rockTag;
-    SerializedProperty cameraShake;
 
     private void OnEnable()
     {
@@ -16,7 +15,6 @@ public class RainingRocksEditor : Editor
         sfxType = serializedObject.FindProperty("sfxType");
         gravityMultipler = serializedObject.FindProperty("gravityMultipler");
         rockTag = serializedObject.FindProperty("rockTag");
-        cameraShake = serializedObject.FindProperty("cameraShake");
     }
 
     public override void OnInspectorGUI()
@@ -35,15 +33,14 @@ public class RainingRocksEditor : Editor
             EditorGUILayout.LabelField("Sound", EditorStyles.boldLabel);
 
             EditorGUILayout.PropertyField(sfxType);
-            EditorGUILayout.PropertyField(cameraShake);
         }
         else if (selectedAction == RainingRocks.ActionType.Physics)
         {
             EditorGUILayout.LabelField("Physics", EditorStyles.boldLabel);
 
+            EditorGUILayout.PropertyField(sfxType);
             EditorGUILayout.PropertyField(gravityMultipler);
             EditorGUILayout.PropertyField(rockTag);
-            EditorGUILayout.PropertyField(cameraShake);
         }
 
         serializedObject.ApplyModifiedProperties();

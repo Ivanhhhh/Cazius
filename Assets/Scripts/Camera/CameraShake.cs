@@ -1,17 +1,18 @@
-using System.Collections;
 using UnityEngine;
 using SmoothShakeFree;
-using System;
-using UnityEngine.Rendering.Universal;
+
 public class CameraShake : MonoBehaviour
 {
+    public static CameraShake Instance { get; private set; }
+
     [SerializeField] private SmoothShake shake;
     [SerializeField] private SmoothShakeFreePreset preset;
 
-    void Start()
+    private void Awake()
     {
-        shake.StartShake(preset);
+        Instance = this;
     }
+
     public void DamageShake()
     {
         shake.StartShake(preset);
@@ -23,6 +24,6 @@ public class CameraShake : MonoBehaviour
     {
         shake.StartShake(preset);
 
-        Debug.Log("Shake camera ON");
+        Debug.Log("Camera Shake ON");
     }
 }
