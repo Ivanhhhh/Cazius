@@ -40,19 +40,19 @@ public class QuestDefinition : ScriptableObject
     public bool useStages;
     public List<QuestStage> stages = new List<QuestStage>();
 
-    [Header("Dialog � Offer")]
+    [Header("Dialog - Offer")]
     [TextArea(2, 5)]
     public string[] offerDialog;
 
-    [Header("Dialog � Active (condition not yet met)")]
+    [Header("Dialog - Active (condition not yet met)")]
     [TextArea(2, 5)]
     public string[] activeDialog;
 
-    [Header("Dialog � First Completion (plays once)")]
+    [Header("Dialog - First Completion (plays once)")]
     [TextArea(2, 5)]
     public string[] firstCompletionDialog;
 
-    [Header("Dialog � Completed (plays every time after)")]
+    [Header("Dialog - Completed (plays every time after)")]
     [TextArea(2, 5)]
     public string[] completedDialog;
 }

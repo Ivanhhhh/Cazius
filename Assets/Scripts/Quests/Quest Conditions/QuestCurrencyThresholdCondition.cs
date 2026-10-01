@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewQuestCurrencyThresholdCondition",
-                 menuName = "Quests/Conditions/Quest Currency Threshold Condition")]
+[CreateAssetMenu(fileName = "NewQuestSoulEnergyCondition",
+                 menuName = "Quests/Conditions/Quest Soul Energy Condition")]
 public class QuestSoulEnergyCondition : QuestCondition
 {
     public override bool IsMet(string targetID)
