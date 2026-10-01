@@ -23,6 +23,8 @@ public class Enemy_HealthSystem_Base : MonoBehaviour, Enemy_Interface_Damage
     [SerializeField] private DeathBehaviorType _deathBehavior = DeathBehaviorType.Destroy;
     [Tooltip("Tiempo antes de destruir/desactivar el gameObject, para dar lugar a los efectos de muerte (VFX, animacion, etc).")]
     [SerializeField] private float _deathDelay = 0f;
+    [SerializeField] AngelEyeBossVisuals _bossVisuals;
+
  
     public float CurrentHealth => _currentHealth;
     public float MaxHealth => _maxHealth;
@@ -59,6 +61,7 @@ public class Enemy_HealthSystem_Base : MonoBehaviour, Enemy_Interface_Damage
     public void TakeDamage(float amount)
     {
         TakeDamageFromPart(amount, BodyPartType.Chest);
+        _bossVisuals.EyeTakeDMG();
     }
  
     public void TakeDamageFromPart(float amount, BodyPartType part)
