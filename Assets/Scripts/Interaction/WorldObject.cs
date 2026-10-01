@@ -23,14 +23,14 @@ public class WorldObject : MonoBehaviour // Va en cada objecto que se quiera pre
         WorldChangeManager.Instance.SwapToEdenEvent += HandleSwapToEden;
         WorldChangeManager.Instance.SwapToPurgatoryEvent += HandleSwapToPurgatory;
     }
-
+    */
     void OnDisable()
     {
         if (WorldChangeManager.Instance == null) return;
 
         WorldChangeManager.Instance.SwapToEdenEvent -= HandleSwapToEden;
         WorldChangeManager.Instance.SwapToPurgatoryEvent -= HandleSwapToPurgatory;
-    }*/
+    }
 
     private void HandleSwapToEden()
     {
