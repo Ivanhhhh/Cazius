@@ -28,7 +28,7 @@ public class RainingRocks : MonoBehaviour
         if (actionType == ActionType.Sound)
         {
             SFXManager.Instance.PlaySFXAtPositionAndPauseMusic(sfxType, transform.position);
-            CameraShake.Instance.DamageShake();
+            CameraShake.Instance.ShakeCamera();
         }
         else if (actionType == ActionType.Physics)
         {
@@ -49,7 +49,7 @@ public class RainingRocks : MonoBehaviour
             rb.useGravity = true;
             rb.AddForce(Vector3.down * gravityMultipler, ForceMode.Acceleration);
 
-            SFXManager.Instance.PlaySFXAtPosition(sfxType, transform.position);
+            // SFXManager.Instance.PlaySFXAtPosition(sfxType, transform.position);
 
             yield return new WaitForSeconds(0.5f);
         }

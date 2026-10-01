@@ -12,6 +12,9 @@ public class TriggerAnimatorOnDisable : MonoBehaviour
     [SerializeField] private bool findAnimatorIfMissing = true;
     [SerializeField] private string animatorObjectName = "FloorAnimator";
 
+    [Header("Sound")]
+    [SerializeField] private SFXManager.SFXCategoryType sfxType;
+
     private int _triggerHash;
     private bool _applicationQuitting;
     private bool _alreadyTriggered;
@@ -50,6 +53,10 @@ public class TriggerAnimatorOnDisable : MonoBehaviour
 
     private IEnumerator DelayedSwap(GameObject objectToDisable)
     {
+        SFXManager.Instance.PlaySFXAtPositionAndPauseMusic(sfxType, transform.position);
+
+        CameraShake.Instance.ShakeCamera();
+
         yield return new WaitForSeconds(delayAfterTrigger);
 
         if (objectToDisable != null)
