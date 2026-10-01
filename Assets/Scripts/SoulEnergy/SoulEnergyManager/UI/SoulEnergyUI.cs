@@ -17,6 +17,8 @@ public class SoulEnergyUI : MonoBehaviour
     [Tooltip("Opcional: fondo (mesh renderer). Si es null, no se hace fade del fondo.")]
     [SerializeField] private MeshRenderer _backgroundMat;
 
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+
     // ============================================================
     //  FORMATO Y VALOR
     // ============================================================
@@ -299,6 +301,13 @@ public class SoulEnergyUI : MonoBehaviour
         // Fondo
         if (_backgroundMat != null)
             _backgroundMat.material.SetFloat("_OpacityMultiplier", alpha);
+
+        if (_spriteRenderer != null)
+        {
+            Color color = _spriteRenderer.color;
+            color.a = alpha > 0f ? 1f : 0f;
+            _spriteRenderer.color = color;
+        }
     }
 
     // ============================================================
