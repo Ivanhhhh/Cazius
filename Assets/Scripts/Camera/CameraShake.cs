@@ -18,4 +18,11 @@ public class CameraShake : MonoBehaviour
 
         Debug.Log("Damage Shake ON");
     }
+
+    public void ShakeCamera()
+    {
+        shake.StartShake(preset);
+
+        Debug.Log("Shake camera ON");
+    }
 }
