@@ -155857,7 +155857,7 @@ Transform:
   m_GameObject: {fileID: 735421371}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 107.381935, y: 9.860623, z: -30.117765}
+  m_LocalPosition: {x: 107.38195, y: 9.860623, z: -30.117765}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -155878,7 +155878,7 @@ MonoBehaviour:
   version: 2
   globalVolume: 0
   mode: 1
-  size: {x: 256.56122, y: 46.77549, z: 187.3454}
+  size: {x: 256.56125, y: 46.77549, z: 187.3454}
   overrideRendererFilters: 0
   minRendererVolumeSize: 0.1
   objectLayerMask:
@@ -327500,11 +327500,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5433220318804263816, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
   m_PrefabInstance: {fileID: 1509357993}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1509357998 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6539583285025339318, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-  m_PrefabInstance: {fileID: 1509357993}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1510646201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -451131,7 +451126,6 @@ GameObject:
   - component: {fileID: 1954580346}
   - component: {fileID: 1954580350}
   - component: {fileID: 1954580349}
-  - component: {fileID: 1954580348}
   - component: {fileID: 1954580347}
   m_Layer: 9
   m_Name: Door Interactive 01 PIVOT IN PURGATORY DOOR (1)
@@ -451177,22 +451171,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.1260223, y: 2.168431, z: 0.23722744}
   m_Center: {x: 0.51795197, y: 1.0703758, z: 0.06510019}
---- !u!114 &1954580348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1954580345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41626dbd1a827e7479d9a6b36a916e8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
-  _showInEden: 0
-  _showInPurgatory: 1
-  _visualRoot: {fileID: 1509357998}
-  _collider: {fileID: 1954580347}
 --- !u!114 &1954580349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497285,11 +497263,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5433220318804263816, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
   m_PrefabInstance: {fileID: 2125686960}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2125686965 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6539583285025339318, guid: ddf515c133d40dd40a7ede7f317251cc, type: 3}
-  m_PrefabInstance: {fileID: 2125686960}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2126880891
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -498101,7 +498074,6 @@ GameObject:
   - component: {fileID: 2135297764}
   - component: {fileID: 2135297768}
   - component: {fileID: 2135297767}
-  - component: {fileID: 2135297766}
   - component: {fileID: 2135297765}
   m_Layer: 9
   m_Name: Door Interactive 01 PIVOT IN PURGATORY DOOR
@@ -498147,22 +498119,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.1260223, y: 2.168431, z: 0.23033142}
   m_Center: {x: 0.51795197, y: 1.0703758, z: 0.061652184}
---- !u!114 &2135297766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2135297763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41626dbd1a827e7479d9a6b36a916e8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WorldObject
-  _showInEden: 0
-  _showInPurgatory: 1
-  _visualRoot: {fileID: 2125686965}
-  _collider: {fileID: 2135297765}
 --- !u!114 &2135297767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -504006,6 +503962,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1000121721}
     m_Modifications:
+    - target: {fileID: 2480006660027003441, guid: 034d12bb7524e4848b73da520d19dbb9, type: 3}
+      propertyPath: sfxType
+      value: 23
+      objectReference: {fileID: 0}
     - target: {fileID: 5808584466432899417, guid: 034d12bb7524e4848b73da520d19dbb9, type: 3}
       propertyPath: m_Name
       value: Raining Rocks

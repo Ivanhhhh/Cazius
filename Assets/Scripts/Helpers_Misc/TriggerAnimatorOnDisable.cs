@@ -14,10 +14,16 @@ public class TriggerAnimatorOnDisable : MonoBehaviour
 
     [Header("Sound")]
     [SerializeField] private SFXManager.SFXCategoryType sfxType;
+    [SerializeField] private SFXManager.SFXCategoryType sfxTypeSMOKE;
+
+    [SerializeField] private GameObject smokeParticlee;
 
 
     [Header("Camera Shake")]
     [SerializeField] private float shakeStrength = 0.08f;
+
+    [Header("Particle System")]
+    [SerializeField] private ParticleSystem particle_system;
 
     private int _triggerHash;
     private bool _applicationQuitting;
@@ -58,6 +64,10 @@ public class TriggerAnimatorOnDisable : MonoBehaviour
     private IEnumerator DelayedSwap(GameObject objectToDisable)
     {
         SFXManager.Instance.PlaySFXAtPositionAndPauseMusic(sfxType, transform.position);
+        SFXManager.Instance.PlaySFXAtPositionAndPauseMusic(sfxTypeSMOKE, transform.position);
+
+        particle_system.Play();
+        smokeParticlee.SetActive(true);
 
         CameraShake.Instance.StartShake(shakeStrength);
 
