@@ -118,6 +118,20 @@ public class NPCWalkerQuestGiver : MonoBehaviour, IEInteractable
     // wherever the waypoint progress was left (it lives on NPCController)
     private void OpenOfferDialog()
     {
+        if (quest.useStages)
+        {
+            DialogUIController.Instance.OpenDialog(
+                pages: Translate(quest.offerDialog),
+                onAccept: () =>
+                {
+                    QuestManager.Instance.StartQuest(quest.questID);
+                    OpenStageOfferDialog();
+                },
+                onClose: () => _npc.Machine.ChangeState(_npc.IdleState)
+            );
+            return;
+        }
+
         DialogUIController.Instance.OpenDialog(
             pages: Translate(quest.offerDialog),
             onAccept: () => QuestManager.Instance.StartQuest(quest.questID),
@@ -125,8 +139,56 @@ public class NPCWalkerQuestGiver : MonoBehaviour, IEInteractable
         );
     }
 
+    private void OpenStageOfferDialog()
+    {
+        if (!quest.useStages)
+            return;
+
+        int stageIndex = QuestManager.Instance.GetStageIndex(quest.questID);
+        if (quest.stages == null || stageIndex < 0 || stageIndex >= quest.stages.Count)
+        {
+            OpenActiveDialog();
+            return;
+        }
+
+        QuestStage stage = quest.stages[stageIndex];
+        if (stage == null || stage.stageOfferDialog == null || stage.stageOfferDialog.Length == 0)
+        {
+            OpenActiveDialog();
+            return;
+        }
+
+        DialogUIController.Instance.OpenDialog(
+            pages: Translate(stage.stageOfferDialog),
+            onAccept: null,
+            onClose: () =>
+            {
+                OpenActiveDialog();
+                _npc.Machine.ChangeState(_npc.IdleState);
+            }
+        );
+    }
+
     private void OpenActiveDialog()
     {
+        if (quest.useStages)
+        {
+            int stageIndex = QuestManager.Instance.GetStageIndex(quest.questID);
+            if (quest.stages != null && stageIndex >= 0 && stageIndex < quest.stages.Count)
+            {
+                QuestStage stage = quest.stages[stageIndex];
+                if (stage != null && stage.stageActiveDialog != null && stage.stageActiveDialog.Length > 0)
+                {
+                    DialogUIController.Instance.OpenDialog(
+                        pages: Translate(stage.stageActiveDialog),
+                        onAccept: null,
+                        onClose: () => _npc.Machine.ChangeState(_npc.IdleState)
+                    );
+                    return;
+                }
+            }
+        }
+
         DialogUIController.Instance.OpenDialog(
             pages: Translate(quest.activeDialog),
             onAccept: null,
@@ -138,14 +200,37 @@ public class NPCWalkerQuestGiver : MonoBehaviour, IEInteractable
     {
         if (quest.useStages)
         {
+            int stageIndex = QuestManager.Instance.GetStageIndex(quest.questID);
+            QuestStage currentStage = quest.stages != null && stageIndex >= 0 && stageIndex < quest.stages.Count
+                ? quest.stages[stageIndex]
+                : null;
+
             bool didAdvance = QuestManager.Instance.TryAdvanceStage(quest.questID);
             if (!didAdvance)
                 return;
 
+            if (currentStage != null && currentStage.stageReadyDialog != null && currentStage.stageReadyDialog.Length > 0)
+            {
+                DialogUIController.Instance.OpenDialog(
+                    pages: Translate(currentStage.stageReadyDialog),
+                    onAccept: null,
+                    onClose: () =>
+                    {
+                        if (QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted)
+                            OpenFirstCompletionDialog();
+                        else
+                            OpenStageOfferDialog();
+
+                        _npc.Machine.ChangeState(_npc.IdleState);
+                    }
+                );
+                return;
+            }
+
             if (QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted)
                 OpenFirstCompletionDialog();
             else
-                OpenActiveDialog();
+                OpenStageOfferDialog();
             return;
         }
 

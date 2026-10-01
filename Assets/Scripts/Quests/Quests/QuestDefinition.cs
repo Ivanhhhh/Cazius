@@ -10,16 +10,28 @@ public class QuestStage
     public QuestCondition condition;
     public string targetID;
 
+    [Header("Stage item flow")]
+    public ItemData itemGivenOnStageStart;
+    public ItemData itemToRemoveOnAdvance;
+    public bool removeItemOnAdvance;
+
     [Header("Reward")]
     public ItemData rewardItem;
-    public bool removeRewardItemOnAdvance;
 
     [Header("Flow")]
     public bool isFinalStage;
 
+    [Header("Stage offer")]
+    [TextArea(2, 5)]
+    public string[] stageOfferDialog;
+
     [Header("Stage dialog")]
     [TextArea(2, 5)]
     public string[] stageReadyDialog;
+
+    [Header("Stage active prompt")]
+    [TextArea(2, 5)]
+    public string[] stageActiveDialog;
 }
 
 [CreateAssetMenu(fileName = "NewQuest",

@@ -16,23 +16,36 @@ MonoBehaviour:
   questTitle: quest_sandwich_title
   questTooltip: quest_sandwich_tooltip
   questType: 1
-  condition: {fileID: 11400000, guid: 3e5c4ca02ef60124ca28af946b347d90, type: 2}
-  conditionTargetID: Legendarysandwich
+  condition: {fileID: 0}
+  conditionTargetID: 
   useStages: 1
   stages:
   - condition: {fileID: 11400000, guid: f96f2bd0e724b1542b1689bc1c8ae98e, type: 2}
     targetID: Eden
+    itemGivenOnStageStart: {fileID: 11400000, guid: bb320d12bac99b64d8b61f1a72ff3f4b, type: 2}
+    itemToRemoveOnAdvance: {fileID: 0}
+    removeItemOnAdvance: 1
     rewardItem: {fileID: 0}
-    removeRewardItemOnAdvance: 0
     isFinalStage: 0
+    stageOfferDialog:
+    - quest_sandwich_stage0_offer_01
     stageReadyDialog:
-    - weqweqw
+    - quest_sandwich_stage0_ready_01
+    stageActiveDialog:
+    - quest_sandwich_stage0_active_01
   - condition: {fileID: 11400000, guid: 461057c871a7d3647b28089cea5b3213, type: 2}
-    targetID: 
-    rewardItem: {fileID: 0}
-    removeRewardItemOnAdvance: 0
+    targetID: 25
+    itemGivenOnStageStart: {fileID: 11400000, guid: 6212d0dba2fda684cb1c14945d2defa5, type: 2}
+    itemToRemoveOnAdvance: {fileID: 0}
+    removeItemOnAdvance: 1
+    rewardItem: {fileID: 11400000, guid: 8ea85bed1a83f064f9ff4884cc5337fb, type: 2}
     isFinalStage: 1
-    stageReadyDialog: []
+    stageOfferDialog:
+    - quest_sandwich_stage1_offer_01
+    stageReadyDialog:
+    - quest_sandwich_stage1_ready_01
+    stageActiveDialog:
+    - quest_sandwich_stage1_active_01
   offerDialog:
   - quest_sandwich_offer_01
   - quest_sandwich_offer_02
