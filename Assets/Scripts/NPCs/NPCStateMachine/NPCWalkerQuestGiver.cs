@@ -50,6 +50,32 @@ public class NPCWalkerQuestGiver : MonoBehaviour, IEInteractable
         QuestManager.Instance.RegisterQuest(quest);
         QuestStatus status = QuestManager.Instance.GetStatus(quest.questID);
 
+        if (quest.useStages)
+        {
+            switch (status)
+            {
+                case QuestStatus.NotStarted:
+                    OpenOfferDialog();
+                    break;
+
+                case QuestStatus.Active:
+                    if (QuestManager.Instance.IsCurrentStageConditionMet(quest.questID))
+                        OpenCompletionDialog();
+                    else
+                        OpenActiveDialog();
+                    break;
+
+                case QuestStatus.JustCompleted:
+                    OpenFirstCompletionDialog();
+                    break;
+
+                case QuestStatus.Completed:
+                    OpenCompletedDialog();
+                    break;
+            }
+            return;
+        }
+
         switch (status)
         {
             case QuestStatus.NotStarted:
@@ -110,6 +136,19 @@ public class NPCWalkerQuestGiver : MonoBehaviour, IEInteractable
 
     private void OpenCompletionDialog()
     {
+        if (quest.useStages)
+        {
+            bool didAdvance = QuestManager.Instance.TryAdvanceStage(quest.questID);
+            if (!didAdvance)
+                return;
+
+            if (QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted)
+                OpenFirstCompletionDialog();
+            else
+                OpenActiveDialog();
+            return;
+        }
+
         QuestManager.Instance.CompleteQuest(quest.questID);
 
         if (_questPrizeItem != null)
