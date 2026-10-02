@@ -18,4 +18,5 @@ public class SerializableQuestEntry
 {
     public string questID;
     public QuestStatus status;
+    public int stageIndex;
 }

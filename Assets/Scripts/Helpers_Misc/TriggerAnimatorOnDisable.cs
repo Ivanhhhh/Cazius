@@ -12,6 +12,19 @@ public class TriggerAnimatorOnDisable : MonoBehaviour
     [SerializeField] private bool findAnimatorIfMissing = true;
     [SerializeField] private string animatorObjectName = "FloorAnimator";
 
+    [Header("Sound")]
+    [SerializeField] private SFXManager.SFXCategoryType sfxType;
+    [SerializeField] private SFXManager.SFXCategoryType sfxTypeSMOKE;
+
+    [SerializeField] private GameObject smokeParticlee;
+
+
+    [Header("Camera Shake")]
+    [SerializeField] private float shakeStrength = 0.08f;
+
+    [Header("Particle System")]
+    [SerializeField] private ParticleSystem particle_system;
+
     private int _triggerHash;
     private bool _applicationQuitting;
     private bool _alreadyTriggered;
@@ -50,7 +63,17 @@ public class TriggerAnimatorOnDisable : MonoBehaviour
 
     private IEnumerator DelayedSwap(GameObject objectToDisable)
     {
+        SFXManager.Instance.PlaySFXAtPositionAndPauseMusic(sfxType, transform.position);
+        SFXManager.Instance.PlaySFXAtPositionAndPauseMusic(sfxTypeSMOKE, transform.position);
+
+        particle_system.Play();
+        smokeParticlee.SetActive(true);
+
+        CameraShake.Instance.StartShake(shakeStrength);
+
         yield return new WaitForSeconds(delayAfterTrigger);
+
+        CameraShake.Instance.StopShake();
 
         if (objectToDisable != null)
             objectToDisable.SetActive(false);

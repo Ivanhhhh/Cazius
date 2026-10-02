@@ -33,7 +33,9 @@ public class SFXManager : MonoBehaviour
         LeavesSFX,
         BouncingSFX,
         HitTree,
-        NPCTalkSFX
+        NPCTalkSFX,
+        RocksSFX,
+        SmokeSFX,
         // Add Categories here
     }
 

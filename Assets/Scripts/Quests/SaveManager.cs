@@ -31,6 +31,7 @@ public class SaveManager : MonoBehaviour
 
         // --- Quests ---
         var questDict = QuestManager.Instance.GetSaveData();
+        var stageDict = QuestManager.Instance.GetStageSaveData();
         var questEntries = new SerializableQuestEntry[questDict.Count];
         int i = 0;
         foreach (var kvp in questDict)
@@ -38,7 +39,8 @@ public class SaveManager : MonoBehaviour
             questEntries[i++] = new SerializableQuestEntry
             {
                 questID = kvp.Key,
-                status = kvp.Value
+                status = kvp.Value,
+                stageIndex = stageDict.TryGetValue(kvp.Key, out var stageIndex) ? stageIndex : 0
             };
         }
         data.questStates = questEntries;
@@ -74,12 +76,16 @@ public class SaveManager : MonoBehaviour
 
         // --- Quests ---
         var questDict = new Dictionary<string, QuestStatus>();
+        var stageDict = new Dictionary<string, int>();
         if (data.questStates != null)
         {
             foreach (var entry in data.questStates)
+            {
                 questDict[entry.questID] = entry.status;
+                stageDict[entry.questID] = entry.stageIndex;
+            }
         }
-        QuestManager.Instance.LoadSaveData(questDict);
+        QuestManager.Instance.LoadSaveData(questDict, stageDict);
 
         // --- Inventory ---
         Inventory.Instance.LoadSaveData(data.inventoryItemIDs, data.keyItemIDs, itemRegistry);

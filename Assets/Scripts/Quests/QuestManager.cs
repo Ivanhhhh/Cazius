@@ -10,6 +10,7 @@ public class QuestManager : MonoBehaviour
 
     private Dictionary<string, QuestDefinition> _questDefinitions = new();
     private Dictionary<string, QuestStatus> _questStates = new();
+    private Dictionary<string, int> _questStageIndexes = new();
     private HashSet<string> _killedEnemies = new();
     private HashSet<string> _reachedLocations = new();
 
@@ -28,9 +29,12 @@ public class QuestManager : MonoBehaviour
 
     public void RegisterQuest(QuestDefinition quest)
     {
+        if (quest == null) return;
         if (_questStates.ContainsKey(quest.questID)) return;
+
         _questDefinitions[quest.questID] = quest;
         _questStates[quest.questID] = QuestStatus.NotStarted;
+        _questStageIndexes[quest.questID] = 0;
         OnQuestUpdated?.Invoke();
     }
 
@@ -41,12 +45,144 @@ public class QuestManager : MonoBehaviour
             : QuestStatus.NotStarted;
     }
 
+    public int GetStageIndex(string questID)
+    {
+        return _questStageIndexes.TryGetValue(questID, out var index)
+            ? index
+            : 0;
+    }
+
+    // --- Notify condition that its stage is now active ---
+
+    private void NotifyStageActivated(QuestDefinition quest, int stageIndex)
+    {
+        if (quest == null) return;
+
+        if (!quest.useStages || quest.stages == null || quest.stages.Count == 0)
+        {
+            quest.condition?.OnQuestActivated();
+            return;
+        }
+
+        if (stageIndex < 0 || stageIndex >= quest.stages.Count) return;
+
+        QuestStage stage = quest.stages[stageIndex];
+        stage?.condition?.OnQuestActivated();
+    }
+
+    // --- Stage item helpers ---
+
+    private void GiveStageStartItem(QuestDefinition quest, int stageIndex)
+    {
+        if (quest == null || quest.stages == null || stageIndex < 0 || stageIndex >= quest.stages.Count)
+            return;
+
+        QuestStage stage = quest.stages[stageIndex];
+        if (stage == null || stage.itemGivenOnStageStart == null) return;
+
+        if (Inventory.Instance != null)
+            Inventory.Instance.AddItem(stage.itemGivenOnStageStart);
+    }
+
+    private void RemoveStageAdvanceItem(QuestStage stage)
+    {
+        if (stage == null) return;
+
+        if (stage.removeItemOnAdvance && stage.itemToRemoveOnAdvance != null
+            && !string.IsNullOrEmpty(stage.itemToRemoveOnAdvance.itemID)
+            && Inventory.Instance != null)
+            Inventory.Instance.RemoveItem(stage.itemToRemoveOnAdvance.itemID);
+    }
+
+    // --- Condition checks ---
+
+    public bool IsCurrentStageConditionMet(string questID)
+    {
+        if (!_questDefinitions.TryGetValue(questID, out var quest) || quest == null)
+            return false;
+
+        if (!quest.useStages || quest.stages == null || quest.stages.Count == 0)
+            return quest.condition == null || quest.condition.IsMet(quest.conditionTargetID);
+
+        int stageIndex = GetStageIndex(questID);
+        if (stageIndex < 0 || stageIndex >= quest.stages.Count)
+            return false;
+
+        QuestStage stage = quest.stages[stageIndex];
+        return stage == null || stage.condition == null || stage.condition.IsMet(stage.targetID);
+    }
+
+    // --- Stage progression ---
+
+    public bool TryAdvanceStage(string questID)
+    {
+        if (!_questDefinitions.TryGetValue(questID, out var quest) || quest == null)
+            return false;
+
+        if (!quest.useStages || quest.stages == null || quest.stages.Count == 0)
+        {
+            if (quest.condition != null && !quest.condition.IsMet(quest.conditionTargetID))
+                return false;
+
+            CompleteQuest(questID);
+            return true;
+        }
+
+        int stageIndex = GetStageIndex(questID);
+        if (stageIndex < 0 || stageIndex >= quest.stages.Count)
+            return false;
+
+        QuestStage stage = quest.stages[stageIndex];
+        if (stage == null) return false;
+
+        if (stage.condition != null && !stage.condition.IsMet(stage.targetID))
+            return false;
+
+        if (stage.rewardItem != null && Inventory.Instance != null)
+            Inventory.Instance.AddItem(stage.rewardItem);
+
+        RemoveStageAdvanceItem(stage);
+
+        stageIndex++;
+        _questStageIndexes[questID] = stageIndex;
+
+        if (stageIndex >= quest.stages.Count)
+        {
+            _questStates[questID] = QuestStatus.JustCompleted;
+            if (SaveManager.Instance != null) SaveManager.Instance.Save();
+            OnQuestUpdated?.Invoke();
+            return true;
+        }
+
+        _questStates[questID] = QuestStatus.Active;
+
+        GiveStageStartItem(quest, stageIndex);
+
+        // Notify the new stage's condition that it is now active
+        NotifyStageActivated(quest, stageIndex);
+
+        if (SaveManager.Instance != null) SaveManager.Instance.Save();
+        OnQuestUpdated?.Invoke();
+        return true;
+    }
+
     public void StartQuest(string questID)
     {
         if (!_questStates.ContainsKey(questID)) return;
         if (_questStates[questID] != QuestStatus.NotStarted) return;
+
         _questStates[questID] = QuestStatus.Active;
-        SaveManager.Instance.Save();
+
+        if (_questDefinitions.TryGetValue(questID, out var quest) && quest != null)
+        {
+            if (quest.useStages && quest.stages != null && quest.stages.Count > 0)
+                GiveStageStartItem(quest, GetStageIndex(questID));
+
+            // Notify stage 0 condition that it is now active
+            NotifyStageActivated(quest, GetStageIndex(questID));
+        }
+
+        if (SaveManager.Instance != null) SaveManager.Instance.Save();
         OnQuestUpdated?.Invoke();
     }
 
@@ -55,7 +191,7 @@ public class QuestManager : MonoBehaviour
         if (!_questStates.ContainsKey(questID)) return;
         if (_questStates[questID] != QuestStatus.Active) return;
         _questStates[questID] = QuestStatus.JustCompleted;
-        SaveManager.Instance.Save();
+        if (SaveManager.Instance != null) SaveManager.Instance.Save();
         OnQuestUpdated?.Invoke();
     }
 
@@ -64,7 +200,7 @@ public class QuestManager : MonoBehaviour
         if (!_questStates.ContainsKey(questID)) return;
         if (_questStates[questID] != QuestStatus.JustCompleted) return;
         _questStates[questID] = QuestStatus.Completed;
-        SaveManager.Instance.Save();
+        if (SaveManager.Instance != null) SaveManager.Instance.Save();
         OnQuestUpdated?.Invoke();
     }
 
@@ -84,37 +220,40 @@ public class QuestManager : MonoBehaviour
 
     // --- Kill tracking ---
 
-    public void RegisterKill(string enemyID)
-    {
-        _killedEnemies.Add(enemyID);
-    }
-
-    public bool WasKilled(string enemyID)
-    {
-        return _killedEnemies.Contains(enemyID);
-    }
+    public void RegisterKill(string enemyID) => _killedEnemies.Add(enemyID);
+    public bool WasKilled(string enemyID) => _killedEnemies.Contains(enemyID);
 
     // --- Location tracking ---
 
-    public void RegisterLocation(string locationID)
-    {
-        _reachedLocations.Add(locationID);
-    }
-
-    public bool WasReached(string locationID)
-    {
-        return _reachedLocations.Contains(locationID);
-    }
+    public void RegisterLocation(string locationID) => _reachedLocations.Add(locationID);
+    public bool WasReached(string locationID) => _reachedLocations.Contains(locationID);
 
     // --- Save / Load integration ---
 
     public Dictionary<string, QuestStatus> GetSaveData()
-    {
-        return new Dictionary<string, QuestStatus>(_questStates);
-    }
+        => new Dictionary<string, QuestStatus>(_questStates);
+
+    public Dictionary<string, int> GetStageSaveData()
+        => new Dictionary<string, int>(_questStageIndexes);
 
     public void LoadSaveData(Dictionary<string, QuestStatus> saved)
     {
         _questStates = new Dictionary<string, QuestStatus>(saved);
+        foreach (var questID in _questDefinitions.Keys)
+            if (!_questStageIndexes.ContainsKey(questID))
+                _questStageIndexes[questID] = 0;
     }
+
+    public void LoadSaveData(Dictionary<string, QuestStatus> saved, Dictionary<string, int> stageIndexes)
+    {
+        _questStates = new Dictionary<string, QuestStatus>(saved);
+        _questStageIndexes = stageIndexes != null
+            ? new Dictionary<string, int>(stageIndexes)
+            : new Dictionary<string, int>();
+
+        foreach (var questID in _questDefinitions.Keys)
+            if (!_questStageIndexes.ContainsKey(questID))
+                _questStageIndexes[questID] = 0;
+    }
+
 }
