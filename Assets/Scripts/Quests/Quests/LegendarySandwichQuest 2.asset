@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c775739362622dc4c93274687942abf2, type: 3}
+  m_Name: LegendarySandwichQuest 2
+  m_EditorClassIdentifier: Assembly-CSharp::QuestDefinition
+  questID: LegendarySandwichQuest
+  questTitle: quest_sandwich_title
+  questTooltip: quest_sandwich_tooltip
+  questType: 1
+  condition: {fileID: 0}
+  conditionTargetID: 
+  useStages: 1
+  stages:
+  - condition: {fileID: 11400000, guid: f96f2bd0e724b1542b1689bc1c8ae98e, type: 2}
+    targetID: Eden
+    itemGivenOnStageStart: {fileID: 11400000, guid: bb320d12bac99b64d8b61f1a72ff3f4b, type: 2}
+    itemToRemoveOnAdvance: {fileID: 11400000, guid: bb320d12bac99b64d8b61f1a72ff3f4b, type: 2}
+    removeItemOnAdvance: 1
+    rewardItem: {fileID: 0}
+    isFinalStage: 0
+    stageOfferDialog:
+    - quest_sandwich_stage0_offer_01
+    stageReadyDialog:
+    - quest_sandwich_stage0_ready_01
+    - quest_sandwich_stage0_ready_02
+    - quest_sandwich_stage0_ready_03
+    - quest_sandwich_stage0_ready_04
+    - quest_sandwich_stage1_offer_01
+    - quest_sandwich_stage1_offer_02
+    - quest_sandwich_stage1_offer_03
+    stageActiveDialog:
+    - quest_sandwich_stage0_active_01
+  - condition: {fileID: 11400000, guid: 461057c871a7d3647b28089cea5b3213, type: 2}
+    targetID: 25
+    itemGivenOnStageStart: {fileID: 11400000, guid: 6212d0dba2fda684cb1c14945d2defa5, type: 2}
+    itemToRemoveOnAdvance: {fileID: 11400000, guid: 6212d0dba2fda684cb1c14945d2defa5, type: 2}
+    removeItemOnAdvance: 1
+    rewardItem: {fileID: 0}
+    isFinalStage: 1
+    stageOfferDialog:
+    - quest_sandwich_stage1_offer_01
+    - quest_sandwich_stage1_offer_02
+    stageReadyDialog:
+    - quest_sandwich_stage1_ready_01
+    - quest_sandwich_stage1_ready_02
+    - quest_sandwich_stage1_ready_03
+    stageActiveDialog:
+    - quest_sandwich_stage1_active_01
+  offerDialog:
+  - quest_sandwich_offer_01
+  - quest_sandwich_offer_02
+  - quest_sandwich_offer_03
+  - quest_sandwich_offer_04
+  - quest_sandwich_stage0_offer_01
+  activeDialog:
+  - quest_sandwich_active_01
+  firstCompletionDialog:
+  - quest_sandwich_firstcompletion_01
+  - quest_sandwich_firstcompletion_02
+  - quest_sandwich_firstcompletion_03
+  - quest_sandwich_firstcompletion_04
+  - quest_sandwich_firstcompletion_05
+  - quest_sandwich_firstcompletion_06
+  - quest_sandwich_firstcompletion_07
+  - quest_sandwich_firstcompletion_08
+  - quest_sandwich_firstcompletion_09
+  - quest_sandwich_firstcompletion_10
+  - quest_sandwich_firstcompletion_11
+  - quest_sandwich_firstcompletion_12
+  completedDialog:
+  - quest_sandwich_completed_01

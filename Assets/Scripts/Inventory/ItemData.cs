@@ -12,7 +12,9 @@ public enum ItemType
     DepotKey,
     Football,
     LegendarySandwich,
-    Recorder
+    Recorder,
+    Sauce,
+    Bread
 }
 
 [CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/Item")]
