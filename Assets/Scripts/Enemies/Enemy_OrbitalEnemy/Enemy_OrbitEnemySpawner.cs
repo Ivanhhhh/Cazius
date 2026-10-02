@@ -15,14 +15,18 @@ public class Enemy_OrbitEnemySpawner : MonoBehaviour
     [Tooltip("Si está activo, en fase 2 NO se spawnea con OnSecondAttackMade. Solo cuando el Data llama a RequestSecondPhaseSpawn().")]
     [SerializeField] private bool _secondPhaseOnlyOnRequest = false;
 
+    private bool _oneTime = false;
+
     private void OnEnable()
     {
         if (_enemyData == null) return;
+        if (_oneTime) { return; }
         _enemyData.OnSecondAttackMade += HandleSecondAttackMade;
         _enemyData.OnSecondPhaseSpawnRequested += SpawnSecondPhaseEnemies;
+        _oneTime = true;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         if (_enemyData == null) return;
         _enemyData.OnSecondAttackMade -= HandleSecondAttackMade;
