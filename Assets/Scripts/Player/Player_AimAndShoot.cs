@@ -408,7 +408,6 @@ public class Player_AimAndShoot : MonoBehaviour
         _remainingBulletsUI.text = $"{_remainingBullets}";
         _maxBulletsUI.text = $"{currentReserve}";
 
-        _pressR.enabled = _remainingBullets < _maxBullets && currentReserve > 0;
     }
 
     public void Flash()

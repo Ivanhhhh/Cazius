@@ -128,7 +128,7 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 
         Debug.Log("Soul Energy Drop");
 
-        gameObject.SetActive(false);
+        Destroy(gameObject);
 
     }
 }

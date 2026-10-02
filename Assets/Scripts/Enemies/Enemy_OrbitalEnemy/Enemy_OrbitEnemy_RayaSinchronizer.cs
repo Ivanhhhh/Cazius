@@ -4,7 +4,8 @@ public class Enemy_OrbitEnemy_RayaSinchronizer : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Enemy_OrbitEnemyData _orbitData;
-    [SerializeField] private LineRenderer _linkPrefab; // el prefab ahora debe tener un LineRenderer
+    [SerializeField] private LineRenderer _redRayPrefab;
+    [SerializeField] private LineRenderer _yellowRayPrefab2;
 
     [Header("Offset Settings")]
     [Tooltip("Cuánto se aleja la punta de la línea del centro del enemigo en la lista.")]
@@ -22,7 +23,7 @@ public class Enemy_OrbitEnemy_RayaSinchronizer : MonoBehaviour
 
     void Update()
     {
-        if (_orbitData == null || _linkPrefab == null) return;
+        if (_orbitData == null || _redRayPrefab == null) return;
 
         SyncLinkInstances();
         UpdateLinkPositions();
@@ -39,7 +40,17 @@ public class Enemy_OrbitEnemy_RayaSinchronizer : MonoBehaviour
 
             if (!_activeLinks.ContainsKey(enemy))
             {
-                LineRenderer newLink = Instantiate(_linkPrefab);
+                LineRenderer newLink;
+                if (_orbitData._inSecondPhase)
+                {
+                     newLink = Instantiate(_yellowRayPrefab2);
+
+                }
+                else
+                {
+                     newLink = Instantiate(_redRayPrefab);
+                }
+
                 _activeLinks.Add(enemy, newLink);
             }
         }

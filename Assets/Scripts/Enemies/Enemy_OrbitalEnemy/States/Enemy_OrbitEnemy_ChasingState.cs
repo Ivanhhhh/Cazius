@@ -4,23 +4,56 @@ public class Enemy_OrbitEnemy_ChasingState : Enemy_Interface_StateMachine
 {
     Enemy_OrbitEnemy_StateMachine _stateMachine;
     Enemy_OrbitEnemyData _data;
-    
+
+
+    [Range(0f, 1f)]
+    private const float SecondPhaseHealthThreshold = 0.5f;
 
     public Enemy_OrbitEnemy_ChasingState(Enemy_OrbitEnemy_StateMachine stateMachine, Enemy_OrbitEnemyData data)
     {
         _stateMachine = stateMachine;
         _data = data;
     }
+
     public void OnEnter()
     {
+        _data._inSecondPhase = false;
         _data._chasing.EnterChase();
     }
+
     public void OnExit()
     {
-        _data._chasing.ExitChase();
+        // Cierra el behaviour que esté activo en este momento
+        if (_data._inSecondPhase)
+            _data._angelPhaseChasing.ExitChase();
+        else
+            _data._chasing.ExitChase();
     }
+
     public void OnUpdate()
     {
-        _data._chasing.Tick();
+        // 1) Chequeo de transición a segunda fase
+        if (!_data._inSecondPhase && IsAtOrBelowHalfHealth())
+        {
+            _data._chasing.ExitChase();           // cerramos chase normal
+            _data._angelPhaseChasing.EnterChase(); // abrimos angel phase
+            _data._inSecondPhase = true;
+        }
+
+        // 2) Tick del behaviour activo
+        if (_data._inSecondPhase)
+            _data._angelPhaseChasing.Tick();
+        else
+            _data._chasing.Tick();
+    }
+
+    // ---------- Helper ----------
+    private bool IsAtOrBelowHalfHealth()
+    {
+        var hs = _data.HealthSystem;
+        if (hs == null) return false;
+
+        // Ajustá el cálculo según tu Enemy_HealthSystem_Base
+        return hs.CurrentHealth <= hs.MaxHealth * SecondPhaseHealthThreshold;
     }
 }
