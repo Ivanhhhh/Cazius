@@ -122802,6 +122802,8 @@ Transform:
   - {fileID: 265939795}
   - {fileID: 2042651715}
   - {fileID: 1077414460}
+  - {fileID: 1998827843}
+  - {fileID: 1140507394}
   m_Father: {fileID: 1000121721}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &558979036
@@ -228765,6 +228767,14 @@ PrefabInstance:
       propertyPath: _enemyData
       value: 
       objectReference: {fileID: 1536161962}
+    - target: {fileID: 964085347002294220, guid: eeb944bb1a24b6840aedd424724257c6, type: 3}
+      propertyPath: _secondPhasePrefab
+      value: 
+      objectReference: {fileID: 1057837529}
+    - target: {fileID: 964085347002294220, guid: eeb944bb1a24b6840aedd424724257c6, type: 3}
+      propertyPath: _secondPhaseAmountToSpawn
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3834026397668167968, guid: eeb944bb1a24b6840aedd424724257c6, type: 3}
       propertyPath: m_Name
       value: Enemy_orbit_spawner (1)
@@ -243927,6 +243937,38 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1424270028614901731, guid: 059cb6be350c63d428436526579c7f9e, type: 3}
   m_PrefabInstance: {fileID: 1139271877}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1140507393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1140507394}
+  m_Layer: 0
+  m_Name: StaticBossTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1140507394
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140507393}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 97.63, y: 2.92, z: 14.63}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1344226332}
+  m_Father: {fileID: 558975787}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1141120569
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -292333,6 +292375,124 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2790272638204469739, guid: d3b7223bddea19842adc07d7204d34ad, type: 3}
   m_PrefabInstance: {fileID: 1343921347}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1344226331
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1344226332}
+  - component: {fileID: 1344226334}
+  - component: {fileID: 1344226333}
+  m_Layer: 0
+  m_Name: Enemy_Orbit_AngelicalBeam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1344226332
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344226331}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.00000047684}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1140507394}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!73398921 &1344226333
+VFXRenderer:
+  serializedVersion: 1
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344226331}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+--- !u!2083052967 &1344226334
+VisualEffect:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344226331}
+  m_Enabled: 1
+  m_Asset: {fileID: 8926484042661614526, guid: 8cba671013ac65b4c99ecc76028436a2, type: 3}
+  m_InitialEventName: OnPlay
+  m_InitialEventNameOverriden: 0
+  m_StartSeed: 0
+  m_ResetSeedOnPlay: 1
+  m_AllowInstancing: 1
+  m_ResourceVersion: 1
+  m_PropertySheet:
+    m_Float:
+      m_Array: []
+    m_Vector2f:
+      m_Array: []
+    m_Vector3f:
+      m_Array: []
+    m_Vector4f:
+      m_Array: []
+    m_Uint:
+      m_Array: []
+    m_Int:
+      m_Array: []
+    m_Matrix4x4f:
+      m_Array: []
+    m_AnimationCurve:
+      m_Array: []
+    m_Gradient:
+      m_Array: []
+    m_NamedObject:
+      m_Array: []
+    m_Bool:
+      m_Array: []
 --- !u!1 &1344250986
 GameObject:
   m_ObjectHideFlags: 0
@@ -335224,9 +335384,21 @@ PrefabInstance:
       value: 17.4
       objectReference: {fileID: 0}
     - target: {fileID: 6052035504325333865, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
+      propertyPath: _laserBeamEffect
+      value: 
+      objectReference: {fileID: 1344226331}
+    - target: {fileID: 6052035504325333865, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
       propertyPath: _horizontalAngleVision
       value: 168.2
       objectReference: {fileID: 0}
+    - target: {fileID: 6052035504325333865, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
+      propertyPath: _angelPhaseTargetAnchor
+      value: 
+      objectReference: {fileID: 1140507394}
+    - target: {fileID: 6052035504325333865, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
+      propertyPath: _enemyMeteoriteSpawnZone
+      value: 
+      objectReference: {fileID: 1998827844}
     - target: {fileID: 7407197699040580248, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
       propertyPath: enemy_ShakeDamageScript
       value: 
@@ -471156,6 +471328,56 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2790272638204469739, guid: d3b7223bddea19842adc07d7204d34ad, type: 3}
   m_PrefabInstance: {fileID: 1994779588}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1998827842
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1998827843}
+  - component: {fileID: 1998827844}
+  m_Layer: 0
+  m_Name: SpawnZone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1998827843
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998827842}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 100.6, y: -6.92, z: 17}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 558975787}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1998827844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998827842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae54a0fcf505d3a418121f7bd856d535, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_MeteoriteSpawnZone
+  player: {fileID: 0}
+  zoneSize: {x: 110.8, y: 1.15, z: 45.4}
+  zoneOffset: {x: 0, y: 0, z: 0}
+  singlePrefab: {fileID: 4716387887276667684, guid: 21ab07929eccc864ca35c8ca3df9edca, type: 3}
+  spawnRadius: 4
+  predictionTime: 1
 --- !u!1001 &2001023023
 PrefabInstance:
   m_ObjectHideFlags: 0

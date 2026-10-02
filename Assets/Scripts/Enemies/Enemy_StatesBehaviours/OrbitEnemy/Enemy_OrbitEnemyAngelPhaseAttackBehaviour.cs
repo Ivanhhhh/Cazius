@@ -86,6 +86,6 @@ public class Enemy_OrbitEnemyAngelPhaseAttackBehaviour : Enemy_OrbitEnemyAngelPh
 
     private void PlayLaser()
     {
-        if (_orbitData.LaserBeamEffect != null) _orbitData.LaserBeamEffect.Play();
+        if (_orbitData.LaserBeamEffect != null) _orbitData.LaserBeamEffect.SetActive(true);
     }
 }

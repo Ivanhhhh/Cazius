@@ -25,6 +25,9 @@ public class Enemy_HealthSystem_Base : MonoBehaviour, Enemy_Interface_Damage
     [SerializeField] private float _deathDelay = 0f;
     [SerializeField] AngelEyeBossVisuals _bossVisuals;
 
+    [SerializeField] ThroneBossVisuals _ThroneBossVisuals;
+    [SerializeField] Enemy_OrbitEnemyData _enemyOrbitEnemyData;
+
  
     public float CurrentHealth => _currentHealth;
     public float MaxHealth => _maxHealth;
@@ -61,7 +64,8 @@ public class Enemy_HealthSystem_Base : MonoBehaviour, Enemy_Interface_Damage
     public void TakeDamage(float amount)
     {
         TakeDamageFromPart(amount, BodyPartType.Chest);
-        _bossVisuals.EyeTakeDMG();
+       // _bossVisuals.EyeTakeDMG();
+        Debug.Log("Boss hit");
     }
  
     public void TakeDamageFromPart(float amount, BodyPartType part)
@@ -69,10 +73,16 @@ public class Enemy_HealthSystem_Base : MonoBehaviour, Enemy_Interface_Damage
         if (_isDead || _isInvulnerable) return;
  
         _currentHealth -= amount;
- 
+
+
         OnDamaged?.Invoke(_currentHealth);
         OnPartHit?.Invoke(part);
- 
+        _bossVisuals.EyeTakeDMG();
+        if(_enemyOrbitEnemyData._inSecondPhase)
+        {
+            _ThroneBossVisuals.EyeTakeDamage();
+        }
+
         if (_currentHealth <= 0f)
             Die();
     }

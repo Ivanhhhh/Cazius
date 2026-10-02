@@ -16,7 +16,7 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
     [SerializeField] GameObject _secondphaseModel;
     [SerializeField] private AngelEyeBossVisuals _angelBossVisuals;
     [SerializeField] private ThroneBossVisuals _throneBossVisuals;
-    [SerializeField] private VisualEffect _laserBeamEffect;
+    [SerializeField] private GameObject _laserBeamEffect;
 
     [Header("Flying Stats (Scriptable Object)")]
     [SerializeField] private FlyingEnemyStatsSO _flyingStats;
@@ -86,7 +86,7 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
     public GameObject SecondPhaseModel => _secondphaseModel;
     public AngelEyeBossVisuals AngelBossVisuals => _angelBossVisuals;
     public ThroneBossVisuals ThroneVisuals => _throneBossVisuals;
-    public VisualEffect LaserBeamEffect => _laserBeamEffect;
+    public GameObject LaserBeamEffect => _laserBeamEffect;
 
 
     // Accesos para el cerebro

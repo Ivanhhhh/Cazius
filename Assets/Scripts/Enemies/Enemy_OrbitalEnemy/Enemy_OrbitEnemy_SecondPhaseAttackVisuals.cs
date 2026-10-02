@@ -39,10 +39,12 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
     [SerializeField] private bool playOnStart = true;
 
     [Header("Al terminar")]
-    [Tooltip("Destruye ESTE GameObject cuando termina el ataque.")]
+    [Tooltip("Destruye ESTE GameObject cuando el VFX inicial se queda sin partículas (después del Stop).")]
     [SerializeField] private bool destroyOnFinish = true;
-    [Tooltip("Espera antes de destruir, para que se desvanezcan las partículas del VFX inicial.")]
-    [SerializeField] private float destroyDelay = 0.5f;
+    [Tooltip("aliveParticleCount llega con unos frames de retraso. Se espera este tiempo antes de confiar en un 0.")]
+    [SerializeField] private float particleCountSettleTime = 0.1f;
+    [Tooltip("Seguridad: si las partículas nunca llegan a 0, se destruye igual pasado este tiempo.")]
+    [SerializeField] private float maxDestroyWait = 5f;
 
     /// <summary>Se dispara cuando la secuencia termina por sí sola (no con StopAttack manual).</summary>
     public event Action OnAttackFinished;
@@ -69,6 +71,8 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log($"[Visuals] Start. playOnStart={playOnStart}", this);
+
         if (playOnStart)
             StartAttack();
     }
@@ -85,6 +89,8 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
 
     public void StartAttack()
     {
+        Debug.Log("[Visuals] StartAttack", this);
+
         if (_sequenceRoutine != null)
             StopCoroutine(_sequenceRoutine);
 
@@ -135,6 +141,8 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
 
     private void ActivateEffect()
     {
+        Debug.Log($"[Visuals] ActivateEffect. effectObject={(effectObject != null)}, effectVfxObject={(effectVfxObject != null)}", this);
+
         // Primero el objeto, por si el VFX vive adentro y está inactivo.
         if (effectObject != null)
             effectObject.SetActive(true);
@@ -170,12 +178,12 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
     private void FinishAttack()
     {
         _sequenceRoutine = null;
-        StopEverything();
+        StopEverything();   // acá se hace attackVfx.Stop()
 
         OnAttackFinished?.Invoke();
 
         if (destroyOnFinish)
-            Destroy(gameObject, destroyDelay);
+            StartCoroutine(DestroyWhenVfxDone());
     }
 
     private void StopEverything()
@@ -219,6 +227,28 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
     //  Gizmos
     // ---------------------------------------------------------
 
+    private IEnumerator DestroyWhenVfxDone()
+    {
+        if (attackVfx != null)
+        {
+            // El contador se actualiza con unos frames de retraso: esperamos antes de leerlo.
+            yield return new WaitForSeconds(particleCountSettleTime);
+
+            float elapsed = 0f;
+            while (attackVfx.aliveParticleCount > 0 && elapsed < maxDestroyWait)
+            {
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            if (elapsed >= maxDestroyWait)
+            {
+                Debug.LogWarning("[Visuals] El VFX inicial sigue con partículas vivas. Se destruye igual.", this);
+            }
+        }
+
+        Destroy(gameObject);
+    }
     private void OnDrawGizmosSelected()
     {
         Transform center = orbitCenter != null ? orbitCenter : transform;

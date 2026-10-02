@@ -101,6 +101,8 @@ public class Enemy_MeteoriteSpawnZone : MonoBehaviour
 
     public List<GameObject> SpawnMultiple(int count)
     {
+        Debug.Log($"SpawnMultiple llamado. count={count}, ignoreZoneCheck=, " +
+    $"startRan=, activeAndEnabled={isActiveAndEnabled}");
         return SpawnMultipleInternal(count, false);
     }
 
