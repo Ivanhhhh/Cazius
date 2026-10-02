@@ -28,8 +28,12 @@ public class Player_WhitoutGun : MonoBehaviour
 
     private void OnEnable()
     {
-        WorldChangeManager.Instance.SwapToEdenEvent += SetWithoutGun;
-        WorldChangeManager.Instance.SwapToPurgatoryEvent += SetWithGun;
+        if (_setWithGun) { }
+        else
+        {
+            WorldChangeManager.Instance.SwapToEdenEvent += SetWithoutGun;
+            WorldChangeManager.Instance.SwapToPurgatoryEvent += SetWithGun;
+        }
     }
 
     private void OnDisable()

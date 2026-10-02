@@ -40,6 +40,9 @@ public class Enemy_MeteoriteSpawnZone : MonoBehaviour
             {
                 player = GameManager.Instance.Player.transform;
             }
+            Debug.Log($"Start OK. player={(player != null ? player.name : "NULL")}, " +
+    $"prefab={(singlePrefab != null ? singlePrefab.name : "NULL")}, " +
+    $"rb={(playerRb != null ? playerRb.name : "NULL")}");
         }
 
         CachePlayerRigidbody();
@@ -47,6 +50,7 @@ public class Enemy_MeteoriteSpawnZone : MonoBehaviour
         if (player != null)
             lastPlayerPos = player.position;
     }
+
 
     private void CachePlayerRigidbody()
     {

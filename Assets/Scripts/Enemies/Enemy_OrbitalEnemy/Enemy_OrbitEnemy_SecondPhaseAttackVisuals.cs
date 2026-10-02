@@ -1,49 +1,51 @@
 using System.Collections;
+using System;
 using UnityEngine;
 using UnityEngine.VFX;
 
+
 public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
 {
-    [Header("VFX")]
-    [Tooltip("El VFX Graph que se activará al iniciar el ataque.")]
+    [Header("VFX inicial")]
+    [Tooltip("El VFX Graph que se activa al iniciar el ataque.")]
     [SerializeField] private VisualEffect attackVfx;
 
     [Header("Objetos que orbitan")]
-    [Tooltip("Los dos objetos que girarán alrededor del centro.")]
     [SerializeField] private Transform orbitObjectA;
     [SerializeField] private Transform orbitObjectB;
-
     [Tooltip("Centro de la órbita. Si está vacío, se usa este Transform.")]
     [SerializeField] private Transform orbitCenter;
-
     [Tooltip("Velocidad de rotación en grados por segundo.")]
     [SerializeField] private float orbitSpeed = 180f;
-
-    [Tooltip("Radio de la órbita.")]
     [SerializeField] private float orbitRadius = 2f;
+    [Tooltip("Si está activo, los objetos que orbitan se ocultan cuando el ataque se detiene.")]
+    [SerializeField] private bool hideOrbitObjectsOnStop = true;
 
-    [Header("Objeto que sube y baja")]
-    [Tooltip("El objeto que se moverá entre la posición inferior y la superior.")]
-    [SerializeField] private Transform movingObject;
+    [Header("Efecto principal (reemplaza al objeto que subía y bajaba)")]
+    [Tooltip("GameObject que se activa junto con el VFX y se desactiva cuando termina.")]
+    [SerializeField] private GameObject effectObject;
+    [Tooltip("VFX principal. Cuando termina, se corta todo.")]
+    [SerializeField] private GameObject effectVfxObject;
 
-    [Tooltip("Posición inferior (punto de partida).")]
-    [SerializeField] private Transform bottomPoint;
-
-    [Tooltip("Posición superior (punto de llegada).")]
-    [SerializeField] private Transform topPoint;
-
-    [Tooltip("Velocidad a la que sube y baja el objeto (unidades/segundo).")]
-    [SerializeField] private float travelSpeed = 3f;
-
-    [Tooltip("Tiempo que permanece arriba antes de bajar.")]
-    [SerializeField] private float holdTimeAtTop = 1.5f;
+    [Tooltip("Solo se usa si 'Detect End By Particle Count' está desactivado.")]
+    [SerializeField] private float effectDuration = 3f;
 
     [Header("Tiempos de la secuencia")]
-    [Tooltip("Tiempo que el VFX y los objetos giran solos antes de que empiece el movimiento vertical.")]
+    [Tooltip("Tiempo que el VFX inicial y los objetos giran solos antes de activar el efecto principal.")]
     [SerializeField] private float anticipationTime = 2f;
-
-    [Tooltip("Si está activado, la secuencia se repite en bucle.")]
     [SerializeField] private bool loop = false;
+    [SerializeField] private float loopPause = 0.2f;
+    [Tooltip("Desactivalo si otro script llama a StartAttack().")]
+    [SerializeField] private bool playOnStart = true;
+
+    [Header("Al terminar")]
+    [Tooltip("Destruye ESTE GameObject cuando termina el ataque.")]
+    [SerializeField] private bool destroyOnFinish = true;
+    [Tooltip("Espera antes de destruir, para que se desvanezcan las partículas del VFX inicial.")]
+    [SerializeField] private float destroyDelay = 0.5f;
+
+    /// <summary>Se dispara cuando la secuencia termina por sí sola (no con StopAttack manual).</summary>
+    public event Action OnAttackFinished;
 
     // ---------- Estado interno ----------
     private float _currentAngle;
@@ -56,18 +58,19 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
 
     private void Awake()
     {
-        // Si no se asigna un centro, usamos el propio Transform como centro.
+        Debug.Log($"[Visuals] Awake en '{name}'. effectObject={(effectObject != null)}, effectVfxObject={(effectVfxObject != null)}", this);
+
         if (orbitCenter == null)
             orbitCenter = transform;
 
-        // Colocamos el objeto móvil en la posición inferior al empezar.
-        if (movingObject != null && bottomPoint != null)
-            movingObject.position = bottomPoint.position;
+        if (effectObject != null) effectObject.SetActive(false);
+        if (effectVfxObject != null) effectVfxObject.SetActive(false);
     }
 
     private void Start()
     {
-        StartAttack();
+        if (playOnStart)
+            StartAttack();
     }
 
     private void Update()
@@ -80,14 +83,13 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
     //  API pública
     // ---------------------------------------------------------
 
-    /// <summary>Inicia toda la secuencia del ataque.</summary>
     public void StartAttack()
     {
-        // Si ya había una secuencia en marcha, la paramos.
         if (_sequenceRoutine != null)
             StopCoroutine(_sequenceRoutine);
 
-        // Activamos el VFX y empezamos a orbitar.
+        SetOrbitObjectsActive(true);
+
         if (attackVfx != null)
             attackVfx.Play();
 
@@ -95,7 +97,7 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
         _sequenceRoutine = StartCoroutine(AttackSequence());
     }
 
-    /// <summary>Detiene el ataque, la órbita y el VFX.</summary>
+    /// <summary>Corta todo lo que esté en proceso (corrutina, órbita, VFX y objetos).</summary>
     public void StopAttack()
     {
         if (_sequenceRoutine != null)
@@ -104,10 +106,7 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
             _sequenceRoutine = null;
         }
 
-        _isOrbiting = false;
-
-        if (attackVfx != null)
-            attackVfx.Stop();
+        StopEverything();
     }
 
     // ---------------------------------------------------------
@@ -118,64 +117,86 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
     {
         do
         {
-            // ---- Fase 1: anticipación ----
-            // El VFX y los dos objetos giran solos durante anticipationTime.
+            // Fase 1: anticipación (giran solos el VFX inicial y los objetos)
             yield return new WaitForSeconds(anticipationTime);
 
-            // ---- Fase 2: subida ----
-            if (movingObject != null && bottomPoint != null && topPoint != null)
-            {
-                yield return MoveObject(movingObject, bottomPoint.position, topPoint.position, travelSpeed);
+            // Fase 2: efecto principal
+            ActivateEffect();
+            yield return WaitForEffectEnd();
+            DeactivateEffect();
 
-                // ---- Fase 3: espera arriba ----
-                yield return new WaitForSeconds(holdTimeAtTop);
-
-                // ---- Fase 4: bajada ----
-                yield return MoveObject(movingObject, topPoint.position, bottomPoint.position, travelSpeed);
-            }
-
-            // Si no está en loop, terminamos aquí.
-            if (!loop)
-                break;
-
-            // Pequeña pausa antes de repetir el ciclo.
-            yield return new WaitForSeconds(0.2f);
+            if (loop)
+                yield return new WaitForSeconds(loopPause);
 
         } while (loop);
 
-        // Al terminar (si no hay loop), dejamos de orbitar y paramos el VFX.
+        FinishAttack();
+    }
+
+    private void ActivateEffect()
+    {
+        // Primero el objeto, por si el VFX vive adentro y está inactivo.
+        if (effectObject != null)
+            effectObject.SetActive(true);
+
+        if (effectVfxObject != null)
+            effectVfxObject.SetActive(true);
+        
+        if (effectVfxObject != null)
+        {
+            var vfx = effectVfxObject.GetComponentInChildren<VisualEffect>(true);
+            Debug.Log($"[Visuals] activeInHierarchy={effectVfxObject.activeInHierarchy}, " +
+                      $"VisualEffect={(vfx != null ? "OK" : "NO ENCONTRADO")}, " +
+                      $"enabled={(vfx != null && vfx.enabled)}, " +
+                      $"asset={(vfx != null && vfx.visualEffectAsset != null)}, " +
+                      $"initialEvent='{(vfx != null ? vfx.initialEventName : "-")}'");
+        }
+    }
+
+    private void DeactivateEffect()
+    {
+        if (effectVfxObject != null)
+            effectVfxObject.SetActive(false);
+
+        if (effectObject != null)
+            effectObject.SetActive(false);
+    }
+
+    private IEnumerator WaitForEffectEnd()
+    {
+            yield return new WaitForSeconds(effectDuration);
+    }
+
+    private void FinishAttack()
+    {
+        _sequenceRoutine = null;
+        StopEverything();
+
+        OnAttackFinished?.Invoke();
+
+        if (destroyOnFinish)
+            Destroy(gameObject, destroyDelay);
+    }
+
+    private void StopEverything()
+    {
         _isOrbiting = false;
+
         if (attackVfx != null)
             attackVfx.Stop();
 
-        _sequenceRoutine = null;
+        DeactivateEffect();   // ya apaga effectVfxObject y effectObject
+
+        if (hideOrbitObjectsOnStop)
+            SetOrbitObjectsActive(false);
     }
 
-    /// <summary>Mueve un Transform a velocidad constante de 'from' a 'to'.</summary>
-    private IEnumerator MoveObject(Transform target, Vector3 from, Vector3 to, float speed)
+    private void SetOrbitObjectsActive(bool active)
     {
-        float distance = Vector3.Distance(from, to);
-        if (distance <= 0.0001f || speed <= 0.0001f)
-        {
-            target.position = to;
-            yield break;
-        }
-
-        float duration = distance / speed;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / duration);
-            target.position = Vector3.Lerp(from, to, t);
-            yield return null;
-        }
-
-        target.position = to;
+        if (orbitObjectA != null) orbitObjectA.gameObject.SetActive(active);
+        if (orbitObjectB != null) orbitObjectB.gameObject.SetActive(active);
     }
 
-    /// <summary>Actualiza la posición de los dos objetos que orbitan.</summary>
     private void UpdateOrbit()
     {
         _currentAngle += orbitSpeed * Time.deltaTime;
@@ -187,7 +208,6 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
             orbitObjectB.position = GetOrbitPosition(_currentAngle + 180f);
     }
 
-    /// <summary>Calcula una posición en el círculo de la órbita para un ángulo dado.</summary>
     private Vector3 GetOrbitPosition(float angleDeg)
     {
         float rad = angleDeg * Mathf.Deg2Rad;
@@ -196,35 +216,14 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
     }
 
     // ---------------------------------------------------------
-    //  Gizmos para ver los puntos en el editor
+    //  Gizmos
     // ---------------------------------------------------------
 
     private void OnDrawGizmosSelected()
     {
         Transform center = orbitCenter != null ? orbitCenter : transform;
 
-        // Órbita
         Gizmos.color = new Color(0.3f, 0.8f, 1f, 0.6f);
         Gizmos.DrawWireSphere(center.position, orbitRadius);
-
-        // Puntos inferior y superior
-        if (bottomPoint != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(bottomPoint.position, 0.15f);
-        }
-
-        if (topPoint != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(topPoint.position, 0.15f);
-        }
-
-        // Línea entre ambos
-        if (bottomPoint != null && topPoint != null)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(bottomPoint.position, topPoint.position);
-        }
     }
 }

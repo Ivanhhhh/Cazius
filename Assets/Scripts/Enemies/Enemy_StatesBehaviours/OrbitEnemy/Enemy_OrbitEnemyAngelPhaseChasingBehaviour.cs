@@ -1,15 +1,23 @@
 using UnityEngine;
+using UnityEngine.VFX;
+using System;
+using System.Collections.Generic;
+
 
 public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
 {
-    // ---------- Fases ----------
+    private struct TimedAction
+    {
+        public float Time;
+        public Action Action;
+    }
     private enum Phase { InitialWait, MoveToPosition, SecondWait, LookAtPlayer }
 
     // ---------- Dependencias ----------
-    private readonly Transform _transform;
-    private readonly Rigidbody _rb;
-    private readonly Transform _playerTransform;
-    private readonly FlyingEnemyStatsSO _stats;
+    protected readonly Transform _transform;
+    protected readonly Rigidbody _rb;
+    protected readonly Transform _playerTransform;
+    protected readonly FlyingEnemyStatsSO _stats;
 
     // ---------- Configuración ----------
     public Vector3 TargetPosition { get; set; }
@@ -19,14 +27,16 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
     public float ArriveThreshold { get; set; } = 0.4f;
     public float LookRotationSpeed { get; set; } = 8f;
     public float BrakeSpeed { get; set; } = 6f;
-    public float AimOffset { get; set; } = 1.5f;   // altura a la que mira al player
+    public float AimOffset { get; set; } = 1.5f;
 
     // ---------- Estado ----------
     private Phase _currentPhase = Phase.InitialWait;
     private float _phaseTimer = 0f;
+    protected float _lastAttackTime = -100f;
 
+    private readonly List<TimedAction> _timeline = new List<TimedAction>();
+    private float _phaseElapsed;
 
-    // ---------- Constructor ----------
     public Enemy_OrbitEnemyAngelPhaseChasingBehaviour(
         Transform transform,
         Rigidbody rb,
@@ -38,24 +48,65 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
         _rb = rb;
         _playerTransform = playerTransform;
         _stats = stats;
+
         TargetPosition = targetPosition;
     }
 
+    protected void ScheduleInPhase(float seconds, Action action)
+    {
+        _timeline.Add(new TimedAction { Time = seconds, Action = action });
+    }
+
+    private void UpdateTimeline()
+    {
+        _phaseElapsed += Time.fixedDeltaTime;
+
+        for (int i = 0; i < _timeline.Count;)
+        {
+            if (_phaseElapsed >= _timeline[i].Time)
+            {
+                Action action = _timeline[i].Action;
+                _timeline.RemoveAt(i);
+                action();
+            }
+            else i++;
+        }
+    }
+
     // ---------- Ciclo de vida ----------
-    public void EnterChase()
+    public virtual void EnterChase()
     {
         if (_rb != null) _rb.useGravity = false;
-        _currentPhase = Phase.InitialWait;
-        _phaseTimer = InitialWaitTime;
+        _lastAttackTime = -100f;
         if (_rb != null) _rb.linearVelocity = Vector3.zero;
+        SetPhase(Phase.InitialWait);
     }
 
-    public void ExitChase()
+    private void SetPhase(Phase newPhase)
+    {
+        _currentPhase = newPhase;
+        _phaseElapsed = 0f;
+        _timeline.Clear();   // lo programado en la fase anterior no sobrevive
+
+        switch (newPhase)
+        {
+            case Phase.InitialWait:
+                _phaseTimer = InitialWaitTime;
+                OnInitialWaitEntered();
+                break;
+            case Phase.SecondWait:
+                _phaseTimer = SecondWaitTime;
+                OnSecondWaitEntered();
+                break;
+        }
+    }
+
+
+    public virtual void ExitChase()
     {
         if (_rb != null) _rb.linearVelocity = Vector3.zero;
     }
 
-    // ---------- Tick principal ----------
     public void Tick()
     {
         if (_playerTransform == null || _transform == null || _rb == null) return;
@@ -73,9 +124,10 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
     private void TickInitialWait()
     {
         Brake();
+        UpdateTimeline();
         _phaseTimer -= Time.fixedDeltaTime;
         if (_phaseTimer <= 0f)
-            _currentPhase = Phase.MoveToPosition;
+            SetPhase(Phase.MoveToPosition);
     }
 
     private void TickMoveToPosition()
@@ -86,8 +138,7 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
         if (dist <= ArriveThreshold)
         {
             _rb.linearVelocity = Vector3.zero;
-            _currentPhase = Phase.SecondWait;
-            _phaseTimer = SecondWaitTime;
+            SetPhase(Phase.SecondWait);
             return;
         }
 
@@ -104,9 +155,10 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
     private void TickSecondWait()
     {
         Brake();
+        UpdateTimeline();
         _phaseTimer -= Time.fixedDeltaTime;
         if (_phaseTimer <= 0f)
-            _currentPhase = Phase.LookAtPlayer;
+            SetPhase(Phase.LookAtPlayer);
     }
 
     private void TickLookAtPlayer()
@@ -117,10 +169,17 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
         Vector3 dir = targetCenter - _transform.position;
 
         RotateTowardsDirection(dir, LookRotationSpeed);
+
+        // La base maneja el cooldown; el hijo solo decide QUÉ atacar.
+        if (Time.time >= _lastAttackTime + _stats.shootCooldown)
+        {
+            _lastAttackTime = Time.time;
+            ExecuteAttack();
+        }
     }
 
     // ---------- Helpers ----------
-    private void Brake()
+    protected void Brake()
     {
         _rb.linearVelocity = Vector3.Lerp(
             _rb.linearVelocity,
@@ -128,7 +187,7 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
             Time.fixedDeltaTime * BrakeSpeed);
     }
 
-    private void RotateTowardsDirection(Vector3 direction, float speed)
+    protected void RotateTowardsDirection(Vector3 direction, float speed)
     {
         if (direction.sqrMagnitude < 0.0001f) return;
 
@@ -138,6 +197,8 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
             Time.fixedDeltaTime * speed);
     }
 
-    // Hook virtual por si después querés agregar ataque u otra fase
+    // Hook para los hijos
     protected virtual void ExecuteAttack() { }
+    protected virtual void OnInitialWaitEntered() { }
+    protected virtual void OnSecondWaitEntered() { }
 }
