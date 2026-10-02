@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -28,6 +29,7 @@ public class NPCWalkerQuestGiver : MonoBehaviour, IEInteractable
     [SerializeField] private Vector3 _newRotationEuler;
 
     [SerializeField] private Transform _interactionUIPoint;
+
     public Transform GetInteractionUIPoint()
     {
         return _interactionUIPoint != null
@@ -125,7 +127,8 @@ public class NPCWalkerQuestGiver : MonoBehaviour, IEInteractable
                 onAccept: () =>
                 {
                     QuestManager.Instance.StartQuest(quest.questID);
-                    OpenStageOfferDialog();
+                    if (QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.Active)
+                        OpenStageOfferDialog();
                 },
                 onClose: () => _npc.Machine.ChangeState(_npc.IdleState)
             );
@@ -161,11 +164,7 @@ public class NPCWalkerQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: Translate(stage.stageOfferDialog),
             onAccept: null,
-            onClose: () =>
-            {
-                OpenActiveDialog();
-                _npc.Machine.ChangeState(_npc.IdleState);
-            }
+            onClose: () => _npc.Machine.ChangeState(_npc.IdleState)
         );
     }
 
@@ -209,6 +208,16 @@ public class NPCWalkerQuestGiver : MonoBehaviour, IEInteractable
             if (!didAdvance)
                 return;
 
+            bool isNowJustCompleted = QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted;
+
+            if (isNowJustCompleted)
+            {
+                if (_questPrizeItem != null)
+                    Inventory.Instance.AddItem(_questPrizeItem);
+                OpenFirstCompletionDialog();
+                return;
+            }
+
             if (currentStage != null && currentStage.stageReadyDialog != null && currentStage.stageReadyDialog.Length > 0)
             {
                 DialogUIController.Instance.OpenDialog(
@@ -216,21 +225,14 @@ public class NPCWalkerQuestGiver : MonoBehaviour, IEInteractable
                     onAccept: null,
                     onClose: () =>
                     {
-                        if (QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted)
-                            OpenFirstCompletionDialog();
-                        else
-                            OpenStageOfferDialog();
-
+                        OpenStageOfferDialog();
                         _npc.Machine.ChangeState(_npc.IdleState);
                     }
                 );
                 return;
             }
 
-            if (QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted)
-                OpenFirstCompletionDialog();
-            else
-                OpenStageOfferDialog();
+            OpenStageOfferDialog();
             return;
         }
 

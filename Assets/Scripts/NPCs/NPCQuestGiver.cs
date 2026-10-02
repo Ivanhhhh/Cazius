@@ -127,7 +127,8 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                 onAccept: () =>
                 {
                     QuestManager.Instance.StartQuest(quest.questID);
-                    OpenStageOfferDialog();
+                    if (QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.Active)
+                        OpenStageOfferDialog();
                 },
                 onClose: null
             );
@@ -162,7 +163,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: Translate(stage.stageOfferDialog),
             onAccept: null,
-            onClose: () => OpenActiveDialog()
+            onClose: null
         );
     }
 
@@ -207,35 +208,25 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
 
             bool isNowJustCompleted = QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted;
 
-            if (currentStage != null && currentStage.stageReadyDialog != null && currentStage.stageReadyDialog.Length > 0)
-            {
-                DialogUIController.Instance.OpenDialog(
-                    pages: Translate(currentStage.stageReadyDialog),
-                    onAccept: null,
-                    onClose: () =>
-                    {
-                        if (QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted)
-                        {
-                            if (_questPrizeItem != null)
-                                Inventory.Instance.AddItem(_questPrizeItem);
-                            OpenFirstCompletionDialog();
-                        }
-                        else
-                            OpenStageOfferDialog();
-                    }
-                );
-                return;
-            }
-
             if (isNowJustCompleted)
             {
                 if (_questPrizeItem != null)
                     Inventory.Instance.AddItem(_questPrizeItem);
                 OpenFirstCompletionDialog();
+                return;
             }
-            else
-                OpenStageOfferDialog();
 
+            if (currentStage != null && currentStage.stageReadyDialog != null && currentStage.stageReadyDialog.Length > 0)
+            {
+                DialogUIController.Instance.OpenDialog(
+                    pages: Translate(currentStage.stageReadyDialog),
+                    onAccept: null,
+                    onClose: () => OpenStageOfferDialog()
+                );
+                return;
+            }
+
+            OpenStageOfferDialog();
             return;
         }
 

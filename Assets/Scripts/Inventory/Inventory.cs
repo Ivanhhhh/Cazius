@@ -48,6 +48,13 @@ public class Inventory : MonoBehaviour
                 items.Remove(item);
                 onInventoryChanged?.Invoke();
                 break;
+            case ItemType.LegendarySandwich:
+                _playerHealthSystem.Heal(100);
+                SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.Heal);
+                SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.Heal);
+                items.Remove(item);
+                onInventoryChanged?.Invoke();
+                break;
             case ItemType.Ammo:
                 Debug.Log("La munición se recarga automáticamente con la tecla R.");
                 break;
