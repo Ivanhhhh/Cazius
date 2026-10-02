@@ -1271,7 +1271,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4070047275662691828, guid: bba5361d43b5ec4439ca7f929148cd2b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 104648665}
+    - targetCorrespondingSourceObject: {fileID: 4070047275662691828, guid: bba5361d43b5ec4439ca7f929148cd2b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 104648666}
   m_SourcePrefab: {fileID: 100100000, guid: bba5361d43b5ec4439ca7f929148cd2b, type: 3}
 --- !u!198 &104648663 stripped
 ParticleSystem:
@@ -1283,6 +1289,40 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4070047275662691828, guid: bba5361d43b5ec4439ca7f929148cd2b, type: 3}
   m_PrefabInstance: {fileID: 104648662}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &104648665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104648664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c73d1544bd24e0c4eb7b3628b1fbb6ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParticleAutoStop
+  _particles: {fileID: 104648663}
+--- !u!65 &104648666
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104648664}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 11.026202, y: 4.2166433, z: 12.208785}
+  m_Center: {x: -5.0131016, y: 3.7446153, z: 5.604393}
 --- !u!1 &105590365
 GameObject:
   m_ObjectHideFlags: 0
