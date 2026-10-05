@@ -383,7 +383,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6014290536835819705}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -401,7 +401,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e52d8756e1d76a34b91a8070a738327f, type: 2}
+  - {fileID: 2100000, guid: 2ed3f055fb7d02d458970a75c97a17b8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -619,6 +619,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4628032032835187159}
     m_Modifications:
+    - target: {fileID: 1557446849266387861, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2ed3f055fb7d02d458970a75c97a17b8, type: 2}
+    - target: {fileID: 4950797414507429333, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2ed3f055fb7d02d458970a75c97a17b8, type: 2}
+    - target: {fileID: 5262788059022336682, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2ed3f055fb7d02d458970a75c97a17b8, type: 2}
+    - target: {fileID: 7072619123669147002, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2ed3f055fb7d02d458970a75c97a17b8, type: 2}
     - target: {fileID: 8473938800449688397, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
       propertyPath: m_Name
       value: EyeAngelEnemyModel
@@ -689,7 +705,40 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8473938800449688397, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6943457969229204216}
+    - targetCorrespondingSourceObject: {fileID: 8473938800449688397, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 511231384975383987}
   m_SourcePrefab: {fileID: 100100000, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+--- !u!137 &1547044553914548948 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1557446849266387861, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+  m_PrefabInstance: {fileID: 64490185409464641}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4922955011445994644 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4950797414507429333, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+  m_PrefabInstance: {fileID: 64490185409464641}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5326685924416105451 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5262788059022336682, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+  m_PrefabInstance: {fileID: 64490185409464641}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6029004024301784738 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6002821445703174115, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+  m_PrefabInstance: {fileID: 64490185409464641}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &7116779112495813691 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7072619123669147002, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+  m_PrefabInstance: {fileID: 64490185409464641}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7229428606307958153 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7255591988552856776, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+  m_PrefabInstance: {fileID: 64490185409464641}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8465754693570697740 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8473938800449688397, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
@@ -730,6 +779,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_SUPERHEALTH_BODYPART
   _damageMultiplier: 2
   _bodyPart: 0
+--- !u!114 &511231384975383987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8465754693570697740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1b37b9d4849a3948ace2fe122043bc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AngelEyeCasterVisuals
+  _eyeRenderer: {fileID: 6029004024301784738}
+  _ringRenderers:
+  - {fileID: 5326685924416105451}
+  - {fileID: 4922955011445994644}
+  - {fileID: 7116779112495813691}
+  _skinnedRingRenderers: {fileID: 1547044553914548948}
+  _animator: {fileID: 8572843316264176741}
+  _nonDissolveMat: {fileID: 7229428606307958153}
+  _eyeDamageDuration: 0.5
+  _phaseChangeDelay: 0.5
+  _dissolveDuration: 1
+--- !u!95 &8572843316264176741 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8511177571169633572, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+  m_PrefabInstance: {fileID: 64490185409464641}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9094939899501527222 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9138554462930225655, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
