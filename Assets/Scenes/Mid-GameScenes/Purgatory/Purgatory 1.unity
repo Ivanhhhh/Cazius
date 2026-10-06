@@ -173994,6 +173994,68 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3148898647394387399, guid: defeed7d84d78bf489f6f84846738bc8, type: 3}
   m_PrefabInstance: {fileID: 789024120}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &789089787
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1000121721}
+    m_Modifications:
+    - target: {fileID: 994667859631520693, guid: 2386dce7c7dcda64e8f6c914b4545e23, type: 3}
+      propertyPath: m_Name
+      value: Door Interactive 01 PIVOT IN PURGATORY DOOR
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056597002693107139, guid: 2386dce7c7dcda64e8f6c914b4545e23, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 56.207
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056597002693107139, guid: 2386dce7c7dcda64e8f6c914b4545e23, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.251
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056597002693107139, guid: 2386dce7c7dcda64e8f6c914b4545e23, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -44.183
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056597002693107139, guid: 2386dce7c7dcda64e8f6c914b4545e23, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056597002693107139, guid: 2386dce7c7dcda64e8f6c914b4545e23, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056597002693107139, guid: 2386dce7c7dcda64e8f6c914b4545e23, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056597002693107139, guid: 2386dce7c7dcda64e8f6c914b4545e23, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056597002693107139, guid: 2386dce7c7dcda64e8f6c914b4545e23, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056597002693107139, guid: 2386dce7c7dcda64e8f6c914b4545e23, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056597002693107139, guid: 2386dce7c7dcda64e8f6c914b4545e23, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2386dce7c7dcda64e8f6c914b4545e23, type: 3}
+--- !u!4 &789089788 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9056597002693107139, guid: 2386dce7c7dcda64e8f6c914b4545e23, type: 3}
+  m_PrefabInstance: {fileID: 789089787}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &789715688
 GameObject:
   m_ObjectHideFlags: 0
@@ -222391,6 +222453,7 @@ Transform:
   - {fileID: 522369846}
   - {fileID: 59381480}
   - {fileID: 446750972}
+  - {fileID: 789089788}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1001402430
@@ -458114,7 +458177,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1954580346
 Transform:
   m_ObjectHideFlags: 0
@@ -458165,6 +458228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WhenOpenDoor
   _doorAnimator: {fileID: 1509357996}
+  _doorOpenAnimator: {fileID: 0}
   _cameraPoint: {fileID: 1509357997}
   _cameraMoveDuration: 0.5
 --- !u!114 &1954580350
@@ -458180,7 +458244,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PurgatoryDoor
   _isOpen: 0
-  _openAngle: -90
   _interactText: You need a Key
   _whenOpenDoor: {fileID: 1954580349}
   _interactionUIPoint: {fileID: 1382832853}
@@ -505183,6 +505246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WhenOpenDoor
   _doorAnimator: {fileID: 2125686963}
+  _doorOpenAnimator: {fileID: 0}
   _cameraPoint: {fileID: 2125686964}
   _cameraMoveDuration: 0.5
 --- !u!114 &2135297768
@@ -505198,7 +505262,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PurgatoryDoor
   _isOpen: 0
-  _openAngle: -90
   _interactText: You need a Key
   _whenOpenDoor: {fileID: 2135297767}
   _interactionUIPoint: {fileID: 441779186}
