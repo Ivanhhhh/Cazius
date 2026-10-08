@@ -46,6 +46,25 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
     [Tooltip("Seguridad: si las partículas nunca llegan a 0, se destruye igual pasado este tiempo.")]
     [SerializeField] private float maxDestroyWait = 5f;
 
+    [Header("Point Light (carga/descarga)")]
+    [Tooltip("Light que sube de intensidad durante la anticipación y baja durante el efecto.")]
+    [SerializeField] private Light chargeLight;
+
+    [Tooltip("Intensidad en reposo (al inicio y al final).")]
+    [SerializeField] private float lightMinIntensity = 0f;
+
+    [Tooltip("Intensidad pico, justo en el momento en que se activa el efecto.")]
+    [SerializeField] private float lightPeakIntensity = 8f;
+
+    [Tooltip("Curva de subida. 1 = lineal. >1 = se queda baja y explota al final (más 'carga').")]
+    [SerializeField, Range(0.1f, 4f)] private float lightRampUpCurve = 2f;
+
+    [Tooltip("Curva de bajada. 1 = lineal. >1 = baja lento y se apaga al final.")]
+    [SerializeField, Range(0.1f, 4f)] private float lightRampDownCurve = 1f;
+
+
+
+
     /// <summary>Se dispara cuando la secuencia termina por sí sola (no con StopAttack manual).</summary>
     public event Action OnAttackFinished;
 
@@ -123,12 +142,26 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
     {
         do
         {
-            // Fase 1: anticipación (giran solos el VFX inicial y los objetos)
-            yield return new WaitForSeconds(anticipationTime);
+            // Fase 1: anticipación — la luz sube de min a peak
+            //           (pega el pico justo cuando termina la anticipación)
+            yield return RampLightAndWait(
+                lightMinIntensity,
+                lightPeakIntensity,
+                anticipationTime,
+                lightRampUpCurve
+            );
 
-            // Fase 2: efecto principal
+            // En este instante la luz está en peak y activamos el efecto
             ActivateEffect();
-            yield return WaitForEffectEnd();
+
+            // Fase 2: efecto principal — la luz baja de peak a min a lo largo de effectDuration
+            yield return RampLightAndWait(
+                lightPeakIntensity,
+                lightMinIntensity,
+                effectDuration,
+                lightRampDownCurve
+            );
+
             DeactivateEffect();
 
             if (loop)
@@ -170,10 +203,7 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
             effectObject.SetActive(false);
     }
 
-    private IEnumerator WaitForEffectEnd()
-    {
-            yield return new WaitForSeconds(effectDuration);
-    }
+
 
     private void FinishAttack()
     {
@@ -193,10 +223,13 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
         if (attackVfx != null)
             attackVfx.Stop();
 
-        DeactivateEffect();   // ya apaga effectVfxObject y effectObject
+        DeactivateEffect();
 
         if (hideOrbitObjectsOnStop)
             SetOrbitObjectsActive(false);
+
+        if (chargeLight != null)
+            chargeLight.intensity = lightMinIntensity;   // <-- nuevo
     }
 
     private void SetOrbitObjectsActive(bool active)
@@ -221,6 +254,30 @@ public class Enemy_OrbitEnemy_SecondPhaseAttackVisuals : MonoBehaviour
         float rad = angleDeg * Mathf.Deg2Rad;
         Vector3 offset = new Vector3(Mathf.Cos(rad), 0f, Mathf.Sin(rad)) * orbitRadius;
         return orbitCenter.position + offset;
+    }
+
+    private IEnumerator RampLightAndWait(float from, float to, float duration, float curve)
+    {
+        if (chargeLight == null)
+        {
+            yield return new WaitForSeconds(duration);
+            yield break;
+        }
+
+        duration = Mathf.Max(0.0001f, duration);
+        chargeLight.intensity = from;
+
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / duration);
+            k = Mathf.Pow(k, curve);                 // misma idea que curvaPerfil
+            chargeLight.intensity = Mathf.Lerp(from, to, k);
+            yield return null;
+        }
+
+        chargeLight.intensity = to;                  // asegura el valor exacto al cerrar la fase
     }
 
     // ---------------------------------------------------------

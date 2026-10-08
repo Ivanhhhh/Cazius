@@ -1,10 +1,14 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Enemy_SUPERHEALTHSYSTEM : MonoBehaviour
 {
     [SerializeField] private float _maxHealth = 100f;
     [SerializeField] private float _currentHealth;
+    [SerializeField] private AngelEyeCasterVisuals _casterVisuals;
+    [SerializeField] private GameObject _soulSpawner;
+    [SerializeField] private float _delayBeforeDeath;
 
     public Action OnDeath;
     public Action<float> OnDamaged;
@@ -90,11 +94,15 @@ public class Enemy_SUPERHEALTHSYSTEM : MonoBehaviour
         _isDead = true;
 
         OnDeath?.Invoke();
-        DieCoroutine();
+        StartCoroutine(DieCoroutine());
     }
 
-    void DieCoroutine()
+    IEnumerator DieCoroutine()
     {
+        _casterVisuals.EyeDie();
+        _soulSpawner.SetActive(true);
+        yield return new WaitForSeconds(_delayBeforeDeath);
         Destroy(gameObject);
+
     }
 }

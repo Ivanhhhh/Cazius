@@ -24,6 +24,7 @@ public class Enemy_HealthSystem_Base : MonoBehaviour, Enemy_Interface_Damage
     [Tooltip("Tiempo antes de destruir/desactivar el gameObject, para dar lugar a los efectos de muerte (VFX, animacion, etc).")]
     [SerializeField] private float _deathDelay = 0f;
     [SerializeField] AngelEyeBossVisuals _bossVisuals;
+    [SerializeField] GameObject _soulSpawner;
 
     [SerializeField] ThroneBossVisuals _ThroneBossVisuals;
     [SerializeField] Enemy_OrbitEnemyData _enemyOrbitEnemyData;
@@ -92,15 +93,16 @@ public class Enemy_HealthSystem_Base : MonoBehaviour, Enemy_Interface_Damage
         if (_isDead) return;
         _isDead = true;
  
-        OnDeath?.Invoke();
         StartCoroutine(FinalizeDeathRoutine());
     }
  
     private IEnumerator FinalizeDeathRoutine()
     {
+        _ThroneBossVisuals.Despawn();
+        _soulSpawner.SetActive(true);
         if (_deathDelay > 0f)
             yield return new WaitForSeconds(_deathDelay);
- 
+        OnDeath?.Invoke();
         if (_deathBehavior == DeathBehaviorType.Destroy)
             Destroy(gameObject);
         else

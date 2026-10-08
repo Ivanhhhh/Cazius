@@ -43,7 +43,12 @@ public class SoulEnergyMovement : MonoBehaviour
     // ============================================================
 
     [Header("Detección")]
-    [SerializeField] private float radioDeteccion = 3f;
+    [Tooltip("Radio de detección en el plano horizontal (XZ).")]
+    [SerializeField] private float radioDeteccionXZ = 3f;
+
+    [Tooltip("Radio de detección en vertical (Y).")]
+    [SerializeField] private float radioDeteccionY = 1.5f;
+
     [SerializeField] private float distanciaRecoger = 0.3f;
 
     [Header("Cooldown")]
@@ -113,7 +118,8 @@ public class SoulEnergyMovement : MonoBehaviour
     private bool _uiRequested;   // solo esta variable privada, sin serializar
 
 
-    public float RadioDeteccion => radioDeteccion;
+    public float RadioDeteccionXZ => radioDeteccionXZ;
+    public float RadioDeteccionY => radioDeteccionY;
 
     /// Posición del player + offset en Y. Es lo que usan detección, Bézier y recogida.
     private Vector3 PosicionObjetivo =>
@@ -256,8 +262,7 @@ public class SoulEnergyMovement : MonoBehaviour
         if (_playerPosition == null) return;
         if (timerCooldown > 0f) return;
 
-        float dist = Vector3.Distance(transform.position, PosicionObjetivo);
-        if (dist <= radioDeteccion)
+        if (EstaEnRangoDeteccion(PosicionObjetivo))
         {
             if (!_uiRequested)
             {
@@ -269,6 +274,15 @@ public class SoulEnergyMovement : MonoBehaviour
         }
     }
 
+    private bool EstaEnRangoDeteccion(Vector3 punto)
+    {
+        Vector3 d = punto - transform.position;
+
+        float distXZ = new Vector2(d.x, d.z).magnitude;
+        if (distXZ > radioDeteccionXZ) return false;
+        if (Mathf.Abs(d.y) > radioDeteccionY) return false;
+        return true;
+    }
     // ============================================================
     //  ESTADO: ATRAYENDO
     // ============================================================
@@ -324,7 +338,13 @@ public class SoulEnergyMovement : MonoBehaviour
         velocidadActual += aceleracion * Time.deltaTime;
         if (acelerarPorDistancia)
         {
-            float factor = Mathf.Clamp01(1f - (distanciaAlObjetivo / radioDeteccion));
+            float distXZ = new Vector2(transform.position.x - objetivo.x,
+                           transform.position.z - objetivo.z).magnitude;
+            float distY = Mathf.Abs(transform.position.y - objetivo.y);
+
+            float nXZ = distXZ / Mathf.Max(0.0001f, radioDeteccionXZ);
+            float nY = distY / Mathf.Max(0.0001f, radioDeteccionY);
+            float factor = Mathf.Clamp01(1f - Mathf.Max(nXZ, nY));
             velocidadActual += aceleracion * factor * Time.deltaTime;
         }
         velocidadActual = Mathf.Min(velocidadActual, atraccionVelocidadMaxima);
@@ -407,7 +427,15 @@ public class SoulEnergyMovement : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, radioDeteccion);
+        Vector3 top = transform.position + Vector3.up * radioDeteccionY;
+        Vector3 bot = transform.position - Vector3.up * radioDeteccionY;
+        Gizmos.DrawWireSphere(top, radioDeteccionXZ);
+        Gizmos.DrawWireSphere(bot, radioDeteccionXZ);
+        // Líneas laterales (4 para que se vea bien)
+        Gizmos.DrawLine(top + Vector3.forward * radioDeteccionXZ, bot + Vector3.forward * radioDeteccionXZ);
+        Gizmos.DrawLine(top - Vector3.forward * radioDeteccionXZ, bot - Vector3.forward * radioDeteccionXZ);
+        Gizmos.DrawLine(top + Vector3.right * radioDeteccionXZ, bot + Vector3.right * radioDeteccionXZ);
+        Gizmos.DrawLine(top - Vector3.right * radioDeteccionXZ, bot - Vector3.right * radioDeteccionXZ);
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, distanciaRecoger);
@@ -439,7 +467,19 @@ public class SoulEnergyMovement : MonoBehaviour
             {
                 Gizmos.color = new Color(0.5f, 0.5f, 0.5f, 0.6f);
                 float factor = timerCooldown / Mathf.Max(0.01f, cooldownAntesDeAtraer + cooldownJitter);
-                Gizmos.DrawWireSphere(transform.position, radioDeteccion * Mathf.Clamp01(factor));
+                factor = Mathf.Clamp01(factor);
+
+                float rXZ = radioDeteccionXZ * factor;
+                float rY = radioDeteccionY * factor;
+
+                Vector3 top2 = transform.position + Vector3.up * rY;
+                Vector3 bot2 = transform.position - Vector3.up * rY;
+                Gizmos.DrawWireSphere(top2, rXZ);
+                Gizmos.DrawWireSphere(bot2, rXZ);
+                Gizmos.DrawLine(top2 + Vector3.forward * rXZ, bot2 + Vector3.forward * rXZ);
+                Gizmos.DrawLine(top2 - Vector3.forward * rXZ, bot2 - Vector3.forward * rXZ);
+                Gizmos.DrawLine(top2 + Vector3.right * rXZ, bot2 + Vector3.right * rXZ);
+                Gizmos.DrawLine(top2 - Vector3.right * rXZ, bot2 - Vector3.right * rXZ);
             }
 
             // Punto objetivo (player + offset)
