@@ -35,8 +35,11 @@ public class Enemy_OrbitEnemy_ChasingState : Enemy_Interface_StateMachine
         // 1) Chequeo de transición a segunda fase
         if (!_data._inSecondPhase && IsAtOrBelowHalfHealth())
         {
-            _data._chasing.ExitChase();           // cerramos chase normal
-            _data._angelPhaseChasing.EnterChase(); // abrimos angel phase
+            // Dispara todo lo que está orbitando (no bloquea, no espera)
+            _data.FireAllOrbitProjectiles();
+
+            _data._chasing.ExitChase();
+            _data._angelPhaseChasing.EnterChase();
             _data._inSecondPhase = true;
         }
 

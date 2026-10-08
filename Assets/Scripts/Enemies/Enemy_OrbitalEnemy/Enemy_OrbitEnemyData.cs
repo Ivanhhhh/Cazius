@@ -223,6 +223,14 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
         OnSecondPhaseSpawnRequested?.Invoke();
     }
 
+    public void FireAllOrbitProjectiles()
+    {
+        if (_orbitManager == null || _playerTransform == null) return;
+
+        Vector3 target = _playerTransform.position + Vector3.up * _flyingStats.aimOffset;
+        _orbitManager.FireAllAsBullets(target, _bulletSpeed);
+    }
+
     private void OnDrawGizmosSelected()
     {
         if (_objectTransform == null) _objectTransform = transform;

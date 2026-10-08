@@ -138,11 +138,15 @@ public class ThroneBossVisuals : MonoBehaviour
         {
             float value = Mathf.Lerp(startValue, endValue, t / _dissolveDuration);
 
+            _eyeMat.SetFloat("_DissolveAmount", value);
+
             foreach (var mat in _wingMats)
                 mat.SetFloat("_DissolveAmount", value);
 
             yield return null;
         }
+
+        _eyeMat.SetFloat("_DissolveAmount", endValue);
 
         foreach (var mat in _wingMats)
             mat.SetFloat("_DissolveAmount", endValue);

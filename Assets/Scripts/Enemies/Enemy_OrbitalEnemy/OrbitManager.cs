@@ -126,5 +126,18 @@ public class OrbitManager : MonoBehaviour
                 obj._orbitSpeed = _sharedSpeed;
         }
     }
+    public void FireAllAsBullets(Vector3 targetPosition, float bulletSpeed)
+    {
+        if (_orbitingObjects.Count == 0) return;
+
+        // Copia para no romper el foreach cuando cada uno se remueva de la lista.
+        var snapshot = new List<OrbitMovement>(_orbitingObjects);
+
+        foreach (var obj in snapshot)
+        {
+            if (obj == null) continue;
+            obj.FireAsBullet(targetPosition, bulletSpeed);
+        }
+    }
 
 }
