@@ -31,6 +31,8 @@ public class AudioVisualizer : MonoBehaviour
 
     void Update()
     {
+        if (PauseManager.Instance != null && PauseManager.Instance.IsPaused) return;
+
         if (bars == null || bars.Length == 0) return;
 
         AudioListener.GetSpectrumData(spectrumData, 0, fftWindow);
