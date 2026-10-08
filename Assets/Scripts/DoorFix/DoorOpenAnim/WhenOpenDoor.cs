@@ -5,6 +5,9 @@ public class WhenOpenDoor : MonoBehaviour
 {
     [Header("Door Animation")]
     [SerializeField] private Animator _doorAnimator;
+
+        [SerializeField] private Animator _doorOpenAnimator;
+
     private Transform _currentCamera;
 
     [Header("Camera Position")]
@@ -31,12 +34,16 @@ public class WhenOpenDoor : MonoBehaviour
             _cameraPoint.rotation
         ));
 
+         _doorOpenAnimator.SetTrigger("Open");
+
         _doorAnimator.enabled = true;
         _doorAnimator.Play(animationName, 0, 0f);
 
         yield return new WaitForSeconds(1);
-
+        
         _doorAnimator.enabled = false;
+
+        //animaciondepuertaapertura
 
         yield return StartCoroutine(LerpCamera(
             _cameraPoint.position,

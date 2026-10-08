@@ -4,7 +4,7 @@ using UnityEngine;
 public class PurgatoryDoor : MonoBehaviour, IEInteractable
 {
     [SerializeField] private bool _isOpen;
-    [SerializeField] private float _openAngle;
+    //[SerializeField] private float _openAngle;
     [SerializeField] private string _interactText = "You need Purgatory Key";
 
     [Header("Open Door Anim")]
@@ -39,6 +39,8 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
 
     public IEnumerator OpenDoor()
     {
+                Debug.LogWarning("AbrirDoor");
+
         player.enabled = false;
 
         SFXManager.Instance.PlaySFXAtPosition(
@@ -50,7 +52,7 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
             _whenOpenDoor.WhenKeyOpenDoor("PurgatoryDoor")
         );
 
-        transform.Rotate(0, _openAngle, 0);
+        //transform.Rotate(0, _openAngle, 0);
 
         _isOpen = true;
 
