@@ -1,25 +1,35 @@
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UILanguageSelector : MonoBehaviour
 {
-    [Header("UI Buttons")]
-    [SerializeField] private Button _englishButton;
-    [SerializeField] private Button _spanishButton;
+    [Header("Language Dropdown")]
+    [SerializeField] private TMP_Dropdown _languageDropdown;
 
     private void Start()
     {
-        if (_englishButton != null)
-            _englishButton.onClick.AddListener(() => SetLanguage(SystemLanguage.English));
-
-        if (_spanishButton != null)
-            _spanishButton.onClick.AddListener(() => SetLanguage(SystemLanguage.Spanish));
+        if (_languageDropdown != null)
+            _languageDropdown.onValueChanged.AddListener(OnLanguageChanged);
     }
 
     private void OnDestroy()
     {
-        if (_englishButton != null) _englishButton.onClick.RemoveAllListeners();
-        if (_spanishButton != null) _spanishButton.onClick.RemoveAllListeners();
+        if (_languageDropdown != null)
+            _languageDropdown.onValueChanged.RemoveListener(OnLanguageChanged);
+    }
+
+    private void OnLanguageChanged(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                SetLanguage(SystemLanguage.English);
+                break;
+
+            case 1:
+                SetLanguage(SystemLanguage.Spanish);
+                break;
+        }
     }
 
     private void SetLanguage(SystemLanguage language)
