@@ -2,108 +2,88 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
-
 public class ButtonsBehaviours : MonoBehaviour
 {
     [SerializeField] GameObject RebindPanel;
-
     [SerializeField] PauseInputHandler _PauseInputHandler;
-
-    [SerializeField] Canvas _OptionsMenu;
+    [SerializeField] GameObject SoundConfigPanel;
+    [SerializeField] GameObject ConfirmPopPanel;
 
     [SerializeField] Button _ResumeButton;
-
-    [SerializeField] Button _OptionsButton;
-
+    [SerializeField] Button _SoundConfigfButton;
     [SerializeField] Button _QuitGameButton;
-
     [SerializeField] Button _RebindButton;
-
-    private bool TogglePanelRebind = false;
-
-    private byte OpenedAmount = 0;
-
+    [SerializeField] Button _ConfirmPopButtonYES;
+    [SerializeField] Button _ConfirmPopButtonNO;
 
     void Start()
     {
         _ResumeButton.onClick.AddListener(ResumeGame);
-        _OptionsButton.onClick.AddListener(OptionsMenu);
+        _SoundConfigfButton.onClick.AddListener(SoundConfig);
         _QuitGameButton.onClick.AddListener(ShowConfirmationPopup);
         _RebindButton.onClick.AddListener(RebindPanelMethod);
 
+        _ConfirmPopButtonYES.onClick.AddListener(QuitGame);
+        _ConfirmPopButtonNO.onClick.AddListener(CloseConfirmationPopup);
     }
 
     void Update()
     {
-        //_ResumeButton.onClick.AddListener(ResumeGame);
-        //_OptionsButton.onClick.AddListener(OptionsMenu);
-        //_QuitGameButton.onClick.AddListener(QuitGame);
-
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            OpenedAmount = 2;
-           RebindPanel.SetActive(false);
-            OpenedAmount = 0;
-
+            ClosePanels();
         }
     }
 
     public void ResumeGame()
     {
         _PauseInputHandler.OnPause(default);
-        OpenedAmount = 0;
-        RebindPanel.SetActive(false);
+        ClosePanels();
     }
 
-    public void OptionsMenu()
+    public void SoundConfig()
     {
-        _OptionsMenu.gameObject.SetActive(true);
+        RebindPanel.SetActive(false);
+        ConfirmPopPanel.SetActive(false);
+
+        SoundConfigPanel.SetActive(!SoundConfigPanel.activeSelf);
     }
+
+    public void RebindPanelMethod()
+    {
+        SoundConfigPanel.SetActive(false);
+        ConfirmPopPanel.SetActive(false);
+
+        RebindPanel.SetActive(!RebindPanel.activeSelf);
+    }
+
     public void ShowConfirmationPopup()
     {
-        if(ConfirmationPopup.Instance  != null)
-        {
-            ConfirmationPopup.Instance.Show
-                (
-                yesAction: QuitGame,
-                message: "Are you sure you want to quit?",
-                noAction:null,
-                yes:"Yes",
-                no:"no"
-                );
-        }
-        else
-        {
-            Debug.LogError("ConfirmationPopup Not Found");
-            QuitGame();
-        }
+        RebindPanel.SetActive(false);
+        SoundConfigPanel.SetActive(false);
+
+        ConfirmPopPanel.SetActive(true);
     }
+
+    public void CloseConfirmationPopup()
+    {
+        ConfirmPopPanel.SetActive(false);
+    }
+
+    private void ClosePanels()
+    {
+        RebindPanel.SetActive(false);
+        SoundConfigPanel.SetActive(false);
+        ConfirmPopPanel.SetActive(false);
+    }
+
     public void QuitGame()
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+        Application.Quit();
 #endif
     }
-
-    public void RebindPanelMethod()
-    {
-         Debug.Log(OpenedAmount);
-        OpenedAmount += 1;
-
-        if (OpenedAmount <= 1) TogglePanelRebind = true;
-
-        
-
-        if (OpenedAmount >= 2)
-        {
-            TogglePanelRebind = false;
-            OpenedAmount = 0;
-        }
-        if (TogglePanelRebind) RebindPanel.SetActive(true);
-
-        else if (TogglePanelRebind != true) RebindPanel.SetActive(false);
-        print ("Ejecutado");
-    }
 }
+
