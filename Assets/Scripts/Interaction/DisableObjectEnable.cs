@@ -5,19 +5,13 @@ public class DisableObjectEnable : MonoBehaviour
 {
     private void OnEnable()
     {
-        DisableObject();
-    }
-
-    private void DisableObject()
-    {
-        if (!gameObject.activeSelf) return;
-
         StartCoroutine(Disable());
     }
 
     private IEnumerator Disable()
     {
-        yield return new WaitForSeconds(61f);
+        yield return new WaitForSeconds(57f);
         gameObject.SetActive(false);
     }
+
 }
