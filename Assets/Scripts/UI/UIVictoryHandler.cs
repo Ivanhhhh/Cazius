@@ -15,6 +15,10 @@ public class UIVictoryHandler : MonoBehaviour
     [SerializeField] private float _fadeDuration = 2.0f;
     [SerializeField] private float _delayBeforeLoad = 2000.0f;
 
+    [SerializeField] private Image _blackFadeImage;
+    [SerializeField] private float _blackFadeDuration = 1.0f;
+
+
     private bool _sequenceStarted = false;
 
     void OnEnable()
@@ -45,7 +49,7 @@ public class UIVictoryHandler : MonoBehaviour
         _sequenceStarted = true;
 
         if (_targetEnemy != null) { _targetEnemy.OnDeath -= HandleEnemyDeath; }
-        if (_victoryPanel != null) { _victoryPanel.SetActive(true); }
+        //if (_victoryPanel != null) { _victoryPanel.SetActive(true); }
 
         StartCoroutine(VictorySequenceRoutine());
     }
@@ -53,6 +57,28 @@ public class UIVictoryHandler : MonoBehaviour
     private IEnumerator VictorySequenceRoutine()
     {
         float elapsedTime = 0f;
+
+        if (_blackFadeImage != null)
+        {
+            elapsedTime = 0f;
+            Color color = _blackFadeImage.color;
+
+            while (elapsedTime < _blackFadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+
+                float alpha = Mathf.Lerp(0f, 1f, elapsedTime / _blackFadeDuration);
+
+                _blackFadeImage.color = new Color(color.r, color.g, color.b, alpha);
+
+                yield return null;
+            }
+
+            _blackFadeImage.color = new Color(color.r, color.g, color.b, 1f);
+        }
+
+        if (_victoryPanel != null) { _victoryPanel.SetActive(true); }
+        elapsedTime = 0f;
 
         if (_victoryFadeImage != null)
         {
@@ -87,7 +113,6 @@ public class UIVictoryHandler : MonoBehaviour
 
     public void SetupTargetEnemy(Enemy_HealthSystem_Base enemy)
     {
-        // Si ya hab�a uno, nos desuscribimos primero
         if (_targetEnemy != null) _targetEnemy.OnDeath -= HandleEnemyDeath;
 
         _targetEnemy = enemy;

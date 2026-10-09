@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public enum ItemType
@@ -9,6 +8,8 @@ public enum ItemType
     Teddybear,
     Herbs,
     WorldCupAlbum,
+    EdenKey,
+    PurgatoryKey,
     DepotKey,
     Football,
     LegendarySandwich,
@@ -26,4 +27,6 @@ public class ItemData : ScriptableObject
     public Sprite icon;
     public ItemType itemType;
     public int value; // HP restored, Ammo added, Soul Energy, etc
+    public string displayName; // Name displayed in the inventory UI
+    public string itemDescription;
 }
