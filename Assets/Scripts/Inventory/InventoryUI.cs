@@ -4,6 +4,12 @@ using TMPro;
 
 public class InventoryUI : MonoBehaviour
 {
+    public enum InventoryTab
+    {
+        Regular,
+        KeyItems
+    }
+
     [Header("References")]
     public GameObject panel;
     public Transform slotContainer;   // The GridLayoutGroup parent
@@ -12,16 +18,47 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private bool _savePanelOpenClose = true;
     [SerializeField] private Material _alwaysOnTopMaterial;
 
-    void OnEnable()
+    [Header("Tab UI Buttons")]
+    [SerializeField] private Button _regularTabButton;
+    [SerializeField] private Button _keyItemsTabButton;
+
+    [Header("Tab Button Colors")]
+    [SerializeField] private Color _selectedTabColor = new Color32(0xB1, 0xFF, 0xFB, 0xFF);   // #B1FFFB
+    [SerializeField] private Color _unselectedTabColor = new Color32(0x5A, 0x81, 0x7F, 0xFF); // #5A817F
+
+    [Header("Tab State")]
+    [SerializeField] private InventoryTab _currentTab = InventoryTab.Regular;
+
+    private Image _regularTabImage;
+    private Image _keyItemsTabImage;
+
+    private void Awake()
+    {
+        if (_regularTabButton != null)
+        {
+            _regularTabImage = _regularTabButton.GetComponent<Image>();
+            _regularTabButton.onClick.AddListener(SelectRegularTab);
+        }
+
+        if (_keyItemsTabButton != null)
+        {
+            _keyItemsTabImage = _keyItemsTabButton.GetComponent<Image>();
+            _keyItemsTabButton.onClick.AddListener(SelectKeyItemsTab);
+        }
+    }
+
+    private void OnEnable()
     {
         if (Inventory.Instance != null)
             Inventory.Instance.onInventoryChanged.AddListener(Refresh);
 
         InventoryInputHandler.OnInventoryToggled += OnToggled;
-        Refresh(); 
+
+        UpdateTabVisuals();
+        Refresh();
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         if (Inventory.Instance != null)
             Inventory.Instance.onInventoryChanged.RemoveListener(Refresh);
@@ -29,30 +66,68 @@ public class InventoryUI : MonoBehaviour
         InventoryInputHandler.OnInventoryToggled -= OnToggled;
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         InventoryInputHandler.OnInventoryToggled -= OnToggled;
+
+        if (_regularTabButton != null)
+            _regularTabButton.onClick.RemoveListener(SelectRegularTab);
+
+        if (_keyItemsTabButton != null)
+            _keyItemsTabButton.onClick.RemoveListener(SelectKeyItemsTab);
     }
 
-    void OnToggled(bool isOpen)
+    public void SelectRegularTab()
+    {
+        _currentTab = InventoryTab.Regular;
+        UpdateTabVisuals();
+        Refresh();
+    }
+
+    public void SelectKeyItemsTab()
+    {
+        _currentTab = InventoryTab.KeyItems;
+        UpdateTabVisuals();
+        Refresh();
+    }
+
+    private void UpdateTabVisuals()
+    {
+        if (_regularTabImage != null)
+        {
+            _regularTabImage.color = (_currentTab == InventoryTab.Regular)
+                ? _selectedTabColor
+                : _unselectedTabColor;
+        }
+
+        if (_keyItemsTabImage != null)
+        {
+            _keyItemsTabImage.color = (_currentTab == InventoryTab.KeyItems)
+                ? _selectedTabColor
+                : _unselectedTabColor;
+        }
+    }
+
+    private void OnToggled(bool isOpen)
     {
         Debug.Log("4. El evento llegó a la UI. isOpen: " + isOpen);
-        
-        if (isOpen) 
+
+        if (isOpen)
         {
             OpenInventory();
         }
-        else 
+        else
         {
             Debug.Log("5. Ejecutando CloseInventory()...");
-            CloseInventory(); 
+            CloseInventory();
         }
     }
 
     public void OpenInventory()
     {
         panel.SetActive(true);
-        Refresh(); 
+        UpdateTabVisuals();
+        Refresh();
     }
 
     public void CloseInventory()
@@ -63,35 +138,39 @@ public class InventoryUI : MonoBehaviour
             _questPanel.SetActive(false);
     }
 
-    void Refresh()
+    private void Refresh()
     {
         if (Inventory.Instance == null) return;
 
         foreach (Transform child in slotContainer)
             Destroy(child.gameObject);
 
-        // Always spawn all 12 slots
-        for (int i = 0; i < Inventory.Instance.maxSlots; i++)
+        var targetList = (_currentTab == InventoryTab.Regular)
+            ? Inventory.Instance.regularItems
+            : Inventory.Instance.keyItems;
+
+        int maxSlots = (_currentTab == InventoryTab.Regular)
+            ? Inventory.Instance.maxRegularSlots
+            : Inventory.Instance.maxKeySlots;
+
+        for (int i = 0; i < maxSlots; i++)
         {
             var slot = Instantiate(slotPrefab, slotContainer);
-            bool hasItem = i < Inventory.Instance.items.Count;
+            bool hasItem = i < targetList.Count;
 
             var icon = slot.GetComponent<Image>();
             icon.material = _alwaysOnTopMaterial;
             icon.enabled = hasItem;
 
-            // BUSCAMOS EL TEXTO DENTRO DEL PREFAB
             var amountText = slot.GetComponentInChildren<TextMeshProUGUI>(true);
 
             if (hasItem)
             {
-                var item = Inventory.Instance.items[i];
+                var item = targetList[i];
                 icon.sprite = item.icon;
 
-                // --- NUEVA LÓGICA PARA EL TEXTO ---
                 if (amountText != null)
                 {
-                    // Si es munición, mostramos la cantidad y prendemos el texto
                     if (item.itemType == ItemType.Ammo || item.itemType == ItemType.Scrap)
                     {
                         amountText.text = item.value.ToString();
@@ -99,22 +178,20 @@ public class InventoryUI : MonoBehaviour
                     }
                     else
                     {
-                        // Si es cura, apagamos el número (a menos que quieras hacer curas apilables después)
                         amountText.gameObject.SetActive(false);
                     }
                 }
-                // ----------------------------------
 
-                int index = i; 
+                int index = i;
                 slot.GetComponent<Button>().onClick.AddListener(() =>
-                    Inventory.Instance.UseItem(Inventory.Instance.items[index])
+                    Inventory.Instance.UseItem(targetList[index])
                 );
             }
             else
             {
-                // Si el slot está vacío, nos aseguramos de apagar el texto
                 if (amountText != null) amountText.gameObject.SetActive(false);
             }
         }
     }
+
 }
