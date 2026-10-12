@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public struct CraftingIngredient
 {
     public string itemName; // AHORA PIDE EL NOMBRE DEL SCRIPTABLE OBJECT
-    public int requiredAmount; 
+    public int requiredAmount;
 }
 
 public class CraftingButton : MonoBehaviour
@@ -85,17 +85,13 @@ public class CraftingButton : MonoBehaviour
         buttonImage.color = currentColor;
 
         UpdateIngredientsTextList();
-        UpdateSoulEnergyText(); // NUEVO
+        UpdateSoulEnergyText();
     }
 
-    // =========================================================
-    // NUEVO: Actualizar el texto de Soul Energy
-    // =========================================================
     private void UpdateSoulEnergyText()
     {
         if (_soulEnergyText == null) return;
 
-        // Si el coste es 0, ocultamos el texto
         if (soulEnergyCost <= 0)
         {
             _soulEnergyText.gameObject.SetActive(false);
@@ -109,25 +105,12 @@ public class CraftingButton : MonoBehaviour
             : 0;
 
         _soulEnergyText.text = string.Format(_soulEnergyFormat, currentEnergy, soulEnergyCost);
-
     }
 
     private int GetItemCount(string itemName)
     {
-        int totalInInventory = 0;
-
-        foreach (ItemData item in Inventory.Instance.items)
-        {
-            string currentItemName = item.name.Trim();
-            string requiredItemName = itemName.Trim();
-
-            if (currentItemName == requiredItemName)
-            {
-                totalInInventory += item.value;
-            }
-        }
-
-        return totalInInventory;
+        if (Inventory.Instance == null) return 0;
+        return Inventory.Instance.GetItemCountByName(itemName);
     }
 
     private void UpdateIngredientsTextList()
@@ -199,8 +182,11 @@ public class CraftingButton : MonoBehaviour
             return;
         }
 
+        // Consumir ingredientes usando el nuevo método del inventario
         foreach (CraftingIngredient req in ingredients)
-            ConsumeIngredient(req.itemName, req.requiredAmount);
+        {
+            Inventory.Instance.ConsumeItemByName(req.itemName, req.requiredAmount);
+        }
 
         if (soulEnergyCost > 0 && SoulEnergyManager.Instance != null)
             SoulEnergyManager.Instance.RemoveSoulEnergy(soulEnergyCost);
@@ -209,35 +195,4 @@ public class CraftingButton : MonoBehaviour
         Debug.Log($"[Crafting] Crafteado '{itemToCraft.name}'. -{soulEnergyCost} Soul Energy.");
     }
 
-    private void ConsumeIngredient(string targetItemName, int amountToConsume)
-    {
-        int amountLeft = amountToConsume;
-        Debug.Log($"[Crafting] Consumiendo {amountToConsume} de '{targetItemName}'...");
-
-        for (int i = Inventory.Instance.items.Count - 1; i >= 0; i--)
-        {
-            ItemData item = Inventory.Instance.items[i];
-
-            if (item.name.Trim() == targetItemName.Trim())
-            {
-                int taken = Mathf.Min(item.value, amountLeft);
-                item.value -= taken;
-                amountLeft -= taken;
-
-                Debug.Log($"[Crafting] Restados {taken} de '{targetItemName}'. Quedan por restar: {amountLeft}");
-
-                if (item.value <= 0)
-                {
-                    Debug.Log($"[Crafting] El slot de '{targetItemName}' quedó vacío. Borrándolo del inventario.");
-                    Inventory.Instance.items.RemoveAt(i);
-                }
-
-                if (amountLeft <= 0)
-                {
-                    Debug.Log($"[Crafting] Terminado de consumir '{targetItemName}'.");
-                    break;
-                }
-            }
-        }
-    }
 }

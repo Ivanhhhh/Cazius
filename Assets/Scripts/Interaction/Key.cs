@@ -5,6 +5,7 @@ using UnityEngine;
 public class Key : MonoBehaviour, IEInteractable
 {
     [Header("Key type")]
+    [SerializeField] private ItemData _itemScriptableObject;
     [SerializeField] private bool _isEdenKey;
     [SerializeField] private bool _isPurgatoryKey;
 
@@ -26,6 +27,7 @@ public class Key : MonoBehaviour, IEInteractable
 
     public void Interact(Transform interactorTransform)
     {
+        Inventory.Instance.AddItem(_itemScriptableObject);
         if (_isPurgatoryKey)
         {
             KeyInventorySystem.Instance.AddPurgatoryKey();

@@ -46,8 +46,8 @@ public class SaveManager : MonoBehaviour
         data.questStates = questEntries;
 
         // --- Inventory ---
-        data.inventoryItemIDs = Inventory.Instance.GetAllItemIDs();
-        data.keyItemIDs = Inventory.Instance.GetKeyItemIDs();
+        // data.inventoryItemIDs = Inventory.Instance.GetAllItemIDs();
+        // data.keyItemIDs = Inventory.Instance.GetKeyItemIDs();
 
         // --- Player ---
         if (playerTransform != null)
@@ -88,7 +88,7 @@ public class SaveManager : MonoBehaviour
         QuestManager.Instance.LoadSaveData(questDict, stageDict);
 
         // --- Inventory ---
-        Inventory.Instance.LoadSaveData(data.inventoryItemIDs, data.keyItemIDs, itemRegistry);
+        // Inventory.Instance.LoadSaveData(data.inventoryItemIDs, data.keyItemIDs, itemRegistry);
 
         Debug.Log($"[SaveManager] Loaded from {SavePath}");
     }
