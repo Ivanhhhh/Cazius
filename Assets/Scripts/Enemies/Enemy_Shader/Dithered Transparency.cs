@@ -4,7 +4,6 @@ using UnityEngine;
 public class DitheredTransparency : MonoBehaviour
 {
     [SerializeField] private SkinnedMeshRenderer _renderer;
-    [SerializeField] private float _fadeDuration = 1.5f;
 
     private Material _material;
 
@@ -17,12 +16,12 @@ public class DitheredTransparency : MonoBehaviour
         _material = _renderer.material;
     }
 
-    public void FadeAlphaToZero()
+    public void FadeAlphaToZero(float fadeDuration)
     {
-        StartCoroutine(FadeCoroutine());
+        StartCoroutine(FadeCoroutine(fadeDuration));
     }
 
-    private IEnumerator FadeCoroutine()
+    private IEnumerator FadeCoroutine(float coroutineeFadeDuration)
     {
         float timer = 0f;
 
@@ -32,11 +31,11 @@ public class DitheredTransparency : MonoBehaviour
         Color endColor = startColor;
         endColor.a = 0f;
 
-        while (timer < _fadeDuration)
+        while (timer < coroutineeFadeDuration)
         {
             timer += Time.deltaTime;
 
-            float t = timer / _fadeDuration;
+            float t = timer / coroutineeFadeDuration;
             Color newColor = Color.Lerp(startColor, endColor, t);
 
             _material.SetColor(BaseColorID, newColor);
