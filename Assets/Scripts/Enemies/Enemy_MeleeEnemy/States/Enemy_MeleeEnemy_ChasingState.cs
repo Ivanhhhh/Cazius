@@ -23,8 +23,11 @@ public class Enemy_MeleeEnemy_ChasingState : Enemy_Interface_StateMachine
     }
     public void OnUpdate()
     {
-        _data._chasing.Tick();
-        _data._speedBoost.Tick();
+        if (_data._isDead) return;
+
+        // Por si acaso, no tickear behaviours que ya están detenidos
+        if (_data._chasing != null) _data._chasing.Tick();
+        if (_data._speedBoost != null) _data._speedBoost.Tick();
         _angelDemonAnim.AttackFalse();
         if (_data._chasing.CanAttack) 
         {

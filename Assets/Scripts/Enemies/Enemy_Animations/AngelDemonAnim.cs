@@ -82,7 +82,9 @@ public class AngelDemonAnim : MonoBehaviour
     public void DeactivateEnemy()
     {
         _enemyData.AttackCollider.enabled = false;
+        _enemyData._isDead = true;
         _enemyData.SetChaseSpeed(0f);
+        Debug.Log("ENEMY DEACTIVATED");
     }
 
     // ====== SLOW ======

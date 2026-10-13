@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
 using System;
+using Unity.VisualScripting;
 
 public class Enemy_MeleeEnemy_Data : MonoBehaviour
 {
@@ -58,6 +59,7 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
     [SerializeField] private float _movementSpeedMultiplier = 2f;
     [SerializeField] private Animator _enemyAnimator;
     [SerializeField] private float _animSpeedMultiplier = 2f;
+    [SerializeField] public bool _isDead = false;
 
     public Collider AttackCollider => _attackCollider;
 
