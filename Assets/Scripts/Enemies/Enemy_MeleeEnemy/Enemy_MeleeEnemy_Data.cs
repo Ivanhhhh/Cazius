@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
+using System;
+using Unity.VisualScripting;
 
 public class Enemy_MeleeEnemy_Data : MonoBehaviour
 {
@@ -53,9 +55,13 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
 
     [Header("Speed Boost (Distance)")]
     [SerializeField] private float _distanceThreshold = 10f;
+    [SerializeField] private float _stopBoostingThreshold;
     [SerializeField] private float _movementSpeedMultiplier = 2f;
-    [SerializeField] private Animator _enemyAnimator; 
+    [SerializeField] private Animator _enemyAnimator;
     [SerializeField] private float _animSpeedMultiplier = 2f;
+    [SerializeField] public bool _isDead = false;
+
+    public Collider AttackCollider => _attackCollider;
 
     [Header("Behaviours")]
     public Enemy_PatrollingBehaviour _patrolling { get; private set; }
@@ -63,11 +69,17 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
     public Enemy_FieldOfViewBehaviour _fieldOfView { get; private set; }
     public Enemy_FirstAttackBehaviour _firstAttack { get; private set; }
     public Enemy_SecondAttackBehaviour _secondAttack { get; private set; }
-    public Enemy_SpeedBoostBehaviour _speedBoost { get; private set; }  // NUEVO
+    public Enemy_SpeedBoostBehaviour _speedBoost { get; private set; }
 
     // Diccionarios para modificadores de velocidad
     private Dictionary<object, float> _speedMultipliers = new Dictionary<object, float>();
     private Dictionary<object, float> _speedAdditives = new Dictionary<object, float>();
+
+    // Evento (por si otros sistemas quieren reaccionar al boost)
+    public event Action _onBoostActivated;
+
+    // ✅ Flag local: la fuente de verdad de "hay boost activo"
+    public bool IsBoostActive { get; private set; }
 
     void Awake()
     {
@@ -97,18 +109,18 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
         _fieldOfView = new Enemy_FieldOfViewBehaviour(_playerTransform, _radiusVision, _selfObjectTransform, _horizontalAngleVision, _verticalAngleVision, _lineOfSightLayerMask, _aimOffset);
         _firstAttack = new Enemy_FirstAttackBehaviour(_firsAttackPreparationTime, _firstAttackDuration, _stunDuration, _agent, _attackCollider, this);
         _secondAttack = new Enemy_SecondAttackBehaviour(_spinSpeed, _objectSpeedWhileSpinning, _secondAttackPreparationTime, _spinTime, _playerTransform, _selfObjectTransform, _agent);
-        _speedBoost = new Enemy_SpeedBoostBehaviour
-             (
-             _selfObjectTransform,
+        _speedBoost = new Enemy_SpeedBoostBehaviour(
+            _selfObjectTransform,
             _playerTransform,
-             this,
-             _distanceThreshold,
-             _movementSpeedMultiplier,
-             _enemyAnimator,
-             _animSpeedMultiplier
-             );
+            this,
+            _distanceThreshold,
+            _stopBoostingThreshold,
+            _movementSpeedMultiplier,
+            _enemyAnimator,
+            _animSpeedMultiplier
+        );
 
-         RecalculateSpeed();
+        RecalculateSpeed();
     }
 
     // ====== SISTEMA DE MODIFICADORES DE VELOCIDAD ======
@@ -127,7 +139,16 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
 
     public void AddSpeedAdditive(object source, float additive)
     {
+        // ✅ Barrera definitiva: si hay boost activo y el additivo es negativo, NO ENTRA.
+        // No depende de _speedBoost (que puede ser null) ni de timing.
+        if (additive < 0f && IsBoostActive)
+        {
+            Debug.Log($"[Speed] Slow RECHAZADO (src={source.GetType().Name}, add={additive}, boost activo)");
+            return;
+        }
+
         _speedAdditives[source] = additive;
+        Debug.Log($"[Speed] Additive ACEPTADO (src={source.GetType().Name}, add={additive})");
         RecalculateSpeed();
     }
 
@@ -139,12 +160,18 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
 
     private void RecalculateSpeed()
     {
-        if (_chasing == null) return; // Aún no inicializado
+        if (_chasing == null) return;
 
         float finalSpeed = _chaseSpeed;
 
+        // ✅ Usamos el flag local, no _speedBoost.IsCurrentlyBoosted
+        bool isBoosted = IsBoostActive;
+
         foreach (float add in _speedAdditives.Values)
+        {
+            if (isBoosted && add < 0f) continue;   // red de seguridad
             finalSpeed += add;
+        }
 
         foreach (float mult in _speedMultipliers.Values)
             finalSpeed *= mult;
@@ -154,26 +181,60 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
         _chasing.SetChaseSpeed(finalSpeed);
     }
 
+    public void RecalculateSpeedNow() => RecalculateSpeed();
+
     public void SetChaseSpeed(float newBaseSpeed)
     {
         _chaseSpeed = newBaseSpeed;
         RecalculateSpeed();
     }
 
-    public float GetBaseChaseSpeed()
-    {
-        return _chaseSpeed;
-    }
+    public float GetBaseChaseSpeed() => _chaseSpeed;
 
     public float GetCurrentChaseSpeed()
     {
         float speed = _chaseSpeed;
-        foreach (float add in _speedAdditives.Values) speed += add;
+        bool isBoosted = IsBoostActive;
+
+        foreach (float add in _speedAdditives.Values)
+        {
+            if (isBoosted && add < 0f) continue;
+            speed += add;
+        }
         foreach (float mult in _speedMultipliers.Values) speed *= mult;
         return Mathf.Max(0f, speed);
     }
 
-    // ====== MÉTODOS AUXILIARES EXISTENTES ======
+    // ====== BOOST ======
+
+    /// <summary>
+    /// Llamado por Enemy_SpeedBoostBehaviour al activar/desactivar el boost.
+    /// Pone el flag local, limpia slows previos si es activación, y avisa por evento.
+    /// </summary>
+    public void SetBoostActive(bool active)
+    {
+        IsBoostActive = active;
+
+        if (active)
+        {
+            // ✅ Borrar cualquier slow que ya estuviera en el diccionario
+            var keysToRemove = new List<object>();
+            foreach (var kvp in _speedAdditives)
+                if (kvp.Value < 0f) keysToRemove.Add(kvp.Key);
+
+            foreach (var key in keysToRemove)
+                _speedAdditives.Remove(key);
+
+            if (keysToRemove.Count > 0)
+                Debug.Log($"[Boost] Eliminados {keysToRemove.Count} slows previos");
+
+            _onBoostActivated?.Invoke();   // avisa (AngelDemonAnim cancela su corrutina)
+        }
+
+        RecalculateSpeed();
+    }
+
+    // ====== AUXILIARES ======
 
     private Vector3 DirFromAngle(float angleInDegrees)
     {
@@ -208,16 +269,16 @@ public class Enemy_MeleeEnemy_Data : MonoBehaviour
         Gizmos.DrawLine(transform.position, transform.position + angleUp * _radiusVision);
         Gizmos.DrawLine(transform.position, transform.position + angleDown * _radiusVision);
 
-        // Radio de ataque
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _attackRadius);
 
-        // Radio de detección de nodos
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, _detectionRadius);
 
-        // Umbral de distancia para el Speed Boost
-        Gizmos.color = new Color(1f, 0.6f, 0f); // Naranja
+        Gizmos.color = new Color(1f, 0.6f, 0f);
         Gizmos.DrawWireSphere(transform.position, _distanceThreshold);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, _stopBoostingThreshold);
     }
 }

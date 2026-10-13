@@ -9,7 +9,7 @@ public class Enemy_HealthSystem_Death_VFX : MonoBehaviour
 {
     [SerializeField] private BloodVFX _bloodVFX;
     [SerializeField] private DitheredTransparency[] _ditheredTransparencies;
-
+    [SerializeField] private float _fadeDuration;
     private Enemy_HealthSystem_Base _healthSystem;
 
     void Awake()
@@ -37,7 +37,7 @@ public class Enemy_HealthSystem_Death_VFX : MonoBehaviour
         foreach (DitheredTransparency dither in _ditheredTransparencies)
         {
             if (dither != null)
-                dither.FadeAlphaToZero();
+                dither.FadeAlphaToZero(_fadeDuration);
         }
     }
 }
