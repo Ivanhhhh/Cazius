@@ -20,7 +20,8 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
 
     [SerializeField] private AngelDemonAnim anim;
     [SerializeField] private DitheredTransparency[] _ditheredTransparencies;
-
+    [SerializeField] private float _fadeDuration;
+    [SerializeField] private float _healthDelay = 1.2f;
     [SerializeField] private BloodVFX bloodVFXScript;
 
     void Start()
@@ -114,17 +115,18 @@ public class Enemy_HealthSystem : MonoBehaviour, Enemy_Interface_Damage
     IEnumerator DieCoroutine()
     {
         bloodVFXScript.BloodDead();
+        anim.DeactivateEnemy();
         anim.DieAnim();
 
 
         foreach (DitheredTransparency dither in _ditheredTransparencies)
         {
             if (dither != null)
-                dither.FadeAlphaToZero();
+                dither.FadeAlphaToZero(_fadeDuration);
         }
         _soulEnergyPrefab.SetActive(true);
 
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(_healthDelay);
 
         Debug.Log("Soul Energy Drop");
 

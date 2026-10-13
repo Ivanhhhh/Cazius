@@ -263,8 +263,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 912681512838086180}
-  - component: {fileID: 8992226062549267390}
-  - component: {fileID: 6471424217615281546}
   - component: {fileID: 6583817609841896493}
   - component: {fileID: 7856561298644488502}
   - component: {fileID: 4172276672993563538}
@@ -313,63 +311,6 @@ Transform:
   - {fileID: 1972605356587307083}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8992226062549267390
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1589750323712136146}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &6471424217615281546
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1589750323712136146}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_MaskInteraction: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!195 &6583817609841896493
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -411,7 +352,7 @@ MonoBehaviour:
   _patrolSpeed: 1
   _MaximumAmountOfNodes: 6
   _SprintRadius: 0
-  _attackRadius: 1
+  _attackRadius: 1.5
   _chaseSpeed: 2.5
   _attackCooldown: 1
   _radiusVision: 14
@@ -437,7 +378,8 @@ MonoBehaviour:
   _isAggresiveOnStart: 0
   _needTimeForFirstReaction: 0
   _healthSystem: {fileID: 7758832045647152129}
-  _distanceThreshold: 4
+  _distanceThreshold: 5
+  _stopBoostingThreshold: 2
   _movementSpeedMultiplier: 2
   _enemyAnimator: {fileID: 4572060112092841929}
   _animSpeedMultiplier: 2
@@ -481,6 +423,8 @@ MonoBehaviour:
   - {fileID: 7063187917015169225}
   - {fileID: 412055686851308708}
   - {fileID: 243463270029969240}
+  _fadeDuration: 2
+  _healthDelay: 2
   bloodVFXScript: {fileID: 8783117518800229546}
 --- !u!114 &8783117518800229546
 MonoBehaviour:
@@ -531,8 +475,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AngelDemonAnim
   animator: {fileID: 4572060112092841929}
-  _slowAmount: 1.5
-  _slowDuration: 1
+  _slowAmount: 2
+  _slowDuration: 2
   _flyDistanceThreshold: 0
 --- !u!114 &3036136070891182812
 MonoBehaviour:
@@ -547,7 +491,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 8698723263564523274}
-  _fadeDuration: 1.5
 --- !u!114 &5247122701573574873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,7 +504,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 2784743972594931677}
-  _fadeDuration: 1.5
 --- !u!114 &2926484955151848311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -575,7 +517,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 7217161337130390300}
-  _fadeDuration: 1.5
 --- !u!114 &359996500938642999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,7 +530,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 5818824188523675690}
-  _fadeDuration: 1.5
 --- !u!114 &5274683750851002582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,7 +543,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 2694454608311871290}
-  _fadeDuration: 1.5
 --- !u!114 &3802497678932193983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -617,7 +556,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 4692947534763572111}
-  _fadeDuration: 1.5
 --- !u!114 &5108934394671142329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -631,7 +569,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 2722382991348091924}
-  _fadeDuration: 1.5
 --- !u!114 &7063187917015169225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645,7 +582,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 5828399196088086223}
-  _fadeDuration: 1.5
 --- !u!114 &412055686851308708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -659,7 +595,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 8407791038259251171}
-  _fadeDuration: 1.5
 --- !u!114 &243463270029969240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -673,7 +608,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 5820439528923065275}
-  _fadeDuration: 1.5
 --- !u!136 &8987227187968179901
 CapsuleCollider:
   m_ObjectHideFlags: 0

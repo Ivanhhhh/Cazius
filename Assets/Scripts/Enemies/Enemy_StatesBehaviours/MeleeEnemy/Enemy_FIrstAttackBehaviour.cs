@@ -21,6 +21,8 @@ public class Enemy_FirstAttackBehaviour
     private AttackPhase _currentPhase = AttackPhase.Preparing;
     
     public bool IsDone => _currentPhase == AttackPhase.Done;
+    private bool _preparationColliderActivated = false;
+
 
     // Actualizamos el constructor. Quitamos speed y playerTransform, y añadimos attackDuration
     public Enemy_FirstAttackBehaviour(float preparationTime, float attackDuration, float stunDuration, NavMeshAgent agent, Collider attackCollider,Enemy_MeleeEnemy_Data data)
@@ -36,7 +38,7 @@ public class Enemy_FirstAttackBehaviour
         
         _agent = agent;
         _attackCollider = attackCollider;
-        
+
         _data = data;
     }
 
@@ -59,6 +61,11 @@ public class Enemy_FirstAttackBehaviour
 
     void UpdatePreparing()
     {
+        if (!_preparationColliderActivated)
+        {
+            _attackCollider.enabled = true;
+            _preparationColliderActivated = true;
+        }
         _currentPreparationTime -= Time.deltaTime;
         if (_currentPreparationTime <= 0)
         {
@@ -110,6 +117,8 @@ public class Enemy_FirstAttackBehaviour
         _currentAttackTime = _attackDuration;
         _attackCollider.enabled = false;
         _currentPhase = AttackPhase.Preparing;
+        _preparationColliderActivated = false;   // ✅ importante
+
 
         // Si tu lógica requiere que el NavMeshAgent vuelva a moverse tras resetear:
         if (_agent.isOnNavMesh)
