@@ -8,7 +8,6 @@ public class AngelDemonAnim : MonoBehaviour
     [Header("Slow Effect")]
     [SerializeField] private float _slowAmount = 2f;
     [SerializeField] private float _slowDuration = 1.5f;
-    [SerializeField] private float _flyDistanceThreshold;
 
     private Enemy_MeleeEnemy_Data _enemyData;
     private Coroutine _slowCoroutine;
@@ -20,11 +19,20 @@ public class AngelDemonAnim : MonoBehaviour
         _enemyData = GetComponent<Enemy_MeleeEnemy_Data>();
 
         if (_enemyData == null)
-            Debug.LogError($"{nameof(AngelDemonAnim)}: No se encontró Enemy_MeleeEnemy_Data en el mismo GameObject.");
+            Debug.LogError($"{nameof(AngelDemonAnim)}: No se encontró Enemy_MeleeEnemy_Data.");
+        else
+            _enemyData._onBoostActivated += CancelSlow;   // suscripción al evento
 
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
     }
+
+    void OnDestroy()
+    {
+        if (_enemyData != null)
+            _enemyData._onBoostActivated -= CancelSlow;   // desuscripción
+    }
+
     private IEnumerator WaitForPlayer()
     {
         while (_playerTransform == null)
@@ -44,8 +52,7 @@ public class AngelDemonAnim : MonoBehaviour
 
     public void WalkAnim(float speed)
     {
-        // (Opcional) Aquí podrías controlar el blend tree de caminata usando 'speed'
-        // animator.SetFloat("Speed", speed);
+        // (Opcional) blend tree de caminata
     }
 
     public void AttackAnim()
@@ -59,47 +66,23 @@ public class AngelDemonAnim : MonoBehaviour
         animator.SetBool("Attacking", false);
     }
 
-    public void HeadshotAnim()
-    {
-        SlowChaseSpeed();
-        animator.SetTrigger("Headshot");
-    }
-
-    public void ChestAnim()
-    {
-        SlowChaseSpeed();
-        animator.SetTrigger("Chest");
-    }
-
-    public void LeftArmAnim()
-    {
-        SlowChaseSpeed();
-        animator.SetTrigger("LeftArm");
-    }
-
-    public void RightArmAnim()
-    {
-        SlowChaseSpeed();
-        animator.SetTrigger("RightArm");
-    }
-
-    public void RightLegAnim()
-    {
-        SlowChaseSpeed();
-        animator.SetTrigger("RightLeg");
-    }
-
-    public void LeftLegAnim()
-    {
-        SlowChaseSpeed();
-        animator.SetTrigger("LeftLeg");
-    }
+    public void HeadshotAnim() { SlowChaseSpeed(); animator.SetTrigger("Headshot"); }
+    public void ChestAnim() { SlowChaseSpeed(); animator.SetTrigger("Chest"); }
+    public void LeftArmAnim() { SlowChaseSpeed(); animator.SetTrigger("LeftArm"); }
+    public void RightArmAnim() { SlowChaseSpeed(); animator.SetTrigger("RightArm"); }
+    public void RightLegAnim() { SlowChaseSpeed(); animator.SetTrigger("RightLeg"); }
+    public void LeftLegAnim() { SlowChaseSpeed(); animator.SetTrigger("LeftLeg"); }
 
     public void DieAnim()
     {
-        SlowChaseSpeed();
         animator.SetBool("Dead", true);
         animator.SetTrigger("Die");
+    }
+
+    public void DeactivateEnemy()
+    {
+        _enemyData.AttackCollider.enabled = false;
+        _enemyData.SetChaseSpeed(0f);
     }
 
     // ====== SLOW ======
@@ -108,7 +91,13 @@ public class AngelDemonAnim : MonoBehaviour
     {
         if (_enemyData == null) return;
 
-        // Si ya hay un slow activo, lo reiniciamos
+        // ✅ Chequeo con el flag local, sin depender de _speedBoost
+        if (_enemyData.IsBoostActive)
+        {
+            Debug.Log("[Slow] Ignorado: boost activo");
+            return;
+        }
+
         if (_slowCoroutine != null)
             StopCoroutine(_slowCoroutine);
 
@@ -117,28 +106,34 @@ public class AngelDemonAnim : MonoBehaviour
 
     private IEnumerator SlowChaseSpeedCoroutine()
     {
-        if (_playerTransform != null)
-        {
-            float distance = Vector3.Distance(transform.position, _playerTransform.position);
-            bool shouldBoost = distance > _flyDistanceThreshold;
+        // El diccionario de Enemy_MeleeEnemy_Data rechaza el negativo si hay boost,
+        // pero por las dudas ya chequeamos arriba.
+        _enemyData.AddSpeedAdditive(this, -_slowAmount);
 
-            if (shouldBoost == false)
-            {
-                // Registrar el modificador aditivo negativo identificado por 'this'
-                _enemyData.AddSpeedAdditive(this, -_slowAmount);
+        yield return new WaitForSeconds(_slowDuration);
 
-                yield return new WaitForSeconds(_slowDuration);
-
-                // Quitar el modificador (el enemy data recalcula la velocidad final)
-                _enemyData.RemoveSpeedAdditive(this);
-            }
-        }
+        _enemyData.RemoveSpeedAdditive(this);
         _slowCoroutine = null;
+    }
+
+    /// <summary>
+    /// Cancela el slow actual. Es llamado por el evento _onBoostActivated.
+    /// Idempotente: se puede llamar sin slow activo.
+    /// </summary>
+    public void CancelSlow()
+    {
+        if (_slowCoroutine != null)
+        {
+            StopCoroutine(_slowCoroutine);
+            _slowCoroutine = null;
+        }
+
+        if (_enemyData != null)
+            _enemyData.RemoveSpeedAdditive(this);
     }
 
     private void OnDisable()
     {
-        // Seguridad: si el objeto se desactiva con un slow activo, lo limpiamos
         if (_enemyData != null)
             _enemyData.RemoveSpeedAdditive(this);
 

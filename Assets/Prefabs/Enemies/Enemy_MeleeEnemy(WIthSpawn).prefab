@@ -9582,7 +9582,7 @@ MonoBehaviour:
   _patrolSpeed: 1
   _MaximumAmountOfNodes: 6
   _SprintRadius: 0
-  _attackRadius: 1
+  _attackRadius: 1.5
   _chaseSpeed: 2.5
   _attackCooldown: 1
   _radiusVision: 14
@@ -9609,9 +9609,10 @@ MonoBehaviour:
   _needTimeForFirstReaction: 1
   _healthSystem: {fileID: 6558827155833743160}
   _distanceThreshold: 5
+  _stopBoostingThreshold: 2
   _movementSpeedMultiplier: 2
   _enemyAnimator: {fileID: 5788573762344844402}
-  _animSpeedMultiplier: 1
+  _animSpeedMultiplier: 2
 --- !u!114 &5257676754998547151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9652,6 +9653,8 @@ MonoBehaviour:
   - {fileID: 2951822766687007286}
   - {fileID: 849216641521607007}
   - {fileID: 2345920454096334748}
+  _fadeDuration: 2
+  _healthDelay: 2
   bloodVFXScript: {fileID: 4470110701704461019}
 --- !u!114 &4470110701704461019
 MonoBehaviour:
@@ -9702,8 +9705,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AngelDemonAnim
   animator: {fileID: 5788573762344844402}
-  _slowAmount: 1.5
-  _slowDuration: 1
+  _slowAmount: 2
+  _slowDuration: 2
   _flyDistanceThreshold: 5
 --- !u!114 &6361583643444521407
 MonoBehaviour:
@@ -9718,7 +9721,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 1701815164904643761}
-  _fadeDuration: 1.5
 --- !u!114 &2942543035980240419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9732,7 +9734,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 5297210334918831206}
-  _fadeDuration: 1.5
 --- !u!114 &1451735587921290553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9746,7 +9747,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 796746425968109735}
-  _fadeDuration: 1.5
 --- !u!114 &4720837999408531704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9760,7 +9760,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 4604509082086587281}
-  _fadeDuration: 1.5
 --- !u!114 &4952479336719902388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9774,7 +9773,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 5351047565576297601}
-  _fadeDuration: 1.5
 --- !u!114 &8769592201302503650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9788,7 +9786,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 3316531360861225012}
-  _fadeDuration: 1.5
 --- !u!114 &6804300932850869658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9802,7 +9799,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 5395811190157703087}
-  _fadeDuration: 1.5
 --- !u!114 &2951822766687007286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9816,7 +9812,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 4595007973653452148}
-  _fadeDuration: 1.5
 --- !u!114 &849216641521607007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9830,7 +9825,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 1983945859491232856}
-  _fadeDuration: 1.5
 --- !u!114 &2345920454096334748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9844,7 +9838,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DitheredTransparency
   _renderer: {fileID: 4602757647050657792}
-  _fadeDuration: 1.5
 --- !u!136 &758454031172152826
 CapsuleCollider:
   m_ObjectHideFlags: 0
