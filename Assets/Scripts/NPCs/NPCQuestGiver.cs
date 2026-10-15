@@ -3,6 +3,12 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 
+public enum AnimationType
+{
+    Trigger,
+    Int
+}
+
 public class NPCQuestGiver : MonoBehaviour, IEInteractable
 {
     [Header("Quest")]
@@ -13,6 +19,10 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [SerializeField] private string _wavingTrigger = "Waving";
     [SerializeField] private float _rotationSpeed = 5f;
     [SerializeField] private SFXManager.SFXCategoryType _interactSFX = SFXManager.SFXCategoryType.MaleHeySFX;
+
+    [Header("Idle Variant (Initial)")]
+    [SerializeField] private int _idleVariant = 0;
+    [SerializeField] private string _idleVariantParamName = "IdleVariant";
 
     [Header("Reward")]
     [SerializeField] private ItemData _questPrizeItem;
@@ -25,30 +35,49 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [SerializeField] private bool _showOnMap = false;
     [SerializeField] private Vector3 _questDestination;
 
-    [Header("Reposition After Quest")]
+    [Header("Reposition & Animation After Quest")]
     [SerializeField] private bool _moveAfterCompletion = false;
     [SerializeField] private Vector3 _newPosition;
     [SerializeField] private Vector3 _newRotationEuler;
 
+    [SerializeField] private bool _changeAnimationOnCompletion = false;
+    [SerializeField] private AnimationType _completionAnimType = AnimationType.Trigger;
+    [SerializeField] private string _animParamName = "IdleVariant";
+    [SerializeField] private int _newAnimIntValue = 1;
+
     private Animator _animator;
+    private Coroutine _rotateCoroutine;
+    private bool _hasBeenRepositioned = false;
 
     [SerializeField] private Transform _interactionUIPoint;
     public Transform GetInteractionUIPoint()
     {
-        return _interactionUIPoint != null
-            ? _interactionUIPoint
-            : transform;
+        return _interactionUIPoint != null ? _interactionUIPoint : transform;
     }
 
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
+        _animator = GetComponentInChildren<Animator>();
+    }
+
+    private void OnEnable()
+    {
+        if (_animator == null)
+            _animator = GetComponentInChildren<Animator>();
+
+        if (_animator != null && !string.IsNullOrEmpty(_idleVariantParamName))
+        {
+            _animator.SetInteger(_idleVariantParamName, _idleVariant);
+            _animator.Update(0f); // Forces Animator to refresh state immediately on load
+        }
     }
 
     public void Interact(Transform interactorTransform)
     {
         RotateTowardsPlayer(interactorTransform);
-        _animator.SetTrigger(_wavingTrigger);
+        if (_animator != null && !string.IsNullOrEmpty(_wavingTrigger))
+            _animator.SetTrigger(_wavingTrigger);
+
         SFXManager.Instance.PlaySFXAtPosition(_interactSFX, transform.position);
 
         QuestManager.Instance.RegisterQuest(quest);
@@ -106,10 +135,10 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     public bool ShowOnMap => _showOnMap;
     public Vector3 QuestDestination => _questDestination;
 
-    public string GetInteractText() { return _interactText; }
-    public Transform GetTransform() { return transform; }
+    public string GetInteractText() => _interactText;
+    public Transform GetTransform() => transform;
 
-    public bool IsLocked() { return false; }
+    public bool IsLocked() => false;
 
     // --- Localization helper ---
 
@@ -247,7 +276,6 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
             dialogPages = new string[] { fallbackTranslated };
         }
 
-        // Using onAccept for "Yes" to proceed with turn-in, onClose/Decline closes dialog without taking item
         DialogUIController.Instance.OpenDialog(
             pages: dialogPages,
             onAccept: onAcceptTurnIn,
@@ -305,13 +333,53 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
             {
                 QuestManager.Instance.AcknowledgeCompletion(quest.questID);
 
-                if (_moveAfterCompletion)
+                if (!_hasBeenRepositioned && (_moveAfterCompletion || _changeAnimationOnCompletion))
                 {
-                    transform.position = _newPosition;
-                    transform.rotation = Quaternion.Euler(_newRotationEuler);
+                    _hasBeenRepositioned = true;
+
+                    if (UIFadeInFadeOut.Instance != null)
+                    {
+                        UIFadeInFadeOut.Instance.FadeOutIn(() =>
+                        {
+                            ApplyCompletionMoveAndAnimation();
+                        });
+                    }
+                    else
+                    {
+                        ApplyCompletionMoveAndAnimation();
+                    }
                 }
             }
         );
+    }
+
+    private void ApplyCompletionMoveAndAnimation()
+    {
+        if (_rotateCoroutine != null)
+        {
+            StopCoroutine(_rotateCoroutine);
+            _rotateCoroutine = null;
+        }
+
+        if (_moveAfterCompletion)
+        {
+            transform.localPosition = _newPosition;
+            transform.localRotation = Quaternion.Euler(_newRotationEuler);
+        }
+
+        if (_changeAnimationOnCompletion && _animator != null && !string.IsNullOrEmpty(_animParamName))
+        {
+            switch (_completionAnimType)
+            {
+                case AnimationType.Trigger:
+                    _animator.SetTrigger(_animParamName);
+                    break;
+
+                case AnimationType.Int:
+                    _animator.SetInteger(_animParamName, _newAnimIntValue);
+                    break;
+            }
+        }
     }
 
     private void OpenCompletedDialog()
@@ -330,7 +398,11 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         Vector3 dir = interactorTransform.position - transform.position;
         dir.y = 0;
         if (dir == Vector3.zero) return;
-        StartCoroutine(RotateCoroutine(Quaternion.LookRotation(dir)));
+
+        if (_rotateCoroutine != null)
+            StopCoroutine(_rotateCoroutine);
+
+        _rotateCoroutine = StartCoroutine(RotateCoroutine(Quaternion.LookRotation(dir)));
     }
 
     private IEnumerator RotateCoroutine(Quaternion targetRotation)
@@ -345,6 +417,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
             yield return null;
         }
         transform.rotation = targetRotation;
+        _rotateCoroutine = null;
     }
 
 }

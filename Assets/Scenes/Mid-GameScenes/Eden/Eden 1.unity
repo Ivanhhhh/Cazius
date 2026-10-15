@@ -129482,6 +129482,38 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -8.881784e-16
       objectReference: {fileID: 0}
+    - target: {fileID: 8017414527574807737, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.073775575
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017414527574807737, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.000000014901161
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017414527574807737, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.032205667
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017414527574807737, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.35811362
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017414527574807737, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017414527574807737, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.93367803
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017414527574807737, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017414527574807737, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 138.031
+      objectReference: {fileID: 0}
     - target: {fileID: 8065941040928652423, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.000000014900997
@@ -129605,11 +129637,14 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 3512742297041317391, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8776130559922324971, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1265507536}
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7208086676912426499, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
-      insertIndex: 1
-      addedObject: {fileID: 272080709}
+    - targetCorrespondingSourceObject: {fileID: 1606476053072142646, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 928418626}
     - targetCorrespondingSourceObject: {fileID: 7208086676912426499, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       insertIndex: -1
       addedObject: {fileID: 272080710}
@@ -129644,13 +129679,20 @@ MonoBehaviour:
   _wavingTrigger: Waving
   _rotationSpeed: 5
   _interactSFX: 3
+  _idleVariant: 0
+  _idleVariantParamName: IdleVariant
   _questPrizeItem: {fileID: 11400000, guid: 33d5c6a2c4a26c645b85e9080f8eea8c, type: 2}
   _removeItemOnCompletion: 1
+  _defaultItemTurnInConfirmID: dialog_default_item_turn_in_confirm
   _showOnMap: 0
   _questDestination: {x: 0, y: 0, z: 0}
   _moveAfterCompletion: 0
   _newPosition: {x: 0, y: 0, z: 0}
   _newRotationEuler: {x: 0, y: 0, z: 0}
+  _changeAnimationOnCompletion: 0
+  _completionAnimType: 0
+  _animParamName: IdleSubtle
+  _newAnimIntValue: 1
   _interactionUIPoint: {fileID: 272080707}
 --- !u!4 &272080707 stripped
 Transform:
@@ -129662,31 +129704,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7208086676912426499, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
   m_PrefabInstance: {fileID: 272080703}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &272080709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 272080708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad495b62dbed61b42b988d5f6b93dbc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NPCQuestGiver
-  quest: {fileID: 11400000, guid: a8ba0962e345e334da6112d4191f98a7, type: 2}
-  _interactText: F to talk
-  _wavingTrigger: Waving
-  _rotationSpeed: 5
-  _interactSFX: 3
-  _questPrizeItem: {fileID: 11400000, guid: 33d5c6a2c4a26c645b85e9080f8eea8c, type: 2}
-  _removeItemOnCompletion: 1
-  _showOnMap: 0
-  _questDestination: {x: 0, y: 0, z: 0}
-  _moveAfterCompletion: 0
-  _newPosition: {x: 0, y: 0, z: 0}
-  _newRotationEuler: {x: 0, y: 0, z: 0}
-  _interactionUIPoint: {fileID: 272080707}
 --- !u!95 &272080710
 Animator:
   serializedVersion: 7
@@ -330174,6 +330191,43 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 928319556}
   m_Mesh: {fileID: -6990799182788483446, guid: b5e59165a8cfa12419904784a1f9bc94, type: 3}
+--- !u!1 &928418625 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1606476053072142646, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+  m_PrefabInstance: {fileID: 272080703}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &928418626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 928418625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad495b62dbed61b42b988d5f6b93dbc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCQuestGiver
+  quest: {fileID: 11400000, guid: a8ba0962e345e334da6112d4191f98a7, type: 2}
+  _interactText: F to talk
+  _wavingTrigger: Waving
+  _rotationSpeed: 5
+  _interactSFX: 3
+  _idleVariant: 0
+  _idleVariantParamName: IdleVariant
+  _questPrizeItem: {fileID: 11400000, guid: 33d5c6a2c4a26c645b85e9080f8eea8c, type: 2}
+  _removeItemOnCompletion: 1
+  _defaultItemTurnInConfirmID: dialog_default_item_turn_in_confirm
+  _showOnMap: 0
+  _questDestination: {x: 0, y: 0, z: 0}
+  _moveAfterCompletion: 1
+  _newPosition: {x: 3, y: 0, z: 13}
+  _newRotationEuler: {x: 0, y: 0, z: 0}
+  _changeAnimationOnCompletion: 1
+  _completionAnimType: 1
+  _animParamName: IdleVariant
+  _newAnimIntValue: 1
+  _interactionUIPoint: {fileID: 272080707}
 --- !u!1001 &928859295
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -448531,6 +448585,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4284703049991547776, guid: 3596894636a5fc84982ed2c84a5e2e67, type: 3}
   m_PrefabInstance: {fileID: 1189315368}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1189320935 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1606476053072142646, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+  m_PrefabInstance: {fileID: 1429881539}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1189454147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -472724,7 +472783,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1391987413}
+    m_TransformParent: {fileID: 272080704}
     m_Modifications:
     - target: {fileID: 5800109247366545777, guid: 2370cf146b59f9445a35f537a1488e43, type: 3}
       propertyPath: m_Name
@@ -472784,11 +472843,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7629919227100607716, guid: 2370cf146b59f9445a35f537a1488e43, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 18.03482
+      value: -0.016077992
       objectReference: {fileID: 0}
     - target: {fileID: 7629919227100607716, guid: 2370cf146b59f9445a35f537a1488e43, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.94356084
       objectReference: {fileID: 0}
     - target: {fileID: 7629919227100607716, guid: 2370cf146b59f9445a35f537a1488e43, type: 3}
       propertyPath: m_LocalRotation.x
@@ -472796,7 +472855,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7629919227100607716, guid: 2370cf146b59f9445a35f537a1488e43, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.3311993
       objectReference: {fileID: 0}
     - target: {fileID: 7629919227100607716, guid: 2370cf146b59f9445a35f537a1488e43, type: 3}
       propertyPath: m_LocalRotation.z
@@ -472804,11 +472863,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7629919227100607716, guid: 2370cf146b59f9445a35f537a1488e43, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -4.3263893
+      value: 0.016716003
       objectReference: {fileID: 0}
     - target: {fileID: 7629919227100607716, guid: 2370cf146b59f9445a35f537a1488e43, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.90011
+      value: 1.9209999
       objectReference: {fileID: 0}
     - target: {fileID: 7629919227100607716, guid: 2370cf146b59f9445a35f537a1488e43, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -516735,7 +516794,6 @@ Transform:
   - {fileID: 247996191}
   - {fileID: 754823958}
   - {fileID: 3866128}
-  - {fileID: 1265507536}
   - {fileID: 1551475403}
   - {fileID: 739192827}
   - {fileID: 1286699785}
@@ -534546,6 +534604,26 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -8.881784e-16
       objectReference: {fileID: 0}
+    - target: {fileID: 8017414527574807737, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017414527574807737, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017414527574807737, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017414527574807737, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017414527574807737, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8065941040928652423, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.000000014900997
@@ -534600,19 +534678,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8776130559922324971, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 15.09
+      value: 15.071064
       objectReference: {fileID: 0}
     - target: {fileID: 8776130559922324971, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.020890005
+      value: -0.02088999
       objectReference: {fileID: 0}
     - target: {fileID: 8776130559922324971, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 17.71
+      value: 17.793621
       objectReference: {fileID: 0}
     - target: {fileID: 8776130559922324971, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.94356084
+      value: -0.23039548
       objectReference: {fileID: 0}
     - target: {fileID: 8776130559922324971, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       propertyPath: m_LocalRotation.x
@@ -534620,7 +534698,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8776130559922324971, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.3311993
+      value: 0.9730971
       objectReference: {fileID: 0}
     - target: {fileID: 8776130559922324971, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       propertyPath: m_LocalRotation.z
@@ -534632,7 +534710,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8776130559922324971, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 38.683
+      value: 206.641
       objectReference: {fileID: 0}
     - target: {fileID: 8776130559922324971, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -534671,8 +534749,8 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7208086676912426499, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
-      insertIndex: 1
+    - targetCorrespondingSourceObject: {fileID: 1606476053072142646, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1429881545}
     - targetCorrespondingSourceObject: {fileID: 7208086676912426499, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       insertIndex: -1
@@ -534718,13 +534796,20 @@ MonoBehaviour:
   _wavingTrigger: Waving
   _rotationSpeed: 5
   _interactSFX: 3
+  _idleVariant: 0
+  _idleVariantParamName: IdleVariant
   _questPrizeItem: {fileID: 11400000, guid: 33d5c6a2c4a26c645b85e9080f8eea8c, type: 2}
   _removeItemOnCompletion: 1
+  _defaultItemTurnInConfirmID: dialog_default_item_turn_in_confirm
   _showOnMap: 0
   _questDestination: {x: 0, y: 0, z: 0}
   _moveAfterCompletion: 0
   _newPosition: {x: 0, y: 0, z: 0}
   _newRotationEuler: {x: 0, y: 0, z: 0}
+  _changeAnimationOnCompletion: 0
+  _completionAnimType: 0
+  _animParamName: IdleSubtle
+  _newAnimIntValue: 1
   _interactionUIPoint: {fileID: 1429881541}
 --- !u!114 &1429881545
 MonoBehaviour:
@@ -534732,7 +534817,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1429881543}
+  m_GameObject: {fileID: 1189320935}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad495b62dbed61b42b988d5f6b93dbc3, type: 3}
@@ -534743,13 +534828,20 @@ MonoBehaviour:
   _wavingTrigger: Waving
   _rotationSpeed: 5
   _interactSFX: 3
+  _idleVariant: 0
+  _idleVariantParamName: IdleVariant
   _questPrizeItem: {fileID: 0}
   _removeItemOnCompletion: 1
+  _defaultItemTurnInConfirmID: dialog_default_item_turn_in_confirm
   _showOnMap: 0
   _questDestination: {x: 0, y: 0, z: 0}
-  _moveAfterCompletion: 0
+  _moveAfterCompletion: 1
   _newPosition: {x: 0, y: 0, z: 0}
   _newRotationEuler: {x: 0, y: 0, z: 0}
+  _changeAnimationOnCompletion: 0
+  _completionAnimType: 0
+  _animParamName: IdleSubtle
+  _newAnimIntValue: 1
   _interactionUIPoint: {fileID: 1429881541}
 --- !u!95 &1429881546
 Animator:

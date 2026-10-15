@@ -9,11 +9,11 @@ public class BasicFloat : MonoBehaviour
 
     void Start()
     {
-        startPos = transform.position;
+        startPos = transform.localPosition;
     }
 
     void Update()
     {
-        transform.position = startPos + Vector3.up * Mathf.Sin(Time.time * speed) * height;
+        transform.localPosition = startPos + Vector3.up * Mathf.Sin(Time.time * speed) * height;
     }
 }

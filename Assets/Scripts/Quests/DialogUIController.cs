@@ -168,17 +168,14 @@ public class DialogUIController : MonoBehaviour
 
     private void CloseDialogSequence(Action callback)
     {
-        // 1. Visually hide current dialogue
         dialogPanel.SetActive(false);
-
-        // 2. Execute callback (e.g., remove item, advance stage, or open next dialogue)
         callback?.Invoke();
 
-        // 3. Only disable dialogue input & free player if NO new dialogue was opened by the callback
         if (!dialogPanel.activeSelf)
         {
             GameInputManager.Instance.DisableDialogInput();
             OnDialogClosed?.Invoke();
         }
     }
+
 }
