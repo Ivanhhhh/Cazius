@@ -4,6 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Transform _cameraTransform;
+    [SerializeField] private Transform _cameraRigTransform;
     [SerializeField] private Transform _cameraTarget;
     [SerializeField] private Animator _animator;
     [SerializeField] private Camera playerCamera;
@@ -237,9 +238,9 @@ public class PlayerMovement : MonoBehaviour
         // sphere literally cannot fit — it stays as close as physically possible.
 
         Vector3 desiredPosition = pivotPosition
-                                + transform.right * _currentXOffset
-                                + Vector3.up * dynamicYOffset
-                                + transform.forward * dynamicZOffset;
+                              + transform.right * _currentXOffset
+                              + Vector3.up * dynamicYOffset
+                              + transform.forward * dynamicZOffset;
 
         Vector3 direction = desiredPosition - pivotPosition;
         float distance = direction.magnitude;
@@ -248,18 +249,24 @@ public class PlayerMovement : MonoBehaviour
                                 out RaycastHit hit, distance, _cameraCollisionMask))
         {
             float safeDistance = Mathf.Max(0f, hit.distance - _sphereCollisionRadius);
-            _cameraTransform.position = pivotPosition + direction.normalized * safeDistance;
+
+            //  Move CameraRig instead of Main Camera
+            _cameraRigTransform.position =
+                pivotPosition + direction.normalized * safeDistance;
         }
         else
         {
-            _cameraTransform.position = desiredPosition;
+            _cameraRigTransform.position = desiredPosition;
         }
 
-        // ── 3. Orientation + recoil ───────────────────────────────────────────
-        _cameraTransform.LookAt(_cameraTarget.position);
-        _cameraTransform.rotation *= Quaternion.Euler(_recoil.CurrentRotation);
+        // ── 3. Orientation + recoil ──
 
-        // ── 4. Rig aim target ─────────────────────────────────────────────────
+        // Rotate CameraRig instead of Main Camera
+        _cameraRigTransform.LookAt(_cameraTarget.position);
+
+        _cameraRigTransform.rotation *= Quaternion.Euler(_recoil.CurrentRotation);
+
+        // ── 4. Rig aim target ──
         UpdateAimTarget();
 
         HandleVisualAimRotation();
