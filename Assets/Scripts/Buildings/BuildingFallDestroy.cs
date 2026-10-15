@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class BuildingFallDestroy : MonoBehaviour
@@ -13,9 +12,13 @@ public class BuildingFallDestroy : MonoBehaviour
     [Header("Impact Shake")]
     [SerializeField] private float _impactShakeStrength = 0.3f;
     [SerializeField] private float _impactShakeDuration = 2f;
-    [SerializeField] private float _impactShakeDelay = 1.5f;
+
+    [Header("Destruction Particles")]
+    [SerializeField] private ParticleSystem[] _initialParticles;
+    [SerializeField] private ParticleSystem[] _impactParticles;
 
     private bool _hasTriggered = false;
+    private bool _impactTriggered = false;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -27,29 +30,45 @@ public class BuildingFallDestroy : MonoBehaviour
 
         _hasTriggered = true;
 
-        StartCoroutine(BuildingDestroyCoroutine());
-    }
-
-    private IEnumerator BuildingDestroyCoroutine()
-    {
         // Start building destruction animation
         _animator.SetTrigger("Destroy");
+    }
 
-        // Small initial camera shake
+    // ANIMATION EVENT: Building starts collapsing
+    public void AnimationEvent_InitialDestruction()
+    {
         CameraShakeManager.Instance.CameraShake(
             _initialShakeStrength,
             _initialShakeDuration
         );
 
-        // Wait until building impacts the ground
-        yield return new WaitForSeconds(_impactShakeDelay);
+        PlayParticles(_initialParticles);
+    }
 
-        // Strong impact camera shake (overwrites previous shake)
+    // ANIMATION EVENT: Building impacts the ground
+    public void AnimationEvent_Impact()
+    {
+        if (_impactTriggered)
+            return;
+
+        _impactTriggered = true;
+
         CameraShakeManager.Instance.CameraShake(
             _impactShakeStrength,
             _impactShakeDuration
         );
 
-        // FUTURE: Activate destruction particles here
+        PlayParticles(_impactParticles);
+    }
+
+    private void PlayParticles(ParticleSystem[] particles)
+    {
+        foreach (ParticleSystem particle in particles)
+        {
+            if (particle == null)
+                continue;
+
+            particle.Play();
+        }
     }
 }
