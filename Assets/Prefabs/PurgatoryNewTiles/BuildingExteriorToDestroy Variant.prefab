@@ -10609,6 +10609,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 198478463879549699, guid: daa5e6dd69040404cadda0e8703d0f5a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4408052110047452970}
+    - targetCorrespondingSourceObject: {fileID: 198478463879549699, guid: daa5e6dd69040404cadda0e8703d0f5a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 40044482976841907}
+    - targetCorrespondingSourceObject: {fileID: 198478463879549699, guid: daa5e6dd69040404cadda0e8703d0f5a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6245317477742221105}
   m_SourcePrefab: {fileID: 100100000, guid: daa5e6dd69040404cadda0e8703d0f5a, type: 3}
 --- !u!1 &1534115570630783589 stripped
 GameObject:
@@ -10637,6 +10643,45 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &40044482976841907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1534115570630783589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 453b2349a9a57c242b7ab321ab8a63d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingFallDestroy
+  _animator: {fileID: 4408052110047452970}
+  _initialShakeStrength: 0.05
+  _initialShakeDuration: 2
+  _impactShakeStrength: 0.3
+  _impactShakeDuration: 2
+  _impactShakeDelay: 1.9
+--- !u!65 &6245317477742221105
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1534115570630783589}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 15.64, y: 0, z: 14.57}
 --- !u!4 &2729191724300584260 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3633120180383753250, guid: daa5e6dd69040404cadda0e8703d0f5a, type: 3}
