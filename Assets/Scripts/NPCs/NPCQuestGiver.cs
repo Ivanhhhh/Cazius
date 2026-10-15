@@ -18,6 +18,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
     [SerializeField] private float _rotationSpeed = 5f;
+    [SerializeField] private bool _rotateTowardsPlayer = true;
     [SerializeField] private SFXManager.SFXCategoryType _interactSFX = SFXManager.SFXCategoryType.MaleHeySFX;
 
     [Header("Idle Variant (Initial)")]
@@ -39,6 +40,8 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [SerializeField] private bool _moveAfterCompletion = false;
     [SerializeField] private Vector3 _newPosition;
     [SerializeField] private Vector3 _newRotationEuler;
+
+    [SerializeField] private bool _rotateTowardsPlayerAfterCompletion = false;
 
     [SerializeField] private bool _changeAnimationOnCompletion = false;
     [SerializeField] private AnimationType _completionAnimType = AnimationType.Trigger;
@@ -74,7 +77,10 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
 
     public void Interact(Transform interactorTransform)
     {
-        RotateTowardsPlayer(interactorTransform);
+        bool canRotate = _hasBeenRepositioned ? _rotateTowardsPlayerAfterCompletion : _rotateTowardsPlayer;
+        if (canRotate)
+            RotateTowardsPlayer(interactorTransform);
+
         if (_animator != null && !string.IsNullOrEmpty(_wavingTrigger))
             _animator.SetTrigger(_wavingTrigger);
 
