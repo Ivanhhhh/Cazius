@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -18,6 +19,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
 
     [Header("Item Quest")]
     [SerializeField] private bool _removeItemOnCompletion = false;
+    [SerializeField] private string _defaultItemTurnInConfirmID = "dialog_default_item_turn_in_confirm";
 
     [Header("Map")]
     [SerializeField] private bool _showOnMap = false;
@@ -85,7 +87,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                 break;
 
             case QuestStatus.Active:
-                if (quest.condition.IsMet(quest.conditionTargetID))
+                if (quest.condition != null && quest.condition.IsMet(quest.conditionTargetID))
                     OpenCompletionDialog();
                 else
                     OpenActiveDialog();
@@ -113,6 +115,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
 
     private string[] Translate(string[] ids)
     {
+        if (ids == null || ids.Length == 0) return new string[0];
         return ids.Select(id => LocalizationManager.Instance.GetTranslate(id)).ToArray();
     }
 
@@ -199,37 +202,89 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         if (quest.useStages)
         {
             int stageIndex = QuestManager.Instance.GetStageIndex(quest.questID);
-            QuestStage currentStage = quest.stages != null && stageIndex >= 0 && stageIndex < quest.stages.Count
+            QuestStage currentStage = (quest.stages != null && stageIndex >= 0 && stageIndex < quest.stages.Count)
                 ? quest.stages[stageIndex]
                 : null;
 
-            bool didAdvance = QuestManager.Instance.TryAdvanceStage(quest.questID);
-            if (!didAdvance) return;
+            bool isItemTurnInStage = currentStage != null && currentStage.removeItemOnAdvance && currentStage.itemToRemoveOnAdvance != null;
 
-            bool isNowJustCompleted = QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted;
-
-            if (isNowJustCompleted)
+            if (isItemTurnInStage)
             {
-                if (_questPrizeItem != null)
-                    Inventory.Instance.AddItem(_questPrizeItem);
-                OpenFirstCompletionDialog();
-                return;
-            }
-
-            if (currentStage != null && currentStage.stageReadyDialog != null && currentStage.stageReadyDialog.Length > 0)
-            {
-                DialogUIController.Instance.OpenDialog(
-                    pages: Translate(currentStage.stageReadyDialog),
-                    onAccept: null,
-                    onClose: () => OpenStageOfferDialog()
+                OpenItemTurnInConfirmation(
+                    customDialog: currentStage.itemTurnInConfirmDialog,
+                    onAcceptTurnIn: () => ProcessMultiStageAdvancement(currentStage)
                 );
                 return;
             }
 
-            OpenStageOfferDialog();
+            ProcessMultiStageAdvancement(currentStage);
             return;
         }
 
+        if (_removeItemOnCompletion)
+        {
+            OpenItemTurnInConfirmation(
+                customDialog: quest.itemTurnInConfirmDialog,
+                onAcceptTurnIn: () => ProcessSingleStageCompletion()
+            );
+            return;
+        }
+
+        ProcessSingleStageCompletion();
+    }
+
+    private void OpenItemTurnInConfirmation(string[] customDialog, Action onAcceptTurnIn)
+    {
+        string[] dialogPages;
+
+        if (customDialog != null && customDialog.Length > 0)
+        {
+            dialogPages = Translate(customDialog);
+        }
+        else
+        {
+            string fallbackTranslated = LocalizationManager.Instance.GetTranslate(_defaultItemTurnInConfirmID);
+            dialogPages = new string[] { fallbackTranslated };
+        }
+
+        // Using onAccept for "Yes" to proceed with turn-in, onClose/Decline closes dialog without taking item
+        DialogUIController.Instance.OpenDialog(
+            pages: dialogPages,
+            onAccept: onAcceptTurnIn,
+            onClose: null
+        );
+    }
+
+    private void ProcessMultiStageAdvancement(QuestStage currentStage)
+    {
+        bool didAdvance = QuestManager.Instance.TryAdvanceStage(quest.questID);
+        if (!didAdvance) return;
+
+        bool isNowJustCompleted = QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted;
+
+        if (isNowJustCompleted)
+        {
+            if (_questPrizeItem != null)
+                Inventory.Instance.AddItem(_questPrizeItem);
+            OpenFirstCompletionDialog();
+            return;
+        }
+
+        if (currentStage != null && currentStage.stageReadyDialog != null && currentStage.stageReadyDialog.Length > 0)
+        {
+            DialogUIController.Instance.OpenDialog(
+                pages: Translate(currentStage.stageReadyDialog),
+                onAccept: null,
+                onClose: () => OpenStageOfferDialog()
+            );
+            return;
+        }
+
+        OpenStageOfferDialog();
+    }
+
+    private void ProcessSingleStageCompletion()
+    {
         QuestManager.Instance.CompleteQuest(quest.questID);
 
         if (_questPrizeItem != null)

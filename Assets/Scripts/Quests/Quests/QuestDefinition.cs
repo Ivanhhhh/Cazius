@@ -32,6 +32,11 @@ public class QuestStage
     [Header("Stage active prompt")]
     [TextArea(2, 5)]
     public string[] stageActiveDialog;
+
+    [Header("Stage Turn-In Confirmation (Optional)")]
+    [TextArea(2, 5)]
+    [Tooltip("Custom confirmation text before handing over the item. If empty, falls back to default localized key.")]
+    public string[] itemTurnInConfirmDialog;
 }
 
 [CreateAssetMenu(fileName = "NewQuest",
@@ -67,4 +72,9 @@ public class QuestDefinition : ScriptableObject
     [Header("Dialog - Completed (plays every time after)")]
     [TextArea(2, 5)]
     public string[] completedDialog;
+
+    [Header("Dialog - Turn-In Confirmation (Optional)")]
+    [TextArea(2, 5)]
+    [Tooltip("Custom confirmation text for single-stage item quests. If empty, falls back to default localized key.")]
+    public string[] itemTurnInConfirmDialog;
 }
