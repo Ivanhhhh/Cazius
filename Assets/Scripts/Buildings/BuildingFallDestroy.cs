@@ -4,6 +4,7 @@ public class BuildingFallDestroy : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Animator _animator;
+    [SerializeField] private float _soundStrength = 1f;
 
     [Header("Initial Shake")]
     [SerializeField] private float _initialShakeStrength = 0.05f;
@@ -16,9 +17,11 @@ public class BuildingFallDestroy : MonoBehaviour
     [Header("Destruction Particles")]
     [SerializeField] private ParticleSystem[] _initialParticles;
     [SerializeField] private ParticleSystem[] _impactParticles;
+    [SerializeField] private ParticleSystem[] _impactDustParticles;
 
     private bool _hasTriggered = false;
     private bool _impactTriggered = false;
+    private bool _impactDustTriggered = false;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -30,22 +33,16 @@ public class BuildingFallDestroy : MonoBehaviour
 
         _hasTriggered = true;
 
-        // Start building destruction animation
         _animator.SetTrigger("Destroy");
     }
 
-    // ANIMATION EVENT: Building starts collapsing
     public void AnimationEvent_InitialDestruction()
     {
-        CameraShakeManager.Instance.CameraShake(
-            _initialShakeStrength,
-            _initialShakeDuration
-        );
-
+        CameraShakeManager.Instance.CameraShake(_initialShakeStrength, _initialShakeDuration);
         PlayParticles(_initialParticles);
+        SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RockCrumble, _soundStrength);
     }
 
-    // ANIMATION EVENT: Building impacts the ground
     public void AnimationEvent_Impact()
     {
         if (_impactTriggered)
@@ -53,12 +50,18 @@ public class BuildingFallDestroy : MonoBehaviour
 
         _impactTriggered = true;
 
-        CameraShakeManager.Instance.CameraShake(
-            _impactShakeStrength,
-            _impactShakeDuration
-        );
-
+        CameraShakeManager.Instance.CameraShake(_impactShakeStrength, _impactShakeDuration);
         PlayParticles(_impactParticles);
+    }
+
+    public void AnimationEvent_ImpactDust()
+    {
+        if (_impactDustTriggered)
+            return;
+
+        _impactDustTriggered = true;
+
+        PlayParticles(_impactDustParticles);
     }
 
     private void PlayParticles(ParticleSystem[] particles)
