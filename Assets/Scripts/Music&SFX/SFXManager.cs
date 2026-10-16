@@ -36,6 +36,7 @@ public class SFXManager : MonoBehaviour
         NPCTalkSFX,
         RocksSFX,
         SmokeSFX,
+        StepsSFX
         // Add Categories here
     }
 
