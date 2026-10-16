@@ -7,6 +7,8 @@ public class QuestManager : MonoBehaviour
 {
     public static QuestManager Instance { get; private set; }
     public static event Action OnQuestUpdated;
+    public static event Action<string> OnQuestStarted;
+    public static event Action<string> OnQuestJustCompleted;
 
     private Dictionary<string, QuestDefinition> _questDefinitions = new();
     private Dictionary<string, QuestStatus> _questStates = new();
@@ -184,6 +186,7 @@ public class QuestManager : MonoBehaviour
 
         if (SaveManager.Instance != null) SaveManager.Instance.Save();
         OnQuestUpdated?.Invoke();
+        OnQuestStarted?.Invoke(questID);
     }
 
     public void CompleteQuest(string questID)
@@ -202,6 +205,7 @@ public class QuestManager : MonoBehaviour
         _questStates[questID] = QuestStatus.Completed;
         if (SaveManager.Instance != null) SaveManager.Instance.Save();
         OnQuestUpdated?.Invoke();
+        OnQuestJustCompleted?.Invoke(questID);
     }
 
     // --- UI queries ---

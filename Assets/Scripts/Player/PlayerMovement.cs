@@ -334,12 +334,17 @@ public class PlayerMovement : MonoBehaviour
 
         if (move.sqrMagnitude > 1f)
             move.Normalize();
+            
 
         _rb.linearVelocity = new Vector3(
             move.x * actualSpeed,
             _rb.linearVelocity.y,
             move.z * actualSpeed
+            
         );
+
+        
+            
 
         _rb.AddForce(Vector3.down * _groundingForce, ForceMode.Force);
 
@@ -623,4 +628,7 @@ public class PlayerMovement : MonoBehaviour
             _animator.SetBool("IsAiming", false);
         }
     }
+
+    
+
 }

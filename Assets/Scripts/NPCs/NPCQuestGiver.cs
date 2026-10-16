@@ -1,6 +1,13 @@
+using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+
+public enum AnimationType
+{
+    Trigger,
+    Int
+}
 
 public class NPCQuestGiver : MonoBehaviour, IEInteractable
 {
@@ -11,42 +18,130 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [SerializeField] private string _interactText = "F to talk";
     [SerializeField] private string _wavingTrigger = "Waving";
     [SerializeField] private float _rotationSpeed = 5f;
+    [SerializeField] private bool _rotateTowardsPlayer = true;
     [SerializeField] private SFXManager.SFXCategoryType _interactSFX = SFXManager.SFXCategoryType.MaleHeySFX;
+
+    [Header("Idle Variant (Initial)")]
+    [SerializeField] private int _idleVariant = 0;
+    [SerializeField] private string _idleVariantParamName = "IdleVariant";
 
     [Header("Reward")]
     [SerializeField] private ItemData _questPrizeItem;
 
     [Header("Item Quest")]
     [SerializeField] private bool _removeItemOnCompletion = false;
+    [SerializeField] private string _defaultItemTurnInConfirmID = "dialog_default_item_turn_in_confirm";
 
     [Header("Map")]
     [SerializeField] private bool _showOnMap = false;
     [SerializeField] private Vector3 _questDestination;
 
-    [Header("Reposition After Quest")]
+    [Header("Reposition & Animation After Quest")]
     [SerializeField] private bool _moveAfterCompletion = false;
     [SerializeField] private Vector3 _newPosition;
     [SerializeField] private Vector3 _newRotationEuler;
 
+    [SerializeField] private bool _rotateTowardsPlayerAfterCompletion = false;
+
+    [SerializeField] private bool _changeAnimationOnCompletion = false;
+    [SerializeField] private AnimationType _completionAnimType = AnimationType.Trigger;
+    [SerializeField] private string _animParamName = "IdleVariant";
+    [SerializeField] private int _newAnimIntValue = 1;
+
+    [Header("Patrol After Quest (Optional)")]
+    [SerializeField] private bool _enablePatrolOnCompletion = false;
+    [SerializeField] private NPCController _npcController;
+
     private Animator _animator;
+    private Coroutine _rotateCoroutine;
+    private bool _hasBeenRepositioned = false;
 
     [SerializeField] private Transform _interactionUIPoint;
     public Transform GetInteractionUIPoint()
     {
-        return _interactionUIPoint != null
-            ? _interactionUIPoint
-            : transform;
+        return _interactionUIPoint != null ? _interactionUIPoint : transform;
     }
 
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
+        _animator = GetComponentInChildren<Animator>();
+
+        if (_npcController == null)
+            _npcController = GetComponent<NPCController>();
+    }
+
+    private void OnEnable()
+    {
+        if (_animator == null)
+            _animator = GetComponentInChildren<Animator>();
+
+        ApplyStateFromQuestStatus();
+    }
+
+    private void Start()
+    {
+        ApplyStateFromQuestStatus();
+    }
+
+    private void ApplyStateFromQuestStatus()
+    {
+        if (_animator == null || quest == null || QuestManager.Instance == null) return;
+
+        QuestStatus status = QuestManager.Instance.GetStatus(quest.questID);
+
+        if (status == QuestStatus.Completed || status == QuestStatus.JustCompleted || _hasBeenRepositioned)
+        {
+            _hasBeenRepositioned = true;
+
+            if (_enablePatrolOnCompletion && _npcController != null)
+            {
+                _npcController.enabled = true;
+            }
+
+            if (_changeAnimationOnCompletion && !string.IsNullOrEmpty(_animParamName))
+            {
+                switch (_completionAnimType)
+                {
+                    case AnimationType.Trigger:
+                        _animator.SetTrigger(_animParamName);
+                        break;
+
+                    case AnimationType.Int:
+                        _animator.SetInteger(_animParamName, _newAnimIntValue);
+                        break;
+                }
+            }
+        }
+        else
+        {
+            if (_enablePatrolOnCompletion && _npcController != null)
+            {
+                _npcController.enabled = false;
+            }
+
+            if (!string.IsNullOrEmpty(_idleVariantParamName))
+            {
+                _animator.SetInteger(_idleVariantParamName, _idleVariant);
+                _animator.Update(0f);
+            }
+        }
     }
 
     public void Interact(Transform interactorTransform)
     {
-        RotateTowardsPlayer(interactorTransform);
-        _animator.SetTrigger(_wavingTrigger);
+        // Pause waypoint patrol during dialogue if active
+        if (_npcController != null && _npcController.enabled && _npcController.Machine != null)
+        {
+            _npcController.Machine.ChangeState(_npcController.TalkingState);
+        }
+
+        bool canRotate = _hasBeenRepositioned ? _rotateTowardsPlayerAfterCompletion : _rotateTowardsPlayer;
+        if (canRotate)
+            RotateTowardsPlayer(interactorTransform);
+
+        if (_animator != null && !string.IsNullOrEmpty(_wavingTrigger))
+            _animator.SetTrigger(_wavingTrigger);
+
         SFXManager.Instance.PlaySFXAtPosition(_interactSFX, transform.position);
 
         QuestManager.Instance.RegisterQuest(quest);
@@ -85,7 +180,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                 break;
 
             case QuestStatus.Active:
-                if (quest.condition.IsMet(quest.conditionTargetID))
+                if (quest.condition != null && quest.condition.IsMet(quest.conditionTargetID))
                     OpenCompletionDialog();
                 else
                     OpenActiveDialog();
@@ -104,19 +199,28 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     public bool ShowOnMap => _showOnMap;
     public Vector3 QuestDestination => _questDestination;
 
-    public string GetInteractText() { return _interactText; }
-    public Transform GetTransform() { return transform; }
+    public string GetInteractText() => _interactText;
+    public Transform GetTransform() => transform;
 
-    public bool IsLocked() { return false; }
+    public bool IsLocked() => false;
 
     // --- Localization helper ---
 
     private string[] Translate(string[] ids)
     {
+        if (ids == null || ids.Length == 0) return new string[0];
         return ids.Select(id => LocalizationManager.Instance.GetTranslate(id)).ToArray();
     }
 
     // --- Dialog openers ---
+
+    private void OnDialogClose()
+    {
+        if (_npcController != null && _npcController.enabled && _npcController.Machine != null)
+        {
+            _npcController.Machine.ChangeState(_npcController.IdleState);
+        }
+    }
 
     private void OpenOfferDialog()
     {
@@ -130,7 +234,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                     if (QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.Active)
                         OpenStageOfferDialog();
                 },
-                onClose: null
+                onClose: OnDialogClose
             );
             return;
         }
@@ -138,7 +242,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: Translate(quest.offerDialog),
             onAccept: () => QuestManager.Instance.StartQuest(quest.questID),
-            onClose: null
+            onClose: OnDialogClose
         );
     }
 
@@ -163,7 +267,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: Translate(stage.stageOfferDialog),
             onAccept: null,
-            onClose: null
+            onClose: OnDialogClose
         );
     }
 
@@ -180,7 +284,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                     DialogUIController.Instance.OpenDialog(
                         pages: Translate(stage.stageActiveDialog),
                         onAccept: null,
-                        onClose: null
+                        onClose: OnDialogClose
                     );
                     return;
                 }
@@ -190,7 +294,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: Translate(quest.activeDialog),
             onAccept: null,
-            onClose: null
+            onClose: OnDialogClose
         );
     }
 
@@ -199,37 +303,88 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         if (quest.useStages)
         {
             int stageIndex = QuestManager.Instance.GetStageIndex(quest.questID);
-            QuestStage currentStage = quest.stages != null && stageIndex >= 0 && stageIndex < quest.stages.Count
+            QuestStage currentStage = (quest.stages != null && stageIndex >= 0 && stageIndex < quest.stages.Count)
                 ? quest.stages[stageIndex]
                 : null;
 
-            bool didAdvance = QuestManager.Instance.TryAdvanceStage(quest.questID);
-            if (!didAdvance) return;
+            bool isItemTurnInStage = currentStage != null && currentStage.removeItemOnAdvance && currentStage.itemToRemoveOnAdvance != null;
 
-            bool isNowJustCompleted = QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted;
-
-            if (isNowJustCompleted)
+            if (isItemTurnInStage)
             {
-                if (_questPrizeItem != null)
-                    Inventory.Instance.AddItem(_questPrizeItem);
-                OpenFirstCompletionDialog();
-                return;
-            }
-
-            if (currentStage != null && currentStage.stageReadyDialog != null && currentStage.stageReadyDialog.Length > 0)
-            {
-                DialogUIController.Instance.OpenDialog(
-                    pages: Translate(currentStage.stageReadyDialog),
-                    onAccept: null,
-                    onClose: () => OpenStageOfferDialog()
+                OpenItemTurnInConfirmation(
+                    customDialog: currentStage.itemTurnInConfirmDialog,
+                    onAcceptTurnIn: () => ProcessMultiStageAdvancement(currentStage)
                 );
                 return;
             }
 
-            OpenStageOfferDialog();
+            ProcessMultiStageAdvancement(currentStage);
             return;
         }
 
+        if (_removeItemOnCompletion)
+        {
+            OpenItemTurnInConfirmation(
+                customDialog: quest.itemTurnInConfirmDialog,
+                onAcceptTurnIn: () => ProcessSingleStageCompletion()
+            );
+            return;
+        }
+
+        ProcessSingleStageCompletion();
+    }
+
+    private void OpenItemTurnInConfirmation(string[] customDialog, Action onAcceptTurnIn)
+    {
+        string[] dialogPages;
+
+        if (customDialog != null && customDialog.Length > 0)
+        {
+            dialogPages = Translate(customDialog);
+        }
+        else
+        {
+            string fallbackTranslated = LocalizationManager.Instance.GetTranslate(_defaultItemTurnInConfirmID);
+            dialogPages = new string[] { fallbackTranslated };
+        }
+
+        DialogUIController.Instance.OpenDialog(
+            pages: dialogPages,
+            onAccept: onAcceptTurnIn,
+            onClose: OnDialogClose
+        );
+    }
+
+    private void ProcessMultiStageAdvancement(QuestStage currentStage)
+    {
+        bool didAdvance = QuestManager.Instance.TryAdvanceStage(quest.questID);
+        if (!didAdvance) return;
+
+        bool isNowJustCompleted = QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted;
+
+        if (isNowJustCompleted)
+        {
+            if (_questPrizeItem != null)
+                Inventory.Instance.AddItem(_questPrizeItem);
+            OpenFirstCompletionDialog();
+            return;
+        }
+
+        if (currentStage != null && currentStage.stageReadyDialog != null && currentStage.stageReadyDialog.Length > 0)
+        {
+            DialogUIController.Instance.OpenDialog(
+                pages: Translate(currentStage.stageReadyDialog),
+                onAccept: null,
+                onClose: () => OpenStageOfferDialog()
+            );
+            return;
+        }
+
+        OpenStageOfferDialog();
+    }
+
+    private void ProcessSingleStageCompletion()
+    {
         QuestManager.Instance.CompleteQuest(quest.questID);
 
         if (_questPrizeItem != null)
@@ -250,13 +405,63 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
             {
                 QuestManager.Instance.AcknowledgeCompletion(quest.questID);
 
-                if (_moveAfterCompletion)
+                if (!_hasBeenRepositioned && (_moveAfterCompletion || _changeAnimationOnCompletion || _enablePatrolOnCompletion))
                 {
-                    transform.position = _newPosition;
-                    transform.rotation = Quaternion.Euler(_newRotationEuler);
+                    _hasBeenRepositioned = true;
+
+                    if (UIFadeInFadeOut.Instance != null)
+                    {
+                        UIFadeInFadeOut.Instance.FadeOutIn(() =>
+                        {
+                            ApplyCompletionMoveAndAnimation();
+
+                        });
+                    }
+                    else
+                    {
+                        ApplyCompletionMoveAndAnimation();
+                    }
+                }
+                else
+                {
+                    OnDialogClose();
                 }
             }
         );
+    }
+
+    private void ApplyCompletionMoveAndAnimation()
+    {
+        if (_rotateCoroutine != null)
+        {
+            StopCoroutine(_rotateCoroutine);
+            _rotateCoroutine = null;
+        }
+
+        if (_moveAfterCompletion)
+        {
+            transform.localPosition = _newPosition;
+            transform.localRotation = Quaternion.Euler(_newRotationEuler);
+        }
+
+        if (_changeAnimationOnCompletion && _animator != null && !string.IsNullOrEmpty(_animParamName))
+        {
+            switch (_completionAnimType)
+            {
+                case AnimationType.Trigger:
+                    _animator.SetTrigger(_animParamName);
+                    break;
+
+                case AnimationType.Int:
+                    _animator.SetInteger(_animParamName, _newAnimIntValue);
+                    break;
+            }
+        }
+
+        if (_enablePatrolOnCompletion && _npcController != null)
+        {
+            _npcController.enabled = true;
+        }
     }
 
     private void OpenCompletedDialog()
@@ -264,7 +469,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: Translate(quest.completedDialog),
             onAccept: null,
-            onClose: null
+            onClose: OnDialogClose
         );
     }
 
@@ -275,7 +480,11 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         Vector3 dir = interactorTransform.position - transform.position;
         dir.y = 0;
         if (dir == Vector3.zero) return;
-        StartCoroutine(RotateCoroutine(Quaternion.LookRotation(dir)));
+
+        if (_rotateCoroutine != null)
+            StopCoroutine(_rotateCoroutine);
+
+        _rotateCoroutine = StartCoroutine(RotateCoroutine(Quaternion.LookRotation(dir)));
     }
 
     private IEnumerator RotateCoroutine(Quaternion targetRotation)
@@ -290,6 +499,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
             yield return null;
         }
         transform.rotation = targetRotation;
+        _rotateCoroutine = null;
     }
 
 }

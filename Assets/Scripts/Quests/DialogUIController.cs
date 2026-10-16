@@ -15,7 +15,6 @@ public class DialogUIController : MonoBehaviour
     [SerializeField] private Button closeButton;
     [SerializeField] private Button declineButton;
 
-    // Static events so UIInteraction can subscribe without a direct reference
     public static event Action OnDialogOpened;
     public static event Action OnDialogClosed;
 
@@ -24,7 +23,6 @@ public class DialogUIController : MonoBehaviour
     private Action _onAccept;
     private Action _onClose;
 
-    // Stored handler references for safe unsubscription
     private Action<InputAction.CallbackContext> _onAdvance;
     private Action<InputAction.CallbackContext> _onDecline;
 
@@ -58,7 +56,7 @@ public class DialogUIController : MonoBehaviour
         GameInputManager.Instance.Controls.Dialog.Decline.performed -= _onDecline;
     }
 
-    // --- Public API called by QuestGiverNPC ---
+    // --- Public API ---
 
     public void OpenDialog(string[] pages, Action onAccept = null, Action onClose = null)
     {
@@ -77,7 +75,7 @@ public class DialogUIController : MonoBehaviour
         ShowCurrentPage();
     }
 
-    // --- Page logic ---
+    // --- Page Logic ---
 
     private void ShowCurrentPage()
     {
@@ -99,9 +97,9 @@ public class DialogUIController : MonoBehaviour
         }
     }
 
-    // --- Input handlers ---
+    // --- Input Handlers ---
 
-    // A key � skip typing > advance page > Accept or Close on last page
+    // A key > skip typing > advance page > Accept or Close on last page
     private void OnAdvancePressed()
     {
         if (acceptButton.gameObject.activeSelf)
@@ -119,11 +117,11 @@ public class DialogUIController : MonoBehaviour
         OnNextPressed();
     }
 
-    // D key � Decline on offer, ignored otherwise
+    // D key > Decline on offer, ignored otherwise
     private void OnDeclinePressed()
     {
         if (declineButton.gameObject.activeSelf)
-            CloseDialog();
+            CloseDialogSequence(null);
     }
 
     private void OnNextPressed()
@@ -141,10 +139,8 @@ public class DialogUIController : MonoBehaviour
         ShowCurrentPage();
     }
 
-    // --- Action buttons ---
+    // --- Action Button Handlers ---
 
-    // Offer state > Accept (A) + Decline (D)
-    // Active/Completed state > Close (A) only
     private void ShowActionButtons()
     {
         bool isOffer = _onAccept != null;
@@ -162,20 +158,24 @@ public class DialogUIController : MonoBehaviour
 
     private void OnAcceptPressed()
     {
-        _onAccept?.Invoke();
-        CloseDialog();
+        CloseDialogSequence(_onAccept);
     }
 
     private void OnClosePressed()
     {
-        _onClose?.Invoke();
-        CloseDialog();
+        CloseDialogSequence(_onClose);
     }
 
-    private void CloseDialog()
+    private void CloseDialogSequence(Action callback)
     {
         dialogPanel.SetActive(false);
-        GameInputManager.Instance.DisableDialogInput();
-        OnDialogClosed?.Invoke();
+        callback?.Invoke();
+
+        if (!dialogPanel.activeSelf)
+        {
+            GameInputManager.Instance.DisableDialogInput();
+            OnDialogClosed?.Invoke();
+        }
     }
+
 }
