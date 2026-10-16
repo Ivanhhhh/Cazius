@@ -48,6 +48,10 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [SerializeField] private string _animParamName = "IdleVariant";
     [SerializeField] private int _newAnimIntValue = 1;
 
+    [Header("Patrol After Quest (Optional)")]
+    [SerializeField] private bool _enablePatrolOnCompletion = false;
+    [SerializeField] private NPCController _npcController;
+
     private Animator _animator;
     private Coroutine _rotateCoroutine;
     private bool _hasBeenRepositioned = false;
@@ -61,6 +65,9 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     private void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
+
+        if (_npcController == null)
+            _npcController = GetComponent<NPCController>();
     }
 
     private void OnEnable()
@@ -68,15 +75,66 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         if (_animator == null)
             _animator = GetComponentInChildren<Animator>();
 
-        if (_animator != null && !string.IsNullOrEmpty(_idleVariantParamName))
+        ApplyStateFromQuestStatus();
+    }
+
+    private void Start()
+    {
+        ApplyStateFromQuestStatus();
+    }
+
+    private void ApplyStateFromQuestStatus()
+    {
+        if (_animator == null || quest == null || QuestManager.Instance == null) return;
+
+        QuestStatus status = QuestManager.Instance.GetStatus(quest.questID);
+
+        if (status == QuestStatus.Completed || status == QuestStatus.JustCompleted || _hasBeenRepositioned)
         {
-            _animator.SetInteger(_idleVariantParamName, _idleVariant);
-            _animator.Update(0f); // Forces Animator to refresh state immediately on load
+            _hasBeenRepositioned = true;
+
+            if (_enablePatrolOnCompletion && _npcController != null)
+            {
+                _npcController.enabled = true;
+            }
+
+            if (_changeAnimationOnCompletion && !string.IsNullOrEmpty(_animParamName))
+            {
+                switch (_completionAnimType)
+                {
+                    case AnimationType.Trigger:
+                        _animator.SetTrigger(_animParamName);
+                        break;
+
+                    case AnimationType.Int:
+                        _animator.SetInteger(_animParamName, _newAnimIntValue);
+                        break;
+                }
+            }
+        }
+        else
+        {
+            if (_enablePatrolOnCompletion && _npcController != null)
+            {
+                _npcController.enabled = false;
+            }
+
+            if (!string.IsNullOrEmpty(_idleVariantParamName))
+            {
+                _animator.SetInteger(_idleVariantParamName, _idleVariant);
+                _animator.Update(0f); // Forces Animator to refresh state immediately on load
+            }
         }
     }
 
     public void Interact(Transform interactorTransform)
     {
+        // Pause waypoint patrol during dialogue if active
+        if (_npcController != null && _npcController.enabled && _npcController.Machine != null)
+        {
+            _npcController.Machine.ChangeState(_npcController.TalkingState);
+        }
+
         bool canRotate = _hasBeenRepositioned ? _rotateTowardsPlayerAfterCompletion : _rotateTowardsPlayer;
         if (canRotate)
             RotateTowardsPlayer(interactorTransform);
@@ -339,7 +397,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
             {
                 QuestManager.Instance.AcknowledgeCompletion(quest.questID);
 
-                if (!_hasBeenRepositioned && (_moveAfterCompletion || _changeAnimationOnCompletion))
+                if (!_hasBeenRepositioned && (_moveAfterCompletion || _changeAnimationOnCompletion || _enablePatrolOnCompletion))
                 {
                     _hasBeenRepositioned = true;
 
@@ -385,6 +443,11 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                     _animator.SetInteger(_animParamName, _newAnimIntValue);
                     break;
             }
+        }
+
+        if (_enablePatrolOnCompletion && _npcController != null)
+        {
+            _npcController.enabled = true;
         }
     }
 
