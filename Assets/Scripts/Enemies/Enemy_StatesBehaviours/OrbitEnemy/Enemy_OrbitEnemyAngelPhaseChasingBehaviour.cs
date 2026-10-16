@@ -127,7 +127,11 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
         UpdateTimeline();
         _phaseTimer -= Time.fixedDeltaTime;
         if (_phaseTimer <= 0f)
-            SetPhase(Phase.MoveToPosition);
+        {
+            Debug.Log("FirstWaitFinished");
+        SetPhase(Phase.MoveToPosition);
+        }
+
     }
 
     private void TickMoveToPosition()
@@ -159,7 +163,11 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
         LookAtPlayer();
         _phaseTimer -= Time.fixedDeltaTime;
         if (_phaseTimer <= 0f)
+        {
             SetPhase(Phase.LookAtPlayer);
+            Debug.Log("Second wait fionished");
+
+        }
     }
 
     private void TickLookAtPlayer()

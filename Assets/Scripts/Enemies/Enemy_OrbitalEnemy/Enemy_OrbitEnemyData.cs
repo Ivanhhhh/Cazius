@@ -194,10 +194,15 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
 
     private IEnumerator SecondAttackDelayRoutine()
     {
+        Debug.Log("Enter seconda attack");
         yield return new WaitForSeconds(_secondAttackDuration);
 
         if (_inSecondPhase)
+        {
+            Debug.Log("SPAAWNNN");
             RequestSecondPhaseSpawn();           // spawner: prefab de fase 2
+        }
+
         else
             OnSecondAttackMade?.Invoke();        // spawner: prefab de fase 1
     }
