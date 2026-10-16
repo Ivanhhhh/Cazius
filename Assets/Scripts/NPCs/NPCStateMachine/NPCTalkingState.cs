@@ -24,7 +24,7 @@ public class NPCTalkingState : NPCState
             _npc.Animator.SetTrigger(_wavingTrigger);
 
         if (SFXManager.Instance != null)
-            SFXManager.Instance.PlaySFXAtPosition(_interactSFX, _npc.transform.position);
+            //SFXManager.Instance.PlaySFXAtPosition(_interactSFX, _npc.transform.position);
     }
 
     public override void Tick()

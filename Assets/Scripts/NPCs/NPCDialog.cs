@@ -1,6 +1,6 @@
+using System.Collections;
 using System.Linq;
 using UnityEngine;
-using System.Collections;
 
 public class NPCDialog : MonoBehaviour, IEInteractable
 {
@@ -28,42 +28,58 @@ public class NPCDialog : MonoBehaviour, IEInteractable
     }
 
     private Animator _animator;
+    private NPCController _npcController;
     private static readonly int _idleVariantHash = Animator.StringToHash("IdleVariant");
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+        if (_animator == null)
+            _animator = GetComponentInChildren<Animator>();
+
+        _npcController = GetComponent<NPCController>();
     }
 
     private void OnEnable()
     {
         if (_animator == null)
-            _animator = GetComponent<Animator>();
+            _animator = GetComponentInChildren<Animator>();
 
-        Debug.Log($"Controller assigned: {_animator.runtimeAnimatorController?.name}");
-        foreach (var p in _animator.parameters)
+        if (_animator != null)
         {
-            Debug.Log($"Param name: '{p.name}', type: {p.type}, hash: {p.nameHash}");
+            _animator.SetInteger(_idleVariantHash, _idleVariant);
+            _animator.Update(0f);
         }
-
-        _animator.SetInteger(_idleVariantHash, _idleVariant);
-        _animator.Update(0f);
-        Debug.Log($"{name}: OnEnable set IdleVariant={_idleVariant}, animator now reads {_animator.GetInteger(_idleVariantHash)}");
     }
 
     public void Interact(Transform interactorTransform)
     {
+        if (_npcController != null && _npcController.enabled && _npcController.Machine != null)
+        {
+            _npcController.Machine.ChangeState(_npcController.TalkingState);
+        }
+
         if (_rotateTowardsPlayer)
             RotateTowardsPlayer(interactorTransform);
 
-        _animator.SetTrigger(_wavingTrigger);
+        if (_animator != null && !string.IsNullOrEmpty(_wavingTrigger))
+            _animator.SetTrigger(_wavingTrigger);
+
         SFXManager.Instance.PlaySFXAtPosition(_interactSFX, transform.position);
 
         DialogUIController.Instance.OpenDialog(
             pages: Translate(_dialogPages),
             onAccept: null,
-            onClose: null
+            onClose: OnDialogClose
         );
+    }
+
+    private void OnDialogClose()
+    {
+        if (_npcController != null && _npcController.enabled && _npcController.Machine != null)
+        {
+            _npcController.Machine.ChangeState(_npcController.IdleState);
+        }
     }
 
     public string GetInteractText() { return _interactText; }
@@ -72,6 +88,7 @@ public class NPCDialog : MonoBehaviour, IEInteractable
     // --- Localization ---
     private string[] Translate(string[] ids)
     {
+        if (ids == null || ids.Length == 0) return new string[0];
         return ids.Select(id => LocalizationManager.Instance.GetTranslate(id)).ToArray();
     }
 

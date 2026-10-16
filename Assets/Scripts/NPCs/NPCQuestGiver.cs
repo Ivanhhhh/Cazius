@@ -122,7 +122,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
             if (!string.IsNullOrEmpty(_idleVariantParamName))
             {
                 _animator.SetInteger(_idleVariantParamName, _idleVariant);
-                _animator.Update(0f); // Forces Animator to refresh state immediately on load
+                _animator.Update(0f);
             }
         }
     }
@@ -214,6 +214,14 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
 
     // --- Dialog openers ---
 
+    private void OnDialogClose()
+    {
+        if (_npcController != null && _npcController.enabled && _npcController.Machine != null)
+        {
+            _npcController.Machine.ChangeState(_npcController.IdleState);
+        }
+    }
+
     private void OpenOfferDialog()
     {
         if (quest.useStages)
@@ -226,7 +234,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                     if (QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.Active)
                         OpenStageOfferDialog();
                 },
-                onClose: null
+                onClose: OnDialogClose
             );
             return;
         }
@@ -234,7 +242,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: Translate(quest.offerDialog),
             onAccept: () => QuestManager.Instance.StartQuest(quest.questID),
-            onClose: null
+            onClose: OnDialogClose
         );
     }
 
@@ -259,7 +267,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: Translate(stage.stageOfferDialog),
             onAccept: null,
-            onClose: null
+            onClose: OnDialogClose
         );
     }
 
@@ -276,7 +284,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                     DialogUIController.Instance.OpenDialog(
                         pages: Translate(stage.stageActiveDialog),
                         onAccept: null,
-                        onClose: null
+                        onClose: OnDialogClose
                     );
                     return;
                 }
@@ -286,7 +294,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: Translate(quest.activeDialog),
             onAccept: null,
-            onClose: null
+            onClose: OnDialogClose
         );
     }
 
@@ -343,7 +351,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: dialogPages,
             onAccept: onAcceptTurnIn,
-            onClose: null
+            onClose: OnDialogClose
         );
     }
 
@@ -406,12 +414,17 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                         UIFadeInFadeOut.Instance.FadeOutIn(() =>
                         {
                             ApplyCompletionMoveAndAnimation();
+
                         });
                     }
                     else
                     {
                         ApplyCompletionMoveAndAnimation();
                     }
+                }
+                else
+                {
+                    OnDialogClose();
                 }
             }
         );
@@ -456,7 +469,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: Translate(quest.completedDialog),
             onAccept: null,
-            onClose: null
+            onClose: OnDialogClose
         );
     }
 

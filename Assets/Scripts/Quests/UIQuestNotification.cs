@@ -23,6 +23,7 @@ public class UIQuestNotification : MonoBehaviour
     [Header("Flicker Settings")]
     [SerializeField] private int _flickerCount = 4;
     [SerializeField] private float _flickerSpeed = 0.07f;
+    [SerializeField] private SFXManager.SFXCategoryType _flickerSFX = SFXManager.SFXCategoryType.HoverButton;
 
     [Header("Localization IDs")]
     [SerializeField] private string _mainQuestLabelID = "notification_main_quest";
@@ -118,6 +119,7 @@ public class UIQuestNotification : MonoBehaviour
             _canvasGroup.alpha = 0f;
             yield return new WaitForSecondsRealtime(_flickerSpeed);
             _canvasGroup.alpha = 1f;
+            SFXManager.Instance.PlaySFX(_flickerSFX);
             yield return new WaitForSecondsRealtime(_flickerSpeed);
         }
 
