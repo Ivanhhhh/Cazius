@@ -23,8 +23,8 @@ public class NPCTalkingState : NPCState
         if (_npc.Animator != null && !string.IsNullOrEmpty(_wavingTrigger))
             _npc.Animator.SetTrigger(_wavingTrigger);
 
-        if (SFXManager.Instance != null)
-            //SFXManager.Instance.PlaySFXAtPosition(_interactSFX, _npc.transform.position);
+        /*if (SFXManager.Instance != null)
+            SFXManager.Instance.PlaySFXAtPosition(_interactSFX, _npc.transform.position);*/
     }
 
     public override void Tick()
