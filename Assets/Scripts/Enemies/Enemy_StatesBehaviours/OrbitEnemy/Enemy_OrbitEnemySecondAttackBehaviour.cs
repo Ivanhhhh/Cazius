@@ -15,10 +15,14 @@ public class Enemy_OrbitEnemySecondAttackBehaviour
         if (_orbitData.OrbitManager == null) return;
 
         // El boost de velocidad de las piedras arranca YA y dura _secondAttackDuration
+        if (!_orbitData.InSecondPhase)
+        {
         _orbitData.OrbitManager.BoostSharedSpeed(
             _orbitData.SpeedBoostMultiplier,
             _orbitData.SecondAttackDuration
         );
+        }
+
 
         // El spawn de enemigos se dispara recién cuando termine esa misma duración
         _orbitData.StartSecondAttackSequence();

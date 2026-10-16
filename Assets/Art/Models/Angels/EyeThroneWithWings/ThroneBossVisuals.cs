@@ -4,10 +4,12 @@ using UnityEngine;
 public class ThroneBossVisuals : MonoBehaviour
 {
     [SerializeField] MeshRenderer _eyeRenderer;
+    [SerializeField] SkinnedMeshRenderer _eyeOutsideRenderer;
     [SerializeField] SkinnedMeshRenderer[] _wingRenderers;
     [SerializeField] Animator _anim;
 
     private Material _eyeMat;
+    private Material _eyeOutsideMat;
     private Material[] _wingMats;
 
     [Header("Eye Damage")]
@@ -31,8 +33,9 @@ public class ThroneBossVisuals : MonoBehaviour
     private void Awake()
     {
         _eyeMat = _eyeRenderer.material;
-
+        _eyeOutsideMat = _eyeOutsideRenderer.material;
         _wingMats = new Material[_wingRenderers.Length];
+
 
         for (int i = 0; i < _wingRenderers.Length; i++)
             _wingMats[i] = _wingRenderers[i].material;
@@ -104,7 +107,7 @@ public class ThroneBossVisuals : MonoBehaviour
 
         yield return new WaitForSeconds(_phaseChangeDelay);
 
-        yield return DissolveWings(1f, 0f);
+        yield return DissolveWings(1f, 0f,false);
 
         yield return new WaitForSeconds(_phaseChangeDuration);
 
@@ -122,7 +125,7 @@ public class ThroneBossVisuals : MonoBehaviour
 
         yield return new WaitForSeconds(_despawnChangeDelay);
 
-        yield return DissolveWings(0f, 1f);
+        yield return DissolveWings(0f, 1f,true);
 
         yield return new WaitForSeconds(_despawnLastDelay);
 
@@ -132,13 +135,16 @@ public class ThroneBossVisuals : MonoBehaviour
     }
 
 
-    private IEnumerator DissolveWings(float startValue, float endValue)
+    private IEnumerator DissolveWings(float startValue, float endValue, bool modifyEye)
     {
         for (float t = 0f; t < _dissolveDuration; t += Time.deltaTime)
         {
             float value = Mathf.Lerp(startValue, endValue, t / _dissolveDuration);
-
+            if (modifyEye)
+            {
             _eyeMat.SetFloat("_DissolveAmount", value);
+            _eyeOutsideMat.SetFloat("_DissolveAmount", value);
+            }
 
             foreach (var mat in _wingMats)
                 mat.SetFloat("_DissolveAmount", value);
