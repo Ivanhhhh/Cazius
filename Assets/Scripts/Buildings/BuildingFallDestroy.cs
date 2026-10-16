@@ -23,6 +23,12 @@ public class BuildingFallDestroy : MonoBehaviour
     private bool _impactTriggered = false;
     private bool _impactDustTriggered = false;
 
+    private void Awake()
+    {
+        _animator.keepAnimatorStateOnDisable = true;
+        _animator.writeDefaultValuesOnDisable = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player"))
