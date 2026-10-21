@@ -383,6 +383,7 @@ MonoBehaviour:
   _movementSpeedMultiplier: 2
   _enemyAnimator: {fileID: 4572060112092841929}
   _animSpeedMultiplier: 2
+  _isDead: 0
 --- !u!114 &4172276672993563538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475,9 +476,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AngelDemonAnim
   animator: {fileID: 4572060112092841929}
-  _slowAmount: 2
-  _slowDuration: 2
-  _flyDistanceThreshold: 0
+  _slowAmount: 1.8
+  _slowDuration: 0.8
 --- !u!114 &3036136070891182812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -643,7 +643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c7231ae1e3afe646a1ab4cba89f6262, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoulRandomAmount
-  _minDrop: 1
+  _minDrop: 18
   _maxDrop: 20
 --- !u!1 &3651821397056411496
 GameObject:

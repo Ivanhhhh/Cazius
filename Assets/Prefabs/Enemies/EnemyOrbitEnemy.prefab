@@ -102,7 +102,7 @@ MonoBehaviour:
   _orbitManager: {fileID: 1086035628948181878}
   _bulletSpeed: 11
   _enemiesAlive: []
-  _secondAttackDuration: 3
+  _secondAttackDuration: 0
   _speedBoostMultiplier: 2
   _secondAttackChance: 0.05
   _secondAttackCooldown: 90
@@ -111,7 +111,7 @@ MonoBehaviour:
   _angelPhaseTargetOffset: {x: 0, y: 0, z: 0}
   _enemyMeteoriteSpawnZone: {fileID: 0}
   _angelInitialWaitTime: 6
-  _angelSecondWaitTime: 0
+  _angelSecondWaitTime: 6
   _angelMoveSpeed: 5
   _angelLookRotationSpeed: 8
   _angelArriveThreshold: 0.4
@@ -684,6 +684,10 @@ PrefabInstance:
     - target: {fileID: 8473938800449688397, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
       propertyPath: m_Layer
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8473938800449688397, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9138554462930225655, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
       propertyPath: m_LocalScale.x
@@ -1374,7 +1378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9b690d660e488874f96158b7c24bcdb1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1952090685491067193, guid: 9b690d660e488874f96158b7c24bcdb1, type: 3}
       propertyPath: m_LocalRotation.y
@@ -1495,7 +1499,7 @@ PrefabInstance:
     - target: {fileID: 7837734534860383625, guid: 9b690d660e488874f96158b7c24bcdb1, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 945720ab63a609c4fbbcc1809b26efb7, type: 2}
+      objectReference: {fileID: 2100000, guid: 8b715b97dcb7adc42a78c7a0f60e9f5e, type: 2}
     - target: {fileID: 8006422667465637277, guid: 9b690d660e488874f96158b7c24bcdb1, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0.0060617155
@@ -1620,13 +1624,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThroneBossVisuals
   _eyeRenderer: {fileID: 5996101054601970940}
+  _eyeOutsideRenderer: {fileID: 1577677996289575050}
   _wingRenderers:
   - {fileID: 2226525222482391292}
   - {fileID: 1616798564556922424}
   - {fileID: 3866413040639029399}
   - {fileID: 9168281420183123208}
-  - {fileID: 1577677996289575050}
-  - {fileID: 1577677996289575050}
   _anim: {fileID: 2903315867534151826}
   _eyeDamageDuration: 0.5
   _phaseChangeDelay: 1

@@ -33,6 +33,7 @@ public class Enemy_OrbitEnemyAngelPhaseAttackBehaviour : Enemy_OrbitEnemyAngelPh
         if (!_hasAttackedOnce)
         {
             _hasAttackedOnce = true;
+            Debug.Log("Second Attack Made");
             DoSecondAttack();
             return;
         }

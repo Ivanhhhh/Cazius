@@ -127,7 +127,11 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
         UpdateTimeline();
         _phaseTimer -= Time.fixedDeltaTime;
         if (_phaseTimer <= 0f)
-            SetPhase(Phase.MoveToPosition);
+        {
+            Debug.Log("FirstWaitFinished");
+        SetPhase(Phase.MoveToPosition);
+        }
+
     }
 
     private void TickMoveToPosition()
@@ -156,9 +160,14 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
     {
         Brake();
         UpdateTimeline();
+        LookAtPlayer();
         _phaseTimer -= Time.fixedDeltaTime;
         if (_phaseTimer <= 0f)
+        {
             SetPhase(Phase.LookAtPlayer);
+            Debug.Log("Second wait fionished");
+
+        }
     }
 
     private void TickLookAtPlayer()
@@ -176,6 +185,12 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
             _lastAttackTime = Time.time;
             ExecuteAttack();
         }
+    }
+    private void LookAtPlayer()
+    {
+        Vector3 targetCenter = _playerTransform.position + Vector3.up * AimOffset;
+        Vector3 dir = targetCenter - _transform.position;
+        RotateTowardsDirection(dir, LookRotationSpeed);
     }
 
     // ---------- Helpers ----------
