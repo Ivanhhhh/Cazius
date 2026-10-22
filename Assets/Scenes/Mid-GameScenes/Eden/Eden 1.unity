@@ -535067,6 +535067,18 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1606476053072142646, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1429881545}
+    - targetCorrespondingSourceObject: {fileID: 1606476053072142646, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1429881550}
+    - targetCorrespondingSourceObject: {fileID: 1606476053072142646, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1429881549}
+    - targetCorrespondingSourceObject: {fileID: 1606476053072142646, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1429881548}
+    - targetCorrespondingSourceObject: {fileID: 1606476053072142646, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1429881547}
     - targetCorrespondingSourceObject: {fileID: 7208086676912426499, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1429881546}
@@ -535152,6 +535164,69 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1429881547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189320935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 843ffeb9355280441a061e816a72605c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCInteractFeedback
+  _wavingTrigger: Waving
+  _interactSFX: 3
+--- !u!114 &1429881548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189320935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32cf7a3483c4463428194da1c9599689, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCFacePlayer
+  _rotationSpeed: 5
+  _rotateTowardsPlayer: 1
+  _rotateTowardsPlayerAfterCompletion: 0
+--- !u!114 &1429881549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189320935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29b39d674f78f6d40aee8305fb7d6e20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCOnCompletionSpawner
+  _objectsToEnable: []
+--- !u!114 &1429881550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189320935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bac489ef9111aa94dbe2dcab5efb0277, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCOnCompletionBehavior
+  _moveAfterCompletion: 1
+  _newPosition: {x: 14.845, y: 0.01499999, z: 19.26893}
+  _newRotation: {x: 0, y: 93.375, z: 0}
+  _changeAnimation: 1
+  _animType: 1
+  _animParamName: IdleVariant
+  _initialIntValue: 0
+  _afterIntValue: 1
+  _enablePatrol: 0
 --- !u!1001 &1430056905
 PrefabInstance:
   m_ObjectHideFlags: 0
