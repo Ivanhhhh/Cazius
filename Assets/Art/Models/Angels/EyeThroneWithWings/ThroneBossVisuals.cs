@@ -107,7 +107,7 @@ public class ThroneBossVisuals : MonoBehaviour
 
         yield return new WaitForSeconds(_phaseChangeDelay);
 
-        yield return DissolveWings(1f, 0f,false);
+        yield return DissolveWings(1f, 0f,true);
 
         yield return new WaitForSeconds(_phaseChangeDuration);
 
