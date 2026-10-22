@@ -89,4 +89,9 @@ public class Enemy_OrbitEnemyAngelPhaseAttackBehaviour : Enemy_OrbitEnemyAngelPh
     {
         if (_orbitData.LaserBeamEffect != null) _orbitData.LaserBeamEffect.SetActive(true);
     }
+    private void HandleSecondPhaseWaveCleared()
+    {
+
+        _orbitData.RequestSecondPhaseRespawn();
+    }
 }
