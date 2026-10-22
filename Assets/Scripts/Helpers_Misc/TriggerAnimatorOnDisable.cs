@@ -25,6 +25,7 @@ public class TriggerAnimatorOnDisable : MonoBehaviour
     [Header("Particle System")]
     [SerializeField] private ParticleSystem particle_system;
 
+
     private int _triggerHash;
     private bool _applicationQuitting;
     private bool _alreadyTriggered;
@@ -75,11 +76,12 @@ public class TriggerAnimatorOnDisable : MonoBehaviour
 
         CameraShake.Instance.StopShake();
 
+        /*
         if (objectToDisable != null)
             objectToDisable.SetActive(false);
 
         if (objectToEnableAfterDelay != null)
-            objectToEnableAfterDelay.SetActive(true);
+            objectToEnableAfterDelay.SetActive(true);*/
     }
 
     private void TryFindAnimator()
