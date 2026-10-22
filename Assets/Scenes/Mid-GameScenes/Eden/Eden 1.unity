@@ -808316,6 +808316,18 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8423661314017872959, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3228502022850010178}
+    - targetCorrespondingSourceObject: {fileID: 8423661314017872959, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3228502022850010184}
+    - targetCorrespondingSourceObject: {fileID: 8423661314017872959, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3228502022850010183}
+    - targetCorrespondingSourceObject: {fileID: 8423661314017872959, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3228502022850010182}
+    - targetCorrespondingSourceObject: {fileID: 8423661314017872959, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3228502022850010181}
   m_SourcePrefab: {fileID: 100100000, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
 --- !u!4 &3228502022850010176 stripped
 Transform:
@@ -808365,12 +808377,75 @@ MonoBehaviour:
   _interactionUIPoint: {fileID: 3228502022850010176}
   _questPrizeItem: {fileID: 11400000, guid: e8184ae5ef468694fbc8c674b146a8fe, type: 2}
   _removeItemOnCompletion: 1
-  _defaultItemTurnInConfirmID: dialog_default_item_turn_in_confirm
+  _defaultItemTurnInConfirmID: quest_football_turn-in_confirmation
 --- !u!95 &3228502022850010180 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 4609672171972893995, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
   m_PrefabInstance: {fileID: 3228502022850010175}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3228502022850010181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3228502022850010177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 843ffeb9355280441a061e816a72605c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCInteractFeedback
+  _wavingTrigger: Waving
+  _interactSFX: 4
+--- !u!114 &3228502022850010182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3228502022850010177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32cf7a3483c4463428194da1c9599689, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCFacePlayer
+  _rotationSpeed: 5
+  _rotateTowardsPlayer: 1
+  _rotateTowardsPlayerAfterCompletion: 1
+--- !u!114 &3228502022850010183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3228502022850010177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29b39d674f78f6d40aee8305fb7d6e20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCOnCompletionSpawner
+  _objectsToEnable: []
+--- !u!114 &3228502022850010184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3228502022850010177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bac489ef9111aa94dbe2dcab5efb0277, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCOnCompletionBehavior
+  _moveAfterCompletion: 1
+  _newPosition: {x: 146.38, y: -0.114, z: -18.1}
+  _newRotation: {x: 0, y: 0, z: 0}
+  _changeAnimation: 1
+  _animType: 0
+  _animParamName: Running
+  _initialIntValue: 0
+  _afterIntValue: 1
+  _enablePatrol: 1
 --- !u!1 &3330921856434934830
 GameObject:
   m_ObjectHideFlags: 0
