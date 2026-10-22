@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(NPCController))]
 public class NPCDialog : MonoBehaviour, IEInteractable
 {
     [Header("Dialog")]
@@ -29,15 +30,14 @@ public class NPCDialog : MonoBehaviour, IEInteractable
 
     private Animator _animator;
     private NPCController _npcController;
+    private Coroutine _rotateCoroutine;
     private static readonly int _idleVariantHash = Animator.StringToHash("IdleVariant");
 
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
-        if (_animator == null)
-            _animator = GetComponentInChildren<Animator>();
-
+        // Get components on the parent/root object
         _npcController = GetComponent<NPCController>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
     private void OnEnable()
@@ -54,9 +54,10 @@ public class NPCDialog : MonoBehaviour, IEInteractable
 
     public void Interact(Transform interactorTransform)
     {
-        if (_npcController != null && _npcController.enabled && _npcController.Machine != null)
+        // Pause patrol movement via NPCController
+        if (_npcController != null && _npcController.enabled)
         {
-            _npcController.Machine.ChangeState(_npcController.TalkingState);
+            _npcController.BeginTalking();
         }
 
         if (_rotateTowardsPlayer)
@@ -65,7 +66,8 @@ public class NPCDialog : MonoBehaviour, IEInteractable
         if (_animator != null && !string.IsNullOrEmpty(_wavingTrigger))
             _animator.SetTrigger(_wavingTrigger);
 
-        SFXManager.Instance.PlaySFXAtPosition(_interactSFX, transform.position);
+        if (SFXManager.Instance != null)
+            SFXManager.Instance.PlaySFXAtPosition(_interactSFX, transform.position);
 
         DialogUIController.Instance.OpenDialog(
             pages: Translate(_dialogPages),
@@ -76,14 +78,15 @@ public class NPCDialog : MonoBehaviour, IEInteractable
 
     private void OnDialogClose()
     {
-        if (_npcController != null && _npcController.enabled && _npcController.Machine != null)
+        // Resume patrol movement
+        if (_npcController != null && _npcController.enabled)
         {
-            _npcController.Machine.ChangeState(_npcController.IdleState);
+            _npcController.EndTalking();
         }
     }
 
-    public string GetInteractText() { return _interactText; }
-    public Transform GetTransform() { return transform; }
+    public string GetInteractText() => _interactText;
+    public Transform GetTransform() => transform;
 
     // --- Localization ---
     private string[] Translate(string[] ids)
@@ -98,7 +101,11 @@ public class NPCDialog : MonoBehaviour, IEInteractable
         Vector3 dir = interactorTransform.position - transform.position;
         dir.y = 0;
         if (dir == Vector3.zero) return;
-        StartCoroutine(RotateCoroutine(Quaternion.LookRotation(dir)));
+
+        if (_rotateCoroutine != null)
+            StopCoroutine(_rotateCoroutine);
+
+        _rotateCoroutine = StartCoroutine(RotateCoroutine(Quaternion.LookRotation(dir)));
     }
 
     private IEnumerator RotateCoroutine(Quaternion targetRotation)
@@ -112,9 +119,11 @@ public class NPCDialog : MonoBehaviour, IEInteractable
             );
             yield return null;
         }
+
         transform.rotation = targetRotation;
+        _rotateCoroutine = null;
     }
 
-    public bool IsLocked() { return false; }
+    public bool IsLocked() => false;
 
 }
