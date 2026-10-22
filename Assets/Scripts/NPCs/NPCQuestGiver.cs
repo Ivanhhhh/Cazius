@@ -8,7 +8,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [SerializeField] private QuestDefinition quest;
 
     [Header("Interaction")]
-    [SerializeField] private string _interactText = "F to talk";
+    [SerializeField] private string _interactText = "F";
     [SerializeField] private Transform _interactionUIPoint;
 
     [Header("Reward")]

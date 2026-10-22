@@ -12,7 +12,7 @@ public class NPCOnCompletionBehavior : MonoBehaviour
     [Header("Reposition")]
     [SerializeField] private bool _moveAfterCompletion = false;
     [SerializeField] private Vector3 _newPosition;
-    [SerializeField] private Vector3 _newRotationEuler;
+    [SerializeField] private Vector3 _newRotation;
 
     [Header("Animation")]
     [SerializeField] private bool _changeAnimation = false;
@@ -121,7 +121,7 @@ public class NPCOnCompletionBehavior : MonoBehaviour
         if (_moveAfterCompletion)
         {
             transform.localPosition = _newPosition;
-            transform.localRotation = Quaternion.Euler(_newRotationEuler);
+            transform.localRotation = Quaternion.Euler(_newRotation);
         }
 
         ApplyAfterState();
