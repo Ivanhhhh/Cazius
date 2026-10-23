@@ -23,6 +23,9 @@ public class NPCController : MonoBehaviour
     private int _waypointIndex;
     private int _direction = 1; // 1 = forward, -1 = backward
 
+    // Optional: only present on quest NPCs
+    private NPCQuestGiver _questGiver;
+
     public NPCStateMachine Machine { get; private set; }
     public NPCIdleState IdleState { get; private set; }
     public NPCWalkingState WalkingState { get; private set; }
@@ -47,6 +50,8 @@ public class NPCController : MonoBehaviour
         WalkingState = new NPCWalkingState(this);
         TalkingState = new NPCTalkingState(this);
 
+        _questGiver = GetComponent<NPCQuestGiver>();
+
         if (_animator == null)
             _animator = GetComponentInChildren<Animator>();
 
@@ -62,12 +67,26 @@ public class NPCController : MonoBehaviour
             return;
         }
 
-        // Reset per-activation state so a pooled/reactivated NPC starts clean
-        _waypointIndex = 0;
-        _direction = 1;
+        // Resume from the current waypoint after a world swap:
+        // waypoint index and direction are kept, only the motion state is reset
+        _waypointIndex = Mathf.Clamp(_waypointIndex, 0, _waypoints.Count - 1);
         Velocity = Vector3.zero;
 
+        if (_questGiver != null)
+        {
+            _questGiver.OnInteracted += HandleInteracted;
+            _questGiver.OnDialogClosed += EndTalking;
+        }
+
         Machine.ChangeState(IdleState);
+    }
+
+    private void OnDisable()
+    {
+        if (_questGiver == null) return;
+
+        _questGiver.OnInteracted -= HandleInteracted;
+        _questGiver.OnDialogClosed -= EndTalking;
     }
 
     public void SetWalking(bool isWalking)
@@ -79,6 +98,25 @@ public class NPCController : MonoBehaviour
     private void Update()
     {
         Machine.Tick();
+    }
+
+    // --- Dialog pause (no-op while the controller is disabled) ---
+
+    public void BeginTalking()
+    {
+        if (!isActiveAndEnabled) return;
+        Machine.ChangeState(TalkingState);
+    }
+
+    public void EndTalking()
+    {
+        if (!isActiveAndEnabled) return;
+        Machine.ChangeState(IdleState);
+    }
+
+    private void HandleInteracted(Transform interactor)
+    {
+        BeginTalking();
     }
 
     // Reverse direction at either end
