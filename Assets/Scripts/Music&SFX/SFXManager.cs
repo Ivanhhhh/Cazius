@@ -39,7 +39,8 @@ public class SFXManager : MonoBehaviour
         StepsSFX,
 
         MetalDoorSFX,
-        DoorWoodSFX
+        DoorWoodOpenSFX,
+        DoorWoodCloseSFX
         // Add Categories here
     }
 
