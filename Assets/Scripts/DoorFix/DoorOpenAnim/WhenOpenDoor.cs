@@ -27,6 +27,8 @@ public class WhenOpenDoor : MonoBehaviour
         Vector3 originalPosition = _currentCamera.position;
         Quaternion originalRotation = _currentCamera.rotation;
 
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.MetalDoorSFX,this.transform.position);
+
         yield return StartCoroutine(LerpCamera(
             originalPosition,
             _cameraPoint.position,

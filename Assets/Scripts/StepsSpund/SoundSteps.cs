@@ -1,5 +1,5 @@
 using UnityEngine;
-public class PlayerFootsteps : MonoBehaviour
+public class SoundSteps : MonoBehaviour
 {
     [SerializeField] private PlayerMovement _player;
     [SerializeField] private float _stepInterval = 0.05f;
