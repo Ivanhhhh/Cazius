@@ -129738,28 +129738,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCQuestGiver
   quest: {fileID: 11400000, guid: a8ba0962e345e334da6112d4191f98a7, type: 2}
   _interactText: F to talk
-  _wavingTrigger: Waving
-  _rotationSpeed: 5
-  _rotateTowardsPlayer: 1
-  _interactSFX: 3
-  _idleVariant: 0
-  _idleVariantParamName: IdleVariant
+  _interactionUIPoint: {fileID: 272080707}
   _questPrizeItem: {fileID: 11400000, guid: 33d5c6a2c4a26c645b85e9080f8eea8c, type: 2}
   _removeItemOnCompletion: 1
   _defaultItemTurnInConfirmID: dialog_default_item_turn_in_confirm
-  _showOnMap: 0
-  _questDestination: {x: 0, y: 0, z: 0}
-  _moveAfterCompletion: 0
-  _newPosition: {x: 0, y: 0, z: 0}
-  _newRotationEuler: {x: 0, y: 0, z: 0}
-  _rotateTowardsPlayerAfterCompletion: 0
-  _changeAnimationOnCompletion: 0
-  _completionAnimType: 0
-  _animParamName: IdleSubtle
-  _newAnimIntValue: 1
-  _enablePatrolOnCompletion: 0
-  _npcController: {fileID: 0}
-  _interactionUIPoint: {fileID: 272080707}
 --- !u!4 &272080707 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8601896732252793923, guid: 6f442a3a292a1454082974e4a75e2b53, type: 3}
@@ -150338,6 +150320,71 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7849003160018633656, guid: 9a24200524296074e95954e73e0ee08a, type: 3}
   m_PrefabInstance: {fileID: 357995066}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &358191610
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1391987413}
+    m_Modifications:
+    - target: {fileID: 2271857753903772029, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 15.33503
+      objectReference: {fileID: 0}
+    - target: {fileID: 2271857753903772029, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.90922
+      objectReference: {fileID: 0}
+    - target: {fileID: 2271857753903772029, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 19.372108
+      objectReference: {fileID: 0}
+    - target: {fileID: 2271857753903772029, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2271857753903772029, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2271857753903772029, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2271857753903772029, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2271857753903772029, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2271857753903772029, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2271857753903772029, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4046207190020911646, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+      propertyPath: m_Name
+      value: Quest Spawns
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2271857753903772029, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 8469788077464924571}
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+--- !u!4 &358191611 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2271857753903772029, guid: db2fb8922fa3f6644b1bcaa2245ef543, type: 3}
+  m_PrefabInstance: {fileID: 358191610}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &358271370
 PrefabInstance:
@@ -293916,6 +293963,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7085046301913456107, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
       insertIndex: 2
       addedObject: {fileID: 821952527}
+    - targetCorrespondingSourceObject: {fileID: 7085046301913456107, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 821952530}
   m_SourcePrefab: {fileID: 100100000, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
 --- !u!4 &821952525 stripped
 Transform:
@@ -293976,6 +294026,25 @@ MonoBehaviour:
   _newAnimIntValue: 1
   _enablePatrolOnCompletion: 0
   _npcController: {fileID: 0}
+--- !u!114 &821952530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821952526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adf015bd209c1e4f999b634e1e8f778, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCController
+  _waypoints: []
+  _moveSpeed: 2
+  _turnSpeed: 120
+  _acceleration: 4
+  _arriveDistance: 0.1
+  _waitTime: 2
+  _animator: {fileID: 0}
 --- !u!1001 &822051519
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -330644,28 +330713,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCQuestGiver
   quest: {fileID: 11400000, guid: a8ba0962e345e334da6112d4191f98a7, type: 2}
   _interactText: F to talk
-  _wavingTrigger: Waving
-  _rotationSpeed: 5
-  _rotateTowardsPlayer: 1
-  _interactSFX: 3
-  _idleVariant: 0
-  _idleVariantParamName: IdleVariant
+  _interactionUIPoint: {fileID: 272080707}
   _questPrizeItem: {fileID: 11400000, guid: 33d5c6a2c4a26c645b85e9080f8eea8c, type: 2}
   _removeItemOnCompletion: 1
   _defaultItemTurnInConfirmID: dialog_default_item_turn_in_confirm
-  _showOnMap: 0
-  _questDestination: {x: 0, y: 0, z: 0}
-  _moveAfterCompletion: 1
-  _newPosition: {x: 0.00799942, y: 0.127, z: 16.585}
-  _newRotationEuler: {x: 15.058, y: 180, z: 0}
-  _rotateTowardsPlayerAfterCompletion: 0
-  _changeAnimationOnCompletion: 1
-  _completionAnimType: 1
-  _animParamName: IdleVariant
-  _newAnimIntValue: 1
-  _enablePatrolOnCompletion: 0
-  _npcController: {fileID: 0}
-  _interactionUIPoint: {fileID: 272080707}
 --- !u!1001 &928859295
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -439551,6 +439602,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7085046301913456107, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
       insertIndex: 2
       addedObject: {fileID: 1151780047}
+    - targetCorrespondingSourceObject: {fileID: 7085046301913456107, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1151780050}
   m_SourcePrefab: {fileID: 100100000, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
 --- !u!4 &1151780045 stripped
 Transform:
@@ -439611,6 +439665,25 @@ MonoBehaviour:
   _newAnimIntValue: 1
   _enablePatrolOnCompletion: 0
   _npcController: {fileID: 0}
+--- !u!114 &1151780050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151780046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adf015bd209c1e4f999b634e1e8f778, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCController
+  _waypoints: []
+  _moveSpeed: 2
+  _turnSpeed: 120
+  _acceleration: 4
+  _arriveDistance: 0.1
+  _waitTime: 2
+  _animator: {fileID: 0}
 --- !u!1001 &1153083942
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -518267,6 +518340,7 @@ Transform:
   - {fileID: 832034273}
   - {fileID: 839066355}
   - {fileID: 182532688}
+  - {fileID: 358191611}
   - {fileID: 351781894}
   - {fileID: 849531718}
   - {fileID: 980910396}
@@ -536355,28 +536429,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCQuestGiver
   quest: {fileID: 11400000, guid: a8ba0962e345e334da6112d4191f98a7, type: 2}
   _interactText: F to talk
-  _wavingTrigger: Waving
-  _rotationSpeed: 5
-  _rotateTowardsPlayer: 1
-  _interactSFX: 3
-  _idleVariant: 0
-  _idleVariantParamName: IdleVariant
+  _interactionUIPoint: {fileID: 1429881541}
   _questPrizeItem: {fileID: 11400000, guid: 33d5c6a2c4a26c645b85e9080f8eea8c, type: 2}
   _removeItemOnCompletion: 1
   _defaultItemTurnInConfirmID: dialog_default_item_turn_in_confirm
-  _showOnMap: 0
-  _questDestination: {x: 0, y: 0, z: 0}
-  _moveAfterCompletion: 0
-  _newPosition: {x: 0, y: 0, z: 0}
-  _newRotationEuler: {x: 0, y: 0, z: 0}
-  _rotateTowardsPlayerAfterCompletion: 0
-  _changeAnimationOnCompletion: 0
-  _completionAnimType: 0
-  _animParamName: IdleSubtle
-  _newAnimIntValue: 1
-  _enablePatrolOnCompletion: 0
-  _npcController: {fileID: 0}
-  _interactionUIPoint: {fileID: 1429881541}
 --- !u!114 &1429881545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -536391,28 +536447,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCQuestGiver
   quest: {fileID: 11400000, guid: 4e551c406032da64d851ccc3b70749df, type: 2}
   _interactText: F
-  _wavingTrigger: Waving
-  _rotationSpeed: 5
-  _rotateTowardsPlayer: 1
-  _interactSFX: 3
-  _idleVariant: 0
-  _idleVariantParamName: IdleVariant
+  _interactionUIPoint: {fileID: 1429881541}
   _questPrizeItem: {fileID: 0}
   _removeItemOnCompletion: 1
   _defaultItemTurnInConfirmID: dialog_default_item_turn_in_confirm
-  _showOnMap: 0
-  _questDestination: {x: 0, y: 0, z: 0}
-  _moveAfterCompletion: 1
-  _newPosition: {x: 14.845, y: 0.01499999, z: 19.26893}
-  _newRotationEuler: {x: 0, y: 93.375, z: 0}
-  _rotateTowardsPlayerAfterCompletion: 0
-  _changeAnimationOnCompletion: 1
-  _completionAnimType: 1
-  _animParamName: IdleVariant
-  _newAnimIntValue: 1
-  _enablePatrolOnCompletion: 0
-  _npcController: {fileID: 0}
-  _interactionUIPoint: {fileID: 1429881541}
 --- !u!95 &1429881546
 Animator:
   serializedVersion: 7
@@ -718597,6 +718635,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7085046301913456107, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
       insertIndex: 2
       addedObject: {fileID: 1969495526}
+    - targetCorrespondingSourceObject: {fileID: 7085046301913456107, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1969495529}
   m_SourcePrefab: {fileID: 100100000, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
 --- !u!4 &1969495524 stripped
 Transform:
@@ -718657,6 +718698,25 @@ MonoBehaviour:
   _newAnimIntValue: 1
   _enablePatrolOnCompletion: 0
   _npcController: {fileID: 0}
+--- !u!114 &1969495529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969495525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adf015bd209c1e4f999b634e1e8f778, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCController
+  _waypoints: []
+  _moveSpeed: 2
+  _turnSpeed: 120
+  _acceleration: 4
+  _arriveDistance: 0.1
+  _waitTime: 2
+  _animator: {fileID: 0}
 --- !u!1001 &1969649491
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -809463,28 +809523,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCQuestGiver
   quest: {fileID: 11400000, guid: 754b10e98eb6a224facb84add5f161c3, type: 2}
   _interactText: F to talk
-  _wavingTrigger: Waving
-  _rotationSpeed: 5
-  _rotateTowardsPlayer: 1
-  _interactSFX: 4
-  _idleVariant: 0
-  _idleVariantParamName: IdleVariant
+  _interactionUIPoint: {fileID: 3228502022850010176}
   _questPrizeItem: {fileID: 11400000, guid: e8184ae5ef468694fbc8c674b146a8fe, type: 2}
   _removeItemOnCompletion: 1
   _defaultItemTurnInConfirmID: dialog_default_item_turn_in_confirm
-  _showOnMap: 0
-  _questDestination: {x: 0, y: 0, z: 0}
-  _moveAfterCompletion: 1
-  _newPosition: {x: 146.38, y: -0.114, z: -18.1}
-  _newRotationEuler: {x: 0, y: 0, z: 0}
-  _rotateTowardsPlayerAfterCompletion: 1
-  _changeAnimationOnCompletion: 1
-  _completionAnimType: 0
-  _animParamName: Running
-  _newAnimIntValue: 1
-  _enablePatrolOnCompletion: 1
-  _npcController: {fileID: 3228502022850010178}
-  _interactionUIPoint: {fileID: 3228502022850010176}
 --- !u!95 &3228502022850010180 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 4609672171972893995, guid: dd41622a4a38e6d468a20c102d518543, type: 3}
@@ -810861,35 +810903,47 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 358191611}
     m_Modifications:
     - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 70.68141
-      objectReference: {fileID: 0}
-    - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.20836596
-      objectReference: {fileID: 0}
-    - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -15.875014
-      objectReference: {fileID: 0}
-    - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
-      propertyPath: m_LocalRotation.w
+      propertyPath: m_LocalScale.x
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.071
+      objectReference: {fileID: 0}
+    - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.008000016
+      objectReference: {fileID: 0}
+    - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.1815834
+      objectReference: {fileID: 0}
+    - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9641232
+      objectReference: {fileID: 0}
+    - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.2654554
       objectReference: {fileID: 0}
     - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -810897,7 +810951,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -30.788
       objectReference: {fileID: 0}
     - target: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -810916,6 +810970,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
+--- !u!4 &8469788077464924571 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7041564434775586474, guid: 0720bc4a10547714faa44ca5c253bcde, type: 3}
+  m_PrefabInstance: {fileID: 8469788077464924570}
+  m_PrefabAsset: {fileID: 0}
 --- !u!33 &9106812787950706851
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -811005,4 +811064,3 @@ SceneRoots:
   - {fileID: 1391987413}
   - {fileID: 2141997186}
   - {fileID: 1114088235}
-  - {fileID: 8469788077464924570}
