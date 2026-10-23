@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 7410321554664465077}
   - component: {fileID: 8767502138739023901}
   - component: {fileID: 8330625792840198888}
+  - component: {fileID: -410996346172651844}
   m_Layer: 8
   m_Name: PlayerModel
   m_TagString: Untagged
@@ -392,13 +393,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerModelMovement
   _modelPos: {fileID: 0}
+  _rb: {fileID: 0}
+  _camera: {fileID: 0}
+  _animator: {fileID: 0}
   modelOffset: {x: 0, y: 0, z: 0}
   forceLookForward: 0
   _forceLookOffset: 30
   _aimSmoothTime: 0.1
+  isAiming: 0
   _maxAngle: 38
   _rotationOffset: 5
   _rotationSpeed: 4
+  _walkingRotationSpeed: 1
+  _walkingRotateMaxAngle: 20
+  _walkingRotateHalfAngle: 15
 --- !u!114 &8330625792840198888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -418,14 +426,30 @@ MonoBehaviour:
   _hipsAim2: {fileID: 2885729043663346338}
   _headAim: {fileID: 9006336713187891090}
   _hipsAimingWeight: 1
+  _hipsAimingMaxLimit: 31
   _hips2AimingWeight: 1
   _headAimingWeight: 1
   _HeadAimingSourceObjWeight: 0.42
   _hipsWalkingWeight: 0.742
+  _hipsWalkingMaxLimit: 10
   _hips2WalkingWeight: 0.742
   _headWalkingWeight: 1
   _HeadWalkingSourceObjWeight: 0.58
   _headbuttDuration: 1
+--- !u!114 &-410996346172651844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1757538884074162663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b77c2c144c279ba4d8eb5e4dffe492e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerFootsteps
+  _player: {fileID: 0}
+  _stepInterval: 0.05
 --- !u!1 &3101524954698322745
 GameObject:
   m_ObjectHideFlags: 0
@@ -3533,6 +3557,7 @@ MonoBehaviour:
   - {fileID: 4629652749377064566}
   - {fileID: 0}
   - {fileID: 0}
+  _setWithGun: 0
 --- !u!4 &3751832576794540728 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8311600421249725388, guid: d0b724c195a0ce644b558f092adc3cda, type: 3}
