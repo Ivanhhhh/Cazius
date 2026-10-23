@@ -59,6 +59,7 @@ public class AngelDemonAnim : MonoBehaviour
     {
         animator.SetBool("Attacking", true);
         animator.SetTrigger("Attack");
+        SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.EnemyMeleeAttack,this.transform.position);
     }
 
     public void AttackFalse()
