@@ -50,6 +50,8 @@ public class OpenTheDoor : MonoBehaviour, IEInteractable
 
         if (!isOpen)
         {
+             SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.DoorWoodSFX,transform.position);
+
             Vector3 direction = player.position - transform.position;
 
             if (Vector3.Dot(transform.right, direction) > 0)
