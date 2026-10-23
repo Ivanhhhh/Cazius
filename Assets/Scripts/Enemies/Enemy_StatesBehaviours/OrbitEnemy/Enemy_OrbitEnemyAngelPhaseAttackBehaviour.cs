@@ -7,6 +7,8 @@ public class Enemy_OrbitEnemyAngelPhaseAttackBehaviour : Enemy_OrbitEnemyAngelPh
 
     private bool _hasAttackedOnce;
     private float _secondAttackReadyTime;
+    private float _specialAttackReadyTime;
+    private const float SPECIAL_ATTACK_COOLDOWN = 30f;
 
     public Enemy_OrbitEnemyAngelPhaseAttackBehaviour(
         Transform transform,
@@ -30,6 +32,22 @@ public class Enemy_OrbitEnemyAngelPhaseAttackBehaviour : Enemy_OrbitEnemyAngelPh
 
     protected override void ExecuteAttack()
     {
+        // NUEVO: Comprobamos si estamos en Wave 2+ y si el temporizador de 30s está listo
+        if (_orbitData.IsInSecondPhaseWave2OrMore && Time.time >= _specialAttackReadyTime)
+        {
+            _specialAttackReadyTime = Time.time + SPECIAL_ATTACK_COOLDOWN; // Reiniciamos el timer a 30s
+
+            // Lanzamos el ataque nuevo a través del SpawnZone
+            if (_orbitData.EnemyMeteoriteSpawnZone != null)
+            {
+                _orbitData.EnemyMeteoriteSpawnZone.SpawnSpecialAttack();
+            }
+
+            // Retornamos para que este frame no lance también meteoritos normales
+            return;
+        }
+
+        // --- Lógica original ---
         if (!_hasAttackedOnce)
         {
             _hasAttackedOnce = true;

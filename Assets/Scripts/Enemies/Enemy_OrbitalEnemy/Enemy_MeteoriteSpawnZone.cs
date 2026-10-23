@@ -17,6 +17,9 @@ public class Enemy_MeteoriteSpawnZone : MonoBehaviour
     [Header("Predicción")]
     [SerializeField] private float predictionTime = 0.5f;
 
+    [Header("Ataque Especial (Wave 2+)")]
+    [SerializeField] private GameObject specialAttackPrefab; // Arrastra aquí tu Prefab del Anticipation
+
 
     // Cache / fallback
     private Rigidbody playerRb;
@@ -212,6 +215,22 @@ public class Enemy_MeteoriteSpawnZone : MonoBehaviour
         Vector2 circle = Random.insideUnitCircle * spawnRadius;
         return new Vector3(circle.x, 0f, circle.y);
     }
+
+    public GameObject SpawnSpecialAttack(bool ignoreZoneCheck = true)
+    {
+        if (specialAttackPrefab == null)
+        {
+            Debug.LogWarning("[SpawnZone] Falta el prefab del ataque especial.", this);
+            return null;
+        }
+
+        if (!CanSpawn(ignoreZoneCheck)) return null;
+
+        // Spawnea en la posición predicha del jugador
+        Vector3 spawnPos = GetPredictedPosition();
+        return Instantiate(specialAttackPrefab, spawnPos, Quaternion.identity);
+    }
+
 
     private void OnDrawGizmosSelected()
     {

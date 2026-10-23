@@ -63,6 +63,8 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
     [Header("Second Phase Waves")]
     [SerializeField] private int _maxSecondPhaseRespawns = 1;
 
+    public bool IsInSecondPhaseWave2OrMore => _inSecondPhase && _secondPhaseBarrierDrops >= 1;
+
     private int _secondPhaseBarrierDrops;
 
     public int SecondPhaseBarrierDrops => _secondPhaseBarrierDrops;
