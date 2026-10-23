@@ -49,7 +49,6 @@ public class NPCOnCompletionBehavior : MonoBehaviour
 
     private void Start()
     {
-        // QuestManager lives in the Persistent scene and may not exist yet during OnEnable
         if (!_stateApplied)
             _stateApplied = TryApplyStateFromQuestStatus();
     }
@@ -58,8 +57,6 @@ public class NPCOnCompletionBehavior : MonoBehaviour
     {
         _questGiver.OnCompletionApplied -= HandleCompletionApplied;
     }
-
-    // --- State derived from quest status ---
 
     private bool TryApplyStateFromQuestStatus()
     {
@@ -88,6 +85,22 @@ public class NPCOnCompletionBehavior : MonoBehaviour
 
     private void ApplyAfterState()
     {
+        if (_moveAfterCompletion)
+        {
+            if (_npcController != null)
+                _npcController.Velocity = Vector3.zero;
+
+            transform.localPosition = _newPosition;
+            transform.localRotation = Quaternion.Euler(_newRotation);
+
+            if (_animator != null && _animator.transform != transform)
+            {
+                _animator.transform.localPosition = Vector3.zero;
+                _animator.transform.localRotation = Quaternion.identity;
+                _animator.Update(0f);
+            }
+        }
+
         if (_enablePatrol && _npcController != null)
             _npcController.enabled = true;
 
@@ -110,19 +123,10 @@ public class NPCOnCompletionBehavior : MonoBehaviour
         return _changeAnimation && _animator != null && !string.IsNullOrEmpty(_animParamName);
     }
 
-    // --- Fade midpoint, raised by NPCQuestGiver ---
-
     private void HandleCompletionApplied()
     {
-        // A turn towards the player still in progress would fight the reposition
         if (_facePlayer != null)
             _facePlayer.StopRotation();
-
-        if (_moveAfterCompletion)
-        {
-            transform.localPosition = _newPosition;
-            transform.localRotation = Quaternion.Euler(_newRotation);
-        }
 
         ApplyAfterState();
     }
