@@ -1,29 +1,15 @@
 using System;
-using System.Collections;
 using System.Linq;
 using UnityEngine;
-
-public enum AnimationType
-{
-    Trigger,
-    Int
-}
 
 public class NPCQuestGiver : MonoBehaviour, IEInteractable
 {
     [Header("Quest")]
     [SerializeField] private QuestDefinition quest;
 
-    [Header("NPC Behavior")]
-    [SerializeField] private string _interactText = "F to talk";
-    [SerializeField] private string _wavingTrigger = "Waving";
-    [SerializeField] private float _rotationSpeed = 5f;
-    [SerializeField] private bool _rotateTowardsPlayer = true;
-    [SerializeField] private SFXManager.SFXCategoryType _interactSFX = SFXManager.SFXCategoryType.MaleHeySFX;
-
-    [Header("Idle Variant (Initial)")]
-    [SerializeField] private int _idleVariant = 0;
-    [SerializeField] private string _idleVariantParamName = "IdleVariant";
+    [Header("Interaction")]
+    [SerializeField] private string _interactText = "F";
+    [SerializeField] private Transform _interactionUIPoint;
 
     [Header("Reward")]
     [SerializeField] private ItemData _questPrizeItem;
@@ -32,117 +18,53 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
     [SerializeField] private bool _removeItemOnCompletion = false;
     [SerializeField] private string _defaultItemTurnInConfirmID = "dialog_default_item_turn_in_confirm";
 
+    /*
     [Header("Map")]
     [SerializeField] private bool _showOnMap = false;
     [SerializeField] private Vector3 _questDestination;
+    public bool ShowOnMap => _showOnMap;
+    public Vector3 QuestDestination => _questDestination;
+    */
 
-    [Header("Reposition & Animation After Quest")]
-    [SerializeField] private bool _moveAfterCompletion = false;
-    [SerializeField] private Vector3 _newPosition;
-    [SerializeField] private Vector3 _newRotationEuler;
+    // --- Add-on seams ---
 
-    [SerializeField] private bool _rotateTowardsPlayerAfterCompletion = false;
+    // Triggered at the start of every interaction
+    public event Action<Transform> OnInteracted;
 
-    [SerializeField] private bool _changeAnimationOnCompletion = false;
-    [SerializeField] private AnimationType _completionAnimType = AnimationType.Trigger;
-    [SerializeField] private string _animParamName = "IdleVariant";
-    [SerializeField] private int _newAnimIntValue = 1;
+    // Triggered when a conversation with this NPC ends
+    public event Action OnDialogClosed;
 
-    [Header("Patrol After Quest (Optional)")]
-    [SerializeField] private bool _enablePatrolOnCompletion = false;
-    [SerializeField] private NPCController _npcController;
+    // Triggered once, at the fade midpoint, after the quest is first completed.
+    // The fade only runs if something subscribes to this event.
+    public event Action OnCompletionApplied;
 
-    private Animator _animator;
-    private Coroutine _rotateCoroutine;
-    private bool _hasBeenRepositioned = false;
+    // --- Public API for add-ons and other systems ---
 
-    [SerializeField] private Transform _interactionUIPoint;
+    public QuestDefinition Quest => quest;
+
+    public QuestStatus CurrentStatus =>
+        quest != null && QuestManager.Instance != null
+            ? QuestManager.Instance.GetStatus(quest.questID)
+            : QuestStatus.NotStarted;
+
+    public bool IsQuestCompleted =>
+        CurrentStatus == QuestStatus.Completed || CurrentStatus == QuestStatus.JustCompleted;
+
+
+    // --- IEInteractable ---
+
+    public string GetInteractText() => _interactText;
+    public Transform GetTransform() => transform;
+    public bool IsLocked() => false;
+
     public Transform GetInteractionUIPoint()
     {
         return _interactionUIPoint != null ? _interactionUIPoint : transform;
     }
 
-    private void Awake()
-    {
-        _animator = GetComponentInChildren<Animator>();
-
-        if (_npcController == null)
-            _npcController = GetComponent<NPCController>();
-    }
-
-    private void OnEnable()
-    {
-        if (_animator == null)
-            _animator = GetComponentInChildren<Animator>();
-
-        ApplyStateFromQuestStatus();
-    }
-
-    private void Start()
-    {
-        ApplyStateFromQuestStatus();
-    }
-
-    private void ApplyStateFromQuestStatus()
-    {
-        if (_animator == null || quest == null || QuestManager.Instance == null) return;
-
-        QuestStatus status = QuestManager.Instance.GetStatus(quest.questID);
-
-        if (status == QuestStatus.Completed || status == QuestStatus.JustCompleted || _hasBeenRepositioned)
-        {
-            _hasBeenRepositioned = true;
-
-            if (_enablePatrolOnCompletion && _npcController != null)
-            {
-                _npcController.enabled = true;
-            }
-
-            if (_changeAnimationOnCompletion && !string.IsNullOrEmpty(_animParamName))
-            {
-                switch (_completionAnimType)
-                {
-                    case AnimationType.Trigger:
-                        _animator.SetTrigger(_animParamName);
-                        break;
-
-                    case AnimationType.Int:
-                        _animator.SetInteger(_animParamName, _newAnimIntValue);
-                        break;
-                }
-            }
-        }
-        else
-        {
-            if (_enablePatrolOnCompletion && _npcController != null)
-            {
-                _npcController.enabled = false;
-            }
-
-            if (!string.IsNullOrEmpty(_idleVariantParamName))
-            {
-                _animator.SetInteger(_idleVariantParamName, _idleVariant);
-                _animator.Update(0f);
-            }
-        }
-    }
-
     public void Interact(Transform interactorTransform)
     {
-        // Pause waypoint patrol during dialogue if active
-        if (_npcController != null && _npcController.enabled && _npcController.Machine != null)
-        {
-            _npcController.Machine.ChangeState(_npcController.TalkingState);
-        }
-
-        bool canRotate = _hasBeenRepositioned ? _rotateTowardsPlayerAfterCompletion : _rotateTowardsPlayer;
-        if (canRotate)
-            RotateTowardsPlayer(interactorTransform);
-
-        if (_animator != null && !string.IsNullOrEmpty(_wavingTrigger))
-            _animator.SetTrigger(_wavingTrigger);
-
-        SFXManager.Instance.PlaySFXAtPosition(_interactSFX, transform.position);
+        OnInteracted?.Invoke(interactorTransform);
 
         QuestManager.Instance.RegisterQuest(quest);
         QuestStatus status = QuestManager.Instance.GetStatus(quest.questID);
@@ -196,14 +118,6 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         }
     }
 
-    public bool ShowOnMap => _showOnMap;
-    public Vector3 QuestDestination => _questDestination;
-
-    public string GetInteractText() => _interactText;
-    public Transform GetTransform() => transform;
-
-    public bool IsLocked() => false;
-
     // --- Localization helper ---
 
     private string[] Translate(string[] ids)
@@ -212,15 +126,12 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         return ids.Select(id => LocalizationManager.Instance.GetTranslate(id)).ToArray();
     }
 
-    // --- Dialog openers ---
-
-    private void OnDialogClose()
+    private void HandleDialogClosed()
     {
-        if (_npcController != null && _npcController.enabled && _npcController.Machine != null)
-        {
-            _npcController.Machine.ChangeState(_npcController.IdleState);
-        }
+        OnDialogClosed?.Invoke();
     }
+
+    // --- Dialog openers ---
 
     private void OpenOfferDialog()
     {
@@ -231,18 +142,25 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                 onAccept: () =>
                 {
                     QuestManager.Instance.StartQuest(quest.questID);
+
                     if (QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.Active)
                         OpenStageOfferDialog();
+                    else
+                        HandleDialogClosed();
                 },
-                onClose: OnDialogClose
+                onClose: HandleDialogClosed
             );
             return;
         }
 
         DialogUIController.Instance.OpenDialog(
             pages: Translate(quest.offerDialog),
-            onAccept: () => QuestManager.Instance.StartQuest(quest.questID),
-            onClose: OnDialogClose
+            onAccept: () =>
+            {
+                QuestManager.Instance.StartQuest(quest.questID);
+                HandleDialogClosed();
+            },
+            onClose: HandleDialogClosed
         );
     }
 
@@ -267,7 +185,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: Translate(stage.stageOfferDialog),
             onAccept: null,
-            onClose: OnDialogClose
+            onClose: HandleDialogClosed
         );
     }
 
@@ -284,7 +202,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                     DialogUIController.Instance.OpenDialog(
                         pages: Translate(stage.stageActiveDialog),
                         onAccept: null,
-                        onClose: OnDialogClose
+                        onClose: HandleDialogClosed
                     );
                     return;
                 }
@@ -294,7 +212,7 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: Translate(quest.activeDialog),
             onAccept: null,
-            onClose: OnDialogClose
+            onClose: HandleDialogClosed
         );
     }
 
@@ -307,7 +225,9 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
                 ? quest.stages[stageIndex]
                 : null;
 
-            bool isItemTurnInStage = currentStage != null && currentStage.removeItemOnAdvance && currentStage.itemToRemoveOnAdvance != null;
+            bool isItemTurnInStage = currentStage != null
+                                  && currentStage.removeItemOnAdvance
+                                  && currentStage.itemToRemoveOnAdvance != null;
 
             if (isItemTurnInStage)
             {
@@ -351,14 +271,18 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: dialogPages,
             onAccept: onAcceptTurnIn,
-            onClose: OnDialogClose
+            onClose: HandleDialogClosed
         );
     }
 
     private void ProcessMultiStageAdvancement(QuestStage currentStage)
     {
         bool didAdvance = QuestManager.Instance.TryAdvanceStage(quest.questID);
-        if (!didAdvance) return;
+        if (!didAdvance)
+        {
+            HandleDialogClosed();
+            return;
+        }
 
         bool isNowJustCompleted = QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted;
 
@@ -403,65 +327,27 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
             onAccept: null,
             onClose: () =>
             {
+                // JustCompleted - Completed happens once, so this is the only time the effects run
+                bool isFirstClose = QuestManager.Instance.GetStatus(quest.questID) == QuestStatus.JustCompleted;
+
                 QuestManager.Instance.AcknowledgeCompletion(quest.questID);
+                HandleDialogClosed();
 
-                if (!_hasBeenRepositioned && (_moveAfterCompletion || _changeAnimationOnCompletion || _enablePatrolOnCompletion))
-                {
-                    _hasBeenRepositioned = true;
-
-                    if (UIFadeInFadeOut.Instance != null)
-                    {
-                        UIFadeInFadeOut.Instance.FadeOutIn(() =>
-                        {
-                            ApplyCompletionMoveAndAnimation();
-
-                        });
-                    }
-                    else
-                    {
-                        ApplyCompletionMoveAndAnimation();
-                    }
-                }
-                else
-                {
-                    OnDialogClose();
-                }
+                if (isFirstClose)
+                    ApplyCompletionEffects();
             }
         );
     }
 
-    private void ApplyCompletionMoveAndAnimation()
+    private void ApplyCompletionEffects()
     {
-        if (_rotateCoroutine != null)
-        {
-            StopCoroutine(_rotateCoroutine);
-            _rotateCoroutine = null;
-        }
+        // Nothing subscribed means no add-on has anything to change, so skip the fade
+        if (OnCompletionApplied == null) return;
 
-        if (_moveAfterCompletion)
-        {
-            transform.localPosition = _newPosition;
-            transform.localRotation = Quaternion.Euler(_newRotationEuler);
-        }
-
-        if (_changeAnimationOnCompletion && _animator != null && !string.IsNullOrEmpty(_animParamName))
-        {
-            switch (_completionAnimType)
-            {
-                case AnimationType.Trigger:
-                    _animator.SetTrigger(_animParamName);
-                    break;
-
-                case AnimationType.Int:
-                    _animator.SetInteger(_animParamName, _newAnimIntValue);
-                    break;
-            }
-        }
-
-        if (_enablePatrolOnCompletion && _npcController != null)
-        {
-            _npcController.enabled = true;
-        }
+        if (UIFadeInFadeOut.Instance != null)
+            UIFadeInFadeOut.Instance.FadeOutIn(() => OnCompletionApplied?.Invoke());
+        else
+            OnCompletionApplied.Invoke();
     }
 
     private void OpenCompletedDialog()
@@ -469,37 +355,8 @@ public class NPCQuestGiver : MonoBehaviour, IEInteractable
         DialogUIController.Instance.OpenDialog(
             pages: Translate(quest.completedDialog),
             onAccept: null,
-            onClose: OnDialogClose
+            onClose: HandleDialogClosed
         );
-    }
-
-    // --- Helpers ---
-
-    private void RotateTowardsPlayer(Transform interactorTransform)
-    {
-        Vector3 dir = interactorTransform.position - transform.position;
-        dir.y = 0;
-        if (dir == Vector3.zero) return;
-
-        if (_rotateCoroutine != null)
-            StopCoroutine(_rotateCoroutine);
-
-        _rotateCoroutine = StartCoroutine(RotateCoroutine(Quaternion.LookRotation(dir)));
-    }
-
-    private IEnumerator RotateCoroutine(Quaternion targetRotation)
-    {
-        while (Quaternion.Angle(transform.rotation, targetRotation) > 0.1f)
-        {
-            transform.rotation = Quaternion.Lerp(
-                transform.rotation,
-                targetRotation,
-                _rotationSpeed * Time.deltaTime
-            );
-            yield return null;
-        }
-        transform.rotation = targetRotation;
-        _rotateCoroutine = null;
     }
 
 }
