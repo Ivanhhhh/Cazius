@@ -56,6 +56,40 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
     [SerializeField] private float _throneSpawnTime = 0f;
     [SerializeField] private float _laserPlayTime = 1f;
 
+
+
+
+
+    [Header("Second Phase Waves")]
+    [SerializeField] private int _maxSecondPhaseRespawns = 1;
+
+    public bool IsInSecondPhaseWave2OrMore => _inSecondPhase && _secondPhaseBarrierDrops >= 1;
+
+    private int _secondPhaseBarrierDrops;
+
+    public int SecondPhaseBarrierDrops => _secondPhaseBarrierDrops;
+    public bool CanStartAnotherSecondPhaseWave =>
+        _inSecondPhase && _secondPhaseBarrierDrops < _maxSecondPhaseRespawns;
+
+    public event Action OnSecondPhaseSpawnRequested;    // wave 1
+    public event Action OnSecondPhaseRespawnRequested;  // wave 2+  ← nuevo
+
+    public void RequestSecondPhaseSpawn()
+    {
+        OnSecondPhaseSpawnRequested?.Invoke();
+    }
+
+    public void RequestSecondPhaseRespawn()
+    {
+        if (!CanStartAnotherSecondPhaseWave) return;
+        _secondPhaseBarrierDrops++;
+        OnSecondPhaseRespawnRequested?.Invoke();
+    }
+
+
+
+
+
     public float ModelSwapTime => _modelSwapTime;
     public float ThroneSpawnTime => _throneSpawnTime;
     public float LaserPlayTime => _laserPlayTime;
@@ -69,8 +103,6 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
     /// El parametro indica si hay al menos un enemigo vivo en la lista.
     /// </summary>
     public event Action<bool> OnEnemiesAliveChanged;
-    public event Action OnSecondPhaseSpawnRequested;
-
 
     public float SecondAttackDuration => _secondAttackDuration;
     public float SpeedBoostMultiplier => _speedBoostMultiplier;
@@ -222,10 +254,6 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
 
         if (!HasEnemiesAlive)
             OnEnemiesAliveChanged?.Invoke(false);
-    }
-    public void RequestSecondPhaseSpawn()
-    {
-        OnSecondPhaseSpawnRequested?.Invoke();
     }
 
     public void FireAllOrbitProjectiles()
