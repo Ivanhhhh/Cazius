@@ -6,6 +6,8 @@ public class SoundSteps : MonoBehaviour
     [SerializeField] private PlayerMovement _player;
     [SerializeField] private float _stepInterval = 0.05f;
 
+    [SerializeField] private float Volume;
+
     private float _timer = 0.1f;
 
     void Update()
@@ -17,7 +19,8 @@ public class SoundSteps : MonoBehaviour
 
             if (_timer <= 0f)
             {
-                SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.StepsSFX,transform.position);
+                //SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.StepsSFX,transform.position);
+                SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.StepsSFX,Volume);
                 _timer = _stepInterval;
             }
         }
