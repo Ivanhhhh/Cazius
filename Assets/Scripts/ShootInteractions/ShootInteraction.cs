@@ -20,6 +20,20 @@ public class ShootInteraction : MonoBehaviour, IShootable
     [Header("Glowparticle")]
     [SerializeField] GameObject _glowParticle;
 
+    private void Awake()
+    {
+        if (_animator != null)
+        {
+        _animator.keepAnimatorStateOnDisable = true;
+        _animator.writeDefaultValuesOnDisable = false;
+        }
+
+        if (_impactParticle != null)
+        {
+            _impactParticle.SetActive(false);
+        }
+    }
+
     public void TakeDamage(float amount)
     {
         if (_animator != null && _animTriggerName != null) { _animator.SetTrigger(_animTriggerName); }
