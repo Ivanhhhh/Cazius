@@ -284,6 +284,7 @@ public class Player_AimAndShoot : MonoBehaviour
     void HandleHit(RaycastHit weaponHit)
     {
         bool hitEnemy = weaponHit.collider.TryGetComponent<Enemy_Interface_Damage>(out var damageable);
+        bool hitObj = weaponHit.collider.TryGetComponent<IShootable>(out var objDamageable);
 
         if (_bulletDecalSpawner != null)
         {
@@ -303,6 +304,10 @@ public class Player_AimAndShoot : MonoBehaviour
             {
                 Instantiate(_hitParticle, weaponHit.point, Quaternion.LookRotation(weaponHit.normal));
             }
+        }
+        if (hitObj)
+        {
+            objDamageable.TakeDamage(_shootDamageAmount);
         }
     }
 
