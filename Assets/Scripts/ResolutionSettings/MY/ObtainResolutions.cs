@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
-public class ObtainResolutions : MonoBehaviour
+public class ObtainResolutions
 {
    public List <Resolution>  SetupResolutions() // creo el metodo SetupResolutions
     {
