@@ -12,7 +12,6 @@ public class SoundSteps : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(_player._currentSpeed);
         if (_player._currentSpeed > 0.01)
         {
             _timer -= Time.deltaTime;
