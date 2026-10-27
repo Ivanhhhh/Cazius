@@ -1,31 +1,43 @@
 using UnityEngine;
 
-public class ScreenSettingsStorage : MonoBehaviour
+public class ScreenSettingsStorage
 {  
     const string WidthKey  = "ResolutionWidth";
     const string HeightKey = "ResolutionHeight";
     const string ModeKey   = "ScreenMode";
 
-    public void SaveWidthScreen(int WidthValue)
+    public void SaveWidthScreen(int widthValue)
     {
-        PlayerPrefs.SetInt(WidthKey,WidthValue);
+        PlayerPrefs.SetInt(WidthKey,widthValue);
         PlayerPrefs.Save();
     }
 
-    public void SaveHeightScreen(int HeightValue)
+    public void SaveHeightScreen(int heightValue)
     {
-        PlayerPrefs.SetInt(HeightKey,HeightValue);
+        PlayerPrefs.SetInt(HeightKey,heightValue);
         PlayerPrefs.Save();
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    public void SaveScreenMode(FullScreenMode mode)
     {
-        
+        PlayerPrefs.SetInt(ModeKey, (int)mode);
+        PlayerPrefs.Save();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   public int LoadWidth()
+   {
+    return PlayerPrefs.GetInt(WidthKey, Screen.currentResolution.width);
+   }
+
+   public int LoadHeight()
+   {
+    return PlayerPrefs.GetInt(HeightKey, Screen.currentResolution.height);
+   }
+
+   public FullScreenMode LoadScreenMode()
+   {
+    int saved = PlayerPrefs.GetInt(ModeKey, (int)FullScreenMode.FullScreenWindow);
+    return (FullScreenMode)saved;
+   }
+
 }
