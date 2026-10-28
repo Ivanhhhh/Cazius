@@ -16,12 +16,16 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] private GameObject _soundPanel;
     [SerializeField] private GameObject _languagePanel;
 
+    [SerializeField] private GameObject _graphicsPanel;
+
     [Header("Main Panel - Buttons")]
     [SerializeField] private string _startGameScene = "LoadToGameFromMenu";
     [SerializeField] private Button _startGameButton;
     [SerializeField] private Button _optionsButton;
     [SerializeField] private Button _exitButton;
     [SerializeField] private Button _RebindButton;
+    [SerializeField] private Button _GraphicsButton;
+
 
     [Header("Options Panel - Buttons")]
     [SerializeField] private Button _controlsButton;

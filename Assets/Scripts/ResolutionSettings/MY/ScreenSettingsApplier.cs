@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ScreenSettingsApplier : MonoBehaviour
+public class ScreenSettingsApplier
 {
 
     public void Apply(int width, int height, FullScreenMode mode)

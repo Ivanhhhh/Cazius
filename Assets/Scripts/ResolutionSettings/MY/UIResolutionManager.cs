@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class UIResolutionsManager : MonoBehaviour
 {
+    ScreenSettingsStorage _storage = new ScreenSettingsStorage();
+    ScreenSettingsApplier _applier = new ScreenSettingsApplier();
+
      [SerializeField] TMP_Dropdown _resolutionDropdown; // es un selector dropdown de resolucion
     [SerializeField] TMP_Dropdown _fullscreenDropdown; // es un selector dropdown de fullsceren
 
@@ -31,7 +34,8 @@ public class UIResolutionsManager : MonoBehaviour
 
         _resolutionDropdown.ClearOptions();
         _resolutionDropdown.AddOptions(options);
-        PlaceResolutionOnStart(Screen.currentResolution.width, Screen.currentResolution.height);
+        PlaceResolutionOnStart(_storage.LoadWidth(), _storage.LoadHeight());
+        _resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
   }
 
 
@@ -48,6 +52,9 @@ public class UIResolutionsManager : MonoBehaviour
 
         _fullscreenDropdown.ClearOptions();
         _fullscreenDropdown.AddOptions(options);
+
+        _fullscreenDropdown.SetValueWithoutNotify(ScreenModeToIndex(_storage.LoadScreenMode()));
+        _fullscreenDropdown.onValueChanged.AddListener(OnFullscreenChanged);
   }
 
 
@@ -68,5 +75,56 @@ public class UIResolutionsManager : MonoBehaviour
 
         _resolutionDropdown.SetValueWithoutNotify(_availableResolutions.Count - 1);
     }
+
+    int ScreenModeToIndex(FullScreenMode mode)
+{
+    switch (mode)
+    {
+        case FullScreenMode.ExclusiveFullScreen: return 0;
+        case FullScreenMode.FullScreenWindow:    return 1;
+        case FullScreenMode.Windowed:            return 2;
+        default:                                 return 1;
+    }
+}
+
+FullScreenMode IndexToScreenMode(int index)
+{
+    switch (index)
+    {
+        case 0:  return FullScreenMode.ExclusiveFullScreen;
+        case 1:  return FullScreenMode.FullScreenWindow;
+        case 2:  return FullScreenMode.Windowed;
+        default: return FullScreenMode.FullScreenWindow;
+    }
+}
+
+void OnResolutionChanged(int index)
+{
+    if (index < 0 || index >= _availableResolutions.Count)
+        return;
+
+    Resolution resolution = _availableResolutions[index];
+
+    _storage.SaveWidthScreen(resolution.width);
+    _storage.SaveHeightScreen(resolution.height);
+    _applier.Apply(resolution.width, resolution.height, _storage.LoadScreenMode());
+}
+
+void OnFullscreenChanged(int index)
+{
+    FullScreenMode mode = IndexToScreenMode(index);
+
+    _storage.SaveScreenMode(mode);
+    _applier.Apply(_storage.LoadWidth(), _storage.LoadHeight(), mode);
+}
+
+void OnDestroy()
+{
+    if (_resolutionDropdown != null)
+        _resolutionDropdown.onValueChanged.RemoveListener(OnResolutionChanged);
+
+    if (_fullscreenDropdown != null)
+        _fullscreenDropdown.onValueChanged.RemoveListener(OnFullscreenChanged);
+}
 
 }
