@@ -7,6 +7,10 @@ public class GameManager : MonoBehaviour
     [Header("Reference")]
     public PlayerMovement Player { get; private set; }
 
+    public Transform playerTransform;
+
+    public Transform playerModelTransform;
+
     public PlayerRigManager playerRig;
 
     public CameraShake cameraShake;
@@ -31,5 +35,6 @@ public class GameManager : MonoBehaviour
     public void RegisterPlayer(PlayerMovement player)
     {
         Player = player;
+        playerTransform = player.transform;
     }
 }

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c775739362622dc4c93274687942abf2, type: 3}
+  m_Name: PurgatoryNotes2Quest
+  m_EditorClassIdentifier: Assembly-CSharp::QuestDefinition
+  questID: Notes2Quest
+  questTitle: quest_notes2_title
+  questTooltip: quest_notes2_tooltip
+  questType: 1
+  condition: {fileID: 11400000, guid: 3e5c4ca02ef60124ca28af946b347d90, type: 2}
+  conditionTargetID: Diary_2
+  useStages: 0
+  stages: []
+  offerDialog:
+  - quest_notes2_offer_01
+  - quest_notes2_offer_02
+  - quest_notes2_offer_03
+  - quest_notes2_offer_04
+  activeDialog:
+  - quest_notes2_active_01
+  firstCompletionDialog:
+  - quest_notes2_firstcompletion_01
+  - quest_notes2_firstcompletion_02
+  completedDialog:
+  - quest_notes2_completed_01
+  itemTurnInConfirmDialog: []
