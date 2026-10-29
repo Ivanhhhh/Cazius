@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000006, guid: d66653a1a56e35a418559b8591605d98, type: 2}
+  m_LightingDataAsset: {fileID: 112000004, guid: d66653a1a56e35a418559b8591605d98, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 0d3c64e9c2529724a82ee1369942b633, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -430,6 +430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1906701603}
   - component: {fileID: 1906701604}
+  - component: {fileID: 1906701605}
   m_Layer: 0
   m_Name: SceneManagment
   m_TagString: Untagged
@@ -465,6 +466,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PurgatorySceneActivate
   scene: {fileID: 897367268}
+--- !u!114 &1906701605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1906701601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf75b0f40f41661439c2f42f5a974164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PurgatoryLightSceneManager
+  _lightingSceneName: PurgatoryBase
 --- !u!1 &2108823283
 GameObject:
   m_ObjectHideFlags: 0

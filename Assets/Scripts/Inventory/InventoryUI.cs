@@ -60,6 +60,7 @@ public class InventoryUI : MonoBehaviour
             Inventory.Instance.onInventoryChanged.AddListener(Refresh);
 
         InventoryInputHandler.OnInventoryToggled += OnToggled;
+        GameManager.Instance.inventoryUI = this;
 
         ClearItemDescription();
         UpdateTabVisuals();
@@ -138,6 +139,25 @@ public class InventoryUI : MonoBehaviour
             StopCoroutine(_typewriterCoroutine);
 
         _typewriterCoroutine = StartCoroutine(TypewriterRoutine(fullText));
+    }
+
+    public string ReturnItemDescription(ItemData item)
+    {
+        if (_descriptionText == null || item == null) return string.Empty;
+
+        string localizedName = string.IsNullOrEmpty(item.displayName)
+            ? item.itemName
+            : LocalizationManager.Instance.GetTranslate(item.displayName);
+
+        string localizedDesc = string.IsNullOrEmpty(item.itemDescription)
+            ? string.Empty
+            : LocalizationManager.Instance.GetTranslate(item.itemDescription);
+
+        string fullText = !string.IsNullOrEmpty(localizedDesc)
+            ? $"{localizedName}: {localizedDesc}"
+            : localizedName;
+
+        return fullText;
     }
 
     public void ClearItemDescription()
