@@ -15,18 +15,29 @@ public class Enemy_DamageSystem : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // 1. ¿Se dispara el trigger con algo?
+        Debug.Log($"TRIGGER DETECTADO con: {other.gameObject.name}");
+
+        // 2. ¿Las capas coinciden?
         if (((1 << other.gameObject.layer) & targetLayer) != 0)
         {
+            Debug.Log($"La capa SÍ coincide. Aplicando daño...");
+
             if (other.gameObject.TryGetComponent(out IPlayerHitable hitable))
             {
-                hitable.Hit(_damageAmount,gameObject);
-                Debug.Log("aplicar daño");
+                hitable.Hit(_damageAmount, gameObject);
+                Debug.Log("Daño aplicado con éxito");
             }
 
             if (_destroyOnImpact)
             {
+                Debug.Log("Intentando destruir o devolver al pool...");
                 ReturnOrDestroy();
             }
+        }
+        else
+        {
+            Debug.LogWarning($"Fallo de capa. La capa del objeto es {LayerMask.LayerToName(other.gameObject.layer)} pero buscas {LayerMask.LayerToName(LayerMask.NameToLayer("TuLayerObjetivo"))}");
         }
     }
 
@@ -34,14 +45,21 @@ public class Enemy_DamageSystem : MonoBehaviour
     private void ReturnOrDestroy()
     {
         // ¿Este objeto pertenece a un pool?
+        if (TryGetComponent(out Enemy_SpawnOnImpact spawner))
+        {
+            spawner.TrySpawn();
+        }
+
         if (TryGetComponent(out IPoolable poolable))
         {
             ObjectFactory.Instance.Return(poolable);
+            Debug.Log("Destroyed2");
+
         }
         else
         {
-            // No es pooleable, se destruye como siempre
             Destroy(gameObject);
+            Debug.Log("Destroyed");
         }
     }
 }

@@ -3,8 +3,18 @@ using System.Collections.Generic;
 
 public class SoulSpawner : MonoBehaviour
 {
-    [Header("Prefab")]
-    [SerializeField] private SoulEnergyMovement prefabOrbe;
+    // --- NUEVO: Estructura para los orbes con probabilidad ---
+    [System.Serializable]
+    public class SoulDrop
+    {
+        public SoulEnergyMovement prefab;
+        [Tooltip("Peso de probabilidad. Ej: Si el Orbe Común tiene 80 y el Raro tiene 20, el común saldrá el 80% de las veces.")]
+        public float peso = 1f;
+    }
+
+    [Header("Prefabs y Probabilidades")]
+    [Tooltip("Agrega aquí los diferentes tipos de orbes y su peso de aparición.")]
+    [SerializeField] private List<SoulDrop> posiblesOrbes = new List<SoulDrop>();
 
     [Header("Frecuencia de spawn")]
     [Tooltip("Segundos entre spawns. Se elige un valor aleatorio en este rango.")]
@@ -62,7 +72,7 @@ public class SoulSpawner : MonoBehaviour
     private void Update()
     {
         if (terminado) return;
-        if (prefabOrbe == null) return;
+        if (posiblesOrbes.Count == 0) return; // Si la lista está vacía, no hace nada
 
         orbesVivos.RemoveAll(o => o == null || !o.gameObject.activeInHierarchy);
 
@@ -89,12 +99,19 @@ public class SoulSpawner : MonoBehaviour
 
     private void SpawnearOrbe()
     {
+        // 1. Elegir qué prefab spawnear según las probabilidades
+        SoulEnergyMovement prefabElegido = ObtenerPrefabAleatorio();
+
+        if (prefabElegido == null) return; // Prevención por si algo falla
+
+        // 2. Calcular posición
         Vector3 origen = puntoSpawn != null ? puntoSpawn.position : transform.position;
         Vector3 offset = Random.insideUnitSphere * radioSpawn;
         offset.y = 0f;
 
+        // 3. Instanciar
         SoulEnergyMovement orbe = Instantiate(
-            prefabOrbe,
+            prefabElegido,
             origen + offset,
             Quaternion.identity
         );
@@ -103,6 +120,46 @@ public class SoulSpawner : MonoBehaviour
         orbe.AplicarImpulsoAleatorio(impulsoMin, impulsoMax, impulsoHorizontal);
 
         spawnsRealizados++;
+    }
+
+    // --- NUEVO: Lógica de probabilidad ponderada ---
+    private SoulEnergyMovement ObtenerPrefabAleatorio()
+    {
+        if (posiblesOrbes.Count == 0) return null;
+
+        // Calcular el peso total de todos los orbes de la lista
+        float pesoTotal = 0f;
+        foreach (var drop in posiblesOrbes)
+        {
+            if (drop.prefab != null && drop.peso > 0)
+                pesoTotal += drop.peso;
+        }
+
+        // Si todos los pesos son 0 o los prefabs son nulos, devolvemos el primero por defecto
+        if (pesoTotal <= 0f)
+        {
+            Debug.LogWarning("Todos los pesos son 0 o nulos. Devolviendo el primer prefab válido.");
+            return posiblesOrbes[0].prefab;
+        }
+
+        // Elegir un número aleatorio entre 0 y el peso total
+        float randomValue = Random.Range(0f, pesoTotal);
+        float pesoAcumulado = 0f;
+
+        // Recorrer la lista acumulando pesos hasta encontrar el elegido
+        foreach (var drop in posiblesOrbes)
+        {
+            if (drop.prefab == null || drop.peso <= 0) continue;
+
+            pesoAcumulado += drop.peso;
+            if (randomValue <= pesoAcumulado)
+            {
+                return drop.prefab;
+            }
+        }
+
+        // Fallback (por si las moscas, aunque matemáticamente nunca debería llegar aquí)
+        return posiblesOrbes[0].prefab;
     }
 
     private void Finalizar()
