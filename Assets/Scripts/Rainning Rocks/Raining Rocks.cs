@@ -1,5 +1,5 @@
+
 using UnityEngine;
-using SmoothShakeFree;
 using System.Collections;
 
 public class RainingRocks : MonoBehaviour
@@ -7,7 +7,7 @@ public class RainingRocks : MonoBehaviour
     public enum ActionType
     {
         Sound,
-        Physics
+        Animator
     }
 
     [SerializeField] private ActionType actionType;
@@ -15,70 +15,81 @@ public class RainingRocks : MonoBehaviour
     [Header("Sound")]
     [SerializeField] private SFXManager.SFXCategoryType sfxType;
 
-    [Header("Physics")]
-    [SerializeField] private string rockTag = "Rock";
-    [SerializeField] private float gravityMultiplier = 10f;
-    [SerializeField] private float timeBetweenRocks = 0.5f;
+    [Header("Animators")]
+    [SerializeField] private Animator[] animators;
 
-    [Header("Camera Shake")]
-    [SerializeField] private float shakeStrength = 0.08f;
+    [Header("Initial Shake")]
+    [SerializeField] private float _initialShakeStrength = 0.05f;
+    [SerializeField] private float _initialShakeDuration = 5f;
+
+    [Header("Impact Shake")]
+    [SerializeField] private float _impactShakeStrength = 0.3f;
+    [SerializeField] private float _impactShakeDuration = 5f;
+
+    [Header("Destruction Particles")]
+    [SerializeField] private ParticleSystem[] _impactDustParticles;
 
     private bool triggered = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player"))
-            return;
-
-        if (triggered)
-            return;
+        if (!other.CompareTag("Player")) return;
+        if (triggered) return;
 
         triggered = true;
 
         if (actionType == ActionType.Sound)
         {
             SFXManager.Instance.PlaySFXAtPositionAndPauseMusic(
-                sfxType,
-                transform.position
+                sfxType, transform.position
             );
+
+            CameraShakeManager.Instance.CameraShake(
+                _initialShakeStrength,
+                _initialShakeDuration
+            );
+            foreach (Animator anim in animators)
+            {
+                if (anim != null)
+                {
+                    anim.SetTrigger("Enable");
+                }
+            }
+
+            foreach (ParticleSystem particle in _impactDustParticles)
+            {
+                if (particle != null)
+                {
+                    particle.Play();
+                }
+            }
         }
-        else if (actionType == ActionType.Physics)
+        else if (actionType == ActionType.Animator)
         {
-            StartCoroutine(ActivateGravity());
-        }
-    }
-
-    private IEnumerator ActivateGravity()
-    {
-        GameObject[] rocks = GameObject.FindGameObjectsWithTag(rockTag);
-
-        CameraShake.Instance.StartShake(shakeStrength);
-
-        foreach (GameObject rock in rocks)
-        {
-            if (rock == null)
-                continue;
-
-            Rigidbody rb = rock.GetComponent<Rigidbody>();
-
-            if (rb == null)
-                continue;
-
-            rb.useGravity = true;
-
-            rb.AddForce(
-                Vector3.down * gravityMultiplier,
-                ForceMode.Acceleration
+            CameraShakeManager.Instance.CameraShake(
+                _initialShakeStrength,
+                _initialShakeDuration
             );
 
-            SFXManager.Instance.PlaySFXAtPosition(
-                sfxType,
-                rock.transform.position
-            );
+            SFXManager.Instance.PlaySFXAtPositionAndPauseMusic(
+                          sfxType, transform.position
+                      );
 
-            yield return new WaitForSeconds(timeBetweenRocks);
+            foreach (ParticleSystem particle in _impactDustParticles)
+            {
+                if (particle != null)
+                {
+                    particle.Play();
+                }
+            }
+
+            foreach (Animator anim in animators)
+            {
+                if (anim != null)
+                {
+                    anim.SetTrigger("Enable");
+                }
+            }
         }
-
-        CameraShake.Instance.StopShake();
     }
 }
