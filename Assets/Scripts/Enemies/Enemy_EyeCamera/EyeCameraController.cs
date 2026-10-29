@@ -225,7 +225,7 @@ public class EyeCameraController : MonoBehaviour
     private void EnterChase()
     {
         _currentState = EyeCameraState.Chase;
-        _damageTimer = 0f;
+        _damageTimer = _damageInterval / 2;
     }
 
     private void EnterLostTarget()
