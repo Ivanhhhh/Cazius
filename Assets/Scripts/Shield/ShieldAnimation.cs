@@ -16,7 +16,7 @@ public class ShieldAnimation : MonoBehaviour
     [SerializeField] private float _impactShakeDuration = 5f;
 
     [Header("Destruction Particles")]
-    [SerializeField] private ParticleSystem _impactDustParticles;
+    [SerializeField] private ParticleSystem[] _impactDustParticles;
 
 
     private bool isEnable = false;
@@ -43,7 +43,13 @@ public class ShieldAnimation : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
 
-        _impactDustParticles.Play();
+        foreach (ParticleSystem particle in _impactDustParticles)
+        {
+            if (particle != null)
+            {
+                particle.Play();
+            }
+        }
 
         SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.RockCrumble, _soundStrength);
     }
