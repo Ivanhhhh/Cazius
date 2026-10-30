@@ -6,7 +6,11 @@ public enum SoulState
     Atractting,
     Done
 }
-
+public enum TipoRecompensa
+{
+    EnergiaAlma,
+    Objeto
+}
 public class SoulEnergyMovement : MonoBehaviour
 {
     [Header("Estado inicial")]
@@ -86,10 +90,21 @@ public class SoulEnergyMovement : MonoBehaviour
     [Header("Deriva (impulso externo)")]
     [Tooltip("Qué tan rápido decae el impulso. 0 = nunca frena. 2 = frena en 1-2 segundos.")]
     [SerializeField] private float desaceleracionDeriva = 1.5f;
-    
+
     [Header("Recompensa")]
-    [Tooltip("Cuánta Soul Energy otorga este orbe al ser recogido.")]
+    [Tooltip("Elegir si el orbe otorga Energía de Alma o un Objeto al Inventario.")]
+    [SerializeField] private TipoRecompensa tipoRecompensa = TipoRecompensa.EnergiaAlma;
+
+    [Tooltip("Cuánta Soul Energy otorga (Solo si el tipo es Energía de Alma).")]
     [SerializeField] private int soulEnergyValue = 1;
+
+    [Tooltip("El objeto que otorga al inventario (Solo si el tipo es Objeto).")]
+    [SerializeField] private ItemData itemScriptableObject;
+
+
+    [Header("Detección - Línea de Visión")]
+    [Tooltip("Capas que bloquean la visión del orbe (paredes, pisos, etc).")]
+    [SerializeField] private LayerMask capasObstaculo;
 
     // ---------- Referencias ----------
     private Transform _playerPosition;
@@ -281,6 +296,18 @@ public class SoulEnergyMovement : MonoBehaviour
         float distXZ = new Vector2(d.x, d.z).magnitude;
         if (distXZ > radioDeteccionXZ) return false;
         if (Mathf.Abs(d.y) > radioDeteccionY) return false;
+
+        // NUEVO: Comprobar si hay paredes en medio
+        Vector3 direccionAlPunto = (punto - transform.position).normalized;
+        float distanciaAlPunto = Vector3.Distance(transform.position, punto);
+
+        // Lanzamos un rayo. Si choca con un obstáculo antes de llegar al jugador, no lo detecta.
+        if (Physics.Raycast(transform.position, direccionAlPunto, out RaycastHit hit, distanciaAlPunto, capasObstaculo))
+        {
+            // El rayo chocó con algo que no es el jugador (una pared)
+            return false;
+        }
+
         return true;
     }
     // ============================================================
@@ -386,9 +413,25 @@ public class SoulEnergyMovement : MonoBehaviour
     {
         estadoActual = SoulState.Done;
 
-        // Sumar al manager global
-        if (SoulEnergyManager.Instance != null)
-            SoulEnergyManager.Instance.AddSoulEnergy(soulEnergyValue);
+        // Ejecutar la recompensa según lo elegido en el Inspector
+        switch (tipoRecompensa)
+        {
+            case TipoRecompensa.EnergiaAlma:
+                if (SoulEnergyManager.Instance != null)
+                    SoulEnergyManager.Instance.AddSoulEnergy(soulEnergyValue);
+                break;
+
+            case TipoRecompensa.Objeto:
+                if (itemScriptableObject != null && Inventory.Instance != null)
+                {
+                    Inventory.Instance.AddItem(itemScriptableObject);
+                }
+                else
+                {
+                    Debug.LogWarning($"El orbe {gameObject.name} intentó dar un objeto, pero falta asignar el ItemData o el Inventory no existe.");
+                }
+                break;
+        }
 
         gameObject.SetActive(false);
     }

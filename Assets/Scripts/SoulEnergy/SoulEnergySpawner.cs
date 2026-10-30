@@ -3,8 +3,22 @@ using System.Collections.Generic;
 
 public class SoulSpawner : MonoBehaviour
 {
-    [Header("Prefab")]
-    [SerializeField] private SoulEnergyMovement prefabOrbe;
+    // --- NUEVO: Estructura para los orbes con probabilidad ---
+    [System.Serializable]
+    public class SoulDrop
+    {
+        public SoulEnergyMovement prefab;
+        [Tooltip("Peso de probabilidad. Ej: Si el Orbe Común tiene 80 y el Raro tiene 20, el común saldrá el 80% de las veces.")]
+        public float peso = 1f;
+    }
+
+    [Header("Prefabs y Probabilidades")]
+    [Tooltip("Agrega aquí los diferentes tipos de orbes y su peso de aparición.")]
+    [SerializeField] private List<SoulDrop> posiblesOrbes = new List<SoulDrop>();
+
+    [Header("Garantía de Spawn")]
+    [Tooltip("Cantidad de orbes que se spawnearán SI O SÍ usando el prefab con el peso más alto antes de empezar a usar las probabilidades. 0 = desactivado.")]
+    [SerializeField] private int spawnsGarantizadosDelMasPeso = 4;
 
     [Header("Frecuencia de spawn")]
     [Tooltip("Segundos entre spawns. Se elige un valor aleatorio en este rango.")]
@@ -62,7 +76,7 @@ public class SoulSpawner : MonoBehaviour
     private void Update()
     {
         if (terminado) return;
-        if (prefabOrbe == null) return;
+        if (posiblesOrbes.Count == 0) return;
 
         orbesVivos.RemoveAll(o => o == null || !o.gameObject.activeInHierarchy);
 
@@ -89,12 +103,19 @@ public class SoulSpawner : MonoBehaviour
 
     private void SpawnearOrbe()
     {
+        // 1. Elegir qué prefab spawnear
+        SoulEnergyMovement prefabElegido = ObtenerPrefabAleatorio();
+
+        if (prefabElegido == null) return;
+
+        // 2. Calcular posición
         Vector3 origen = puntoSpawn != null ? puntoSpawn.position : transform.position;
         Vector3 offset = Random.insideUnitSphere * radioSpawn;
         offset.y = 0f;
 
+        // 3. Instanciar
         SoulEnergyMovement orbe = Instantiate(
-            prefabOrbe,
+            prefabElegido,
             origen + offset,
             Quaternion.identity
         );
@@ -103,6 +124,72 @@ public class SoulSpawner : MonoBehaviour
         orbe.AplicarImpulsoAleatorio(impulsoMin, impulsoMax, impulsoHorizontal);
 
         spawnsRealizados++;
+    }
+
+    // --- Lógica de selección ---
+    private SoulEnergyMovement ObtenerPrefabAleatorio()
+    {
+        if (posiblesOrbes.Count == 0) return null;
+
+        // --- NUEVO: Comprobar si estamos en la fase de spawns garantizados ---
+        if (spawnsRealizados < spawnsGarantizadosDelMasPeso)
+        {
+            return ObtenerPrefabConMasPeso();
+        }
+
+        // --- Lógica de probabilidad normal ---
+        float pesoTotal = 0f;
+        foreach (var drop in posiblesOrbes)
+        {
+            if (drop.prefab != null && drop.peso > 0)
+                pesoTotal += drop.peso;
+        }
+
+        if (pesoTotal <= 0f)
+        {
+            Debug.LogWarning("Todos los pesos son 0 o nulos. Devolviendo el primer prefab válido.");
+            return posiblesOrbes[0].prefab;
+        }
+
+        float randomValue = Random.Range(0f, pesoTotal);
+        float pesoAcumulado = 0f;
+
+        foreach (var drop in posiblesOrbes)
+        {
+            if (drop.prefab == null || drop.peso <= 0) continue;
+
+            pesoAcumulado += drop.peso;
+            if (randomValue <= pesoAcumulado)
+            {
+                return drop.prefab;
+            }
+        }
+
+        return posiblesOrbes[0].prefab;
+    }
+
+    // --- NUEVO: Método para encontrar el prefab con el peso más alto ---
+    private SoulEnergyMovement ObtenerPrefabConMasPeso()
+    {
+        SoulEnergyMovement mejorPrefab = null;
+        float mayorPeso = -1f;
+
+        foreach (var drop in posiblesOrbes)
+        {
+            if (drop.prefab != null && drop.peso > mayorPeso)
+            {
+                mayorPeso = drop.peso;
+                mejorPrefab = drop.prefab;
+            }
+        }
+
+        // Si por alguna razón no encontró ninguno válido, devolvemos el primero (aunque sea nulo)
+        if (mejorPrefab == null && posiblesOrbes.Count > 0)
+        {
+            mejorPrefab = posiblesOrbes[0].prefab;
+        }
+
+        return mejorPrefab;
     }
 
     private void Finalizar()

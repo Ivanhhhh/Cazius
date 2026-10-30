@@ -44,7 +44,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ed59350ae7adb0498c5857afc62afb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoulEnergySpawner
-  prefabOrbe: {fileID: 6015086218785157540, guid: 139d909a0462f574882aebc95f36985e, type: 3}
+  posiblesOrbes:
+  - prefab: {fileID: 6015086218785157540, guid: 139d909a0462f574882aebc95f36985e, type: 3}
+    peso: 50
+  - prefab: {fileID: 5915240145094179220, guid: 3df6f50d4ec657b4288ed778188360ca, type: 3}
+    peso: 15
+  - prefab: {fileID: 6520919698878873174, guid: abb0ff94345550847b0a96527ca5f87b, type: 3}
+    peso: 35
+  spawnsGarantizadosDelMasPeso: 4
   intervaloMin: 0.1
   intervaloMax: 0.2
   maxOrbesVivos: 6

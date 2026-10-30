@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2431698421003307464}
   - component: {fileID: 3378907380327304585}
   - component: {fileID: 8606564611743439888}
+  - component: {fileID: 3298200314103635696}
   m_Layer: 19
   m_Name: Rockbullet
   m_TagString: Untagged
@@ -136,6 +137,22 @@ MonoBehaviour:
     m_Bits: 256
   _damageAmount: 5
   _destroyOnImpact: 1
+--- !u!114 &3298200314103635696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806556901992554917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3476c2d203c712745bdfdbc73e0491db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_SpawnOnImpact
+  _poolIdToSpawn: 
+  _prefabToSpawn: {fileID: 6598117116278201746, guid: cfecf10db6312b54d9664be487e28fa3, type: 3}
+  _spawnChance: 50
+  _spawnOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &1604712989988400551
 PrefabInstance:
   m_ObjectHideFlags: 0
