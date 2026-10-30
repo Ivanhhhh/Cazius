@@ -16,6 +16,10 @@ public class SoulSpawner : MonoBehaviour
     [Tooltip("Agrega aquí los diferentes tipos de orbes y su peso de aparición.")]
     [SerializeField] private List<SoulDrop> posiblesOrbes = new List<SoulDrop>();
 
+    [Header("Garantía de Spawn")]
+    [Tooltip("Cantidad de orbes que se spawnearán SI O SÍ usando el prefab con el peso más alto antes de empezar a usar las probabilidades. 0 = desactivado.")]
+    [SerializeField] private int spawnsGarantizadosDelMasPeso = 4;
+
     [Header("Frecuencia de spawn")]
     [Tooltip("Segundos entre spawns. Se elige un valor aleatorio en este rango.")]
     [SerializeField] private float intervaloMin = 0.5f;
@@ -72,7 +76,7 @@ public class SoulSpawner : MonoBehaviour
     private void Update()
     {
         if (terminado) return;
-        if (posiblesOrbes.Count == 0) return; // Si la lista está vacía, no hace nada
+        if (posiblesOrbes.Count == 0) return;
 
         orbesVivos.RemoveAll(o => o == null || !o.gameObject.activeInHierarchy);
 
@@ -99,10 +103,10 @@ public class SoulSpawner : MonoBehaviour
 
     private void SpawnearOrbe()
     {
-        // 1. Elegir qué prefab spawnear según las probabilidades
+        // 1. Elegir qué prefab spawnear
         SoulEnergyMovement prefabElegido = ObtenerPrefabAleatorio();
 
-        if (prefabElegido == null) return; // Prevención por si algo falla
+        if (prefabElegido == null) return;
 
         // 2. Calcular posición
         Vector3 origen = puntoSpawn != null ? puntoSpawn.position : transform.position;
@@ -122,12 +126,18 @@ public class SoulSpawner : MonoBehaviour
         spawnsRealizados++;
     }
 
-    // --- NUEVO: Lógica de probabilidad ponderada ---
+    // --- Lógica de selección ---
     private SoulEnergyMovement ObtenerPrefabAleatorio()
     {
         if (posiblesOrbes.Count == 0) return null;
 
-        // Calcular el peso total de todos los orbes de la lista
+        // --- NUEVO: Comprobar si estamos en la fase de spawns garantizados ---
+        if (spawnsRealizados < spawnsGarantizadosDelMasPeso)
+        {
+            return ObtenerPrefabConMasPeso();
+        }
+
+        // --- Lógica de probabilidad normal ---
         float pesoTotal = 0f;
         foreach (var drop in posiblesOrbes)
         {
@@ -135,18 +145,15 @@ public class SoulSpawner : MonoBehaviour
                 pesoTotal += drop.peso;
         }
 
-        // Si todos los pesos son 0 o los prefabs son nulos, devolvemos el primero por defecto
         if (pesoTotal <= 0f)
         {
             Debug.LogWarning("Todos los pesos son 0 o nulos. Devolviendo el primer prefab válido.");
             return posiblesOrbes[0].prefab;
         }
 
-        // Elegir un número aleatorio entre 0 y el peso total
         float randomValue = Random.Range(0f, pesoTotal);
         float pesoAcumulado = 0f;
 
-        // Recorrer la lista acumulando pesos hasta encontrar el elegido
         foreach (var drop in posiblesOrbes)
         {
             if (drop.prefab == null || drop.peso <= 0) continue;
@@ -158,8 +165,31 @@ public class SoulSpawner : MonoBehaviour
             }
         }
 
-        // Fallback (por si las moscas, aunque matemáticamente nunca debería llegar aquí)
         return posiblesOrbes[0].prefab;
+    }
+
+    // --- NUEVO: Método para encontrar el prefab con el peso más alto ---
+    private SoulEnergyMovement ObtenerPrefabConMasPeso()
+    {
+        SoulEnergyMovement mejorPrefab = null;
+        float mayorPeso = -1f;
+
+        foreach (var drop in posiblesOrbes)
+        {
+            if (drop.prefab != null && drop.peso > mayorPeso)
+            {
+                mayorPeso = drop.peso;
+                mejorPrefab = drop.prefab;
+            }
+        }
+
+        // Si por alguna razón no encontró ninguno válido, devolvemos el primero (aunque sea nulo)
+        if (mejorPrefab == null && posiblesOrbes.Count > 0)
+        {
+            mejorPrefab = posiblesOrbes[0].prefab;
+        }
+
+        return mejorPrefab;
     }
 
     private void Finalizar()
