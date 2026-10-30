@@ -121,6 +121,7 @@ MonoBehaviour:
   _modelSwapTime: 0
   _throneSpawnTime: 0
   _laserPlayTime: 0
+  _maxSecondPhaseRespawns: 1
   _patrolSpeed: 4
   _patrollingRotationSpeed: 2
   _patrolAcceleration: 3
@@ -131,7 +132,7 @@ MonoBehaviour:
   _lineOfSightLayerMask:
     serializedVersion: 2
     m_Bits: 129
-  _sensorLength: 0.9
+  _sensorLength: 1.96
   _avoidanceForce: 15
   _obstacleMask:
     serializedVersion: 2
@@ -429,7 +430,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -541,7 +542,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -687,7 +688,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8473938800449688397, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9138554462930225655, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
       propertyPath: m_LocalScale.x
@@ -818,7 +819,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4405890238795297944, guid: 1b4bdef34567e9045a7e9a2f22c304d4, type: 3}
 --- !u!23 &5142587802685549468 stripped
@@ -882,7 +883,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 273793445022461687, guid: 1b4bdef34567e9045a7e9a2f22c304d4, type: 3}
 --- !u!23 &6708472061013626581 stripped
@@ -941,7 +942,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -423084300730588792, guid: 1b4bdef34567e9045a7e9a2f22c304d4, type: 3}
 --- !u!23 &7814295220812158028 stripped
@@ -1378,7 +1379,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9b690d660e488874f96158b7c24bcdb1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1952090685491067193, guid: 9b690d660e488874f96158b7c24bcdb1, type: 3}
       propertyPath: m_LocalRotation.y
