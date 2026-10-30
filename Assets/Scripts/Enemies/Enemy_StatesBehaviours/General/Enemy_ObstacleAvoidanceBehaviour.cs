@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy_ObstacleAvoidanceBehaviour : MonoBehaviour
+public class Enemy_ObstacleAvoidanceBehaviour
 {
     private Transform _transform;
     private float _sensorLength;

@@ -290,8 +290,7 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
         }
 
         // Gizmo de Evasión de Obstáculos
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(_objectTransform.position, _sensorLength);
+        DrawObstacleAvoidanceGizmos();
 
         // Gizmos de Patrullaje (Solo visibles en modo Play)
         if (Application.isPlaying && _patrolling != null)
@@ -314,6 +313,52 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
             Vector3 dynamicTarget = _playerTransform.position + _angelPhaseTargetOffset;
             Gizmos.DrawWireSphere(dynamicTarget, 0.5f);
             Gizmos.DrawLine(_objectTransform.position, dynamicTarget);
+        }
+    }
+    private void DrawObstacleAvoidanceGizmos()
+    {
+        Vector3 origin = _objectTransform.position;
+        Vector3 forward = _objectTransform.forward;
+
+        // Mismos ángulos que Enemy_ObstacleAvoidanceBehaviour._rayAngles
+        float[] rayAngles = { 0f, -25f, 25f, -50f, 50f };
+
+        // --- Sensores exteriores ---
+        foreach (float angle in rayAngles)
+        {
+            Vector3 dir = Quaternion.Euler(0, angle, 0) * forward;
+
+            if (Physics.Raycast(origin, dir, out RaycastHit hit, _sensorLength, _obstacleMask))
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(origin, hit.point);
+                Gizmos.DrawWireSphere(hit.point, 0.12f);
+
+                // Normal = dirección de la fuerza de repulsión (pushAway)
+                Gizmos.color = Color.white;
+                Gizmos.DrawRay(hit.point, hit.normal * 0.6f);
+            }
+            else
+            {
+                Gizmos.color = new Color(1f, 1f, 0f, 0.4f);
+                Gizmos.DrawLine(origin, origin + dir * _sensorLength);
+            }
+        }
+
+        // --- Sensor interior (rayo corto hacia delante) ---
+        if (Physics.Raycast(origin, forward, out RaycastHit interiorHit, _interiorSensorLength, _obstacleMask))
+        {
+            Gizmos.color = new Color(1f, 0.4f, 0f);
+            Gizmos.DrawLine(origin, interiorHit.point);
+            Gizmos.DrawWireSphere(interiorHit.point, 0.12f);
+
+            Gizmos.color = Color.white;
+            Gizmos.DrawRay(interiorHit.point, interiorHit.normal * 0.6f);
+        }
+        else
+        {
+            Gizmos.color = new Color(1f, 0.6f, 0f, 0.5f);
+            Gizmos.DrawLine(origin, origin + forward * _interiorSensorLength);
         }
     }
 }

@@ -157,4 +157,87 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
 
         SpawnProjectile(direction);
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (_objectTransform == null) return;
+
+        Vector3 origin = _objectTransform.position;
+        Vector3 forward = _objectTransform.forward;
+        Vector3 right = _objectTransform.right;
+        Vector3 up = _objectTransform.up;
+
+        // --- Targeting ---
+        if (_showTargetingRay && _playerTransform != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawLine(origin, _playerTransform.position);
+        }
+
+        // --- Sensores de evasión (exterior) ---
+        if (_showAvoidanceRay)
+        {
+            DrawSensor(origin, forward, _sensorLength, _obstacleMask, Color.green);
+
+            Vector3 diagOrigin = origin + forward * (_sensorLength * 0.4f);
+            float diagLength = _sensorLength * 0.7f;
+
+            DrawSensor(diagOrigin, (forward + right).normalized, diagLength, _obstacleMask, Color.yellow);
+            DrawSensor(diagOrigin, (forward - right).normalized, diagLength, _obstacleMask, Color.yellow);
+            DrawSensor(diagOrigin, (forward + up).normalized, diagLength, _obstacleMask, Color.magenta);
+            DrawSensor(diagOrigin, (forward - up).normalized, diagLength, _obstacleMask, Color.magenta);
+        }
+
+        // --- Zona de vuelo + sensores interiores ---
+        if (_flightZone != null)
+        {
+            Bounds b = _flightZone.bounds;
+            bool inside = b.Contains(origin);
+
+            Gizmos.color = inside ? new Color(1f, 0.5f, 0f, 0.35f) : new Color(0f, 1f, 0f, 0.15f);
+            Gizmos.DrawWireCube(b.center, b.size);
+
+            if (_showAvoidanceRay && inside)
+            {
+                // Sensores cortos en todas las direcciones cuando está dentro de la zona
+                DrawSensor(origin, forward, _interiorSensorLength, _obstacleMask, Color.red);
+                DrawSensor(origin, -forward, _interiorSensorLength, _obstacleMask, Color.red);
+                DrawSensor(origin, right, _interiorSensorLength, _obstacleMask, Color.red);
+                DrawSensor(origin, -right, _interiorSensorLength, _obstacleMask, Color.red);
+                DrawSensor(origin, up, _interiorSensorLength, _obstacleMask, Color.red);
+                DrawSensor(origin, -up, _interiorSensorLength, _obstacleMask, Color.red);
+            }
+        }
+
+        // --- Velocidad actual ---
+        if (_showVelocityRay && _rb != null && Application.isPlaying)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawRay(origin, _rb.linearVelocity);
+        }
+
+        // --- Rayos que dependen de los behaviours ---
+        // _showWanderRay / _showIdealMovementRay / _showFinalDirectionRay
+        // necesitan que Enemy_FlyingPatrollingBehaviour y Enemy_FlyingCasterAttackBehaviour
+        // expongan su waypoint actual y su dirección deseada. Ver nota abajo.
+    }
+
+    private void DrawSensor(Vector3 origin, Vector3 dir, float length, LayerMask mask, Color clearColor)
+    {
+        if (Physics.Raycast(origin, dir, out RaycastHit hit, length, mask))
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(origin, hit.point);
+            Gizmos.DrawWireSphere(hit.point, 0.15f);
+
+            // Normal de la superficie (útil para ver la dirección de evasión)
+            Gizmos.color = Color.white;
+            Gizmos.DrawRay(hit.point, hit.normal * 0.5f);
+        }
+        else
+        {
+            Gizmos.color = clearColor;
+            Gizmos.DrawLine(origin, origin + dir * length);
+        }
+    }
 }
