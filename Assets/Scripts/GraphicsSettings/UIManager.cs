@@ -5,12 +5,23 @@ public class UIManager : MonoBehaviour
 {
      [SerializeField] private TMP_Dropdown _qualityDropdown;
 
-    public SetQuality _Quality;
-    public SaveConfig _SaveConfig;
+    public IQualitySetter _Quality;
+    public ISave _SaveConfig;
+
+    public ILoad _LoadConfig;
+
+    void Awake()
+    {
+            //interfaces
+      _LoadConfig = GetComponent<ILoad>();
+      _SaveConfig = GetComponent<ISave>();
+      _Quality = GetComponent<IQualitySetter>();
+          /////
+    }
 
     void Start()
     {
-        _SaveConfig.Load();
+        _LoadConfig.Load();
          if (!_qualityDropdown)
         {
              Debug.LogError("GraphicsQualitySettings: asigná un TMP_Dropdown en el Inspector.", this);
@@ -24,8 +35,7 @@ public class UIManager : MonoBehaviour
          _qualityDropdown.SetValueWithoutNotify(QualitySettings.GetQualityLevel());
          _qualityDropdown.RefreshShownValue();
          _qualityDropdown.onValueChanged.AddListener(_Quality.QualitySetter);
-
-            _qualityDropdown.onValueChanged.AddListener(_SaveConfig.Save);
+         _qualityDropdown.onValueChanged.AddListener(_SaveConfig.Save);
 
     }
 

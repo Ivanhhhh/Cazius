@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class SaveConfig : MonoBehaviour
+public class SaveConfig : MonoBehaviour,ISave,ILoad,IClamp
 {
     public int savedqualitysettings;
 
@@ -14,10 +14,11 @@ public class SaveConfig : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public void Load()
-    {
-      savedqualitysettings = PlayerPrefs.GetInt(PrefKey,QualitySettings.GetQualityLevel());
-    }
+   public int Load()
+   {
+    int saved = PlayerPrefs.GetInt(PrefKey, QualitySettings.GetQualityLevel());
+    return Mathf.Clamp(saved, 0, QualitySettings.names.Length - 1);
+   }
 
     public void Clamp()
     {

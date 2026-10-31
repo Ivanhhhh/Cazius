@@ -1,16 +1,28 @@
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
-public class SetQuality : MonoBehaviour
+public class SetQuality : MonoBehaviour,IQualitySetter
 {
-    public UIManager _uimanager;
-    public SaveConfig _SaveConfig;
+    public ILoad _LoadConfig;
+
+    public ISave _SaveConfig;
+
+    public IClamp _ClampConfig;
+
+
 
    void Awake()
 {
-    _SaveConfig.Load();
-    _SaveConfig.Clamp();
-    QualitySetter(_SaveConfig.savedqualitysettings);
+    _LoadConfig.Load();
+    _ClampConfig.Clamp();
+    QualitySetter(_LoadConfig.Load());
+    
+    //interfaces
+    _LoadConfig = GetComponent<ILoad>();
+    _SaveConfig = GetComponent<ISave>();
+    _ClampConfig = GetComponent<IClamp>();
+     //
+
 }
 
     public void QualitySetter(int Index)
