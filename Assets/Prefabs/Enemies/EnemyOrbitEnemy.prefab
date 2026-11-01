@@ -76,7 +76,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &6052035504325333865
@@ -111,14 +111,14 @@ MonoBehaviour:
   _angelPhaseTargetOffset: {x: 0, y: 0, z: 0}
   _enemyMeteoriteSpawnZone: {fileID: 0}
   _angelInitialWaitTime: 6
-  _angelSecondWaitTime: 6
+  _angelSecondWaitTime: 6.5
   _angelMoveSpeed: 5
   _angelLookRotationSpeed: 8
   _angelArriveThreshold: 0.4
   _angelBrakeSpeed: 6
   _angelAimOffset: 1.5
   _meteoriteMultipleAttackCountCount: 4
-  _modelSwapTime: 0
+  _modelSwapTime: 1
   _throneSpawnTime: 0
   _laserPlayTime: 0
   _maxSecondPhaseRespawns: 1
@@ -132,12 +132,12 @@ MonoBehaviour:
   _lineOfSightLayerMask:
     serializedVersion: 2
     m_Bits: 129
-  _sensorLength: 1.96
-  _avoidanceForce: 15
+  _sensorLength: 1.79
+  _avoidanceForce: 20.3
   _obstacleMask:
     serializedVersion: 2
     m_Bits: 129
-  _interiorSensorLength: 1.5
+  _interiorSensorLength: 3
   _interiorAvoidanceForce: 5
   _healthSystem: {fileID: 3597665577665271042}
 --- !u!114 &7989828774317554653
@@ -1614,6 +1614,13 @@ MonoBehaviour:
   - {fileID: 5396382743355897059}
   - {fileID: 5142587802685549468}
   _animator: {fileID: 8667968509326855186}
+  _colliderParents:
+  - {fileID: 6799590878390616662}
+  - {fileID: 1545842286510963817}
+  - {fileID: 5260196042895658385}
+  - {fileID: 7570584982216272337}
+  - {fileID: 7230605312929208231}
+  - {fileID: 5701838049815162313}
   _eyeDamageDuration: 0.5
   _phaseChangeDelay: 5.5
   _dissolveDuration: 2

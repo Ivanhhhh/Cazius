@@ -6,6 +6,7 @@ public class AngelEyeBossVisuals : MonoBehaviour
     [SerializeField] MeshRenderer _eyeRenderer;
     [SerializeField] MeshRenderer[] _ringRenderers;
     [SerializeField] Animator _animator;
+    [SerializeField] GameObject[] _colliderParents;
 
     private Material _eyeMat;
     private Material[] _ringMats;
@@ -66,6 +67,22 @@ public class AngelEyeBossVisuals : MonoBehaviour
 
     private IEnumerator ChangePhaseCoroutine()
     {
+
+        if (_colliderParents != null)
+        {
+            foreach (var parent in _colliderParents)
+            {
+                if (parent == null) continue;
+
+                Collider[] todosLosColliders = parent.GetComponents<Collider>();
+
+                foreach (var col in todosLosColliders)
+                {
+                    col.enabled = false;
+                }
+            }
+        }
+
         yield return new WaitForSeconds(_phaseChangeDelay);
 
         for (float t = 0f; t < _dissolveDuration; t += Time.deltaTime)

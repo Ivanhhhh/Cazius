@@ -6,11 +6,6 @@ using System.Collections.Generic;
 
 public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
 {
-    private struct TimedAction
-    {
-        public float Time;
-        public Action Action;
-    }
     private enum Phase { InitialWait, MoveToPosition, SecondWait, LookAtPlayer }
 
     // ---------- Dependencias ----------
@@ -31,11 +26,11 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
 
     // ---------- Estado ----------
     private Phase _currentPhase = Phase.InitialWait;
-    private float _phaseTimer = 0f;
     protected float _lastAttackTime = -100f;
 
-    private readonly List<TimedAction> _timeline = new List<TimedAction>();
-    private float _phaseElapsed;
+    // Usamos Time.time (tiempo absoluto) para evitar que los timers varíen según los FPS.
+    private float _phaseEndTime;
+    private readonly List<(float Time, Action Action)> _timeline = new List<(float, Action)>();
 
     public Enemy_OrbitEnemyAngelPhaseChasingBehaviour(
         Transform transform,
@@ -48,28 +43,29 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
         _rb = rb;
         _playerTransform = playerTransform;
         _stats = stats;
-
         TargetPosition = targetPosition;
     }
 
+    // Agenda una acción guardando el momento exacto en que debe ocurrir (Time.time + segundos)
     protected void ScheduleInPhase(float seconds, Action action)
     {
-        _timeline.Add(new TimedAction { Time = seconds, Action = action });
+        _timeline.Add((Time.time + seconds, action));
     }
 
+    // Recorre la lista hacia atrás para poder eliminar elementos mientras la recorres de forma segura
     private void UpdateTimeline()
     {
-        _phaseElapsed += Time.fixedDeltaTime;
-
-        for (int i = 0; i < _timeline.Count;)
+        // Recorremos HACIA ADELANTE para respetar el orden de programación
+        for (int i = 0; i < _timeline.Count; i++)
         {
-            if (_phaseElapsed >= _timeline[i].Time)
+            if (Time.time >= _timeline[i].Time)
             {
                 Action action = _timeline[i].Action;
                 _timeline.RemoveAt(i);
-                action();
+                i--; // Importante: al remover, el siguiente elemento se mueve a este índice, así que retrocedemos i
+
+                action(); // Ejecutamos la acción
             }
-            else i++;
         }
     }
 
@@ -85,22 +81,21 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
     private void SetPhase(Phase newPhase)
     {
         _currentPhase = newPhase;
-        _phaseElapsed = 0f;
-        _timeline.Clear();   // lo programado en la fase anterior no sobrevive
+        _timeline.Clear();
 
         switch (newPhase)
         {
             case Phase.InitialWait:
-                _phaseTimer = InitialWaitTime;
+                // Guardamos la hora exacta en la que termina la espera
+                _phaseEndTime = Time.time + InitialWaitTime;
                 OnInitialWaitEntered();
                 break;
             case Phase.SecondWait:
-                _phaseTimer = SecondWaitTime;
+                _phaseEndTime = Time.time + SecondWaitTime;
                 OnSecondWaitEntered();
                 break;
         }
     }
-
 
     public virtual void ExitChase()
     {
@@ -125,13 +120,13 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
     {
         Brake();
         UpdateTimeline();
-        _phaseTimer -= Time.fixedDeltaTime;
-        if (_phaseTimer <= 0f)
+
+        // Comparamos el tiempo actual con la hora de finalización
+        if (Time.time >= _phaseEndTime)
         {
             Debug.Log("FirstWaitFinished");
-        SetPhase(Phase.MoveToPosition);
+            SetPhase(Phase.MoveToPosition);
         }
-
     }
 
     private void TickMoveToPosition()
@@ -148,10 +143,11 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
 
         Vector3 dir = toTarget / dist;
 
+        // Usamos Time.deltaTime para movimiento suave en Update
         _rb.linearVelocity = Vector3.Lerp(
             _rb.linearVelocity,
             dir * MoveSpeed,
-            Time.fixedDeltaTime * _stats.normalReactionSpeed);
+            Time.deltaTime * _stats.normalReactionSpeed);
 
         RotateTowardsDirection(dir, _stats.rotationSpeed);
     }
@@ -161,12 +157,11 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
         Brake();
         UpdateTimeline();
         LookAtPlayer();
-        _phaseTimer -= Time.fixedDeltaTime;
-        if (_phaseTimer <= 0f)
+
+        if (Time.time >= _phaseEndTime)
         {
             SetPhase(Phase.LookAtPlayer);
-            Debug.Log("Second wait fionished");
-
+            Debug.Log("Second wait finished");
         }
     }
 
@@ -179,13 +174,14 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
 
         RotateTowardsDirection(dir, LookRotationSpeed);
 
-        // La base maneja el cooldown; el hijo solo decide QUÉ atacar.
+        // Cooldown basado en tiempo absoluto (Time.time)
         if (Time.time >= _lastAttackTime + _stats.shootCooldown)
         {
             _lastAttackTime = Time.time;
             ExecuteAttack();
         }
     }
+
     private void LookAtPlayer()
     {
         Vector3 targetCenter = _playerTransform.position + Vector3.up * AimOffset;
@@ -196,10 +192,11 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
     // ---------- Helpers ----------
     protected void Brake()
     {
+        // Time.deltaTime para que el frenado sea consistente sin importar los FPS
         _rb.linearVelocity = Vector3.Lerp(
             _rb.linearVelocity,
             Vector3.zero,
-            Time.fixedDeltaTime * BrakeSpeed);
+            Time.deltaTime * BrakeSpeed);
     }
 
     protected void RotateTowardsDirection(Vector3 direction, float speed)
@@ -207,12 +204,13 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
         if (direction.sqrMagnitude < 0.0001f) return;
 
         Quaternion targetRot = Quaternion.LookRotation(direction.normalized);
+
+        // Time.deltaTime para que la rotación se vea fluida en Update
         _transform.rotation = Quaternion.Slerp(
             _transform.rotation, targetRot,
-            Time.fixedDeltaTime * speed);
+            Time.deltaTime * speed);
     }
 
-    // Hook para los hijos
     protected virtual void ExecuteAttack() { }
     protected virtual void OnInitialWaitEntered() { }
     protected virtual void OnSecondWaitEntered() { }

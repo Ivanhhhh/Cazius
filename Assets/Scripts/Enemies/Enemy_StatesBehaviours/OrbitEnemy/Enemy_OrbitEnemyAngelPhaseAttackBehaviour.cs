@@ -32,22 +32,14 @@ public class Enemy_OrbitEnemyAngelPhaseAttackBehaviour : Enemy_OrbitEnemyAngelPh
 
     protected override void ExecuteAttack()
     {
-        // NUEVO: Comprobamos si estamos en Wave 2+ y si el temporizador de 30s está listo
         if (_orbitData.IsInSecondPhaseWave2OrMore && Time.time >= _specialAttackReadyTime)
         {
-            _specialAttackReadyTime = Time.time + SPECIAL_ATTACK_COOLDOWN; // Reiniciamos el timer a 30s
-
-            // Lanzamos el ataque nuevo a través del SpawnZone
+            _specialAttackReadyTime = Time.time + SPECIAL_ATTACK_COOLDOWN;
             if (_orbitData.EnemyMeteoriteSpawnZone != null)
-            {
                 _orbitData.EnemyMeteoriteSpawnZone.SpawnSpecialAttack();
-            }
-
-            // Retornamos para que este frame no lance también meteoritos normales
             return;
         }
 
-        // --- Lógica original ---
         if (!_hasAttackedOnce)
         {
             _hasAttackedOnce = true;
@@ -74,21 +66,29 @@ public class Enemy_OrbitEnemyAngelPhaseAttackBehaviour : Enemy_OrbitEnemyAngelPh
     {
         Enemy_MeteoriteSpawnZone zone = _orbitData.EnemyMeteoriteSpawnZone;
         if (zone == null) return;
-
         zone.SpawnMultiple(_orbitData.MeteoriteCount);
     }
+
     protected override void OnInitialWaitEntered()
     {
         if (_orbitData.AngelBossVisuals != null)
             _orbitData.AngelBossVisuals.EyeChangePhase();
-            _orbitData.HealthSystem.SetInvulnerable(true);
+        _orbitData.HealthSystem.SetInvulnerable(true);
     }
 
+    // --- AQUÍ ESTÁ EL CAMBIO: Ejecución secuencial directa ---
     protected override void OnSecondWaitEntered()
     {
-        ScheduleInPhase(_orbitData.ModelSwapTime, SwapModels);
-        ScheduleInPhase(_orbitData.ThroneSpawnTime, SpawnThrone);
-        ScheduleInPhase(_orbitData.LaserPlayTime, PlayLaser);
+        // 1. Cambiamos el modelo
+        SwapModels();
+
+        // 2. Spawneamos el trono
+        SpawnThrone();
+
+        // 3. Activamos el láser
+        PlayLaser();
+
+        // 4. Quitamos la invulnerabilidad
         _orbitData.HealthSystem.SetInvulnerable(false);
     }
 
@@ -96,6 +96,7 @@ public class Enemy_OrbitEnemyAngelPhaseAttackBehaviour : Enemy_OrbitEnemyAngelPh
     {
         if (_orbitData.FirstPhaseModel != null) _orbitData.FirstPhaseModel.SetActive(false);
         if (_orbitData.SecondPhaseModel != null) _orbitData.SecondPhaseModel.SetActive(true);
+        Debug.Log("Models Swapped");
     }
 
     private void SpawnThrone()
@@ -107,9 +108,9 @@ public class Enemy_OrbitEnemyAngelPhaseAttackBehaviour : Enemy_OrbitEnemyAngelPh
     {
         if (_orbitData.LaserBeamEffect != null) _orbitData.LaserBeamEffect.SetActive(true);
     }
+
     private void HandleSecondPhaseWaveCleared()
     {
-
         _orbitData.RequestSecondPhaseRespawn();
     }
 }
