@@ -37,6 +37,7 @@ public class PlayerModelMovement : MonoBehaviour
 
     private bool _shouldRotateModel = false;
     private bool _rotateAnimationTriggered = false;
+    private Transform _inventoryLookTarget;
 
     [Header("WalkingParams")]
 
@@ -155,7 +156,6 @@ public class PlayerModelMovement : MonoBehaviour
 
     private void WalkingRotateSmooth()
     {
-        //transform.rotation = Quaternion.Slerp(transform.rotation, _modelPos.rotation, Time.deltaTime * _walkingRotationSpeed);
 
         Vector3 moveDir = _rb.linearVelocity;
         moveDir.y = 0f;
@@ -177,58 +177,6 @@ public class PlayerModelMovement : MonoBehaviour
 
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * _walkingRotationSpeed);
     }
-    /*
-    private void RotateTowardsWalkingDir()
-    {
-        Vector3 moveDir = _rb.linearVelocity.normalized;
-
-        Debug.Log(moveDir);
-
-        Quaternion rotate;
-
-        rotate = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * 10);
-
-        rotate.x = 0f;
-        rotate.z = 0f;
-
-        rotate.y = Mathf.Clamp(rotate.y, 0f, _walkingRotateMaxAngle);
-
-            transform.rotation = rotate;
-        
-        if (IsMovingForwardLeft())
-        {
-            transform.rotation = rotate;
-        }
-        else
-        {
-            rotate.y = -rotate.y;
-            transform.rotation = rotate;
-        }
-        
-
-    }*/
-/*
-    private bool IsMovingForwardLeft()
-    {
-        Vector3 moveDir = _rb.linearVelocity;
-        moveDir.y = 0f;
-        moveDir.Normalize();
-
-        Vector3 cameraForward = _camera.transform.forward;
-        cameraForward.y = 0f;
-        cameraForward.Normalize();
-
-        Vector3 cameraRight = _camera.transform.right;
-        cameraRight.y = 0f;
-        cameraRight.Normalize();
-
-        float forwardDot = Vector3.Dot(moveDir, cameraForward);
-        float rightDot = Vector3.Dot(moveDir, cameraRight);
-
-        bool forwardOrLeft = forwardDot > 0f || rightDot < 0f;
-
-       return forwardOrLeft;
-    }*/
 
     private void RotateSmoothTowards()
     {
@@ -289,6 +237,36 @@ public class PlayerModelMovement : MonoBehaviour
             forceLookForward = false;
         }
     }
+
+
+    public void ForceInventoryLookForward(Transform cameraTransform)
+    {
+        if (cameraTransform == null)
+            return;
+
+        Vector3 forward = cameraTransform.forward;
+        forward.y = 0f;
+
+        if (forward.sqrMagnitude < 0.001f)
+            return;
+
+        forward.Normalize();
+
+        Vector3 lookDirection = Quaternion.Euler(0f, -_forceLookOffset, 0f) * forward;
+
+        if (_inventoryLookTarget == null)
+            _inventoryLookTarget = new GameObject("InventoryLookTarget").transform;
+
+        _inventoryLookTarget.position = transform.position + lookDirection * 1000f;
+
+        ForceToLookForward(true, _inventoryLookTarget);
+    }
+
+    public void StopInventoryLookForward()
+    {
+        ForceToLookForward(false, null);
+    }
+
 
     private float GetWalkingRotationOffset(float angle)
     {

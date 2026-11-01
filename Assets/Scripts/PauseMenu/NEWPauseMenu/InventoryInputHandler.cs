@@ -23,6 +23,7 @@ public class InventoryInputHandler : MonoBehaviour
     [SerializeField] private AnimationCurve _cameraCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
     [SerializeField] private PlayerMovement _cameraLookController;
+    [SerializeField] private PlayerModelMovement _playerModel;
 
     public static event Action<bool> OnInventoryToggled;
     public static event Action<bool> OnInventoryVisibilityChanged;
@@ -84,6 +85,9 @@ public class InventoryInputHandler : MonoBehaviour
         if (WorldScanManager.Instance != null)
             WorldScanManager.Instance.SetInventoryActive(true);
 
+        if (_playerModel != null)
+            _playerModel.ForceInventoryLookForward(_cameraParent);
+
         if (_cameraLookController != null)
             _cameraLookController.BeginInventoryCamera();
 
@@ -114,6 +118,9 @@ public class InventoryInputHandler : MonoBehaviour
 
         if (_cameraLookController != null)
             _cameraLookController.EndInventoryCamera();
+
+        if (_playerModel != null)
+            _playerModel.StopInventoryLookForward();
 
         if (WorldScanManager.Instance != null)
             WorldScanManager.Instance.SetInventoryActive(false);
