@@ -53,6 +53,8 @@ public class UIMainMenu : MonoBehaviour
         _languageButton.onClick.AddListener(OnOpenLanguage);
         _backToMainButton.onClick.AddListener(OnBackToMain);
         _RebindButton.onClick.AddListener(RebindPanelMethod);
+        _GraphicsButton.onClick.AddListener(OnOpenGraphics);
+
 
 
         // Start on main panel
@@ -135,6 +137,7 @@ public class UIMainMenu : MonoBehaviour
     private void OnOpenControls() => ShowSubPanel(_controlsPanel);
     private void OnOpenSoundConfig() => ShowSubPanel(_soundPanel);
     private void OnOpenLanguage() => ShowSubPanel(_languagePanel);
+    private void OnOpenGraphics() => ShowSubPanel(_graphicsPanel);
     private void OnBackToMain() => ShowPanel(_mainPanel);
 
     public void RebindPanelMethod()
