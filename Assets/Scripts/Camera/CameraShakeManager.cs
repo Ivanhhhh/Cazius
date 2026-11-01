@@ -1,3 +1,4 @@
+
 using System.Collections;
 using UnityEngine;
 
@@ -7,7 +8,14 @@ public class CameraShakeManager : MonoBehaviour
 
     [SerializeField] private Transform _shakePivot;
 
-    private Vector3 _originalLocalPosition;
+    [Header("Shake Settings")]
+    [SerializeField] private float _rotationMultiplier = 12f;
+    [SerializeField] private float _pitchAmount = 0.15f;
+    [SerializeField] private float _yawAmount = 0.15f;
+    [SerializeField] private float _rollAmount = 1f;
+    [SerializeField] private float _noiseSpeed = 20f;
+
+    private Quaternion _originalLocalRotation;
     private Coroutine _shakeCoroutine;
 
     private void Awake()
@@ -21,9 +29,7 @@ public class CameraShakeManager : MonoBehaviour
         Instance = this;
 
         if (_shakePivot != null)
-        {
-            _originalLocalPosition = _shakePivot.localPosition;
-        }
+            _originalLocalRotation = _shakePivot.localRotation;
     }
 
     public void CameraShake(float shakeStrength, float shakeDuration)
@@ -37,9 +43,7 @@ public class CameraShakeManager : MonoBehaviour
             _shakeCoroutine = null;
         }
 
-        _shakePivot.localPosition = _originalLocalPosition;
-
-        Debug.Log("ShakeCalled");
+        _shakePivot.localRotation = _originalLocalRotation;
 
         _shakeCoroutine = StartCoroutine(CameraShakeCoroutine(shakeStrength, shakeDuration));
     }
@@ -47,28 +51,38 @@ public class CameraShakeManager : MonoBehaviour
     private IEnumerator CameraShakeCoroutine(float shakeStrength, float shakeDuration)
     {
         float elapsedTime = 0f;
+        float seed = Random.Range(0f, 1000f);
 
         while (elapsedTime < shakeDuration)
         {
-            Vector2 randomOffset = Random.insideUnitCircle * shakeStrength;
+            float progress = elapsedTime / shakeDuration;
+            float intensity = shakeStrength * (1f - progress) * _rotationMultiplier;
+            float time = Time.time * _noiseSpeed;
 
-            _shakePivot.localPosition = _originalLocalPosition + new Vector3(randomOffset.x, randomOffset.y, 0f);
+            float pitch = (Mathf.PerlinNoise(seed, time) * 2f - 1f) * intensity * _pitchAmount;
+            float yaw = (Mathf.PerlinNoise(seed + 100f, time) * 2f - 1f) * intensity * _yawAmount;
+            float roll = (Mathf.PerlinNoise(seed + 200f, time) * 2f - 1f) * intensity * _rollAmount;
+
+            _shakePivot.localRotation = _originalLocalRotation * Quaternion.Euler(pitch, yaw, roll);
 
             elapsedTime += Time.deltaTime;
 
             yield return null;
         }
 
-        _shakePivot.localPosition = _originalLocalPosition;
-
+        _shakePivot.localRotation = _originalLocalRotation;
         _shakeCoroutine = null;
     }
 
     private void OnDisable()
     {
-        if (_shakePivot != null)
+        if (_shakeCoroutine != null)
         {
-            _shakePivot.localPosition = _originalLocalPosition;
+            StopCoroutine(_shakeCoroutine);
+            _shakeCoroutine = null;
         }
+
+        if (_shakePivot != null)
+            _shakePivot.localRotation = _originalLocalRotation;
     }
 }
