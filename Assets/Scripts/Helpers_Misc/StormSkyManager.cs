@@ -108,4 +108,39 @@ public class StormSkyManager : MonoBehaviour
     {
         return new Color(color.r * multiplier, color.g * multiplier, color.b * multiplier, color.a);
     }
+
+
+    private void OnDisable()
+    {
+        if (_stormCoroutine != null)
+        {
+            StopCoroutine(_stormCoroutine);
+            _stormCoroutine = null;
+        }
+
+        ResetStorm();
+    }
+
+    private void OnApplicationQuit()
+    {
+        ResetStorm();
+    }
+
+    private void OnDestroy()
+    {
+        ResetStorm();
+    }
+
+    private void ResetStorm()
+    {
+        if (_cloudMaterial != null)
+            _cloudMaterial.SetColor(_cloudColorProperty, _baseCloudColor);
+
+        if (_lightningLight != null)
+        {
+            _lightningLight.intensity = 0f;
+            _lightningLight.enabled = false;
+        }
+    }
+
 }

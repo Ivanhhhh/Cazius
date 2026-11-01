@@ -29,13 +29,19 @@ public class UITooltip : MonoBehaviour
         _tooltipRect.localScale = Vector3.zero;
     }
 
+
     public void Show(string text, RectTransform targetRect)
+    {
+        Show(text, targetRect, _offset);
+    }
+
+    public void Show(string text, RectTransform targetRect, Vector2 offset)
     {
         _tooltipText.text = text;
 
         Vector3 targetPos = targetRect.position
-                          + (targetRect.right * (_offset.x * targetRect.lossyScale.x))
-                          + (targetRect.up * (_offset.y * targetRect.lossyScale.y));
+                          + (targetRect.right * (offset.x * targetRect.lossyScale.x))
+                          + (targetRect.up * (offset.y * targetRect.lossyScale.y));
 
         _tooltipRect.position = targetPos;
         _tooltipRect.rotation = targetRect.rotation;
@@ -46,6 +52,7 @@ public class UITooltip : MonoBehaviour
         if (_animCoroutine != null) StopCoroutine(_animCoroutine);
         _animCoroutine = StartCoroutine(AnimateScale(Vector3.zero, Vector3.one));
     }
+
 
     public void Hide()
     {
