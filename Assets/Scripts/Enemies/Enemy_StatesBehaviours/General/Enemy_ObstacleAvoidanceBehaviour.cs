@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy_ObstacleAvoidanceBehaviour : MonoBehaviour
+public class Enemy_ObstacleAvoidanceBehaviour
 {
     private Transform _transform;
     private float _sensorLength;
@@ -9,11 +9,15 @@ public class Enemy_ObstacleAvoidanceBehaviour : MonoBehaviour
     private float _interiorSensorLength;
     private float _interiorAvoidanceForce;
 
-    // Ángulos de los "bigotes" (Rayos) que el enemigo usará para palpar el entorno
-    // 0 es el centro, negativos son la izquierda, positivos la derecha
-    private readonly float[] _rayAngles = { 0f, -25f, 25f, -50f, 50f };
+    // Buffer reutilizado para OverlapSphereNonAlloc (cero allocs)
+    private readonly Collider[] _overlapBuffer = new Collider[32];
+    public Vector3 LastAvoidanceVector { get; private set; }
+    public float SensorLength => _sensorLength;
+    public float InteriorSensorLength => _interiorSensorLength;
 
-    public Enemy_ObstacleAvoidanceBehaviour(Transform transform, float sensorLength, float avoidanceForce, LayerMask obstacleMask, float interiorSensorLength, float interiorAvoidanceForce)
+
+    public Enemy_ObstacleAvoidanceBehaviour(Transform transform, float sensorLength, float avoidanceForce,
+        LayerMask obstacleMask, float interiorSensorLength, float interiorAvoidanceForce)
     {
         _transform = transform;
         _sensorLength = sensorLength;
@@ -23,62 +27,73 @@ public class Enemy_ObstacleAvoidanceBehaviour : MonoBehaviour
         _interiorAvoidanceForce = interiorAvoidanceForce;
     }
 
-    public Vector3 GetAvoidanceVector()
+    public Vector3 GetAvoidanceVector(Vector3 extraCheckDirection = default)
     {
         Vector3 avoidanceVector = Vector3.zero;
         int hitCount = 0;
+        Vector3 origin = _transform.position;
 
-        for (int i = 0; i < _rayAngles.Length; i++)
+        // === 1. Consulta única en esfera (cubre 3D completo) ===
+        int count = Physics.OverlapSphereNonAlloc(origin, _sensorLength, _overlapBuffer, _obstacleMask);
+
+        for (int i = 0; i < count; i++)
         {
-            // Calculamos la dirección de este rayo específico
-            Vector3 rayDirection = Quaternion.Euler(0, _rayAngles[i], 0) * _transform.forward;
+            Collider col = _overlapBuffer[i];
+            if (col == null) continue;
 
-            if (Physics.Raycast(_transform.position, rayDirection, out RaycastHit hit, _sensorLength, _obstacleMask))
-            {
-                hitCount++;
+            // Ignorar el propio collider del enemigo si está en la misma capa
+            if (col.transform == _transform || col.transform.IsChildOf(_transform)) continue;
 
-                // 1. FUERZA DE REPULSIÓN BÁSICA (Alejarse de la pared)
-                Vector3 pushAway = hit.normal;
+            // Punto más cercano del collider al enemigo
+            Vector3 closest = col.ClosestPoint(origin);
+            Vector3 toObstacle = closest - origin;
+            float distance = toObstacle.magnitude;
 
-                // 2. FUERZA DE DESLIZAMIENTO TANGENCIAL (Magia anti-rebotes)
-                // Usamos el Producto Cruzado entre Arriba y la Normal de la pared para conseguir la dirección paralela a la pared.
-                Vector3 slideDirection = Vector3.Cross(Vector3.up, hit.normal).normalized;
+            if (distance < 0.001f) continue;  // solapado, no hay dirección
 
-                // Decidimos hacia qué lado deslizarnos basándonos en qué rayo golpeó el obstáculo
-                if (_rayAngles[i] > 0) 
-                {
-                    // Si golpeó el rayo derecho, nos deslizamos hacia la izquierda
-                    slideDirection = -slideDirection; 
-                }
-                else if (_rayAngles[i] == 0)
-                {
-                    // Si golpeó el rayo central de lleno, decidimos aleatoriamente o por la rotación actual para no trabarnos
-                    float rightDot = Vector3.Dot(_transform.right, hit.normal);
-                    if (rightDot > 0) slideDirection = -slideDirection;
-                }
+            Vector3 normal = toObstacle / distance;  // "normal" sintética: hacia el obstáculo
 
-                // Mientras más cerca esté de chocar, más fuerte es la evasión
-                float distanceFactor = 1.0f - (hit.distance / _sensorLength);
-                
-                // Combinamos la repulsión y el deslizamiento
-                Vector3 finalForce = (pushAway + (slideDirection * 1.5f)).normalized;
-                
-                avoidanceVector += finalForce * (_avoidanceForce * distanceFactor);
-            }
+            // Repulsión: empuja en dirección OPUESTA al obstáculo
+            Vector3 pushAway = -normal;
+
+            // Deslizamiento: perpendicular a la dirección al obstáculo
+            Vector3 slideDir = Vector3.Cross(Vector3.up, normal).normalized;
+            // (si quieres deslizamiento 3D completo, proyecta sobre el plano tangente)
+
+            float distanceFactor = 1.0f - (distance / _sensorLength);
+            Vector3 finalForce = (pushAway + slideDir * 1.2f).normalized;
+
+            avoidanceVector += finalForce * (_avoidanceForce * distanceFactor);
+            hitCount++;
         }
 
-        // Si múltiples rayos detectan paredes, promediamos la dirección de escape
         if (hitCount > 0)
-        {
             avoidanceVector /= hitCount;
-            
-            // Añadimos un pequeño empuje extra de los "sensores interiores" si está a punto de chocar
-            if (Physics.Raycast(_transform.position, _transform.forward, out RaycastHit closeHit, _interiorSensorLength, _obstacleMask))
+
+        // === 2. Sensor interior frontal corto (refuerzo de proximidad) ===
+        if (Physics.Raycast(origin, _transform.forward,
+                            out RaycastHit closeHit, _interiorSensorLength, _obstacleMask))
+        {
+            avoidanceVector += closeHit.normal * _interiorAvoidanceForce;
+        }
+
+        // === 3. Fix 1: dirección real de movimiento ===
+        if (extraCheckDirection.sqrMagnitude > 0.01f)
+        {
+            Vector3 flatDir = new Vector3(extraCheckDirection.x, 0f, extraCheckDirection.z);
+            if (flatDir.sqrMagnitude > 0.01f)
             {
-                avoidanceVector += closeHit.normal * _interiorAvoidanceForce;
+                flatDir.Normalize();
+                if (Physics.Raycast(origin, flatDir, out RaycastHit moveHit,
+                                    _sensorLength, _obstacleMask))
+                {
+                    float falloff = 1f - (moveHit.distance / _sensorLength);
+                    avoidanceVector += moveHit.normal * (_avoidanceForce * falloff);
+                }
             }
         }
 
+        LastAvoidanceVector = avoidanceVector;
         return avoidanceVector;
     }
 }

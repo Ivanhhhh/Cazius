@@ -12,7 +12,9 @@ public abstract class Enemy_FlyingChasingBehaviour
 
     protected float _randomWanderTimer = 0f;
     protected Vector3 _currentRandomWander = Vector3.zero;
-    protected float _lastShootTime = -100f; 
+    protected float _lastShootTime = -100f;
+    public Vector3 LastIdealMovement { get; private set; }
+
 
     public Enemy_FlyingChasingBehaviour(Transform transform, Rigidbody rb, Transform playerTransform, 
         Enemy_FieldOfViewBehaviour fov, Enemy_ObstacleAvoidanceBehaviour avoidanceHelper, FlyingEnemyStatsSO stats)
@@ -74,7 +76,8 @@ public abstract class Enemy_FlyingChasingBehaviour
             idealMovement = finalWander.normalized;
         }
 
-        Vector3 avoidance = _avoidanceHelper.GetAvoidanceVector();
+        LastIdealMovement = idealMovement;
+        Vector3 avoidance = _avoidanceHelper.GetAvoidanceVector(idealMovement);   // <-- FIX 1: pasamos idealMovement
         Vector3 finalDirection = (idealMovement + avoidance).normalized;
         float reactionSpeed = avoidance.sqrMagnitude > 0.1f ? _stats.evasionReactionSpeed : _stats.normalReactionSpeed;
         _rb.linearVelocity = Vector3.Lerp(_rb.linearVelocity, finalDirection * _stats.chaseSpeed, Time.fixedDeltaTime * reactionSpeed);
