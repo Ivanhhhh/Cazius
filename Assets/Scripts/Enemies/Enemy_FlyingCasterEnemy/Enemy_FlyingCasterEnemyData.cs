@@ -67,7 +67,6 @@ public class Enemy_FlyingCasterEnemyData : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _rb.useGravity = false;
         _rb.isKinematic = false;
-        _rb.constraints = RigidbodyConstraints.FreezeRotation;
         _rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
         StartCoroutine(WaitForPlayer());
