@@ -155,7 +155,6 @@ public class Enemy_OrbitEnemyData : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _rb.useGravity = false;
-        _rb.constraints = RigidbodyConstraints.FreezeRotation;
         StartCoroutine(WaitForPlayer());
     }
 

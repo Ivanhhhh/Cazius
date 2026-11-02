@@ -61,7 +61,7 @@ public abstract class Enemy_FlyingChasingBehaviour
         }
         else 
         {
-            _randomWanderTimer -= Time.fixedDeltaTime;
+            _randomWanderTimer -= Time.deltaTime;
             if (_randomWanderTimer <= 0f)
             {
                 float randomStrafe = Random.Range(-_stats.wanderStrafeLimit, _stats.wanderStrafeLimit); 
@@ -80,7 +80,7 @@ public abstract class Enemy_FlyingChasingBehaviour
         Vector3 avoidance = _avoidanceHelper.GetAvoidanceVector(idealMovement);   // <-- FIX 1: pasamos idealMovement
         Vector3 finalDirection = (idealMovement + avoidance).normalized;
         float reactionSpeed = avoidance.sqrMagnitude > 0.1f ? _stats.evasionReactionSpeed : _stats.normalReactionSpeed;
-        _rb.linearVelocity = Vector3.Lerp(_rb.linearVelocity, finalDirection * _stats.chaseSpeed, Time.fixedDeltaTime * reactionSpeed);
+        _rb.linearVelocity = Vector3.Lerp(_rb.linearVelocity, finalDirection * _stats.chaseSpeed, Time.deltaTime * reactionSpeed);
 
         // 2. DETECCIÓN DE ATAQUE
         if (horizontalDistance <= _stats.attackRange && canSeePlayer && Time.time >= _lastShootTime + _stats.shootCooldown)
@@ -103,10 +103,16 @@ public abstract class Enemy_FlyingChasingBehaviour
     {
         Vector3 targetCenter = _playerTransform.position + (Vector3.up * _stats.aimOffset);
         Vector3 directionToPlayer = (targetCenter - _transform.position).normalized;
+
         if (directionToPlayer.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
-            _transform.rotation = Quaternion.Slerp(_transform.rotation, targetRotation, Time.fixedDeltaTime * _stats.rotationSpeed);
+
+            // Calculamos la rotación
+            Quaternion newRotation = Quaternion.Slerp(_rb.rotation, targetRotation, Time.deltaTime * _stats.rotationSpeed);
+
+            // Aplicamos la rotación a través de la física (NO al transform directamente)
+            _rb.MoveRotation(newRotation);
         }
     }
 
