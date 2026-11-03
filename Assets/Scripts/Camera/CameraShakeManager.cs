@@ -1,5 +1,4 @@
 
-using System.Collections;
 using UnityEngine;
 
 public class CameraShakeManager : MonoBehaviour
@@ -15,8 +14,19 @@ public class CameraShakeManager : MonoBehaviour
     [SerializeField] private float _rollAmount = 1f;
     [SerializeField] private float _noiseSpeed = 20f;
 
+    [Header("Continuous Shake")]
+    [SerializeField] private float _continuousFadeSpeed = 3f;
+
     private Quaternion _originalLocalRotation;
-    private Coroutine _shakeCoroutine;
+
+    private float _targetContinuousStrength;
+    private float _currentContinuousStrength;
+
+    private float _shakeStrength;
+    private float _shakeDuration;
+    private float _shakeTimer;
+
+    private float _noiseSeed;
 
     private void Awake()
     {
@@ -30,6 +40,54 @@ public class CameraShakeManager : MonoBehaviour
 
         if (_shakePivot != null)
             _originalLocalRotation = _shakePivot.localRotation;
+
+        _noiseSeed = Random.Range(0f, 1000f);
+    }
+
+    private void OnEnable()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
+
+    private void LateUpdate()
+    {
+        if (_shakePivot == null)
+            return;
+
+        _currentContinuousStrength = Mathf.MoveTowards(
+            _currentContinuousStrength,
+            _targetContinuousStrength,
+            _continuousFadeSpeed * Time.deltaTime
+        );
+
+        float impactStrength = 0f;
+
+        if (_shakeTimer < _shakeDuration)
+        {
+            float progress = _shakeTimer / _shakeDuration;
+
+            impactStrength = _shakeStrength * (1f - progress);
+
+            _shakeTimer += Time.deltaTime;
+        }
+
+        float totalStrength = _currentContinuousStrength + impactStrength;
+
+        if (totalStrength <= 0.0001f)
+        {
+            _shakePivot.localRotation = _originalLocalRotation;
+            return;
+        }
+
+        float intensity = totalStrength * _rotationMultiplier;
+        float time = Time.time * _noiseSpeed;
+
+        float pitch = (Mathf.PerlinNoise(_noiseSeed, time) * 2f - 1f) * intensity * _pitchAmount;
+        float yaw = (Mathf.PerlinNoise(_noiseSeed + 100f, time) * 2f - 1f) * intensity * _yawAmount;
+        float roll = (Mathf.PerlinNoise(_noiseSeed + 200f, time) * 2f - 1f) * intensity * _rollAmount;
+
+        _shakePivot.localRotation = _originalLocalRotation * Quaternion.Euler(pitch, yaw, roll);
     }
 
     public void CameraShake(float shakeStrength, float shakeDuration)
@@ -37,52 +95,29 @@ public class CameraShakeManager : MonoBehaviour
         if (_shakePivot == null)
             return;
 
-        if (_shakeCoroutine != null)
-        {
-            StopCoroutine(_shakeCoroutine);
-            _shakeCoroutine = null;
-        }
-
-        _shakePivot.localRotation = _originalLocalRotation;
-
-        _shakeCoroutine = StartCoroutine(CameraShakeCoroutine(shakeStrength, shakeDuration));
+        _shakeStrength = Mathf.Max(0f, shakeStrength);
+        _shakeDuration = Mathf.Max(0f, shakeDuration);
+        _shakeTimer = 0f;
     }
 
-    private IEnumerator CameraShakeCoroutine(float shakeStrength, float shakeDuration)
+    public void SetContinuousShake(float strength)
     {
-        float elapsedTime = 0f;
-        float seed = Random.Range(0f, 1000f);
-
-        while (elapsedTime < shakeDuration)
-        {
-            float progress = elapsedTime / shakeDuration;
-            float intensity = shakeStrength * (1f - progress) * _rotationMultiplier;
-            float time = Time.time * _noiseSpeed;
-
-            float pitch = (Mathf.PerlinNoise(seed, time) * 2f - 1f) * intensity * _pitchAmount;
-            float yaw = (Mathf.PerlinNoise(seed + 100f, time) * 2f - 1f) * intensity * _yawAmount;
-            float roll = (Mathf.PerlinNoise(seed + 200f, time) * 2f - 1f) * intensity * _rollAmount;
-
-            _shakePivot.localRotation = _originalLocalRotation * Quaternion.Euler(pitch, yaw, roll);
-
-            elapsedTime += Time.deltaTime;
-
-            yield return null;
-        }
-
-        _shakePivot.localRotation = _originalLocalRotation;
-        _shakeCoroutine = null;
+        _targetContinuousStrength = Mathf.Max(0f, strength);
     }
 
     private void OnDisable()
     {
-        if (_shakeCoroutine != null)
-        {
-            StopCoroutine(_shakeCoroutine);
-            _shakeCoroutine = null;
-        }
+        _targetContinuousStrength = 0f;
+        _currentContinuousStrength = 0f;
+
+        _shakeStrength = 0f;
+        _shakeDuration = 0f;
+        _shakeTimer = 0f;
 
         if (_shakePivot != null)
             _shakePivot.localRotation = _originalLocalRotation;
+
+        if (Instance == this)
+            Instance = null;
     }
 }
