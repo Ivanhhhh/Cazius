@@ -42,6 +42,10 @@ public class EyeCameraController : MonoBehaviour
     [Header("Damage")]
     [SerializeField] private int _damageAmount = 10;
     [SerializeField] private float _damageInterval = 2f;
+
+    [Header("Visuals")]
+    [SerializeField] private EyeCameraVisuals _visuals;
+
     private IPlayerHitable _playerHitable;
 
     private EyeCameraState _currentState = EyeCameraState.Patrol;
@@ -60,7 +64,6 @@ public class EyeCameraController : MonoBehaviour
     {
         if (_eyePivot == null)
         {
-            Debug.LogError("EyeCamera is missing its EyePivot reference.", this);
             enabled = false;
             yield break;
         }
@@ -89,6 +92,18 @@ public class EyeCameraController : MonoBehaviour
                 yield return wait;
         }
     }
+
+
+    private void OnDisable()
+    {
+        _visuals?.StopTracking();
+
+        DamageVignetteManager.Instance?.Release(this);
+
+        _currentState = EyeCameraState.Patrol;
+        _damageTimer = 0f;
+    }
+
 
     private void Update()
     {
@@ -195,8 +210,11 @@ public class EyeCameraController : MonoBehaviour
         _patrolIndex = nextIndex;
     }
 
+
     private void UpdateChase()
     {
+        DamageVignetteManager.Instance?.TryStart(this, Mathf.Max(0.01f, _damageInterval - _damageTimer));
+
         Vector3 targetPosition = GetPlayerTargetPosition();
 
         Quaternion targetRotation = GetLimitedRotation(targetPosition);
@@ -214,6 +232,7 @@ public class EyeCameraController : MonoBehaviour
         }
     }
 
+
     private void UpdateLostTarget()
     {
         _lostTargetTimer -= Time.deltaTime;
@@ -226,14 +245,25 @@ public class EyeCameraController : MonoBehaviour
     {
         _currentState = EyeCameraState.Chase;
         _damageTimer = _damageInterval / 2;
+
+        Transform target = _playerTarget != null ? _playerTarget : _player;
+        Vector3 offset = _playerTarget != null ? Vector3.zero : Vector3.up * _playerHeightOffset;
+
+        _visuals?.StartTracking(target, offset);
     }
+
 
     private void EnterLostTarget()
     {
         _currentState = EyeCameraState.LostTarget;
         _lostTargetTimer = _lostTargetWaitTime;
         _damageTimer = 0f;
+
+        _visuals?.StopTracking();
+
+        DamageVignetteManager.Instance?.Release(this);
     }
+
 
     private void EnterPatrol()
     {
@@ -321,9 +351,14 @@ public class EyeCameraController : MonoBehaviour
         );
     }
 
+
     private void DealDamage()
     {
         _playerHitable?.Hit(_damageAmount, gameObject);
+
+        _visuals?.OnDamage();
+
+        DamageVignetteManager.Instance?.NotifyDamage(this, _damageInterval);
     }
 
     private void OnDrawGizmosSelected()

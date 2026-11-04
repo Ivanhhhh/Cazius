@@ -8,7 +8,8 @@ public class InventoryUI : MonoBehaviour
     public enum InventoryTab
     {
         Regular,
-        KeyItems
+        KeyItems,
+        LoreItems
     }
 
     [Header("References")]
@@ -26,6 +27,7 @@ public class InventoryUI : MonoBehaviour
     [Header("Tab UI Buttons")]
     [SerializeField] private Button _regularTabButton;
     [SerializeField] private Button _keyItemsTabButton;
+    [SerializeField] private Button _loreItemsTabButton;
 
     [Header("Tab Button Colors")]
     [SerializeField] private Color _selectedTabColor = new Color32(0xB1, 0xFF, 0xFB, 0xFF);   // #B1FFFB
@@ -36,6 +38,7 @@ public class InventoryUI : MonoBehaviour
 
     private Image _regularTabImage;
     private Image _keyItemsTabImage;
+    private Image _loreItemsTabImage;
 
     private Coroutine _typewriterCoroutine;
 
@@ -51,6 +54,11 @@ public class InventoryUI : MonoBehaviour
         {
             _keyItemsTabImage = _keyItemsTabButton.GetComponent<Image>();
             _keyItemsTabButton.onClick.AddListener(SelectKeyItemsTab);
+        }
+        if (_loreItemsTabButton != null)
+        {
+            _loreItemsTabImage = _loreItemsTabButton.GetComponent<Image>();
+            _loreItemsTabButton.onClick.AddListener(SelectLoreItemsTab);
         }
     }
 
@@ -84,6 +92,8 @@ public class InventoryUI : MonoBehaviour
 
         if (_keyItemsTabButton != null)
             _keyItemsTabButton.onClick.RemoveListener(SelectKeyItemsTab);
+        if (_loreItemsTabButton != null)
+            _loreItemsTabButton.onClick.RemoveListener(SelectLoreItemsTab);
     }
 
     public void SelectRegularTab()
@@ -102,6 +112,14 @@ public class InventoryUI : MonoBehaviour
         Refresh();
     }
 
+    public void SelectLoreItemsTab()
+    {
+        _currentTab = InventoryTab.LoreItems;
+        ClearItemDescription();
+        UpdateTabVisuals();
+        Refresh();
+    }
+
     private void UpdateTabVisuals()
     {
         if (_regularTabImage != null)
@@ -114,6 +132,13 @@ public class InventoryUI : MonoBehaviour
         if (_keyItemsTabImage != null)
         {
             _keyItemsTabImage.color = (_currentTab == InventoryTab.KeyItems)
+                ? _selectedTabColor
+                : _unselectedTabColor;
+        }
+
+        if (_loreItemsTabImage != null)
+        {
+            _loreItemsTabImage.color = (_currentTab == InventoryTab.LoreItems)
                 ? _selectedTabColor
                 : _unselectedTabColor;
         }
@@ -228,14 +253,26 @@ public class InventoryUI : MonoBehaviour
         foreach (Transform child in slotContainer)
             Destroy(child.gameObject);
 
-        // Active tab configuration
-        var targetList = (_currentTab == InventoryTab.Regular)
-            ? Inventory.Instance.regularItems
-            : Inventory.Instance.keyItems;
+        System.Collections.Generic.List<ItemData> targetList;
+        int maxSlots;
 
-        int maxSlots = (_currentTab == InventoryTab.Regular)
-            ? Inventory.Instance.maxRegularSlots
-            : Inventory.Instance.maxKeySlots;
+        switch (_currentTab)
+        {
+            case InventoryTab.KeyItems:
+                targetList = Inventory.Instance.keyItems;
+                maxSlots = Inventory.Instance.maxKeySlots;
+                break;
+
+            case InventoryTab.LoreItems:
+                targetList = Inventory.Instance.loreItems;
+                maxSlots = Inventory.Instance.maxLoreSlots;
+                break;
+
+            default:
+                targetList = Inventory.Instance.regularItems;
+                maxSlots = Inventory.Instance.maxRegularSlots;
+                break;
+        }
 
         for (int i = 0; i < maxSlots; i++)
         {
@@ -248,7 +285,6 @@ public class InventoryUI : MonoBehaviour
 
             var amountText = slot.GetComponentInChildren<TextMeshProUGUI>(true);
 
-            // Ensure slot has InventorySlot component for pointer enter/exit
             var slotHover = slot.GetComponent<InventorySlot>();
             if (slotHover == null)
                 slotHover = slot.AddComponent<InventorySlot>();
@@ -258,7 +294,6 @@ public class InventoryUI : MonoBehaviour
                 var item = targetList[i];
                 icon.sprite = item.icon;
 
-                // Setup hover data
                 slotHover.Setup(item, this);
 
                 if (amountText != null)
@@ -286,5 +321,4 @@ public class InventoryUI : MonoBehaviour
             }
         }
     }
-
 }

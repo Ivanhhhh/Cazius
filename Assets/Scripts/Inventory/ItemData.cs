@@ -23,6 +23,7 @@ public class ItemData : ScriptableObject
 {
     public string itemID;
     public bool isKeyItem;
+    public bool isLoreItem;
     public string itemName;
     public Sprite icon;
     public ItemType itemType;
