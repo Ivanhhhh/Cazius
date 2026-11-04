@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8479b3c573f1ded4c9ff46b024d13ed5, type: 3}
   m_Name: FlyingCasterEnemyChasingStates
   m_EditorClassIdentifier: Assembly-CSharp::FlyingEnemyStatsSO
-  chaseSpeed: 2
+  chaseSpeed: 6
   rotationSpeed: 5
   attackRange: 10
   shootCooldown: 5
@@ -21,17 +21,17 @@ MonoBehaviour:
     m_Bits: 256
   aimOffset: 0.6
   hoverHeight: 6
-  retreatMargin: 2
-  normalReactionSpeed: 5
-  evasionReactionSpeed: 15
-  heightCorrectionMultiplier: 2
-  minWanderTime: 1.5
-  maxWanderTime: 3
+  retreatMargin: 4
+  normalReactionSpeed: 0.3
+  evasionReactionSpeed: 1
+  heightCorrectionMultiplier: 7
+  minWanderTime: 2
+  maxWanderTime: 4
   wanderStrafeLimit: 1
-  wanderForwardLimit: 0.5
-  showTargetingRay: 1
-  showWanderRay: 1
+  wanderForwardLimit: 1
+  showTargetingRay: 0
+  showWanderRay: 0
   showIdealMovementRay: 1
   showAvoidanceRay: 1
-  showFinalDirectionRay: 1
-  showVelocityRay: 1
+  showFinalDirectionRay: 0
+  showVelocityRay: 0
