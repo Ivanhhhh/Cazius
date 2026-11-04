@@ -11,10 +11,12 @@ public class Inventory : MonoBehaviour
     [Header("Slot Limits")]
     public int maxRegularSlots = 12;
     public int maxKeySlots = 12;
+    public int maxLoreSlots = 12;
 
     [Header("Item Collections")]
     public List<ItemData> regularItems = new();
     public List<ItemData> keyItems = new();
+    public List<ItemData> loreItems = new();
 
     public UnityEvent onInventoryChanged;
     public event Action<ItemData> OnItemAdded;
@@ -26,6 +28,7 @@ public class Inventory : MonoBehaviour
         {
             var combined = new List<ItemData>(regularItems);
             combined.AddRange(keyItems);
+            combined.AddRange(loreItems);
             return combined;
         }
     }
@@ -53,6 +56,11 @@ public class Inventory : MonoBehaviour
         }
 
         foreach (var item in keyItems)
+        {
+            if (item.name.Trim() == searchName)
+                total += item.value;
+        }
+        foreach (var item in loreItems)
         {
             if (item.name.Trim() == searchName)
                 total += item.value;
@@ -90,6 +98,8 @@ public class Inventory : MonoBehaviour
         ConsumeFromList(regularItems);
         if (amountLeft > 0)
             ConsumeFromList(keyItems);
+        if (amountLeft > 0)
+            ConsumeFromList(loreItems);
 
         if (amountLeft < amountToConsume)
             onInventoryChanged?.Invoke();
@@ -112,6 +122,18 @@ public class Inventory : MonoBehaviour
             ItemData clonedItem = Instantiate(item);
             clonedItem.name = item.name;
             keyItems.Add(clonedItem);
+        }
+        else if (item.isLoreItem)
+        {
+            if (loreItems.Count >= maxLoreSlots)
+            {
+                Debug.Log("Lore Item Inventory full!");
+                return false;
+            }
+
+            ItemData clonedItem = Instantiate(item);
+            clonedItem.name = item.name;
+            loreItems.Add(clonedItem);
         }
         else
         {
@@ -198,7 +220,9 @@ public class Inventory : MonoBehaviour
 
     public bool HasItem(string itemID)
     {
-        return regularItems.Exists(i => i.itemID == itemID) || keyItems.Exists(i => i.itemID == itemID);
+        return regularItems.Exists(i => i.itemID == itemID)
+            || keyItems.Exists(i => i.itemID == itemID)
+            || loreItems.Exists(i => i.itemID == itemID);
     }
 
     public bool RemoveItem(string itemID)
@@ -215,6 +239,15 @@ public class Inventory : MonoBehaviour
         if (item != null)
         {
             keyItems.Remove(item);
+            onInventoryChanged?.Invoke();
+            return true;
+        }
+
+        item = loreItems.Find(i => i.itemID == itemID);
+
+        if (item != null)
+        {
+            loreItems.Remove(item);
             onInventoryChanged?.Invoke();
             return true;
         }
