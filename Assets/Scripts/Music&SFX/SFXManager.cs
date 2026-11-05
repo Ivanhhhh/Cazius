@@ -42,7 +42,8 @@ public class SFXManager : MonoBehaviour
         DoorWoodOpenSFX,
         DoorWoodCloseSFX,
         EnemyMeleeAttack,
-        CasterAttack
+        CasterAttack,
+        DamageVoiceSFX,
         // Add Categories here
     }
 
@@ -128,8 +129,7 @@ public class SFXManager : MonoBehaviour
             int randomIndex = Random.Range(0, sfxCategory.clips.Count);
             AudioClip clip = sfxCategory.clips[randomIndex];
 
-            audioSource.transform.position = position;
-            audioSource.PlayOneShot(clip);
+            PlayClip3D(clip, position);
         }
         else
         {
@@ -162,8 +162,7 @@ public class SFXManager : MonoBehaviour
                 _backgroundMusicSource.Pause();
             }
 
-            audioSource.transform.position = position;
-            audioSource.PlayOneShot(clip);
+            PlayClip3D(clip, position);
 
             StartCoroutine(ResumeMusicAfterSFX(clip.length));
         }
@@ -171,6 +170,24 @@ public class SFXManager : MonoBehaviour
         {
             Debug.LogWarning($"SFXManager: Sound effect category '{category}' not found!");
         }
+    }
+
+    private void PlayClip3D(AudioClip clip, Vector3 position)
+    {
+        GameObject temp = new GameObject("TempSFX");
+        temp.transform.position = position;
+
+        AudioSource source = temp.AddComponent<AudioSource>();
+        source.clip = clip;
+        source.spatialBlend = 1f;
+        source.minDistance = 1f;
+        source.maxDistance = 20f;
+        source.rolloffMode = AudioRolloffMode.Linear;
+        source.volume = audioSource.volume;
+        source.outputAudioMixerGroup = audioSource.outputAudioMixerGroup;
+        source.Play();
+
+        Destroy(temp, clip.length + 0.1f);
     }
 
     private System.Collections.IEnumerator ResumeMusicAfterSFX(float duration)
