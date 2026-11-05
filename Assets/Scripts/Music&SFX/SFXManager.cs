@@ -42,7 +42,8 @@ public class SFXManager : MonoBehaviour
         DoorWoodOpenSFX,
         DoorWoodCloseSFX,
         EnemyMeleeAttack,
-        CasterAttack
+        CasterAttack,
+        DamageVoiceSFX,
         // Add Categories here
     }
 
