@@ -9303,6 +9303,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player_Damage
   _volume: {fileID: 1181820843}
+  _damageShakeStrength: 0.3
+  _damageShakeDuration: 0.4
+  _soundStrength: 1
+  _flashIntensity: 0.47
+  _flashHoldTime: 0.47
+  _flashFadeStep: 0.01
+  _flashFadeInterval: 0.1
+  _amazingIntensity: 0
+  _greatIntensity: 0.5
+  _regularIntensity: 0.8
+  _lowIntensity: 1
+  _criticIntensity: 1.5
+  _baseTransitionSpeed: 2
 --- !u!114 &1181820843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12220,25 +12233,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 53103536328830992, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 0ea0b721a67ff5e4bad8439ef39ad0de, type: 2}
     - target: {fileID: 981654006732462316, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
       propertyPath: m_Name
       value: EnemyOrbitEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 1869273562020226015, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
-      propertyPath: _dissolveSpeed
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1869273562020226015, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
-      propertyPath: _appearingDissolve
-      value: -0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1869273562020226015, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
-      propertyPath: _disappearingDissolve
-      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 2242555410895999047, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12278,10 +12275,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2242555410895999047, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5807873248742297215, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
-      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6052035504325333865, guid: fe15e0001317d08429ecf963bf3e9ff0, type: 3}
