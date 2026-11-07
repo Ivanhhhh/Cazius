@@ -111,46 +111,60 @@ public class Inventory : MonoBehaviour
     {
         if (item == null) return false;
 
-        if (item.isKeyItem)
+        // 1. Elegir la lista destino
+        List<ItemData> targetList;
+        int maxSlots;
+        if (item.isKeyItem) { targetList = keyItems; maxSlots = maxKeySlots; }
+        else if (item.isLoreItem) { targetList = loreItems; maxSlots = maxLoreSlots; }
+        else { targetList = regularItems; maxSlots = maxRegularSlots; }
+
+        int maxStack = Mathf.Max(1, item.maxStackSize);
+        int amountToAdd = Mathf.Max(1, item.value); // value=0 → recoges 1
+        bool anyAdded = false;
+
+        // 2. Intentar fusionar en pilas existentes con hueco
+        for (int i = 0; i < targetList.Count && amountToAdd > 0; i++)
         {
-            if (keyItems.Count >= maxKeySlots)
+            var existing = targetList[i];
+            if (!IsSameStack(existing, item)) continue;
+            if (existing.value >= maxStack) continue;
+
+            int space = maxStack - existing.value;
+            int toAdd = Mathf.Min(space, amountToAdd);
+            existing.value += toAdd;
+            amountToAdd -= toAdd;
+            anyAdded = true;
+        }
+
+        // 3. Si sobra, crear slots nuevos
+        while (amountToAdd > 0)
+        {
+            if (targetList.Count >= maxSlots)
             {
-                Debug.Log("Key Item Inventory full!");
-                return false;
+                Debug.Log("[Inventory] Slots llenos, no se pudo añadir todo.");
+                break;
             }
 
-            ItemData clonedItem = Instantiate(item);
-            clonedItem.name = item.name;
-            keyItems.Add(clonedItem);
+            ItemData clone = Instantiate(item);
+            clone.name = item.name;
+            clone.value = Mathf.Min(maxStack, amountToAdd);
+            amountToAdd -= clone.value;
+            targetList.Add(clone);
+            anyAdded = true;
         }
-        else if (item.isLoreItem)
-        {
-            if (loreItems.Count >= maxLoreSlots)
-            {
-                Debug.Log("Lore Item Inventory full!");
-                return false;
-            }
 
-            ItemData clonedItem = Instantiate(item);
-            clonedItem.name = item.name;
-            loreItems.Add(clonedItem);
-        }
-        else
-        {
-            if (regularItems.Count >= maxRegularSlots)
-            {
-                Debug.Log("Regular Inventory full!");
-                return false;
-            }
-
-            ItemData clonedItem = Instantiate(item);
-            clonedItem.name = item.name;
-            regularItems.Add(clonedItem);
-        }
+        if (!anyAdded) return false;
 
         onInventoryChanged?.Invoke();
         OnItemAdded?.Invoke(item);
         return true;
+    }
+    private static bool IsSameStack(ItemData a, ItemData b)
+    {
+        if (a == null || b == null) return false;
+        if (!string.IsNullOrEmpty(a.itemID) && !string.IsNullOrEmpty(b.itemID))
+            return a.itemID == b.itemID;
+        return a.name == b.name;
     }
 
     public void UseItem(ItemData item)

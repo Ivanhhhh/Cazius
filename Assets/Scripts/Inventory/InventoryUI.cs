@@ -297,17 +297,24 @@ public class InventoryUI : MonoBehaviour
                 slotHover.Setup(item, this);
 
                 if (amountText != null)
-                {
-                    if (item.itemType == ItemType.Ammo || item.itemType == ItemType.Scrap)
+                    if (amountText != null)
                     {
-                        amountText.text = item.value.ToString();
-                        amountText.gameObject.SetActive(true);
+                        bool showQuantity =
+                            item.maxStackSize > 1 ||
+                            item.value > 1 ||
+                            item.itemType == ItemType.Ammo ||
+                            item.itemType == ItemType.Scrap;
+
+                        if (showQuantity)
+                        {
+                            amountText.text = item.value.ToString();
+                            amountText.gameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            amountText.gameObject.SetActive(false);
+                        }
                     }
-                    else
-                    {
-                        amountText.gameObject.SetActive(false);
-                    }
-                }
 
                 int index = i;
                 slot.GetComponent<Button>().onClick.AddListener(() =>
