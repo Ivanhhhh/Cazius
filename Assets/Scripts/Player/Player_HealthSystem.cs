@@ -91,6 +91,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
         _currentHealth += amount;
         _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
         UpdateHealthState();
+        playerDamageScript.SetHealthState(_healthState);
         ModifyUI();
     }
 
@@ -120,9 +121,10 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
         _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
 
         _cameraShakeScript.DamageShake();
-        playerDamageScript.TakeDamageEffect();
 
         UpdateHealthState();
+        playerDamageScript.SetHealthState(_healthState);
+        playerDamageScript.TakeDamageEffect();
         ModifyUI();
 
         if (_currentHealth <= 0)

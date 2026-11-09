@@ -63,7 +63,7 @@ public class Enemy_FirstAttackBehaviour
     {
         if (!_preparationColliderActivated)
         {
-            _attackCollider.enabled = true;
+            //_attackCollider.enabled = true;
             _preparationColliderActivated = true;
         }
         _currentPreparationTime -= Time.deltaTime;
