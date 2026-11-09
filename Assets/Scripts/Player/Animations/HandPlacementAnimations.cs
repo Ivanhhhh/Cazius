@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using System.Collections;
 
@@ -8,96 +9,100 @@ public class HandPlacementAnimations : MonoBehaviour
     [Header("Collision")]
     [SerializeField] LayerMask _collisionLayer;
 
-    [Header("Muzzle Detection")]
-    [SerializeField] Transform _muzzle;
-    [SerializeField] float _muzzleRadius = 0.15f;
-
     [Header("Clearance Detection")]
     [SerializeField] Transform _clearanceOrigin;
     [SerializeField] Transform _aimDirection;
-    [SerializeField] float _clearanceDistance = 0.8f;
+    [SerializeField] float _blockDistance = 0.8f;
+    [SerializeField] float _clearDistance = 1f;
+    [SerializeField] float _collisionRadius = 0.15f;
 
-    [Header("Return To Aim")]
-    [SerializeField] float _clearDelay = 0.1f;
+    [Header("Detection Delay")]
+    [SerializeField] float _blockDelay = 0.05f;
+    [SerializeField] float _clearDelay = 0.2f;
 
     [Header("Animation Blend")]
     [SerializeField] float _gunBlendDuration = 0.2f;
 
     private Coroutine _gunBlendCoroutine;
-
     private bool _weaponBlocked;
+    private float _blockTimer;
     private float _clearTimer;
 
     private void Update()
     {
         if (!GameManager.Instance.gunActive)
-        {  return; }
+            return;
+
+        float distance = _weaponBlocked ? _clearDistance : _blockDistance;
+
+        bool originBlocked = Physics.CheckSphere(
+            _clearanceOrigin.position,
+            _collisionRadius,
+            _collisionLayer,
+            QueryTriggerInteraction.Ignore
+        );
+
+        bool pathBlocked = Physics.SphereCast(
+            _clearanceOrigin.position,
+            _collisionRadius,
+            _aimDirection.forward,
+            out _,
+            distance,
+            _collisionLayer,
+            QueryTriggerInteraction.Ignore
+        );
+
+        bool blocked = originBlocked || pathBlocked;
 
         if (!_weaponBlocked)
         {
-            CheckMuzzleCollision();
-        }
-        else
-        {
-            CheckClearance();
-        }
-    }
+            _clearTimer = 0f;
 
-    private void CheckMuzzleCollision()
-    {
-        bool muzzleBlocked = Physics.CheckSphere(_muzzle.position, _muzzleRadius, _collisionLayer, QueryTriggerInteraction.Ignore);
-
-        if (muzzleBlocked)
-        {
-            SetWeaponBlocked(true);
-        }
-    }
-
-    private void CheckClearance()
-    {
-        bool blocked = Physics.Raycast(_clearanceOrigin.position, _aimDirection.forward, _clearanceDistance, _collisionLayer, QueryTriggerInteraction.Ignore);
-
-        if (!blocked)
-        {
-            _clearTimer += Time.deltaTime;
-
-            if (_clearTimer >= _clearDelay)
+            if (blocked)
             {
-                SetWeaponBlocked(false);
+                _blockTimer += Time.deltaTime;
+
+                if (_blockTimer >= _blockDelay)
+                    SetWeaponBlocked(true);
+            }
+            else
+            {
+                _blockTimer = 0f;
             }
         }
         else
         {
-            _clearTimer = 0f;
+            _blockTimer = 0f;
+
+            if (!blocked)
+            {
+                _clearTimer += Time.deltaTime;
+
+                if (_clearTimer >= _clearDelay)
+                    SetWeaponBlocked(false);
+            }
+            else
+            {
+                _clearTimer = 0f;
+            }
         }
     }
 
     private void SetWeaponBlocked(bool blocked)
     {
+        if (_weaponBlocked == blocked)
+            return;
+
         _weaponBlocked = blocked;
+        _blockTimer = 0f;
         _clearTimer = 0f;
 
         float targetValue = blocked ? 0f : 1f;
 
         if (_gunBlendCoroutine != null)
-        {
             StopCoroutine(_gunBlendCoroutine);
-        }
 
         _gunBlendCoroutine = StartCoroutine(BlendHasGun(targetValue));
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (_muzzle != null)
-        {
-            Gizmos.DrawWireSphere(_muzzle.position, _muzzleRadius);
-        }
-
-        if (_clearanceOrigin != null && _aimDirection != null)
-        {
-            Gizmos.DrawRay(_clearanceOrigin.position, _aimDirection.forward * _clearanceDistance);
-        }
     }
 
     private IEnumerator BlendHasGun(float targetValue)
@@ -109,16 +114,34 @@ public class HandPlacementAnimations : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            float blend = elapsedTime / _gunBlendDuration;
-            float newValue = Mathf.Lerp(startValue, targetValue, blend);
-
-            _animator.SetFloat("HasGun", newValue);
+            float blend = Mathf.Clamp01(elapsedTime / _gunBlendDuration);
+            _animator.SetFloat("HasGun", Mathf.Lerp(startValue, targetValue, blend));
 
             yield return null;
         }
 
         _animator.SetFloat("HasGun", targetValue);
-
         _gunBlendCoroutine = null;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (_clearanceOrigin == null || _aimDirection == null)
+            return;
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(
+            _clearanceOrigin.position + _aimDirection.forward * _blockDistance,
+            _collisionRadius
+        );
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(
+            _clearanceOrigin.position + _aimDirection.forward * _clearDistance,
+            _collisionRadius
+        );
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(_clearanceOrigin.position, _collisionRadius);
     }
 }
