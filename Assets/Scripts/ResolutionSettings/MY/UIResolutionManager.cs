@@ -7,10 +7,10 @@ public class UIResolutionsManager : MonoBehaviour
     ScreenSettingsStorage _storage = new ScreenSettingsStorage();
     ScreenSettingsApplier _applier = new ScreenSettingsApplier();
 
-     [SerializeField] TMP_Dropdown _resolutionDropdown; // es un selector dropdown de resolucion
-    [SerializeField] TMP_Dropdown _fullscreenDropdown; // es un selector dropdown de fullsceren
+     [SerializeField] TMP_Dropdown _resolutionDropdown;
+    [SerializeField] TMP_Dropdown _fullscreenDropdown;
 
-    List<Resolution> _availableResolutions;   // la tabla de traducción (vacía al principio)
+    List<Resolution> _availableResolutions;
 
     List<string> DropDownResolutions = new List<string>();
 
@@ -41,10 +41,6 @@ public class UIResolutionsManager : MonoBehaviour
 
    public void ScreenModeDropdown()
   {
-    //ObtainResolutions providerofresolutions = new ObtainResolutions();
-
-    //_availableResolutions = providerofresolutions.SetupResolutions();
-
       List<string> options = new List<string>();
       options.Add("Full Screen");
       options.Add("borderless window");
@@ -67,10 +63,7 @@ public class UIResolutionsManager : MonoBehaviour
             {
               _resolutionDropdown.SetValueWithoutNotify(i);
               return;
-            }
-
-          
-           
+            }       
         }
 
         _resolutionDropdown.SetValueWithoutNotify(_availableResolutions.Count - 1);
