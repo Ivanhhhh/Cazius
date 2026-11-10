@@ -22909,11 +22909,12 @@ MonoBehaviour:
   _collisionLayer:
     serializedVersion: 2
     m_Bits: 128
-  _muzzle: {fileID: 1647406193}
-  _muzzleRadius: 0.15
   _clearanceOrigin: {fileID: 1745980045}
   _aimDirection: {fileID: 1256757082}
-  _clearanceDistance: 0.8
+  _blockDistance: 0.8
+  _clearDistance: 1
+  _collisionRadius: 0.15
+  _blockDelay: 0.05
   _clearDelay: 0.1
   _gunBlendDuration: 0.2
 --- !u!1001 &945038597
@@ -38948,11 +38949,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6542152925707314754, guid: 32a5dc7be279f034f924d81a536cdefd, type: 3}
   m_PrefabInstance: {fileID: 1636136076}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1647406193 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1436565336327738866, guid: 4d60c001a2cc1cc4f98f374cc81114e8, type: 3}
-  m_PrefabInstance: {fileID: 372027579}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1651813799
 GameObject:
   m_ObjectHideFlags: 0
@@ -54109,6 +54105,10 @@ PrefabInstance:
     - target: {fileID: 430166589737430327, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 651653032407350410, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: far clip plane
+      value: 5000
       objectReference: {fileID: 0}
     - target: {fileID: 651653032407350410, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: m_CullingMask.m_Bits
