@@ -5295,6 +5295,10 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -57786,6 +57790,74 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.53388196, y: 0.502592, z: 1.0522231}
   m_Center: {x: -0.0000180006, y: -0.00039300328, z: 0.52718854}
+--- !u!1 &113434823
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 113434824}
+  - component: {fileID: 113434825}
+  m_Layer: 0
+  m_Name: Probe Adjustment Volume (16)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &113434824
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 113434823}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 79.87155, y: 3.3286185, z: 27.505913}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1891162427}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &113434825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 113434823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55f90731af2ebc94fb7fdaebe2a9a409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeAdjustmentVolume
+  shape: 0
+  size: {x: 17.261154, y: 0.7387767, z: 12.627087}
+  radius: 0.7287979
+  mode: 0
+  intensityScale: 1
+  overriddenDilationThreshold: 0.75
+  virtualOffsetRotation: {x: 0, y: 0, z: 0}
+  virtualOffsetDistance: 1
+  geometryBias: 0.01
+  virtualOffsetThreshold: 0.75
+  rayOriginBias: -0.001
+  skyDirection: {x: 0, y: 0, z: 0}
+  directSampleCount: 32
+  indirectSampleCount: 512
+  sampleCountMultiplier: 4
+  maxBounces: 2
+  skyOcclusionSampleCount: 2048
+  skyOcclusionMaxBounces: 2
+  renderingLayerMaskOperation: 0
+  renderingLayerMask: 0
+  cachedHashCode: -1918306278
+  version: 1
+  invalidateProbes: 0
+  overrideDilationThreshold: 0
 --- !u!1 &114281725
 GameObject:
   m_ObjectHideFlags: 0
@@ -91453,6 +91525,74 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1747073560253146936, guid: 9a24200524296074e95954e73e0ee08a, type: 3}
   m_PrefabInstance: {fileID: 175852305}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &176392184
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 176392185}
+  - component: {fileID: 176392186}
+  m_Layer: 0
+  m_Name: Probe Adjustment Volume (12)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &176392185
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 176392184}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 87.34033, y: 1.2375485, z: 27.748053}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1891162427}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &176392186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 176392184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55f90731af2ebc94fb7fdaebe2a9a409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeAdjustmentVolume
+  shape: 0
+  size: {x: 0.4057312, y: 6.3285027, z: 10.844814}
+  radius: 0.7287979
+  mode: 0
+  intensityScale: 1
+  overriddenDilationThreshold: 0.75
+  virtualOffsetRotation: {x: 0, y: 0, z: 0}
+  virtualOffsetDistance: 1
+  geometryBias: 0.01
+  virtualOffsetThreshold: 0.75
+  rayOriginBias: -0.001
+  skyDirection: {x: 0, y: 0, z: 0}
+  directSampleCount: 32
+  indirectSampleCount: 512
+  sampleCountMultiplier: 4
+  maxBounces: 2
+  skyOcclusionSampleCount: 2048
+  skyOcclusionMaxBounces: 2
+  renderingLayerMaskOperation: 0
+  renderingLayerMask: 0
+  cachedHashCode: -1329473484
+  version: 1
+  invalidateProbes: 0
+  overrideDilationThreshold: 0
 --- !u!1001 &176495249
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -106819,74 +106959,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 211309194}
   m_Mesh: {fileID: -6730727585579540463, guid: b20f52eba82279741a0b651f065526e5, type: 3}
---- !u!1 &211691238
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 211691239}
-  - component: {fileID: 211691240}
-  m_Layer: 0
-  m_Name: Probe Adjustment Volume (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &211691239
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 211691238}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.20007458, y: -0.48612514, z: 0.085779466, w: -0.8463418}
-  m_LocalPosition: {x: 82.39, y: 2.267, z: 32.419}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1891162427}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &211691240
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 211691238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f90731af2ebc94fb7fdaebe2a9a409, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeAdjustmentVolume
-  shape: 1
-  size: {x: 3.0204697, y: 4.311407, z: 8.351177}
-  radius: 0.7287979
-  mode: 0
-  intensityScale: 1
-  overriddenDilationThreshold: 0.75
-  virtualOffsetRotation: {x: 0, y: 0, z: 0}
-  virtualOffsetDistance: 1
-  geometryBias: 0.01
-  virtualOffsetThreshold: 0.75
-  rayOriginBias: -0.001
-  skyDirection: {x: 0, y: 0, z: 0}
-  directSampleCount: 32
-  indirectSampleCount: 512
-  sampleCountMultiplier: 4
-  maxBounces: 2
-  skyOcclusionSampleCount: 2048
-  skyOcclusionMaxBounces: 2
-  renderingLayerMaskOperation: 0
-  renderingLayerMask: 0
-  cachedHashCode: -1081556977
-  version: 1
-  invalidateProbes: 0
-  overrideDilationThreshold: 0
 --- !u!1001 &212070491
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -156366,6 +156438,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b5686eebf85735b4baadee0ca70c15b1, type: 2}
+    - target: {fileID: 2176275886830126515, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202771069794134876, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2423115438916844890, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -167385,6 +167465,10 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8989800695723152682, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -167812,6 +167896,14 @@ PrefabInstance:
     - target: {fileID: 1604872932357326881, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.594
+      objectReference: {fileID: 0}
+    - target: {fileID: 2176275886830126515, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202771069794134876, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2423115438916844890, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -175518,6 +175610,10 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -178768,6 +178864,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b5686eebf85735b4baadee0ca70c15b1, type: 2}
+    - target: {fileID: 2176275886830126515, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202771069794134876, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2423115438916844890, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -181149,6 +181253,74 @@ Transform:
   - {fileID: 305221933}
   m_Father: {fileID: 3866128}
   m_LocalEulerAnglesHint: {x: 0, y: 64.359, z: 0}
+--- !u!1 &406159726
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 406159727}
+  - component: {fileID: 406159728}
+  m_Layer: 0
+  m_Name: Probe Adjustment Volume (17)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &406159727
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406159726}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 79.86827, y: -0.20300001, z: 27.396381}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1891162427}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &406159728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406159726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55f90731af2ebc94fb7fdaebe2a9a409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeAdjustmentVolume
+  shape: 0
+  size: {x: 16.98394, y: 0.7387767, z: 12.514965}
+  radius: 0.7287979
+  mode: 0
+  intensityScale: 1
+  overriddenDilationThreshold: 0.75
+  virtualOffsetRotation: {x: 0, y: 0, z: 0}
+  virtualOffsetDistance: 1
+  geometryBias: 0.01
+  virtualOffsetThreshold: 0.75
+  rayOriginBias: -0.001
+  skyDirection: {x: 0, y: 0, z: 0}
+  directSampleCount: 32
+  indirectSampleCount: 512
+  sampleCountMultiplier: 4
+  maxBounces: 2
+  skyOcclusionSampleCount: 2048
+  skyOcclusionMaxBounces: 2
+  renderingLayerMaskOperation: 0
+  renderingLayerMask: 0
+  cachedHashCode: 1264272633
+  version: 1
+  invalidateProbes: 0
+  overrideDilationThreshold: 0
 --- !u!1001 &406545762
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -182589,8 +182761,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_Intensity
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8989800695723152682, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_IsActive
@@ -193787,8 +193967,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_Intensity
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -226929,7 +227117,7 @@ Transform:
   m_GameObject: {fileID: 531660332}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 52.55855, y: 3.2331855, z: -8.692587}
+  m_LocalPosition: {x: 55.905827, y: 3.2331855, z: -8.692587}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -226950,7 +227138,7 @@ MonoBehaviour:
   version: 2
   globalVolume: 0
   mode: 2
-  size: {x: 16.669903, y: 12.894378, z: 13.074875}
+  size: {x: 23.36444, y: 12.894378, z: 13.074875}
   overrideRendererFilters: 0
   minRendererVolumeSize: 0.1
   objectLayerMask:
@@ -226964,7 +227152,7 @@ MonoBehaviour:
     e00: 1
     e01: 0
     e02: 0
-    e03: -69.21794
+    e03: -72.565216
     e10: 0
     e11: 1
     e12: 0
@@ -226977,7 +227165,7 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 1
-  cachedHashCode: 949374642
+  cachedHashCode: -1691354915
   fillEmptySpaces: 1
 --- !u!1001 &532050345
 PrefabInstance:
@@ -241682,6 +241870,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b5686eebf85735b4baadee0ca70c15b1, type: 2}
+    - target: {fileID: 2176275886830126515, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202771069794134876, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2423115438916844890, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -257172,7 +257368,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_BounceIntensity
-      value: 2
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -302221,6 +302417,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b5686eebf85735b4baadee0ca70c15b1, type: 2}
+    - target: {fileID: 2176275886830126515, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202771069794134876, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2423115438916844890, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -302778,8 +302982,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_Intensity
       value: 1.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8989800695723152682, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_IsActive
@@ -314004,6 +314216,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b5686eebf85735b4baadee0ca70c15b1, type: 2}
+    - target: {fileID: 2176275886830126515, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202771069794134876, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2423115438916844890, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -344221,6 +344441,10 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -355516,6 +355740,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b5686eebf85735b4baadee0ca70c15b1, type: 2}
+    - target: {fileID: 2176275886830126515, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202771069794134876, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2423115438916844890, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -369190,74 +369422,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4284703049991547776, guid: 3596894636a5fc84982ed2c84a5e2e67, type: 3}
   m_PrefabInstance: {fileID: 887777334}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &888436780
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 888436781}
-  - component: {fileID: 888436782}
-  m_Layer: 0
-  m_Name: Probe Adjustment Volume (7)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &888436781
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 888436780}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.096269615, y: -0.57047397, z: 0.095518135, w: 0.8100419}
-  m_LocalPosition: {x: 72.71773, y: 1.5090017, z: 25.201876}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1891162427}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &888436782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 888436780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f90731af2ebc94fb7fdaebe2a9a409, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeAdjustmentVolume
-  shape: 1
-  size: {x: 3.0204697, y: 4.311407, z: 8.351177}
-  radius: 0.7287979
-  mode: 0
-  intensityScale: 1
-  overriddenDilationThreshold: 0.75
-  virtualOffsetRotation: {x: 0, y: 0, z: 0}
-  virtualOffsetDistance: 1
-  geometryBias: 0.01
-  virtualOffsetThreshold: 0.75
-  rayOriginBias: -0.001
-  skyDirection: {x: 0, y: 0, z: 0}
-  directSampleCount: 32
-  indirectSampleCount: 512
-  sampleCountMultiplier: 4
-  maxBounces: 2
-  skyOcclusionSampleCount: 2048
-  skyOcclusionMaxBounces: 2
-  renderingLayerMaskOperation: 0
-  renderingLayerMask: 0
-  cachedHashCode: 1636545741
-  version: 1
-  invalidateProbes: 0
-  overrideDilationThreshold: 0
 --- !u!1 &888526857
 GameObject:
   m_ObjectHideFlags: 0
@@ -389689,74 +389853,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 93.79602, y: 103.42569, z: 0.000003814698}
   m_Center: {x: -46.89801, y: 51.62049, z: -0.0000020261546}
---- !u!1 &978561840
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 978561841}
-  - component: {fileID: 978561842}
-  m_Layer: 0
-  m_Name: Probe Adjustment Volume (9)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &978561841
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 978561840}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.09476095, y: -0.25299746, z: 0.048352152, w: 0.96160007}
-  m_LocalPosition: {x: 72.293015, y: 1.9656795, z: 32.72741}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1891162427}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &978561842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 978561840}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f90731af2ebc94fb7fdaebe2a9a409, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeAdjustmentVolume
-  shape: 1
-  size: {x: 3.0204697, y: 4.311407, z: 8.351177}
-  radius: 0.7287979
-  mode: 0
-  intensityScale: 1
-  overriddenDilationThreshold: 0.75
-  virtualOffsetRotation: {x: 0, y: 0, z: 0}
-  virtualOffsetDistance: 1
-  geometryBias: 0.01
-  virtualOffsetThreshold: 0.75
-  rayOriginBias: -0.001
-  skyDirection: {x: 0, y: 0, z: 0}
-  directSampleCount: 32
-  indirectSampleCount: 512
-  sampleCountMultiplier: 4
-  maxBounces: 2
-  skyOcclusionSampleCount: 2048
-  skyOcclusionMaxBounces: 2
-  renderingLayerMaskOperation: 0
-  renderingLayerMask: 0
-  cachedHashCode: -1134206818
-  version: 1
-  invalidateProbes: 0
-  overrideDilationThreshold: 0
 --- !u!1001 &978570222
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -417093,6 +417189,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1179369722}
     m_Modifications:
+    - target: {fileID: 5001917410411121512, guid: ef208ac5c36a77b4284222c222c23d09, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5918002508335458809, guid: ef208ac5c36a77b4284222c222c23d09, type: 3}
       propertyPath: m_Name
       value: ToraMartPrefab (1)
@@ -426936,6 +427036,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8989800695723152682, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -429076,6 +429180,74 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4284703049991547776, guid: 3596894636a5fc84982ed2c84a5e2e67, type: 3}
   m_PrefabInstance: {fileID: 1040801161}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1040801702
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1040801703}
+  - component: {fileID: 1040801704}
+  m_Layer: 0
+  m_Name: Probe Adjustment Volume (14)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1040801703
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040801702}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 71.926544, y: 1.2375485, z: 27.64}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1891162427}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1040801704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040801702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55f90731af2ebc94fb7fdaebe2a9a409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeAdjustmentVolume
+  shape: 0
+  size: {x: 0.7465439, y: 6.3285027, z: 10.606548}
+  radius: 0.7287979
+  mode: 0
+  intensityScale: 1
+  overriddenDilationThreshold: 0.75
+  virtualOffsetRotation: {x: 0, y: 0, z: 0}
+  virtualOffsetDistance: 1
+  geometryBias: 0.01
+  virtualOffsetThreshold: 0.75
+  rayOriginBias: -0.001
+  skyDirection: {x: 0, y: 0, z: 0}
+  directSampleCount: 32
+  indirectSampleCount: 512
+  sampleCountMultiplier: 4
+  maxBounces: 2
+  skyOcclusionSampleCount: 2048
+  skyOcclusionMaxBounces: 2
+  renderingLayerMaskOperation: 0
+  renderingLayerMask: 0
+  cachedHashCode: 62691907
+  version: 1
+  invalidateProbes: 0
+  overrideDilationThreshold: 0
 --- !u!1001 &1041117845
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -431833,8 +432005,8 @@ Transform:
   m_GameObject: {fileID: 1058379751}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: -0.50000006, z: -0.50000006, w: -0.5}
-  m_LocalPosition: {x: 616.6, y: 40.3, z: -76.54}
-  m_LocalScale: {x: 153.92, y: 153.92, z: 153.92}
+  m_LocalPosition: {x: 618.52, y: 40.52, z: -77.93}
+  m_LocalScale: {x: 201.54285, y: 201.54285, z: 201.54285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1091109515}
@@ -471875,74 +472047,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1014751857038947911, guid: 1852f6a5797774f4c931005993a728b5, type: 3}
   m_PrefabInstance: {fileID: 1179756192}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1179989583
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1179989584}
-  - component: {fileID: 1179989585}
-  m_Layer: 0
-  m_Name: Probe Adjustment Volume (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1179989584
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1179989583}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.20007458, y: -0.48612514, z: 0.085779466, w: -0.8463418}
-  m_LocalPosition: {x: 76.113, y: 1.925, z: 33.022}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1891162427}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1179989585
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1179989583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f90731af2ebc94fb7fdaebe2a9a409, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeAdjustmentVolume
-  shape: 1
-  size: {x: 3.0204697, y: 4.311407, z: 8.351177}
-  radius: 0.7287979
-  mode: 0
-  intensityScale: 1
-  overriddenDilationThreshold: 0.75
-  virtualOffsetRotation: {x: 0, y: 0, z: 0}
-  virtualOffsetDistance: 1
-  geometryBias: 0.01
-  virtualOffsetThreshold: 0.75
-  rayOriginBias: -0.001
-  skyDirection: {x: 0, y: 0, z: 0}
-  directSampleCount: 32
-  indirectSampleCount: 512
-  sampleCountMultiplier: 4
-  maxBounces: 2
-  skyOcclusionSampleCount: 2048
-  skyOcclusionMaxBounces: 2
-  renderingLayerMaskOperation: 0
-  renderingLayerMask: 0
-  cachedHashCode: 973402438
-  version: 1
-  invalidateProbes: 0
-  overrideDilationThreshold: 0
 --- !u!1001 &1180657775
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -477814,6 +477918,10 @@ PrefabInstance:
     - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_Intensity
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -485359,6 +485467,10 @@ PrefabInstance:
     - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_Intensity
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -518567,6 +518679,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1405966828634447196, guid: dcaeb3293b9060443a23da4f88fdaa69, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1405966828634447196, guid: dcaeb3293b9060443a23da4f88fdaa69, type: 3}
       propertyPath: m_RenderingLayerMask
       value: 2
       objectReference: {fileID: 0}
@@ -518609,6 +518725,14 @@ PrefabInstance:
     - target: {fileID: 3508792887599089727, guid: dcaeb3293b9060443a23da4f88fdaa69, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4057344263061580201, guid: dcaeb3293b9060443a23da4f88fdaa69, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -228.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4057344263061580201, guid: dcaeb3293b9060443a23da4f88fdaa69, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 57
       objectReference: {fileID: 0}
     - target: {fileID: 5136653650875605633, guid: dcaeb3293b9060443a23da4f88fdaa69, type: 3}
       propertyPath: m_Layer
@@ -525909,8 +526033,8 @@ Transform:
   m_GameObject: {fileID: 1330356160}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: -0.50000006, z: -0.50000006, w: -0.5}
-  m_LocalPosition: {x: 618.8, y: 40.3, z: -76.54}
-  m_LocalScale: {x: 153.92, y: 153.92, z: 153.92}
+  m_LocalPosition: {x: 620.87, y: 40.52, z: -77.04}
+  m_LocalScale: {x: 201.54285, y: 201.54285, z: 201.54285}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1091109515}
@@ -527928,6 +528052,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b5686eebf85735b4baadee0ca70c15b1, type: 2}
+    - target: {fileID: 2176275886830126515, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202771069794134876, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2423115438916844890, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -563207,6 +563339,10 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8989800695723152682, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -564057,8 +564193,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_Intensity
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8989800695723152682, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_IsActive
@@ -625450,8 +625594,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_Intensity
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8989800695723152682, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_IsActive
@@ -629841,6 +629993,10 @@ PrefabInstance:
     - target: {fileID: 688576044626275278, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -643530,6 +643686,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b5686eebf85735b4baadee0ca70c15b1, type: 2}
+    - target: {fileID: 2176275886830126515, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202771069794134876, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2423115438916844890, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -759010,14 +759174,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2003694740}
-  - {fileID: 211691239}
-  - {fileID: 1179989584}
-  - {fileID: 2099206582}
-  - {fileID: 888436781}
-  - {fileID: 978561841}
-  - {fileID: 1969206460}
-  - {fileID: 2128347789}
+  - {fileID: 176392185}
+  - {fileID: 1040801703}
+  - {fileID: 2117504332}
+  - {fileID: 113434824}
+  - {fileID: 406159727}
   - {fileID: 1980867374}
   - {fileID: 474663291}
   - {fileID: 1107247577}
@@ -771512,6 +771673,10 @@ PrefabInstance:
     - target: {fileID: 688576044626275278, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -785173,74 +785338,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3482496823048044645, guid: bbf7750b3d473024d83bd848d2e69ceb, type: 3}
   m_PrefabInstance: {fileID: 1968173290}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1969206459
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1969206460}
-  - component: {fileID: 1969206461}
-  m_Layer: 0
-  m_Name: Probe Adjustment Volume (10)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1969206460
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1969206459}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.09075079, y: -0.05029598, z: 0.027260272, w: 0.9942291}
-  m_LocalPosition: {x: 78.92854, y: 0.9555732, z: 32.57806}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1891162427}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1969206461
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1969206459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f90731af2ebc94fb7fdaebe2a9a409, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeAdjustmentVolume
-  shape: 1
-  size: {x: 3.0204697, y: 4.311407, z: 8.351177}
-  radius: 0.7287979
-  mode: 0
-  intensityScale: 1
-  overriddenDilationThreshold: 0.75
-  virtualOffsetRotation: {x: 0, y: 0, z: 0}
-  virtualOffsetDistance: 1
-  geometryBias: 0.01
-  virtualOffsetThreshold: 0.75
-  rayOriginBias: -0.001
-  skyDirection: {x: 0, y: 0, z: 0}
-  directSampleCount: 32
-  indirectSampleCount: 512
-  sampleCountMultiplier: 4
-  maxBounces: 2
-  skyOcclusionSampleCount: 2048
-  skyOcclusionMaxBounces: 2
-  renderingLayerMaskOperation: 0
-  renderingLayerMask: 0
-  cachedHashCode: -1926444370
-  version: 1
-  invalidateProbes: 0
-  overrideDilationThreshold: 0
 --- !u!1001 &1969649491
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -795806,6 +795903,10 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -797945,74 +798046,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1014751857038947911, guid: 1852f6a5797774f4c931005993a728b5, type: 3}
   m_PrefabInstance: {fileID: 2002071587}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2003694739
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2003694740}
-  - component: {fileID: 2003694741}
-  m_Layer: 0
-  m_Name: Probe Adjustment Volume (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2003694740
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2003694739}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.20007458, y: -0.48612514, z: 0.085779466, w: -0.8463418}
-  m_LocalPosition: {x: 86.888, y: 0.229, z: 29.641}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1891162427}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2003694741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2003694739}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f90731af2ebc94fb7fdaebe2a9a409, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeAdjustmentVolume
-  shape: 1
-  size: {x: 3.0204697, y: 4.311407, z: 8.351177}
-  radius: 0.7287979
-  mode: 0
-  intensityScale: 1
-  overriddenDilationThreshold: 0.75
-  virtualOffsetRotation: {x: 0, y: 0, z: 0}
-  virtualOffsetDistance: 1
-  geometryBias: 0.01
-  virtualOffsetThreshold: 0.75
-  rayOriginBias: -0.001
-  skyDirection: {x: 0, y: 0, z: 0}
-  directSampleCount: 32
-  indirectSampleCount: 512
-  sampleCountMultiplier: 4
-  maxBounces: 2
-  skyOcclusionSampleCount: 2048
-  skyOcclusionMaxBounces: 2
-  renderingLayerMaskOperation: 0
-  renderingLayerMask: 0
-  cachedHashCode: 506629891
-  version: 1
-  invalidateProbes: 0
-  overrideDilationThreshold: 0
 --- !u!1001 &2005603349
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -806895,6 +806928,10 @@ PrefabInstance:
     - target: {fileID: 688576044626275278, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -835599,7 +835636,7 @@ Transform:
   m_GameObject: {fileID: 2058709913}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 81.02396, y: 0.6932125, z: 27.30136}
+  m_LocalPosition: {x: 79.642715, y: 1.2584721, z: 28.097929}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -835620,7 +835657,7 @@ MonoBehaviour:
   version: 2
   globalVolume: 0
   mode: 2
-  size: {x: 18.400177, y: 7.814432, z: 12.715153}
+  size: {x: 17.5746, y: 4.607442, z: 9.792997}
   overrideRendererFilters: 0
   minRendererVolumeSize: 0.1
   objectLayerMask:
@@ -835628,27 +835665,27 @@ MonoBehaviour:
     m_Bits: 4294967295
   lowestSubdivLevelOverride: 0
   highestSubdivLevelOverride: 0
-  overridesSubdivLevels: 1
+  overridesSubdivLevels: 0
   mightNeedRebaking: 0
   cachedTransform:
     e00: 1
     e01: 0
     e02: 0
-    e03: -97.68335
+    e03: -96.30211
     e10: 0
     e11: 1
     e12: 0
-    e13: -0.8011025
+    e13: -1.3663621
     e20: 0
     e21: 0
     e22: 1
-    e23: -15.48354
+    e23: -16.28011
     e30: 0
     e31: 0
     e32: 0
     e33: 1
-  cachedHashCode: 1118525516
-  fillEmptySpaces: 1
+  cachedHashCode: -895250124
+  fillEmptySpaces: 0
 --- !u!1 &2060091118
 GameObject:
   m_ObjectHideFlags: 0
@@ -850706,8 +850743,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_Intensity
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8989800695723152682, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_IsActive
@@ -853793,6 +853838,10 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -855008,74 +855057,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2097359152}
   m_Mesh: {fileID: -7492820226372794194, guid: 50acde3cde952e1418c3a1193d1d4948, type: 3}
---- !u!1 &2099206581
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2099206582}
-  - component: {fileID: 2099206583}
-  m_Layer: 0
-  m_Name: Probe Adjustment Volume (4)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2099206582
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2099206581}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.20007458, y: -0.48612514, z: 0.085779466, w: -0.8463418}
-  m_LocalPosition: {x: 72.086, y: 1.247, z: 25.803}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1891162427}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2099206583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2099206581}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f90731af2ebc94fb7fdaebe2a9a409, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeAdjustmentVolume
-  shape: 1
-  size: {x: 3.0204697, y: 4.311407, z: 8.351177}
-  radius: 0.7287979
-  mode: 0
-  intensityScale: 1
-  overriddenDilationThreshold: 0.75
-  virtualOffsetRotation: {x: 0, y: 0, z: 0}
-  virtualOffsetDistance: 1
-  geometryBias: 0.01
-  virtualOffsetThreshold: 0.75
-  rayOriginBias: -0.001
-  skyDirection: {x: 0, y: 0, z: 0}
-  directSampleCount: 32
-  indirectSampleCount: 512
-  sampleCountMultiplier: 4
-  maxBounces: 2
-  skyOcclusionSampleCount: 2048
-  skyOcclusionMaxBounces: 2
-  renderingLayerMaskOperation: 0
-  renderingLayerMask: 0
-  cachedHashCode: 1531002266
-  version: 1
-  invalidateProbes: 0
-  overrideDilationThreshold: 0
 --- !u!1001 &2099285394
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -858725,6 +858706,74 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.008070037, y: 0.0032546248, z: 0.00132703}
   m_Center: {x: -4.656613e-10, y: -0.000000014901161, z: -0.0000000018044377}
+--- !u!1 &2117504331
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2117504332}
+  - component: {fileID: 2117504333}
+  m_Layer: 0
+  m_Name: Probe Adjustment Volume (15)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2117504332
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117504331}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 79.73236, y: 1.2375485, z: 33.28795}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1891162427}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2117504333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117504331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55f90731af2ebc94fb7fdaebe2a9a409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeAdjustmentVolume
+  shape: 0
+  size: {x: 15.012161, y: 6.3285027, z: 0.45703697}
+  radius: 0.7287979
+  mode: 0
+  intensityScale: 1
+  overriddenDilationThreshold: 0.75
+  virtualOffsetRotation: {x: 0, y: 0, z: 0}
+  virtualOffsetDistance: 1
+  geometryBias: 0.01
+  virtualOffsetThreshold: 0.75
+  rayOriginBias: -0.001
+  skyDirection: {x: 0, y: 0, z: 0}
+  directSampleCount: 32
+  indirectSampleCount: 512
+  sampleCountMultiplier: 4
+  maxBounces: 2
+  skyOcclusionSampleCount: 2048
+  skyOcclusionMaxBounces: 2
+  renderingLayerMaskOperation: 0
+  renderingLayerMask: 0
+  cachedHashCode: -388986012
+  version: 1
+  invalidateProbes: 0
+  overrideDilationThreshold: 0
 --- !u!1001 &2117553342
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -860544,74 +860593,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2127458050}
   m_Mesh: {fileID: -14861751888290527, guid: 2fdb3f8ee658bdc439b8426cc5bc1385, type: 3}
---- !u!1 &2128347788
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2128347789}
-  - component: {fileID: 2128347790}
-  m_Layer: 0
-  m_Name: Probe Adjustment Volume (11)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2128347789
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2128347788}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.0064933565, y: -0.9179339, z: 0.041084275, w: 0.39454705}
-  m_LocalPosition: {x: 77.34796, y: 1.870239, z: 23.149668}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1891162427}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2128347790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2128347788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55f90731af2ebc94fb7fdaebe2a9a409, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.ProbeAdjustmentVolume
-  shape: 1
-  size: {x: 3.0204697, y: 4.311407, z: 8.351177}
-  radius: 0.7287979
-  mode: 0
-  intensityScale: 1
-  overriddenDilationThreshold: 0.75
-  virtualOffsetRotation: {x: 0, y: 0, z: 0}
-  virtualOffsetDistance: 1
-  geometryBias: 0.01
-  virtualOffsetThreshold: 0.75
-  rayOriginBias: -0.001
-  skyDirection: {x: 0, y: 0, z: 0}
-  directSampleCount: 32
-  indirectSampleCount: 512
-  sampleCountMultiplier: 4
-  maxBounces: 2
-  skyOcclusionSampleCount: 2048
-  skyOcclusionMaxBounces: 2
-  renderingLayerMaskOperation: 0
-  renderingLayerMask: 0
-  cachedHashCode: 910725611
-  version: 1
-  invalidateProbes: 0
-  overrideDilationThreshold: 0
 --- !u!1001 &2128580720
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -868168,6 +868149,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b5686eebf85735b4baadee0ca70c15b1, type: 2}
+    - target: {fileID: 2176275886830126515, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202771069794134876, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2423115438916844890, guid: e9c847d987f6a944b9003b1ae4730d1a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -868628,6 +868617,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1179369722}
     m_Modifications:
+    - target: {fileID: 5001917410411121512, guid: ef208ac5c36a77b4284222c222c23d09, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5918002508335458809, guid: ef208ac5c36a77b4284222c222c23d09, type: 3}
       propertyPath: m_Name
       value: ToraMartPrefab
@@ -869243,8 +869236,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_Intensity
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -869993,6 +869994,10 @@ PrefabInstance:
     - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_Intensity
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614634006910814992, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8989800695723152682, guid: a8058a04ba2d5d04a8fe1fd461b10eef, type: 3}
       propertyPath: m_IsActive
