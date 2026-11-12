@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(NPCQuestGiver))]
 public class NPCFacePlayer : MonoBehaviour
 {
     [Header("Rotation")]

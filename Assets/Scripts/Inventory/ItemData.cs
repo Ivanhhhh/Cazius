@@ -15,7 +15,8 @@ public enum ItemType
     LegendarySandwich,
     Recorder,
     Sauce,
-    Bread
+    Bread,
+    Ibuprofen
 }
 
 [CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/Item")]
