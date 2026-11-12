@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1061565804012812290}
+  - component: {fileID: 1541293782644405913}
   m_Layer: 0
   m_Name: BikePrefab
   m_TagString: Untagged
@@ -32,6 +33,29 @@ Transform:
   - {fileID: 4827260983405983720}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1541293782644405913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998374774624104359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c84aede1cf18a514bae9df66c638154e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RandomMaterialSelector
+  _randomizeOnStart: 1
+  _materialConfigurations:
+  - renderer: {fileID: 5960176099175156871}
+    materialIndex: 0
+    possibleMaterials:
+    - {fileID: 2100000, guid: 01b695ef04f82e24d819bc8705355726, type: 2}
+    - {fileID: 2100000, guid: f52b19702697d254bb2df7a4f75e5617, type: 2}
+    - {fileID: 2100000, guid: 88c7abe2e80f6784da16fecf8d0d95cc, type: 2}
+    - {fileID: 2100000, guid: 0c2dc0c60289f2f41bfcf3376198f167, type: 2}
+    - {fileID: 2100000, guid: 16b168331c2bebc4ca884a1d7e776af2, type: 2}
+    - {fileID: 2100000, guid: 5cc26cf7be38f7a488693b84644306f5, type: 2}
 --- !u!1001 &5005567593482375171
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -139,3 +163,8 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.55586445, y: 0.3350634, z: 0.055084277}
   m_Center: {x: 0.0002087456, y: -0.00075055705, z: 0.004520187}
+--- !u!23 &5960176099175156871 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 83ce9e474012733478be522f8a4d51cc, type: 3}
+  m_PrefabInstance: {fileID: 5005567593482375171}
+  m_PrefabAsset: {fileID: 0}
