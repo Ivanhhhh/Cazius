@@ -6,7 +6,8 @@ namespace Patterns.Observer.EventManager_Delegates
         Event_PauseGame,
         Event_ResumeGame,
         Event_PausePlayer,
-        Event_SoulEnergyChanged
+        Event_SoulEnergyChanged,
+        OnResolutionChange
        
     }
 

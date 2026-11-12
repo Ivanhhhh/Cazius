@@ -1178,17 +1178,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCQuestGiver
   quest: {fileID: 11400000, guid: a8ba0962e345e334da6112d4191f98a7, type: 2}
   _interactText: F to talk
-  _wavingTrigger: Waving
-  _rotationSpeed: 5
-  _interactSFX: 3
+  _interactionUIPoint: {fileID: 5837536812567350932}
   _questPrizeItem: {fileID: 11400000, guid: 33d5c6a2c4a26c645b85e9080f8eea8c, type: 2}
   _removeItemOnCompletion: 1
-  _showOnMap: 0
-  _questDestination: {x: 0, y: 0, z: 0}
-  _moveAfterCompletion: 0
-  _newPosition: {x: 0, y: 0, z: 0}
-  _newRotationEuler: {x: 0, y: 0, z: 0}
-  _interactionUIPoint: {fileID: 5837536812567350932}
+  _defaultItemTurnInConfirmID: dialog_default_item_turn_in_confirm
 --- !u!4 &3299914474169639071 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 943c3dd92f4165e40bf35545edc8465f, type: 3}
@@ -1269,7 +1262,7 @@ PrefabInstance:
     - target: {fileID: -5014256135885617482, guid: 42ad398b4e50ea84e9a3399e3e01ad94, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 56e457a1b81439a4ab84209068b5d882, type: 2}
+      objectReference: {fileID: 2100000, guid: 56c55dc9c3e62af419394046c063b2ea, type: 2}
     - target: {fileID: 919132149155446097, guid: 42ad398b4e50ea84e9a3399e3e01ad94, type: 3}
       propertyPath: m_Name
       value: NPC Adult
@@ -1287,7 +1280,33 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 42ad398b4e50ea84e9a3399e3e01ad94, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7485094601722558068}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 42ad398b4e50ea84e9a3399e3e01ad94, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8911821110109322891}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 42ad398b4e50ea84e9a3399e3e01ad94, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7350144162429883560}
   m_SourcePrefab: {fileID: 100100000, guid: 42ad398b4e50ea84e9a3399e3e01ad94, type: 3}
+--- !u!137 &2994205197486065154 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -4504220266258980848, guid: 42ad398b4e50ea84e9a3399e3e01ad94, type: 3}
+  m_PrefabInstance: {fileID: 7561621063957587474}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &5301827636117971998 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -6817422417713659380, guid: 42ad398b4e50ea84e9a3399e3e01ad94, type: 3}
+  m_PrefabInstance: {fileID: 7561621063957587474}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &5437559592944479087 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -6663548539404776067, guid: 42ad398b4e50ea84e9a3399e3e01ad94, type: 3}
+  m_PrefabInstance: {fileID: 7561621063957587474}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &5951945436833685668 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -5014256135885617482, guid: 42ad398b4e50ea84e9a3399e3e01ad94, type: 3}
+  m_PrefabInstance: {fileID: 7561621063957587474}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7219604018392243011 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 42ad398b4e50ea84e9a3399e3e01ad94, type: 3}
@@ -1310,6 +1329,7 @@ MonoBehaviour:
   - adult1_dialog_02
   _interactText: F
   _wavingTrigger: Waving
+  _rotationSpeed: 5
   _interactSFX: 3
   _idleVariant: 1
   _rotateTowardsPlayer: 0
@@ -1359,6 +1379,68 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8911821110109322891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7219604018392243011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adf015bd209c1e4f999b634e1e8f778, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCController
+  _waypoints: []
+  _moveSpeed: 2
+  _turnSpeed: 120
+  _acceleration: 4
+  _arriveDistance: 0.1
+  _waitTime: 2
+  _animator: {fileID: 0}
+--- !u!114 &7350144162429883560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7219604018392243011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c84aede1cf18a514bae9df66c638154e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RandomMaterialSelector
+  _randomizeOnStart: 1
+  _materialConfigurations:
+  - renderer: {fileID: 5951945436833685668}
+    materialIndex: 0
+    possibleMaterials:
+    - {fileID: 2100000, guid: 56e457a1b81439a4ab84209068b5d882, type: 2}
+    - {fileID: 2100000, guid: 56c55dc9c3e62af419394046c063b2ea, type: 2}
+    - {fileID: 2100000, guid: d4cc5921f7151f44b8e000c106536092, type: 2}
+    - {fileID: 2100000, guid: f3140339af5d8814b96402c256d9bbb4, type: 2}
+  - renderer: {fileID: 5301827636117971998}
+    materialIndex: 0
+    possibleMaterials:
+    - {fileID: 2100000, guid: fa787b4b3afbf5a478ffd383dfe6e4b9, type: 2}
+    - {fileID: 2100000, guid: a4c807011caa5e34fa2a6a86af415676, type: 2}
+    - {fileID: 2100000, guid: 9926ad7746986bf48a72cd379e895088, type: 2}
+    - {fileID: 2100000, guid: 0d31ac7696533dd479fc2433eb1352b0, type: 2}
+    - {fileID: 2100000, guid: 52814179b7ca72041a50ff19f664af9b, type: 2}
+  - renderer: {fileID: 5437559592944479087}
+    materialIndex: 0
+    possibleMaterials:
+    - {fileID: 2100000, guid: 5eba155cd76931847b59f800d5ac52a6, type: 2}
+    - {fileID: 2100000, guid: a711452b342deed48a2c2de22b080c72, type: 2}
+    - {fileID: 2100000, guid: 2cf5b7c1551f1c34c961d5f8c95d12c7, type: 2}
+    - {fileID: 2100000, guid: c283cd4f02b9ea14f94bc5d5aaad4b77, type: 2}
+    - {fileID: 2100000, guid: 0235779e4abb1f948b0ab0109e9a9013, type: 2}
+  - renderer: {fileID: 2994205197486065154}
+    materialIndex: 0
+    possibleMaterials:
+    - {fileID: 2100000, guid: 1babe620e6cbc3d40a735e5328a7d164, type: 2}
+    - {fileID: 2100000, guid: 7b1b5eebaf5adf443ba6472dd4464140, type: 2}
+    - {fileID: 2100000, guid: c04b8a2e02abdb3498c7b359723c30b6, type: 2}
 --- !u!4 &8033013493264335353 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 42ad398b4e50ea84e9a3399e3e01ad94, type: 3}

@@ -16,12 +16,16 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] private GameObject _soundPanel;
     [SerializeField] private GameObject _languagePanel;
 
+    [SerializeField] private GameObject _graphicsPanel;
+
     [Header("Main Panel - Buttons")]
     [SerializeField] private string _startGameScene = "LoadToGameFromMenu";
     [SerializeField] private Button _startGameButton;
     [SerializeField] private Button _optionsButton;
     [SerializeField] private Button _exitButton;
     [SerializeField] private Button _RebindButton;
+    [SerializeField] private Button _GraphicsButton;
+
 
     [Header("Options Panel - Buttons")]
     [SerializeField] private Button _controlsButton;
@@ -49,6 +53,8 @@ public class UIMainMenu : MonoBehaviour
         _languageButton.onClick.AddListener(OnOpenLanguage);
         _backToMainButton.onClick.AddListener(OnBackToMain);
         _RebindButton.onClick.AddListener(RebindPanelMethod);
+        _GraphicsButton.onClick.AddListener(OnOpenGraphics);
+
 
 
         // Start on main panel
@@ -131,6 +137,7 @@ public class UIMainMenu : MonoBehaviour
     private void OnOpenControls() => ShowSubPanel(_controlsPanel);
     private void OnOpenSoundConfig() => ShowSubPanel(_soundPanel);
     private void OnOpenLanguage() => ShowSubPanel(_languagePanel);
+    private void OnOpenGraphics() => ShowSubPanel(_graphicsPanel);
     private void OnBackToMain() => ShowPanel(_mainPanel);
 
     public void RebindPanelMethod()
