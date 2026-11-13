@@ -7,6 +7,7 @@ public class ShopItemEntry
 {
     public ItemData item;
     [Min(0)] public int price = 10;
+    public bool buyOnce = false;
 }
 
 [CreateAssetMenu(fileName = "NewShopCatalog", menuName = "Shop/Shop Catalog")]

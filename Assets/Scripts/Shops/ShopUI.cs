@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,7 @@ public class ShopUI : MonoBehaviour
     private Action<bool> _onShopClosed;
     private bool _purchasedAnything;
     private Coroutine _typewriterCoroutine;
+    private readonly HashSet<ItemData> _boughtOnceItems = new();
 
     public bool IsOpen => _panel != null && _panel.activeSelf;
 
@@ -123,6 +125,11 @@ public class ShopUI : MonoBehaviour
 
         SoulEnergyManager.Instance.RemoveSoulEnergy(entry.price);
         _purchasedAnything = true;
+        if (entry.buyOnce)
+        {
+            _boughtOnceItems.Add(entry.item);
+            ClearItemDescription();
+        }
 
         if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(_purchaseSFX);
 
@@ -149,6 +156,7 @@ public class ShopUI : MonoBehaviour
 
         foreach (ShopItemEntry entry in _currentCatalog.items)
         {
+            if (entry.buyOnce && _boughtOnceItems.Contains(entry.item)) continue;
             if (entry == null || entry.item == null) continue;
 
             GameObject slotObj = Instantiate(_slotPrefab, _slotContainer);
