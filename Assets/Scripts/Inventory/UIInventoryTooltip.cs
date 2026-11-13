@@ -92,7 +92,29 @@ public class UIInventoryTooltip : MonoBehaviour
         // Iniciamos la animación de cierre
         _animCoroutine = StartCoroutine(AnimateScale(_tooltipRect.localScale, Vector3.zero, true));
     }
+    public void HideImmediate()
+    {
+        if (_animCoroutine != null) StopCoroutine(_animCoroutine);
+        _animCoroutine = null;
 
+        _currentItem = null;
+        _isOpen = false;
+
+        if (_tooltipRect != null) _tooltipRect.localScale = Vector3.zero;
+        if (_tooltipPanel != null) _tooltipPanel.SetActive(false);
+    }
+
+    // Reset de seguridad si el objeto se desactiva
+    private void OnDisable()
+    {
+        if (_animCoroutine != null) StopCoroutine(_animCoroutine);
+        _animCoroutine = null;
+
+        _isOpen = false;
+        _currentItem = null;
+
+        if (_tooltipRect != null) _tooltipRect.localScale = Vector3.zero;
+    }
     private void Update()
     {
         if (!_isOpen || _tooltipRect == null) return;

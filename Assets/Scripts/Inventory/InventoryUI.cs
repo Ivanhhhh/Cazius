@@ -303,9 +303,11 @@ public class InventoryUI : MonoBehaviour
 
     public void CloseInventory()
     {
-        UIInventoryTooltip.Instance?.Hide();
+        UIInventoryTooltip.Instance?.HideImmediate();
+
         panel.SetActive(false);
         ClearItemDescription();
+
         if (_questPanel != null && !_savePanelOpenClose)
             _questPanel.SetActive(false);
     }

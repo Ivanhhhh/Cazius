@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5799493600612242964}
   - component: {fileID: 696938308149727846}
   - component: {fileID: 5787652501100996385}
+  - component: {fileID: 2926256057360476562}
   m_Layer: 0
   m_Name: Herbs
   m_TagString: Untagged
@@ -48,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickableItem
   _itemScriptableObject: {fileID: 11400000, guid: e8184ae5ef468694fbc8c674b146a8fe, type: 2}
+  _quantityOverride: -1
   _interactText: F to Take Herbs bear
   sfxType: 9
   _interactionUIPoint: {fileID: 3353582686070063712}
@@ -70,8 +72,35 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.19, y: 2.083351, z: 0.43999994}
-  m_Center: {x: 0, y: 0.9816755, z: 0.56}
+  m_Size: {x: 0.19, y: 0.32519197, z: 0.43999994}
+  m_Center: {x: 0, y: 0.102595985, z: 0.56}
+--- !u!54 &2926256057360476562
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 287635785610028141}
+  serializedVersion: 5
+  m_Mass: 2
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2488818752509592134
 GameObject:
   m_ObjectHideFlags: 0
