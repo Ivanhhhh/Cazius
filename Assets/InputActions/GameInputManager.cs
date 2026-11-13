@@ -49,6 +49,10 @@ public class GameInputManager : MonoBehaviour
     public void DisableDialogInput()
     {
         Controls.Dialog.Disable();
+
+        if (ShopUI.Instance != null && ShopUI.Instance.IsOpen)
+            return;
+
         Controls.UI.Enable();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

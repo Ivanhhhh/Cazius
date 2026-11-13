@@ -30,6 +30,8 @@ public class ShopUI : MonoBehaviour
     private bool _purchasedAnything;
     private Coroutine _typewriterCoroutine;
 
+    public bool IsOpen => _panel != null && _panel.activeSelf;
+
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -122,8 +124,7 @@ public class ShopUI : MonoBehaviour
         SoulEnergyManager.Instance.RemoveSoulEnergy(entry.price);
         _purchasedAnything = true;
 
-        if (SFXManager.Instance != null)
-            SFXManager.Instance.PlaySFX(_purchaseSFX);
+        if (SFXManager.Instance != null) SFXManager.Instance.PlaySFX(_purchaseSFX);
 
         UpdateCurrencyDisplay();
         Refresh();
