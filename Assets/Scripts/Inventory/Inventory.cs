@@ -18,6 +18,9 @@ public class Inventory : MonoBehaviour
     public List<ItemData> keyItems = new();
     public List<ItemData> loreItems = new();
 
+    [Header("World Drop")]
+    [SerializeField] private Transform _dropSpawnPoint;
+
     public UnityEvent onInventoryChanged;
     public event Action<ItemData> OnItemAdded;
 
@@ -50,21 +53,13 @@ public class Inventory : MonoBehaviour
         string searchName = targetName.Trim();
 
         foreach (var item in regularItems)
-        {
-            if (item.name.Trim() == searchName)
-                total += item.value;
-        }
+            if (item.name.Trim() == searchName) total += item.value;
 
         foreach (var item in keyItems)
-        {
-            if (item.name.Trim() == searchName)
-                total += item.value;
-        }
+            if (item.name.Trim() == searchName) total += item.value;
+
         foreach (var item in loreItems)
-        {
-            if (item.name.Trim() == searchName)
-                total += item.value;
-        }
+            if (item.name.Trim() == searchName) total += item.value;
 
         return total;
     }
@@ -74,7 +69,6 @@ public class Inventory : MonoBehaviour
         int amountLeft = amountToConsume;
         string searchName = targetName.Trim();
 
-        // Helper to consume items from a specific target list
         void ConsumeFromList(List<ItemData> list)
         {
             for (int i = list.Count - 1; i >= 0; i--)
@@ -94,12 +88,9 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        // Tries regular items first, then key items if needed
         ConsumeFromList(regularItems);
-        if (amountLeft > 0)
-            ConsumeFromList(keyItems);
-        if (amountLeft > 0)
-            ConsumeFromList(loreItems);
+        if (amountLeft > 0) ConsumeFromList(keyItems);
+        if (amountLeft > 0) ConsumeFromList(loreItems);
 
         if (amountLeft < amountToConsume)
             onInventoryChanged?.Invoke();
@@ -111,46 +102,58 @@ public class Inventory : MonoBehaviour
     {
         if (item == null) return false;
 
-        if (item.isKeyItem)
+        List<ItemData> targetList;
+        int maxSlots;
+        if (item.isKeyItem) { targetList = keyItems; maxSlots = maxKeySlots; }
+        else if (item.isLoreItem) { targetList = loreItems; maxSlots = maxLoreSlots; }
+        else { targetList = regularItems; maxSlots = maxRegularSlots; }
+
+        int maxStack = Mathf.Max(1, item.maxStackSize);
+        int amountToAdd = Mathf.Max(1, item.value);
+        bool anyAdded = false;
+
+        for (int i = 0; i < targetList.Count && amountToAdd > 0; i++)
         {
-            if (keyItems.Count >= maxKeySlots)
+            var existing = targetList[i];
+            if (!IsSameStack(existing, item)) continue;
+            if (existing.value >= maxStack) continue;
+
+            int space = maxStack - existing.value;
+            int toAdd = Mathf.Min(space, amountToAdd);
+            existing.value += toAdd;
+            amountToAdd -= toAdd;
+            anyAdded = true;
+        }
+
+        while (amountToAdd > 0)
+        {
+            if (targetList.Count >= maxSlots)
             {
-                Debug.Log("Key Item Inventory full!");
-                return false;
+                Debug.Log("[Inventory] Slots llenos, no se pudo añadir todo.");
+                break;
             }
 
-            ItemData clonedItem = Instantiate(item);
-            clonedItem.name = item.name;
-            keyItems.Add(clonedItem);
+            ItemData clone = Instantiate(item);
+            clone.name = item.name;
+            clone.value = Mathf.Min(maxStack, amountToAdd);
+            amountToAdd -= clone.value;
+            targetList.Add(clone);
+            anyAdded = true;
         }
-        else if (item.isLoreItem)
-        {
-            if (loreItems.Count >= maxLoreSlots)
-            {
-                Debug.Log("Lore Item Inventory full!");
-                return false;
-            }
 
-            ItemData clonedItem = Instantiate(item);
-            clonedItem.name = item.name;
-            loreItems.Add(clonedItem);
-        }
-        else
-        {
-            if (regularItems.Count >= maxRegularSlots)
-            {
-                Debug.Log("Regular Inventory full!");
-                return false;
-            }
-
-            ItemData clonedItem = Instantiate(item);
-            clonedItem.name = item.name;
-            regularItems.Add(clonedItem);
-        }
+        if (!anyAdded) return false;
 
         onInventoryChanged?.Invoke();
         OnItemAdded?.Invoke(item);
         return true;
+    }
+
+    private static bool IsSameStack(ItemData a, ItemData b)
+    {
+        if (a == null || b == null) return false;
+        if (!string.IsNullOrEmpty(a.itemID) && !string.IsNullOrEmpty(b.itemID))
+            return a.itemID == b.itemID;
+        return a.name == b.name;
     }
 
     public void UseItem(ItemData item)
@@ -184,10 +187,7 @@ public class Inventory : MonoBehaviour
     {
         int totalAmmo = 0;
         foreach (var item in regularItems)
-        {
-            if (item.itemType == ItemType.Ammo)
-                totalAmmo += item.value;
-        }
+            if (item.itemType == ItemType.Ammo) totalAmmo += item.value;
         return totalAmmo;
     }
 
@@ -216,8 +216,6 @@ public class Inventory : MonoBehaviour
         return amountExtracted;
     }
 
-    // --- Quest system ---
-
     public bool HasItem(string itemID)
     {
         return regularItems.Exists(i => i.itemID == itemID)
@@ -228,32 +226,73 @@ public class Inventory : MonoBehaviour
     public bool RemoveItem(string itemID)
     {
         ItemData item = regularItems.Find(i => i.itemID == itemID);
-        if (item != null)
-        {
-            regularItems.Remove(item);
-            onInventoryChanged?.Invoke();
-            return true;
-        }
+        if (item != null) { regularItems.Remove(item); onInventoryChanged?.Invoke(); return true; }
 
         item = keyItems.Find(i => i.itemID == itemID);
-        if (item != null)
-        {
-            keyItems.Remove(item);
-            onInventoryChanged?.Invoke();
-            return true;
-        }
+        if (item != null) { keyItems.Remove(item); onInventoryChanged?.Invoke(); return true; }
 
         item = loreItems.Find(i => i.itemID == itemID);
-
-        if (item != null)
-        {
-            loreItems.Remove(item);
-            onInventoryChanged?.Invoke();
-            return true;
-        }
+        if (item != null) { loreItems.Remove(item); onInventoryChanged?.Invoke(); return true; }
 
         Debug.LogWarning($"[Inventory] Item not found for removal: '{itemID}'");
         return false;
     }
 
+    // --- FUNCIÓN DE DROP CON CANTIDAD OPCIONAL ---
+    public bool RemoveItemAndSpawn(ItemData item, int amountToDrop = -1)
+    {
+        if (item == null) return false;
+        if (item.isKeyItem || item.isLoreItem)
+        {
+            Debug.LogWarning("[Inventory] Solo se pueden dropear items Regular.");
+            return false;
+        }
+        if (!regularItems.Contains(item))
+        {
+            Debug.LogWarning("[Inventory] El item no está en regularItems.");
+            return false;
+        }
+
+        // Si amountToDrop es -1 (o menos), significa que queremos dropear la pila entera
+        if (amountToDrop <= 0)
+            amountToDrop = item.value;
+
+        // Nos aseguramos de no dropear más de lo que tenemos
+        amountToDrop = Mathf.Min(amountToDrop, item.value);
+
+        // Restamos del inventario
+        item.value -= amountToDrop;
+
+        // Si se vació la pila, la borramos del inventario
+        if (item.value <= 0)
+            regularItems.Remove(item);
+
+        // Spawneamos el objeto físico
+        if (item.worldPrefab != null && _dropSpawnPoint != null)
+        {
+            GameObject go = Instantiate(item.worldPrefab, _dropSpawnPoint.position, _dropSpawnPoint.rotation);
+
+            PickableItem pickable = go.GetComponent<PickableItem>();
+            if (pickable != null)
+            {
+                // CLONAMOS el ItemData para que el objeto en el suelo tenga su propia cantidad
+                ItemData droppedData = Instantiate(item);
+                droppedData.value = amountToDrop;
+                droppedData.name = item.name;
+
+                pickable.Setup(droppedData);
+            }
+            else
+            {
+                Debug.LogWarning("[Inventory] El worldPrefab no tiene el script PickableItem.");
+            }
+        }
+        else if (item.worldPrefab == null)
+            Debug.LogWarning($"[Inventory] '{item.name}' no tiene worldPrefab asignado.");
+        else
+            Debug.LogWarning("[Inventory] _dropSpawnPoint no está asignado.");
+
+        onInventoryChanged?.Invoke();
+        return true;
+    }
 }
