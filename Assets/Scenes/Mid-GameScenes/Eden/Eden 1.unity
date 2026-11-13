@@ -242203,6 +242203,7 @@ GameObject:
   - component: {fileID: 590141153}
   - component: {fileID: 590141155}
   - component: {fileID: 590141154}
+  - component: {fileID: 590141156}
   m_Layer: 0
   m_Name: Cabinet  (2)
   m_TagString: Untagged
@@ -242282,6 +242283,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 590141152}
   m_Mesh: {fileID: 6641434612355351517, guid: b20f52eba82279741a0b651f065526e5, type: 3}
+--- !u!65 &590141156
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 590141152}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.151, y: 0.085270405, z: 0.12080705}
+  m_Center: {x: 0.00621551, y: 0.037155703, z: -0.020456716}
 --- !u!1001 &590709429
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -258527,6 +258549,26 @@ PrefabInstance:
     - target: {fileID: 7845306406324477464, guid: 71077c34952bdd24db5d23506fc5bb4a, type: 3}
       propertyPath: sfxType
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8421862742040150490, guid: 71077c34952bdd24db5d23506fc5bb4a, type: 3}
+      propertyPath: m_Size.x
+      value: 0.7272493
+      objectReference: {fileID: 0}
+    - target: {fileID: 8421862742040150490, guid: 71077c34952bdd24db5d23506fc5bb4a, type: 3}
+      propertyPath: m_Size.y
+      value: 0.299038
+      objectReference: {fileID: 0}
+    - target: {fileID: 8421862742040150490, guid: 71077c34952bdd24db5d23506fc5bb4a, type: 3}
+      propertyPath: m_Center.x
+      value: -0.0061950563
+      objectReference: {fileID: 0}
+    - target: {fileID: 8421862742040150490, guid: 71077c34952bdd24db5d23506fc5bb4a, type: 3}
+      propertyPath: m_Center.y
+      value: -0.12082385
+      objectReference: {fileID: 0}
+    - target: {fileID: 8421862742040150490, guid: 71077c34952bdd24db5d23506fc5bb4a, type: 3}
+      propertyPath: m_Center.z
+      value: 0.031166084
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -332775,6 +332817,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickableItem
   _itemScriptableObject: {fileID: 11400000, guid: 321452995aa1752439388c11b86f88df, type: 2}
+  _quantityOverride: -1
   _interactText: F to Take Teddy bear
   sfxType: 8
   _interactionUIPoint: {fileID: 0}
@@ -371182,6 +371225,7 @@ GameObject:
   - component: {fileID: 900798404}
   - component: {fileID: 900798406}
   - component: {fileID: 900798405}
+  - component: {fileID: 900798407}
   m_Layer: 0
   m_Name: Cabinet  (3)
   m_TagString: Untagged
@@ -371261,6 +371305,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 900798403}
   m_Mesh: {fileID: 6641434612355351517, guid: b20f52eba82279741a0b651f065526e5, type: 3}
+--- !u!65 &900798407
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900798403}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.151, y: 0.085270405, z: 0.12080705}
+  m_Center: {x: 0.0062145563, y: 0.037155464, z: -0.020456716}
 --- !u!1001 &901168689
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -427275,6 +427340,7 @@ GameObject:
   - component: {fileID: 1026898003}
   - component: {fileID: 1026898002}
   - component: {fileID: 1026898001}
+  - component: {fileID: 1026898004}
   m_Layer: 0
   m_Name: Racking  (7)
   m_TagString: Untagged
@@ -427314,7 +427380,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.080623046, y: 0.017703716, z: 0.036223117}
   m_Center: {x: -0.02001527, y: -0.00020913778, z: -0.0009967596}
@@ -427374,6 +427440,28 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1026897999}
+  m_Mesh: {fileID: 6358321756274750966, guid: 2fdb3f8ee658bdc439b8426cc5bc1385, type: 3}
+--- !u!64 &1026898004
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026897999}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
   m_Mesh: {fileID: 6358321756274750966, guid: 2fdb3f8ee658bdc439b8426cc5bc1385, type: 3}
 --- !u!1001 &1027611949
 PrefabInstance:
@@ -516202,6 +516290,26 @@ PrefabInstance:
       propertyPath: sfxType
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 8421862742040150490, guid: 71077c34952bdd24db5d23506fc5bb4a, type: 3}
+      propertyPath: m_Size.y
+      value: 0.31849414
+      objectReference: {fileID: 0}
+    - target: {fileID: 8421862742040150490, guid: 71077c34952bdd24db5d23506fc5bb4a, type: 3}
+      propertyPath: m_Size.z
+      value: 0.39799944
+      objectReference: {fileID: 0}
+    - target: {fileID: 8421862742040150490, guid: 71077c34952bdd24db5d23506fc5bb4a, type: 3}
+      propertyPath: m_Center.x
+      value: -0.006195069
+      objectReference: {fileID: 0}
+    - target: {fileID: 8421862742040150490, guid: 71077c34952bdd24db5d23506fc5bb4a, type: 3}
+      propertyPath: m_Center.y
+      value: -0.111095816
+      objectReference: {fileID: 0}
+    - target: {fileID: 8421862742040150490, guid: 71077c34952bdd24db5d23506fc5bb4a, type: 3}
+      propertyPath: m_Center.z
+      value: 0.031166079
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -531027,8 +531135,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.44578102, y: 0.085270405, z: 0.28951648}
-  m_Center: {x: -0.1411769, y: 0.03715572, z: 0.063897915}
+  m_Size: {x: 0.151, y: 0.085270405, z: 0.12080705}
+  m_Center: {x: 0.0062136026, y: 0.037155703, z: -0.020456716}
 --- !u!1001 &1356707267
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -618264,6 +618372,7 @@ GameObject:
   - component: {fileID: 1540407698}
   - component: {fileID: 1540407701}
   - component: {fileID: 1540407700}
+  - component: {fileID: 1540407702}
   m_Layer: 0
   m_Name: Racking  (8)
   m_TagString: Untagged
@@ -618342,6 +618451,28 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1540407697}
+  m_Mesh: {fileID: 6358321756274750966, guid: 2fdb3f8ee658bdc439b8426cc5bc1385, type: 3}
+--- !u!64 &1540407702
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540407697}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
   m_Mesh: {fileID: 6358321756274750966, guid: 2fdb3f8ee658bdc439b8426cc5bc1385, type: 3}
 --- !u!1001 &1540561225
 PrefabInstance:
@@ -655746,7 +655877,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2532742716090202206, guid: f74e5e37815e37b48a62429f11a8fabd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.95711005
+      value: 1.028
       objectReference: {fileID: 0}
     - target: {fileID: 2532742716090202206, guid: f74e5e37815e37b48a62429f11a8fabd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -655783,6 +655914,22 @@ PrefabInstance:
     - target: {fileID: 4592070178067349863, guid: f74e5e37815e37b48a62429f11a8fabd, type: 3}
       propertyPath: sfxType
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5804000432671649955, guid: f74e5e37815e37b48a62429f11a8fabd, type: 3}
+      propertyPath: m_Size.y
+      value: 0.27826676
+      objectReference: {fileID: 0}
+    - target: {fileID: 5804000432671649955, guid: f74e5e37815e37b48a62429f11a8fabd, type: 3}
+      propertyPath: m_Center.x
+      value: -0.006195066
+      objectReference: {fileID: 0}
+    - target: {fileID: 5804000432671649955, guid: f74e5e37815e37b48a62429f11a8fabd, type: 3}
+      propertyPath: m_Center.y
+      value: 0.16900451
+      objectReference: {fileID: 0}
+    - target: {fileID: 5804000432671649955, guid: f74e5e37815e37b48a62429f11a8fabd, type: 3}
+      propertyPath: m_Center.z
+      value: 0.031166075
       objectReference: {fileID: 0}
     - target: {fileID: 7059167398821246299, guid: f74e5e37815e37b48a62429f11a8fabd, type: 3}
       propertyPath: m_RenderingLayerMask
