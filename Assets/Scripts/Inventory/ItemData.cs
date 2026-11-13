@@ -15,7 +15,8 @@ public enum ItemType
     LegendarySandwich,
     Recorder,
     Sauce,
-    Bread
+    Bread,
+    Ibuprofen
 }
 
 [CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/Item")]
@@ -24,6 +25,7 @@ public class ItemData : ScriptableObject
     public string itemID;
     public bool isKeyItem;
     public bool isLoreItem;
+    public string loreText;
     public string itemName;
     public Sprite icon;
     public ItemType itemType;

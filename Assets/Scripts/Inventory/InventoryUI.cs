@@ -24,6 +24,10 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private TMP_Text _descriptionText;
     [SerializeField] private float _typewriterCharDelay = 0.02f;
 
+    [Header("Lore Note Preview")]
+    [SerializeField] private GameObject _loreNotePanel;
+    [SerializeField] private TMP_Text _loreNoteText;
+
     [Header("Tab UI Buttons")]
     [SerializeField] private Button _regularTabButton;
     [SerializeField] private Button _keyItemsTabButton;
@@ -41,6 +45,7 @@ public class InventoryUI : MonoBehaviour
     private Image _loreItemsTabImage;
 
     private Coroutine _typewriterCoroutine;
+    private Coroutine _loreTypewriterCoroutine;
 
     private void Awake()
     {
@@ -149,7 +154,32 @@ public class InventoryUI : MonoBehaviour
 
     public void ShowItemDescription(ItemData item)
     {
-        if (_descriptionText == null || item == null) return;
+        if (item == null) return;
+
+        // Lore Notes
+        if (item.isLoreItem && !string.IsNullOrEmpty(item.loreText) && _loreNotePanel != null)
+        {
+            _loreNotePanel.SetActive(true);
+
+            if (_loreNoteText != null)
+            {
+                string translatedLore = LocalizationManager.Instance
+                    .GetTranslate(item.loreText)
+                    .Replace("\\n", "\n");
+
+                if (_loreTypewriterCoroutine != null)
+                    StopCoroutine(_loreTypewriterCoroutine);
+
+                _loreTypewriterCoroutine = StartCoroutine(LoreTypewriterRoutine(translatedLore));
+            }
+        }
+        else
+        {
+            HideLoreNote();
+        }
+
+        // Description Box
+        if (_descriptionText == null) return;
 
         string localizedName = string.IsNullOrEmpty(item.displayName)
             ? item.itemName
@@ -168,6 +198,7 @@ public class InventoryUI : MonoBehaviour
 
         _typewriterCoroutine = StartCoroutine(TypewriterRoutine(fullText));
     }
+
 
     public string ReturnItemDescription(ItemData item)
     {
@@ -198,6 +229,26 @@ public class InventoryUI : MonoBehaviour
             _descriptionText.text = string.Empty;
             _descriptionText.maxVisibleCharacters = 0;
         }
+
+        HideLoreNote();
+    }
+
+    private void HideLoreNote()
+    {
+        if (_loreTypewriterCoroutine != null)
+        {
+            StopCoroutine(_loreTypewriterCoroutine);
+            _loreTypewriterCoroutine = null;
+        }
+
+        if (_loreNotePanel != null)
+            _loreNotePanel.SetActive(false);
+
+        if (_loreNoteText != null)
+        {
+            _loreNoteText.text = string.Empty;
+            _loreNoteText.maxVisibleCharacters = 0;
+        }
     }
 
     private IEnumerator TypewriterRoutine(string text)
@@ -217,19 +268,29 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
+    private IEnumerator LoreTypewriterRoutine(string text)
+    {
+        if (_loreNoteText == null) yield break;
+
+        _loreNoteText.text = text;
+        _loreNoteText.ForceMeshUpdate();
+
+        int totalCharacters = _loreNoteText.textInfo.characterCount;
+        _loreNoteText.maxVisibleCharacters = 0;
+
+        for (int i = 0; i <= totalCharacters; i++)
+        {
+            _loreNoteText.maxVisibleCharacters = i;
+            yield return new WaitForSecondsRealtime(_typewriterCharDelay);
+        }
+
+        _loreTypewriterCoroutine = null;
+    }
+
     private void OnToggled(bool isOpen)
     {
-        Debug.Log("4. El evento llegó a la UI. isOpen: " + isOpen);
-
-        if (isOpen)
-        {
-            OpenInventory();
-        }
-        else
-        {
-            Debug.Log("5. Ejecutando CloseInventory()...");
-            CloseInventory();
-        }
+        if (isOpen) { OpenInventory(); }
+        else { CloseInventory(); }
     }
 
     public void OpenInventory()
@@ -331,4 +392,5 @@ public class InventoryUI : MonoBehaviour
             }
         }
     }
+
 }
