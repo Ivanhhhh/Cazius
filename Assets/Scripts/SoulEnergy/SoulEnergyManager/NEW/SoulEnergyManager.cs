@@ -29,6 +29,8 @@ public class SoulEnergyManager : MonoBehaviour
             return;
         }
         Instance = this;
+
+        AddSoulEnergy(10);
     }
 
     private void OnDestroy()
