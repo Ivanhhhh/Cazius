@@ -98,6 +98,7 @@ public class InventoryUI : MonoBehaviour
 
     public void SelectRegularTab()
     {
+        UIInventoryTooltip.Instance?.Hide();
         _currentTab = InventoryTab.Regular;
         ClearItemDescription();
         UpdateTabVisuals();
@@ -106,6 +107,7 @@ public class InventoryUI : MonoBehaviour
 
     public void SelectKeyItemsTab()
     {
+        UIInventoryTooltip.Instance?.Hide();
         _currentTab = InventoryTab.KeyItems;
         ClearItemDescription();
         UpdateTabVisuals();
@@ -114,6 +116,7 @@ public class InventoryUI : MonoBehaviour
 
     public void SelectLoreItemsTab()
     {
+        UIInventoryTooltip.Instance?.Hide();
         _currentTab = InventoryTab.LoreItems;
         ClearItemDescription();
         UpdateTabVisuals();
@@ -239,9 +242,9 @@ public class InventoryUI : MonoBehaviour
 
     public void CloseInventory()
     {
+        UIInventoryTooltip.Instance?.Hide();
         panel.SetActive(false);
         ClearItemDescription();
-
         if (_questPanel != null && !_savePanelOpenClose)
             _questPanel.SetActive(false);
     }

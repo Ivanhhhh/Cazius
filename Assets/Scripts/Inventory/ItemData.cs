@@ -35,4 +35,7 @@ public class ItemData : ScriptableObject
 
     [Tooltip("Tamaño máximo de pila. 1 = no apilable.")]
     [Min(1)] public int maxStackSize = 1;
+    [Header("World Drop")]
+    [Tooltip("Prefab spawneado al soltar el item. Solo se usa si es Regular.")]
+    public GameObject worldPrefab;
 }
