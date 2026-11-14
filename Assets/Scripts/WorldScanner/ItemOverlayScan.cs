@@ -40,19 +40,54 @@ public class ItemOverlayScan : MonoBehaviour
         }
     }
 
+
+    private WorldScanManager _scanManager;
+    private Coroutine _subscriptionCoroutine;
+
     private void OnEnable()
     {
+        _subscriptionCoroutine = StartCoroutine(SubscribeToScan());
+    }
 
-        WorldScanManager.Instance.ScanActive += ActivateScan;
-        WorldScanManager.Instance.ScanDeactivate += DeactivateScan;
+    private IEnumerator SubscribeToScan()
+    {
+        while (WorldScanManager.Instance == null)
+            yield return null;
+
+        _scanManager = WorldScanManager.Instance;
+
+        _scanManager.ScanActive += ActivateScan;
+        _scanManager.ScanDeactivate += DeactivateScan;
+
+        float targetOpacity = _scanManager.IsScanActive ? 1f : 0f;
+        _currentOpacity = targetOpacity;
+        SetOpacity(targetOpacity);
+
+        _subscriptionCoroutine = null;
     }
 
     private void OnDisable()
     {
+        if (_subscriptionCoroutine != null)
+        {
+            StopCoroutine(_subscriptionCoroutine);
+            _subscriptionCoroutine = null;
+        }
 
-        WorldScanManager.Instance.ScanActive -= ActivateScan;
-        WorldScanManager.Instance.ScanDeactivate -= DeactivateScan;
+        if (_scanManager != null)
+        {
+            _scanManager.ScanActive -= ActivateScan;
+            _scanManager.ScanDeactivate -= DeactivateScan;
+            _scanManager = null;
+        }
+
+        if (_opacityCoroutine != null)
+        {
+            StopCoroutine(_opacityCoroutine);
+            _opacityCoroutine = null;
+        }
     }
+
 
     private void ActivateScan()
     {
