@@ -5,7 +5,6 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using System;
 
-[DefaultExecutionOrder(-100)]
 public class WorldChangeManager : MonoBehaviour
 {
 
