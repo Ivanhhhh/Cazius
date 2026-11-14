@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4057718889858915555}
   - component: {fileID: 9184248705114358638}
   - component: {fileID: 4244788154385817132}
-  - component: {fileID: 3159010045236173772}
   m_Layer: 0
   m_Name: DropDownShelfShootInteract
   m_TagString: Untagged
@@ -104,22 +103,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3159010045236173772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1449212836151973729}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d00e290506cd951408e5b0f39b78388b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemOverlayScan
-  _renderers:
-  - renderer: {fileID: 7783039423046432026}
-    materialIndex: 1
-  _transitionDuration: 0.5
 --- !u!1 &8250119040539998885
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,24 +480,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Holder1
       objectReference: {fileID: 0}
-    - target: {fileID: 3511829755427322869, guid: 2c83f7a93d056084ba805c9e930ccd08, type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3511829755427322869, guid: 2c83f7a93d056084ba805c9e930ccd08, type: 3}
-      propertyPath: 'm_Materials.Array.data[1]'
-      value: 
-      objectReference: {fileID: 2100000, guid: cff11ebc0838c3546ab8a6db2af02d4b, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c83f7a93d056084ba805c9e930ccd08, type: 3}
---- !u!23 &7783039423046432026 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 3511829755427322869, guid: 2c83f7a93d056084ba805c9e930ccd08, type: 3}
-  m_PrefabInstance: {fileID: 6682901562008751855}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8575440203817456847 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3151529072426474016, guid: 2c83f7a93d056084ba805c9e930ccd08, type: 3}
@@ -611,7 +581,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickableItem
   _itemScriptableObject: {fileID: 11400000, guid: 7c1ee3d44a3a6434ca5b46dc8c7043b1, type: 2}
-  _quantityOverride: -1
   _interactText: F to Take Diary bear
   sfxType: 9
   _interactionUIPoint: {fileID: 0}
