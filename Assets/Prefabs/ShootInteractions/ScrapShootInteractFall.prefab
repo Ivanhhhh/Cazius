@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5967465729817603668}
   - component: {fileID: 5337269087952809684}
   - component: {fileID: 6289892665953543351}
-  - component: {fileID: 4675533775873882999}
   m_Layer: 0
   m_Name: ScrapShootInteractFall
   m_TagString: Untagged
@@ -80,23 +79,6 @@ MonoBehaviour:
   _shootCollider: {fileID: 5337269087952809684}
   _impactParticle: {fileID: 0}
   _glowParticle: {fileID: 5748424263599088925}
---- !u!114 &4675533775873882999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7583803275668528725}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d00e290506cd951408e5b0f39b78388b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemOverlayScan
-  _renderers:
-  - renderer: {fileID: 7583999471142465113}
-    materialIndex: 1
-  - renderer: {fileID: 5869509850401962818}
-    materialIndex: 1
 --- !u!1001 &1289565387798415109
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -105,14 +87,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5967465729817603668}
     m_Modifications:
-    - target: {fileID: 4652716490091428935, guid: cfecf10db6312b54d9664be487e28fa3, type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4652716490091428935, guid: cfecf10db6312b54d9664be487e28fa3, type: 3}
-      propertyPath: 'm_Materials.Array.data[1]'
-      value: 
-      objectReference: {fileID: 2100000, guid: cff11ebc0838c3546ab8a6db2af02d4b, type: 2}
     - target: {fileID: 5826224307337922344, guid: cfecf10db6312b54d9664be487e28fa3, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.02044487
@@ -161,14 +135,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8708470419720464732, guid: cfecf10db6312b54d9664be487e28fa3, type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8708470419720464732, guid: cfecf10db6312b54d9664be487e28fa3, type: 3}
-      propertyPath: 'm_Materials.Array.data[1]'
-      value: 
-      objectReference: {fileID: 2100000, guid: cff11ebc0838c3546ab8a6db2af02d4b, type: 2}
     m_RemovedComponents:
     - {fileID: 3826175883175577906, guid: cfecf10db6312b54d9664be487e28fa3, type: 3}
     - {fileID: 8624190817850612069, guid: cfecf10db6312b54d9664be487e28fa3, type: 3}
@@ -186,16 +152,6 @@ Transform:
 --- !u!1 &5364997084194986647 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6598117116278201746, guid: cfecf10db6312b54d9664be487e28fa3, type: 3}
-  m_PrefabInstance: {fileID: 1289565387798415109}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &5869509850401962818 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 4652716490091428935, guid: cfecf10db6312b54d9664be487e28fa3, type: 3}
-  m_PrefabInstance: {fileID: 1289565387798415109}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &7583999471142465113 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8708470419720464732, guid: cfecf10db6312b54d9664be487e28fa3, type: 3}
   m_PrefabInstance: {fileID: 1289565387798415109}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1705676268799269645
