@@ -165,15 +165,16 @@ public class Inventory : MonoBehaviour
             case ItemType.Heal:
                 _playerHealthSystem.Heal(10);
                 SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.Heal);
-                regularItems.Remove(item);
+                item.value--;
+                if (item.value <= 0) regularItems.Remove(item);
                 onInventoryChanged?.Invoke();
                 break;
 
             case ItemType.LegendarySandwich:
                 _playerHealthSystem.Heal(100);
                 SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.Heal);
-                SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.Heal);
-                regularItems.Remove(item);
+                item.value--;
+                if (item.value <= 0) regularItems.Remove(item);
                 onInventoryChanged?.Invoke();
                 break;
 
