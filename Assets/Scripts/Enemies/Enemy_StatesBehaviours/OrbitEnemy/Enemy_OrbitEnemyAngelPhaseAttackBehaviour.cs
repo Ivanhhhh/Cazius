@@ -87,11 +87,13 @@ public class Enemy_OrbitEnemyAngelPhaseAttackBehaviour : Enemy_OrbitEnemyAngelPh
 
         // 3. Activamos el láser
         PlayLaser();
-
-        // 4. Quitamos la invulnerabilidad
-        _orbitData.HealthSystem.SetInvulnerable(false);
     }
 
+    protected override void OnLookAtPlayerEntered()
+    {
+        // El jefe entra en la fase de ataque, se vuelve vulnerable
+        _orbitData.HealthSystem.SetInvulnerable(false);
+    }
     private void SwapModels()
     {
         if (_orbitData.FirstPhaseModel != null) _orbitData.FirstPhaseModel.SetActive(false);
