@@ -94,6 +94,10 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
                 _phaseEndTime = Time.time + SecondWaitTime;
                 OnSecondWaitEntered();
                 break;
+            case Phase.LookAtPlayer:
+                // AGREGAR ESTO: Se ejecuta una sola vez al entrar a la fase de combate
+                OnLookAtPlayerEntered();
+                break;
         }
     }
 
@@ -214,4 +218,6 @@ public class Enemy_OrbitEnemyAngelPhaseChasingBehaviour
     protected virtual void ExecuteAttack() { }
     protected virtual void OnInitialWaitEntered() { }
     protected virtual void OnSecondWaitEntered() { }
+    protected virtual void OnLookAtPlayerEntered() { }
+
 }
