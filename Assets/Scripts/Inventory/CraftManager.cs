@@ -13,14 +13,19 @@ public class CraftManager : MonoBehaviour
     {
         ActivateList(0);
     }
-     
+
     public void ActivateList(int indexToActivate)
     {
+        if (InventoryUI.Instance != null)
+        {
+            InventoryUI.Instance.CancelMoveMode();
+        }
+
         _currentIndex = indexToActivate;
 
         for (int i = 0; i < _objectsList.Length; i++)
         {
-            _objectsList[i].SetActive(i == indexToActivate); 
+            _objectsList[i].SetActive(i == indexToActivate);
         }
 
         UpdateButtonsVisuals();
