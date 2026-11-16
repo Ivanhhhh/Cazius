@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+[DefaultExecutionOrder(-100)]
 public class WorldScanManager : MonoBehaviour
 {
 
