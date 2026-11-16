@@ -1,3 +1,4 @@
+
 using System.Collections;
 using UnityEngine;
 
@@ -21,16 +22,17 @@ public class InteractWorldSwap : MonoBehaviour, IEInteractable
     [SerializeField] private string _activateTriggerName = "Activate";
     [SerializeField] private float _activationAnimDuration = 1.5f;
 
-    [Header("Rune Material")]
-    [SerializeField] private Renderer _runeRenderer;
+    [Header("Rune Materials")]
+    [SerializeField] private Renderer[] _runeRenderers = new Renderer[3];
     [SerializeField] private string _runeActiveProperty = "_RuneActive";
 
     private bool _canInteract = true;
     private bool _isActivating;
-    private Material _runeMaterialInstance;
 
+    private Material[] _runeMaterialInstances;
 
     [SerializeField] private Transform _interactionUIPoint;
+
     public Transform GetInteractionUIPoint()
     {
         return _interactionUIPoint != null
@@ -43,8 +45,16 @@ public class InteractWorldSwap : MonoBehaviour, IEInteractable
         if (_animator == null)
             _animator = GetComponentInChildren<Animator>();
 
-        if (_runeRenderer != null)
-            _runeMaterialInstance = _runeRenderer.material;
+        // Create material instances for all rune renderers
+        _runeMaterialInstances = new Material[_runeRenderers.Length];
+
+        for (int i = 0; i < _runeRenderers.Length; i++)
+        {
+            if (_runeRenderers[i] == null)
+                continue;
+
+            _runeMaterialInstances[i] = _runeRenderers[i].material;
+        }
 
         SetRuneActive(false);
     }
@@ -53,7 +63,8 @@ public class InteractWorldSwap : MonoBehaviour, IEInteractable
     {
         if (_player == null)
         {
-            GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+            GameObject playerObject =
+                GameObject.FindGameObjectWithTag("Player");
 
             if (playerObject != null)
                 _player = playerObject.transform;
@@ -91,11 +102,13 @@ public class InteractWorldSwap : MonoBehaviour, IEInteractable
 
         if (WorldChangeManager.Instance.IsInEden)
         {
-            WorldChangeManager.Instance.SwapToPurgatory(_scenesToLoadPurgatory);
+            WorldChangeManager.Instance.SwapToPurgatory(
+                _scenesToLoadPurgatory);
         }
         else
         {
-            WorldChangeManager.Instance.SwapToEden(_scenesToLoadEden);
+            WorldChangeManager.Instance.SwapToEden(
+                _scenesToLoadEden);
         }
 
         yield return new WaitForSeconds(_activationAnimDuration);
@@ -103,42 +116,42 @@ public class InteractWorldSwap : MonoBehaviour, IEInteractable
         _isActivating = false;
         SetRuneActive(false);
 
-        yield return new WaitForSeconds(_cooldown - _activationAnimDuration);
+        yield return new WaitForSeconds(
+            Mathf.Max(0f, _cooldown - _activationAnimDuration));
 
         _canInteract = true;
     }
 
     private void HandleNearAnimation()
     {
-        if (_animator == null)
-            return;
-
         if (_player == null)
             return;
 
         if (_isActivating)
             return;
 
-        float distanceToPlayer = Vector3.Distance(transform.position, _player.position);
+        float distanceToPlayer =
+            Vector3.Distance(transform.position, _player.position);
+
         bool isNear = distanceToPlayer <= _nearDistance;
 
-        if (isNear)
-        {
-            SetRuneActive(true);
-        }
-        else
-        {
-            SetRuneActive(false);
-        }
+        SetRuneActive(isNear);
+
+        if (_animator != null)
             _animator.SetBool(_nearBoolName, isNear);
     }
 
     private void SetRuneActive(bool active)
     {
-        if (_runeMaterialInstance == null)
-            return;
+        float value = active ? 1f : 0f;
 
-        _runeMaterialInstance.SetFloat(_runeActiveProperty, active ? 1f : 0f);
+        foreach (Material material in _runeMaterialInstances)
+        {
+            if (material == null)
+                continue;
+
+            material.SetFloat(_runeActiveProperty, value);
+        }
     }
 
     public string GetInteractText()
@@ -151,7 +164,10 @@ public class InteractWorldSwap : MonoBehaviour, IEInteractable
         return transform;
     }
 
-    public bool IsLocked() { return false; }
+    public bool IsLocked()
+    {
+        return false;
+    }
 
     private void OnDrawGizmosSelected()
     {
