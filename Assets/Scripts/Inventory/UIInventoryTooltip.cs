@@ -189,6 +189,11 @@ public class UIInventoryTooltip : MonoBehaviour
 
     private void OnMoveClicked()
     {
+        if (_currentItem == null) { Hide(); return; }
+
+        if (InventoryUI.Instance != null)
+            InventoryUI.Instance.BeginMoveModeByItem(_currentItem);
+
         Hide();
     }
 }

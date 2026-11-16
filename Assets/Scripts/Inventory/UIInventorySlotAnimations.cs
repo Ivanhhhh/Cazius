@@ -9,56 +9,36 @@ public class UIInventorySlotAnimations : MonoBehaviour
     [Tooltip("Image a la que se le aplicará el alpha. Si está vacío, se busca en este GameObject.")]
     [SerializeField] private Image targetImage;
 
-    [Tooltip("Opcional: si se asigna, se usa el alpha del CanvasGroup en lugar del color de la Image " +
-             "(recomendado si la imagen tiene hijos y querés afectarlos a todos).")]
-
     [Header("Alpha")]
-    [Range(0f, 1f)] public float minAlpha = 0f;   // alpha cuando está "apagada"
-    [Range(0f, 1f)] public float maxAlpha = 1f;   // alpha cuando está "encendida"
+    [Range(0f, 1f)] public float minAlpha = 0f;
+    [Range(0f, 1f)] public float maxAlpha = 1f;
 
     [Header("Fade Speeds (segundos)")]
-    [Min(0f)] public float fadeInDuration = 0.5f;  // minAlpha -> maxAlpha
-    [Min(0f)] public float fadeOutDuration = 0.5f;  // maxAlpha -> minAlpha
+    [Min(0f)] public float fadeInDuration = 0.5f;
+    [Min(0f)] public float fadeOutDuration = 0.5f;
 
     [Header("Hold Times (segundos)")]
-    [Min(0f)] public float holdVisibleTime = 1f;  // tiempo visible antes de apagarse
-    [Min(0f)] public float holdInvisibleTime = 1f;  // tiempo invisible antes de encenderse
+    [Min(0f)] public float holdVisibleTime = 1f;
+    [Min(0f)] public float holdInvisibleTime = 1f;
 
     [Header("Options")]
-    [Tooltip("Repeticiones: -1 = infinito, 1 = un solo ciclo, etc.")]
     public int loopCount = -1;
-
-    [Tooltip("Si true, arranca visible (hold visible -> fade out). Si false, arranca invisible.")]
     public bool startVisible = true;
-
-    [Tooltip("Reproducir automáticamente al activarse el GameObject.")]
     public bool playOnEnable = true;
-
-    [Tooltip("Usa tiempo no escalado (útil si el juego se pausa).")]
     public bool useUnscaledTime = false;
 
-    [Tooltip("Curva de easing del fade. Null = lineal.")]
     [SerializeField] private AnimationCurve fadeCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
-    /// <summary>Se dispara al terminar todas las repeticiones (si loopCount > 0).</summary>
     public event Action OnPulseCompleted;
-
-    /// <summary>True solo mientras el bucle de pulso está corriendo.</summary>
     public bool IsRunning => _isRunning;
 
     private Coroutine _activeCoroutine;
-    private Color _baseColor;
     private bool _isRunning;
-
-    // ------------------------------------------------------------------ //
-    // Unity
-    // ------------------------------------------------------------------ //
 
     void Awake()
     {
-
-        if (targetImage != null)
-            _baseColor = targetImage.color;
+        if (targetImage == null)
+            targetImage = GetComponent<Image>();
     }
 
     void OnEnable()
@@ -71,11 +51,6 @@ public class UIInventorySlotAnimations : MonoBehaviour
         StopPulse(resetToVisible: false);
     }
 
-    // ------------------------------------------------------------------ //
-    // API pública
-    // ------------------------------------------------------------------ //
-
-    /// <summary>Arranca el bucle de fade infinito (o loopCount ciclos).</summary>
     public void StartPulse()
     {
         if (_isRunning) return;
@@ -83,8 +58,6 @@ public class UIInventorySlotAnimations : MonoBehaviour
         _activeCoroutine = StartCoroutine(PulseRoutine());
     }
 
-    /// <summary>Detiene el comportamiento de pulso.</summary>
-    /// <param name="resetToVisible">Si true, deja la imagen en maxAlpha al detener.</param>
     public void StopPulse(bool resetToVisible = true)
     {
         StopActiveCoroutine();
@@ -94,7 +67,6 @@ public class UIInventorySlotAnimations : MonoBehaviour
             SetAlpha(minAlpha);
     }
 
-    /// <summary>Muestra u oculta la imagen, con o sin transición.</summary>
     public void SetVisible(bool visible, bool instant = true)
     {
         StopActiveCoroutine();
@@ -109,27 +81,20 @@ public class UIInventorySlotAnimations : MonoBehaviour
                 FadeRoutine(GetCurrentAlpha(), target, visible ? fadeInDuration : fadeOutDuration));
     }
 
-    // ------------------------------------------------------------------ //
-    // Internos
-    // ------------------------------------------------------------------ //
-
     private IEnumerator PulseRoutine()
     {
         _isRunning = true;
         int cyclesDone = 0;
 
-        // Estado inicial
         bool visible = startVisible;
         SetAlpha(visible ? maxAlpha : minAlpha);
         yield return Wait(visible ? holdVisibleTime : holdInvisibleTime);
 
         while (loopCount < 0 || cyclesDone < loopCount)
         {
-            // Fade out
             yield return FadeRoutine(maxAlpha, minAlpha, fadeOutDuration);
             yield return Wait(holdInvisibleTime);
 
-            // Fade in
             yield return FadeRoutine(minAlpha, maxAlpha, fadeInDuration);
             yield return Wait(holdVisibleTime);
 
@@ -196,11 +161,10 @@ public class UIInventorySlotAnimations : MonoBehaviour
 
         if (targetImage != null)
         {
-            Color c = _baseColor;
+            // SOLO CAMBIAMOS EL ALPHA, PRESERVAMOS EL COLOR RGB DEL PREFAB
+            Color c = targetImage.color;
             c.a = alpha;
             targetImage.color = c;
         }
     }
-
-
 }

@@ -40,27 +40,16 @@ public class Inventory : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-
-        if (itemToAdd != null)
-        {
-            AddItem(itemToAdd);
-        }
+        if (itemToAdd != null) AddItem(itemToAdd);
     }
 
     public int GetItemCountByName(string targetName)
     {
         int total = 0;
         string searchName = targetName.Trim();
-
-        foreach (var item in regularItems)
-            if (item.name.Trim() == searchName) total += item.value;
-
-        foreach (var item in keyItems)
-            if (item.name.Trim() == searchName) total += item.value;
-
-        foreach (var item in loreItems)
-            if (item.name.Trim() == searchName) total += item.value;
-
+        foreach (var item in regularItems) if (item != null && item.name.Trim() == searchName) total += item.value;
+        foreach (var item in keyItems) if (item != null && item.name.Trim() == searchName) total += item.value;
+        foreach (var item in loreItems) if (item != null && item.name.Trim() == searchName) total += item.value;
         return total;
     }
 
@@ -73,17 +62,14 @@ public class Inventory : MonoBehaviour
         {
             for (int i = list.Count - 1; i >= 0; i--)
             {
+                if (list[i] == null) continue;
                 if (list[i].name.Trim() == searchName)
                 {
                     int taken = Mathf.Min(list[i].value, amountLeft);
                     list[i].value -= taken;
                     amountLeft -= taken;
-
-                    if (list[i].value <= 0)
-                        list.RemoveAt(i);
-
-                    if (amountLeft <= 0)
-                        break;
+                    if (list[i].value <= 0) list.RemoveAt(i);
+                    if (amountLeft <= 0) break;
                 }
             }
         }
@@ -92,9 +78,7 @@ public class Inventory : MonoBehaviour
         if (amountLeft > 0) ConsumeFromList(keyItems);
         if (amountLeft > 0) ConsumeFromList(loreItems);
 
-        if (amountLeft < amountToConsume)
-            onInventoryChanged?.Invoke();
-
+        if (amountLeft < amountToConsume) onInventoryChanged?.Invoke();
         return amountLeft <= 0;
     }
 
@@ -112,9 +96,11 @@ public class Inventory : MonoBehaviour
         int amountToAdd = Mathf.Max(1, item.value);
         bool anyAdded = false;
 
+        // 1. Intentar apilar en ítems existentes
         for (int i = 0; i < targetList.Count && amountToAdd > 0; i++)
         {
             var existing = targetList[i];
+            if (existing == null) continue;
             if (!IsSameStack(existing, item)) continue;
             if (existing.value >= maxStack) continue;
 
@@ -125,9 +111,14 @@ public class Inventory : MonoBehaviour
             anyAdded = true;
         }
 
+        // 2. Si sobra cantidad, buscar el primer hueco o agregar al final
         while (amountToAdd > 0)
         {
-            if (targetList.Count >= maxSlots)
+            // Buscamos si hay algún slot nulo (hueco) en la lista
+            int emptyIndex = targetList.FindIndex(x => x == null);
+
+            // Si no hay huecos y ya estamos en el límite máximo, el inventario está lleno
+            if (emptyIndex < 0 && targetList.Count >= maxSlots)
             {
                 Debug.Log("[Inventory] Slots llenos, no se pudo añadir todo.");
                 break;
@@ -137,12 +128,22 @@ public class Inventory : MonoBehaviour
             clone.name = item.name;
             clone.value = Mathf.Min(maxStack, amountToAdd);
             amountToAdd -= clone.value;
-            targetList.Add(clone);
+
+            if (emptyIndex >= 0)
+            {
+                // Lo colocamos en el primer hueco libre (izquierda superior)
+                targetList[emptyIndex] = clone;
+            }
+            else
+            {
+                // Si no hay huecos, lo agregamos al final
+                targetList.Add(clone);
+            }
+
             anyAdded = true;
         }
 
         if (!anyAdded) return false;
-
         onInventoryChanged?.Invoke();
         OnItemAdded?.Invoke(item);
         return true;
@@ -151,8 +152,7 @@ public class Inventory : MonoBehaviour
     private static bool IsSameStack(ItemData a, ItemData b)
     {
         if (a == null || b == null) return false;
-        if (!string.IsNullOrEmpty(a.itemID) && !string.IsNullOrEmpty(b.itemID))
-            return a.itemID == b.itemID;
+        if (!string.IsNullOrEmpty(a.itemID) && !string.IsNullOrEmpty(b.itemID)) return a.itemID == b.itemID;
         return a.name == b.name;
     }
 
@@ -188,7 +188,7 @@ public class Inventory : MonoBehaviour
     {
         int totalAmmo = 0;
         foreach (var item in regularItems)
-            if (item.itemType == ItemType.Ammo) totalAmmo += item.value;
+            if (item != null && item.itemType == ItemType.Ammo) totalAmmo += item.value;
         return totalAmmo;
     }
 
@@ -197,49 +197,42 @@ public class Inventory : MonoBehaviour
         int amountExtracted = 0;
         for (int i = regularItems.Count - 1; i >= 0; i--)
         {
+            if (regularItems[i] == null) continue;
             if (regularItems[i].itemType == ItemType.Ammo)
             {
                 int bulletsToTake = Mathf.Min(regularItems[i].value, amountNeeded - amountExtracted);
                 regularItems[i].value -= bulletsToTake;
                 amountExtracted += bulletsToTake;
-
-                if (regularItems[i].value <= 0)
-                    regularItems.RemoveAt(i);
-
-                if (amountExtracted >= amountNeeded)
-                    break;
+                if (regularItems[i].value <= 0) regularItems.RemoveAt(i);
+                if (amountExtracted >= amountNeeded) break;
             }
         }
-
-        if (amountExtracted > 0)
-            onInventoryChanged?.Invoke();
-
+        if (amountExtracted > 0) onInventoryChanged?.Invoke();
         return amountExtracted;
     }
 
     public bool HasItem(string itemID)
     {
-        return regularItems.Exists(i => i.itemID == itemID)
-            || keyItems.Exists(i => i.itemID == itemID)
-            || loreItems.Exists(i => i.itemID == itemID);
+        return regularItems.Exists(i => i != null && i.itemID == itemID)
+            || keyItems.Exists(i => i != null && i.itemID == itemID)
+            || loreItems.Exists(i => i != null && i.itemID == itemID);
     }
 
     public bool RemoveItem(string itemID)
     {
-        ItemData item = regularItems.Find(i => i.itemID == itemID);
+        ItemData item = regularItems.Find(i => i != null && i.itemID == itemID);
         if (item != null) { regularItems.Remove(item); onInventoryChanged?.Invoke(); return true; }
 
-        item = keyItems.Find(i => i.itemID == itemID);
+        item = keyItems.Find(i => i != null && i.itemID == itemID);
         if (item != null) { keyItems.Remove(item); onInventoryChanged?.Invoke(); return true; }
 
-        item = loreItems.Find(i => i.itemID == itemID);
+        item = loreItems.Find(i => i != null && i.itemID == itemID);
         if (item != null) { loreItems.Remove(item); onInventoryChanged?.Invoke(); return true; }
 
         Debug.LogWarning($"[Inventory] Item not found for removal: '{itemID}'");
         return false;
     }
 
-    // --- FUNCIÓN DE DROP CON CANTIDAD OPCIONAL ---
     public bool RemoveItemAndSpawn(ItemData item, int amountToDrop = -1)
     {
         if (item == null) return false;
@@ -254,46 +247,54 @@ public class Inventory : MonoBehaviour
             return false;
         }
 
-        // Si amountToDrop es -1 (o menos), significa que queremos dropear la pila entera
-        if (amountToDrop <= 0)
-            amountToDrop = item.value;
-
-        // Nos aseguramos de no dropear más de lo que tenemos
+        if (amountToDrop <= 0) amountToDrop = item.value;
         amountToDrop = Mathf.Min(amountToDrop, item.value);
-
-        // Restamos del inventario
         item.value -= amountToDrop;
+        if (item.value <= 0) regularItems.Remove(item);
 
-        // Si se vació la pila, la borramos del inventario
-        if (item.value <= 0)
-            regularItems.Remove(item);
-
-        // Spawneamos el objeto físico
         if (item.worldPrefab != null && _dropSpawnPoint != null)
         {
             GameObject go = Instantiate(item.worldPrefab, _dropSpawnPoint.position, _dropSpawnPoint.rotation);
-
             PickableItem pickable = go.GetComponent<PickableItem>();
             if (pickable != null)
             {
-                // CLONAMOS el ItemData para que el objeto en el suelo tenga su propia cantidad
                 ItemData droppedData = Instantiate(item);
                 droppedData.value = amountToDrop;
                 droppedData.name = item.name;
-
                 pickable.Setup(droppedData);
             }
-            else
-            {
-                Debug.LogWarning("[Inventory] El worldPrefab no tiene el script PickableItem.");
-            }
+            else Debug.LogWarning("[Inventory] El worldPrefab no tiene el script PickableItem.");
         }
-        else if (item.worldPrefab == null)
-            Debug.LogWarning($"[Inventory] '{item.name}' no tiene worldPrefab asignado.");
-        else
-            Debug.LogWarning("[Inventory] _dropSpawnPoint no está asignado.");
+        else if (item.worldPrefab == null) Debug.LogWarning($"[Inventory] '{item.name}' no tiene worldPrefab asignado.");
+        else Debug.LogWarning("[Inventory] _dropSpawnPoint no está asignado.");
 
         onInventoryChanged?.Invoke();
         return true;
+    }
+
+    // === NUEVO: helpers de slot para el move mode ===
+
+    /// <summary>Intercambia dos posiciones (null permitido, crece la lista si hace falta).</summary>
+    public static void SwapSlots(List<ItemData> list, int a, int b)
+    {
+        if (list == null || a == b) return;
+        while (list.Count <= Mathf.Max(a, b)) list.Add(null);
+        (list[a], list[b]) = (list[b], list[a]);
+    }
+
+    /// <summary>Mueve el contenido de "from" a "to" (deja from como null).</summary>
+    public static void MoveSlot(List<ItemData> list, int from, int to)
+    {
+        if (list == null || from == to) return;
+        while (list.Count <= Mathf.Max(from, to)) list.Add(null);
+        list[to] = list[from];
+        list[from] = null;
+    }
+
+    /// <summary>Compacta la lista borrando los null del final (para no acumular slots vacíos).</summary>
+    public static void TrimTrailingNulls(List<ItemData> list)
+    {
+        if (list == null) return;
+        while (list.Count > 0 && list[list.Count - 1] == null) list.RemoveAt(list.Count - 1);
     }
 }
