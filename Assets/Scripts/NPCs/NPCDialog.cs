@@ -19,6 +19,7 @@ public class NPCDialog : MonoBehaviour, IEInteractable
 
     [Header("Interaction")]
     [SerializeField] private bool _rotateTowardsPlayer = true;
+    [SerializeField] private bool _playSound = true;
 
     [SerializeField] private Transform _interactionUIPoint;
     public Transform GetInteractionUIPoint()
@@ -66,7 +67,7 @@ public class NPCDialog : MonoBehaviour, IEInteractable
         if (_animator != null && !string.IsNullOrEmpty(_wavingTrigger))
             _animator.SetTrigger(_wavingTrigger);
 
-        if (SFXManager.Instance != null)
+        if (SFXManager.Instance != null && _playSound)
             SFXManager.Instance.PlaySFXAtPosition(_interactSFX, transform.position);
 
         DialogUIController.Instance.OpenDialog(
