@@ -433,7 +433,7 @@ public class EyeCameraController : MonoBehaviour, IShootable
     {
         _shield.SetActive(true);
 
-        SFXManager.Instance?.PlaySFXAtPosition(SFXManager.SFXCategoryType.NPCTalkSFX, transform.position);
+        SFXManager.Instance?.PlaySFXAtPosition(SFXManager.SFXCategoryType.NoDamageEye, transform.position);
 
         yield return new WaitForSeconds(_shieldDuration);
 
