@@ -15,24 +15,20 @@ public class Enable1Random : MonoBehaviour
 
     private void PickRandom()
     {
-        int validCount = 0;
-        foreach (GameObject obj in _objects)
-        {
-            if (obj != null) validCount++;
-        }
-
-        if (validCount == 0) return;
-
-        int chosen = Random.Range(0, validCount);
-        int index = 0;
+        List<GameObject> validObjects = new List<GameObject>();
 
         foreach (GameObject obj in _objects)
         {
             if (obj == null) continue;
 
-            obj.SetActive(index == chosen);
-            index++;
+            obj.SetActive(false);
+            validObjects.Add(obj);
         }
-    }
 
+        if (validObjects.Count == 0) return;
+
+        int chosen = Random.Range(0, validObjects.Count);
+
+        validObjects[chosen].SetActive(true);
+    }
 }

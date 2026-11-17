@@ -28,7 +28,7 @@ public class NPCDialog : MonoBehaviour, IEInteractable
             : transform;
     }
 
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
     private NPCController _npcController;
     private Coroutine _rotateCoroutine;
     private static readonly int _idleVariantHash = Animator.StringToHash("IdleVariant");
@@ -37,7 +37,7 @@ public class NPCDialog : MonoBehaviour, IEInteractable
     {
         // Get components on the parent/root object
         _npcController = GetComponent<NPCController>();
-        _animator = GetComponentInChildren<Animator>();
+        //_animator = GetComponentInChildren<Animator>();
     }
 
     private void OnEnable()
