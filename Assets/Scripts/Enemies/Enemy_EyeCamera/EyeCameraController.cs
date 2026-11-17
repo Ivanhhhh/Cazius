@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 
-public class EyeCameraController : MonoBehaviour
+public class EyeCameraController : MonoBehaviour, IShootable
 {
     private enum EyeCameraState
     {
@@ -102,6 +102,15 @@ public class EyeCameraController : MonoBehaviour
 
         _currentState = EyeCameraState.Patrol;
         _damageTimer = 0f;
+
+        if (_shieldRoutine != null)
+        {
+            StopCoroutine(_shieldRoutine);
+            _shieldRoutine = null;
+        }
+
+        if (_shield != null)
+            _shield.SetActive(false);
     }
 
 
@@ -402,5 +411,33 @@ public class EyeCameraController : MonoBehaviour
             Gizmos.DrawWireSphere(node.position, 0.2f);
             Gizmos.DrawLine(_eyePivot.position, node.position);
         }
+    }
+
+    [Header("Shield")]
+    [SerializeField] private GameObject _shield;
+    [SerializeField] private float _shieldDuration = 3f;
+
+    private Coroutine _shieldRoutine;
+    public void TakeDamage(float amount)
+    {
+        if (_shield == null)
+            return;
+
+        if (_shieldRoutine != null)
+            StopCoroutine(_shieldRoutine);
+
+        _shieldRoutine = StartCoroutine(ShieldRoutine());
+    }
+
+    private IEnumerator ShieldRoutine()
+    {
+        _shield.SetActive(true);
+
+        SFXManager.Instance?.PlaySFXAtPosition(SFXManager.SFXCategoryType.NPCTalkSFX, transform.position);
+
+        yield return new WaitForSeconds(_shieldDuration);
+
+        _shield.SetActive(false);
+        _shieldRoutine = null;
     }
 }
