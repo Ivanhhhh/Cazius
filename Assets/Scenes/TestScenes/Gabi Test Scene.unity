@@ -128,10 +128,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 13424737}
-  - component: {fileID: 13424736}
-  - component: {fileID: 13424735}
-  - component: {fileID: 13424734}
+  - component: {fileID: 13424738}
   - component: {fileID: 13424733}
+  - component: {fileID: 13424734}
   m_Layer: 0
   m_Name: NPC_LWS_Runner
   m_TagString: Untagged
@@ -152,8 +151,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enable1Random
   _objects:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 896244274}
+  - {fileID: 1150353837}
   _allowMultipleEnabled: 0
   _allowAllDisabled: 0
 --- !u!136 &13424734
@@ -178,46 +177,7 @@ CapsuleCollider:
   m_Radius: 0.047552586
   m_Height: 1.8129108
   m_Direction: 1
-  m_Center: {x: -0.34728622, y: 0.9233471, z: 0.0025196075}
---- !u!114 &13424735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 13424732}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82871424db4c0654990dc50c4fa99144, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NPCWalkerDialog
-  _dialogPages:
-  - quest_cat_completed_02
-  _interactText: 
-  _wavingTrigger: Waving
-  _interactSFX: 3
-  _interactionUIPoint: {fileID: 1765080136}
---- !u!114 &13424736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 13424732}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1adf015bd209c1e4f999b634e1e8f778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NPCController
-  _waypoints:
-  - {fileID: 187272024}
-  - {fileID: 768242478}
-  _moveSpeed: 2
-  _turnSpeed: 270
-  _acceleration: 5.83
-  _arriveDistance: 0.67
-  _waitTime: 2
-  _animator: {fileID: 919132149327535123}
+  m_Center: {x: 0.82, y: 0.9233471, z: 0.42}
 --- !u!4 &13424737
 Transform:
   m_ObjectHideFlags: 0
@@ -235,6 +195,27 @@ Transform:
   - {fileID: 1765080136}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &13424738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13424732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5953490bae665d948b25be163c67fb8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCOneWayWalker
+  _pointA: {fileID: 1290280781}
+  _pointB: {fileID: 1692726206}
+  _moveSpeed: 3.5
+  _turnSpeed: 120
+  _acceleration: 4
+  _arriveDistance: 0.15
+  _minRespawnDelay: 2
+  _maxRespawnDelay: 6
+  _animator: {fileID: 919132149327535123}
 --- !u!1 &71456332
 GameObject:
   m_ObjectHideFlags: 0
@@ -1419,7 +1400,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6899661103941132341, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00093406125
+      value: 0.0015113949
       objectReference: {fileID: 0}
     - target: {fileID: 8495130659686491907, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4029,6 +4010,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1829938496}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1290280780
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1290280781}
+  m_Layer: 0
+  m_Name: A
+  m_TagString: Untagged
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1290280781
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290280780}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 20.09, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1306140522
 GameObject:
   m_ObjectHideFlags: 0
@@ -5020,6 +5032,37 @@ Transform:
   - {fileID: 995116103}
   - {fileID: 8221973993205290398}
   - {fileID: 1446209337}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1692726205
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1692726206}
+  m_Layer: 0
+  m_Name: B
+  m_TagString: Untagged
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1692726206
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692726205}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 20.09, y: 0, z: 10.23}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1722322156
@@ -6739,7 +6782,7 @@ Animator:
   m_GameObject: {fileID: 919132149327535122}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 6e700ca9459baee4688673dc9acc9e9e, type: 3}
-  m_Controller: {fileID: 9100000, guid: d75c4d7466dd5ff4bb0e6a8773696f89, type: 2}
+  m_Controller: {fileID: 9100000, guid: 76ce1e88a393c6843944c22eaed4d695, type: 2}
   m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -15596,3 +15639,5 @@ SceneRoots:
   - {fileID: 8627687532740499218}
   - {fileID: 229532089}
   - {fileID: 13424737}
+  - {fileID: 1290280781}
+  - {fileID: 1692726206}
