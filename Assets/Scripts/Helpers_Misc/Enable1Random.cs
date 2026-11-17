@@ -23,6 +23,7 @@ public class Enable1Random : MonoBehaviour
     [Header("Behavior")]
     [Tooltip("Allows more than one object to be enabled at the same time")]
     [SerializeField] private bool _allowMultipleEnabled = false;
+
     [Tooltip("Allows every object to be disabled")]
     [SerializeField] private bool _allowAllDisabled = false;
 
@@ -35,54 +36,71 @@ public class Enable1Random : MonoBehaviour
     {
         if (_objects == null || _objects.Count == 0) return;
 
-        // Ignore empty slots
         List<GameObject> valid = new List<GameObject>();
+        List<GameObject> unique = new List<GameObject>();
+        HashSet<GameObject> seen = new HashSet<GameObject>();
+
         foreach (GameObject obj in _objects)
         {
-            if (obj != null) valid.Add(obj);
+            if (obj == null) continue;
+
+            valid.Add(obj);
+
+            if (seen.Add(obj))
+                unique.Add(obj);
         }
 
         if (valid.Count == 0) return;
 
-        bool[] shouldEnable = _allowMultipleEnabled
-            ? PickMultiple(valid.Count)
-            : PickSingle(valid.Count);
-
-        for (int i = 0; i < valid.Count; i++)
-            valid[i].SetActive(shouldEnable[i]);
+        if (_allowMultipleEnabled)
+        {
+            PickMultiple(unique);
+        }
+        else
+        {
+            PickSingle(valid, unique);
+        }
     }
 
-    // One object enabled, or none when allowed (one extra outcome)
-    private bool[] PickSingle(int count)
+    private void PickSingle(
+        List<GameObject> valid,
+        List<GameObject> unique)
     {
-        bool[] result = new bool[count];
+        int outcomes = _allowAllDisabled
+            ? valid.Count + 1
+            : valid.Count;
 
-        int outcomes = _allowAllDisabled ? count + 1 : count;
         int chosen = Random.Range(0, outcomes);
 
-        if (chosen < count)
-            result[chosen] = true;
+        foreach (GameObject obj in unique)
+            obj.SetActive(false);
 
-        return result;
+        if (chosen < valid.Count)
+            valid[chosen].SetActive(true);
     }
 
-    // Each object is independently on or off (50/50)
-    private bool[] PickMultiple(int count)
+    private void PickMultiple(List<GameObject> unique)
     {
-        bool[] result = new bool[count];
+        bool[] shouldEnable = new bool[unique.Count];
         bool anyEnabled = false;
 
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < unique.Count; i++)
         {
-            result[i] = Random.value < 0.5f;
-            anyEnabled |= result[i];
+            shouldEnable[i] = Random.value < 0.5f;
+
+            if (shouldEnable[i])
+                anyEnabled = true;
         }
 
-        // Nothing came up enabled and that is not allowed: force one random object on
         if (!anyEnabled && !_allowAllDisabled)
-            result[Random.Range(0, count)] = true;
+        {
+            int chosen = Random.Range(0, unique.Count);
+            shouldEnable[chosen] = true;
+        }
 
-        return result;
+        for (int i = 0; i < unique.Count; i++)
+        {
+            unique[i].SetActive(shouldEnable[i]);
+        }
     }
-
 }
