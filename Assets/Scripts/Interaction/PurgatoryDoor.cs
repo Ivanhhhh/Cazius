@@ -7,17 +7,11 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
     //[SerializeField] private float _openAngle;
     [SerializeField] private string _interactText = "You need Purgatory Key";
 
-    [Header("Open Door Anim")]
-    [SerializeField] private WhenOpenDoor _whenOpenDoor;
+    [Header("Open The Door")]
+    [SerializeField] private OpenTheDoor _openTheDoor;
 
     [SerializeField] private Transform _interactionUIPoint;
 
-    private PlayerMovement player;
-
-    private void Start()
-    {
-        player = GameManager.Instance.Player;
-    }
 
     public Transform GetInteractionUIPoint()
     {
@@ -33,30 +27,11 @@ public class PurgatoryDoor : MonoBehaviour, IEInteractable
 
         if (KeyInventorySystem.Instance.HasPurgatoryKey)
         {
-            StartCoroutine(OpenDoor());
+            if (KeyInventorySystem.Instance.HasPurgatoryKey)
+            {
+                _openTheDoor.OpenDoor(default);
+            }
         }
-    }
-
-    public IEnumerator OpenDoor()
-    {
-                Debug.LogWarning("AbrirDoor");
-
-        player.enabled = false;
-
-        SFXManager.Instance.PlaySFXAtPosition(
-            SFXManager.SFXCategoryType.DoorPurgatory,
-            transform.position
-        );
-
-        yield return StartCoroutine(
-            _whenOpenDoor.WhenKeyOpenDoor("PurgatoryDoor")
-        );
-
-        //transform.Rotate(0, _openAngle, 0);
-
-        _isOpen = true;
-
-        player.enabled = true;
     }
 
     public string GetInteractText()
