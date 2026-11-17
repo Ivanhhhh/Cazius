@@ -163,7 +163,7 @@ public class Inventory : MonoBehaviour
         switch (item.itemType)
         {
             case ItemType.Heal:
-                _playerHealthSystem.Heal(10);
+                _playerHealthSystem.Heal(20);
                 SFXManager.Instance.PlaySFX(SFXManager.SFXCategoryType.Heal);
                 item.value--;
                 if (item.value <= 0) regularItems.Remove(item);

@@ -44,26 +44,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ed59350ae7adb0498c5857afc62afb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoulEnergySpawner
-  posiblesOrbes:
-  - prefab: {fileID: 6015086218785157540, guid: 139d909a0462f574882aebc95f36985e, type: 3}
-    peso: 50
-  - prefab: {fileID: 5915240145094179220, guid: 3df6f50d4ec657b4288ed778188360ca, type: 3}
-    peso: 15
-  - prefab: {fileID: 6520919698878873174, guid: abb0ff94345550847b0a96527ca5f87b, type: 3}
-    peso: 35
-  spawnsGarantizadosDelMasPeso: 4
-  intervaloMin: 0.1
-  intervaloMax: 0.2
-  maxOrbesVivos: 6
-  maxSpawnsTotales: 10
-  desactivarAlTerminar: 1
-  destruirAlTerminar: 0
-  alTerminar:
+  _soulPrefab: {fileID: 6015086218785157540, guid: 139d909a0462f574882aebc95f36985e, type: 3}
+  _intervalMin: 0.1
+  _intervalMax: 0.2
+  _maxAliveSouls: 20
+  _maxTotalSpawns: 5
+  _disableOnFinish: 0
+  _destroyOnFinish: 1
+  _onFinish:
     m_PersistentCalls:
       m_Calls: []
-  impulsoMin: 0.8
-  impulsoMax: 1.2
-  impulsoHorizontal: 0
-  puntoSpawn: {fileID: 3401359782500480251}
-  radioSpawn: 0.3
-  dibujarGizmos: 1
+  _impulseMin: 0.8
+  _impulseMax: 1.2
+  _impulseHorizontal: 0
+  _spawnPoint: {fileID: 3401359782500480251}
+  _spawnRadius: 0.3
+  _enableHealthBonusDrop: 1
+  _healthStateThreshold: 2
+  _healthBonusPrefab: {fileID: 5915240145094179220, guid: 3df6f50d4ec657b4288ed778188360ca, type: 3}
+  _healthBonusAmountPerSpawn: 1
+  _healthBonusChance: 1
+  _healthItemIDsToCheck:
+  - Herbs
+  - Medkit
+  _enableAmmoBonusDrop: 1
+  _ammoThreshold: 15
+  _ammoBonusPrefab: {fileID: 6520919698878873174, guid: abb0ff94345550847b0a96527ca5f87b, type: 3}
+  _ammoBonusAmountPerSpawn: 1
+  _ammoBonusChance: 1
+  _ammoItemIDsToCheck:
+  - Scrap01
+  _drawGizmos: 1

@@ -3,240 +3,269 @@ using System.Collections.Generic;
 
 public class SoulSpawner : MonoBehaviour
 {
-    // --- NUEVO: Estructura para los orbes con probabilidad ---
-    [System.Serializable]
-    public class SoulDrop
-    {
-        public SoulEnergyMovement prefab;
-        [Tooltip("Peso de probabilidad. Ej: Si el Orbe Común tiene 80 y el Raro tiene 20, el común saldrá el 80% de las veces.")]
-        public float peso = 1f;
-    }
+    [Header("Standard Prefab")]
+    [Tooltip("Soul that is always spawned on every cycle.")]
+    [SerializeField] private SoulEnergyMovement _soulPrefab;
 
-    [Header("Prefabs y Probabilidades")]
-    [Tooltip("Agrega aquí los diferentes tipos de orbes y su peso de aparición.")]
-    [SerializeField] private List<SoulDrop> posiblesOrbes = new List<SoulDrop>();
+    [Header("Spawn Frequency")]
+    [Tooltip("Seconds between spawns. A random value is picked within this range.")]
+    [SerializeField] private float _intervalMin = 0.5f;
+    [SerializeField] private float _intervalMax = 2f;
 
-    [Header("Garantía de Spawn")]
-    [Tooltip("Cantidad de orbes que se spawnearán SI O SÍ usando el prefab con el peso más alto antes de empezar a usar las probabilidades. 0 = desactivado.")]
-    [SerializeField] private int spawnsGarantizadosDelMasPeso = 4;
+    [Tooltip("Maximum number of alive souls at once. Spawn pauses when reached.")]
+    [SerializeField] private int _maxAliveSouls = 12;
 
-    [Header("Frecuencia de spawn")]
-    [Tooltip("Segundos entre spawns. Se elige un valor aleatorio en este rango.")]
-    [SerializeField] private float intervaloMin = 0.5f;
-    [SerializeField] private float intervaloMax = 2f;
+    [Header("Spawn Limit")]
+    [Tooltip("Total number of standard spawns. -1 = unlimited.")]
+    [SerializeField] private int _maxTotalSpawns = -1;
+    [SerializeField] private bool _disableOnFinish = true;
+    [SerializeField] private bool _destroyOnFinish = false;
+    [SerializeField] private UnityEngine.Events.UnityEvent _onFinish;
 
-    [Tooltip("Máximo de orbes vivos a la vez. Se pausa el spawn si se llega.")]
-    [SerializeField] private int maxOrbesVivos = 12;
+    [Header("Initial Impulse")]
+    [SerializeField] private float _impulseMin = 1f;
+    [SerializeField] private float _impulseMax = 4f;
+    [SerializeField] private bool _impulseHorizontal = true;
 
-    [Header("Límite de spawn")]
-    [Tooltip("Cantidad total de orbes que puede spawnear este spawner. -1 = ilimitado.")]
-    [SerializeField] private int maxSpawnsTotales = -1;
+    [Header("Spawn Point")]
+    [SerializeField] private Transform _spawnPoint;
+    [SerializeField] private float _spawnRadius = 0.3f;
 
-    [Tooltip("Si está activo, el spawner se desactiva cuando llega al límite.")]
-    [SerializeField] private bool desactivarAlTerminar = true;
+    // ============================================================
+    //  BONUS · LOW HEALTH
+    // ============================================================
+    [Header("Bonus · Low Health")]
+    [SerializeField] private bool _enableHealthBonusDrop = true;
 
-    [Tooltip("Si está activo, también se destruye el GameObject (si no, solo se desactiva el componente).")]
-    [SerializeField] private bool destruirAlTerminar = false;
+    [Tooltip("State equal to or WORSE than this is considered 'low health'. Amazing_100=0 ... Critic_20=4.")]
+    [SerializeField] private HealthStates _healthStateThreshold = HealthStates.Low_30;
 
-    [Tooltip("Evento opcional al terminar todos los spawns (para conectar cosas por Inspector).")]
-    [SerializeField] private UnityEngine.Events.UnityEvent alTerminar;
+    [SerializeField] private SoulEnergyMovement _healthBonusPrefab;
 
-    [Header("Impulso inicial")]
-    [SerializeField] private float impulsoMin = 1f;
-    [SerializeField] private float impulsoMax = 4f;
-    [SerializeField] private bool impulsoHorizontal = true;
+    [Tooltip("How many extra souls per spawn when the condition is met.")]
+    [SerializeField] private int _healthBonusAmountPerSpawn = 1;
 
-    [Header("Punto de spawn")]
-    [SerializeField] private Transform puntoSpawn;
-    [SerializeField] private float radioSpawn = 0.3f;
+    [Tooltip("Chance (0-1) that the bonus appears when the condition is met. 1 = always.")]
+    [SerializeField, Range(0f, 1f)] private float _healthBonusChance = 1f;
+
+    [Tooltip("If the player ALREADY has any of these itemIDs, the bonus is not added.")]
+    [SerializeField] private string[] _healthItemIDsToCheck = new string[] { };
+
+    // ============================================================
+    //  BONUS · LOW AMMO
+    // ============================================================
+    [Header("Bonus · Low Ammo")]
+    [SerializeField] private bool _enableAmmoBonusDrop = true;
+
+    [Tooltip("Total ammo at or below this value triggers the bonus.")]
+    [SerializeField] private int _ammoThreshold = 5;
+
+    [SerializeField] private SoulEnergyMovement _ammoBonusPrefab;
+
+    [Tooltip("How many extra souls per spawn when the condition is met.")]
+    [SerializeField] private int _ammoBonusAmountPerSpawn = 1;
+
+    [SerializeField, Range(0f, 1f)] private float _ammoBonusChance = 1f;
+
+    [Tooltip("If the player ALREADY has any of these itemIDs, the bonus is not added.")]
+    [SerializeField] private string[] _ammoItemIDsToCheck = new string[] { };
 
     [Header("Debug")]
-    [SerializeField] private bool dibujarGizmos = true;
+    [SerializeField] private bool _drawGizmos = true;
 
-    // --- Estado interno ---
-    private float timerProximoSpawn;
-    private int spawnsRealizados;
-    private bool terminado;
-    private readonly List<SoulEnergyMovement> orbesVivos = new List<SoulEnergyMovement>();
+    // --- Internal state ---
+    private float _nextSpawnTimer;
+    private int _completedSpawns;
+    private bool _finished;
+    private readonly List<SoulEnergyMovement> _aliveSouls = new List<SoulEnergyMovement>();
+    private HealthStates _cachedHealthState = HealthStates.Amazing_100;
 
-    public bool Terminado => terminado;
-    public int SpawnsRealizados => spawnsRealizados;
+    // One-shot flags: each bonus can only trigger once per spawner lifetime
+    private bool _healthBonusGiven;
+    private bool _ammoBonusGiven;
+
+    public bool IsFinished => _finished;
+    public int CompletedSpawns => _completedSpawns;
+
+    // -------------------- Lifecycle --------------------
 
     private void OnEnable()
     {
-        terminado = false;
-        ProgramarProximoSpawn();
+        _finished = false;
+        _healthBonusGiven = false;
+        _ammoBonusGiven = false;
+
+        _cachedHealthState = Player_HealthSystem.CurrentHealthState;
+        Player_HealthSystem.OnHealthStateChanged += HandleHealthStateChanged;
+
+        ScheduleNextSpawn();
+    }
+
+    private void OnDisable()
+    {
+        Player_HealthSystem.OnHealthStateChanged -= HandleHealthStateChanged;
+    }
+
+    private void HandleHealthStateChanged(HealthStates newState)
+    {
+        _cachedHealthState = newState;
     }
 
     private void Start()
     {
-        ProgramarProximoSpawn();
+        ScheduleNextSpawn();
     }
 
     private void Update()
     {
-        if (terminado) return;
-        if (posiblesOrbes.Count == 0) return;
+        if (_finished) return;
+        if (_soulPrefab == null) return;
 
-        orbesVivos.RemoveAll(o => o == null || !o.gameObject.activeInHierarchy);
+        _aliveSouls.RemoveAll(s => s == null || !s.gameObject.activeInHierarchy);
 
-        if (maxSpawnsTotales >= 0 && spawnsRealizados >= maxSpawnsTotales)
+        if (_maxTotalSpawns >= 0 && _completedSpawns >= _maxTotalSpawns)
         {
-            Finalizar();
+            Finish();
             return;
         }
 
-        if (orbesVivos.Count >= maxOrbesVivos) return;
+        if (_aliveSouls.Count >= _maxAliveSouls) return;
 
-        timerProximoSpawn -= Time.deltaTime;
-        if (timerProximoSpawn <= 0f)
+        _nextSpawnTimer -= Time.deltaTime;
+        if (_nextSpawnTimer <= 0f)
         {
-            SpawnearOrbe();
-            ProgramarProximoSpawn();
+            SpawnSoul();
+            ScheduleNextSpawn();
         }
     }
 
-    private void ProgramarProximoSpawn()
+    private void ScheduleNextSpawn()
     {
-        timerProximoSpawn = Random.Range(intervaloMin, intervaloMax);
+        _nextSpawnTimer = Random.Range(_intervalMin, _intervalMax);
     }
 
-    private void SpawnearOrbe()
+    // -------------------- MAIN SPAWN --------------------
+
+    private void SpawnSoul()
     {
-        // 1. Elegir qué prefab spawnear
-        SoulEnergyMovement prefabElegido = ObtenerPrefabAleatorio();
+        Vector3 origin = _spawnPoint != null ? _spawnPoint.position : transform.position;
 
-        if (prefabElegido == null) return;
-
-        // 2. Calcular posición
-        Vector3 origen = puntoSpawn != null ? puntoSpawn.position : transform.position;
-        Vector3 offset = Random.insideUnitSphere * radioSpawn;
+        // 1) Standard soul (always)
+        Vector3 offset = Random.insideUnitSphere * _spawnRadius;
         offset.y = 0f;
 
-        // 3. Instanciar
-        SoulEnergyMovement orbe = Instantiate(
-            prefabElegido,
-            origen + offset,
-            Quaternion.identity
-        );
+        SoulEnergyMovement soul = Instantiate(_soulPrefab, origin + offset, Quaternion.identity);
+        _aliveSouls.Add(soul);
+        soul.AplicarImpulsoAleatorio(_impulseMin, _impulseMax, _impulseHorizontal);
+        _completedSpawns++;
 
-        orbesVivos.Add(orbe);
-        orbe.AplicarImpulsoAleatorio(impulsoMin, impulsoMax, impulsoHorizontal);
-
-        spawnsRealizados++;
+        // 2) Conditional bonuses (one-shot each)
+        TrySpawnBonusDrops(origin);
     }
 
-    // --- Lógica de selección ---
-    private SoulEnergyMovement ObtenerPrefabAleatorio()
+    // -------------------- CONDITIONAL BONUSES --------------------
+
+    private void TrySpawnBonusDrops(Vector3 origin)
     {
-        if (posiblesOrbes.Count == 0) return null;
-
-        // --- NUEVO: Comprobar si estamos en la fase de spawns garantizados ---
-        if (spawnsRealizados < spawnsGarantizadosDelMasPeso)
+        // --- HEALTH ---
+        if (_enableHealthBonusDrop && !_healthBonusGiven
+            && _healthBonusPrefab != null && _healthBonusAmountPerSpawn > 0)
         {
-            return ObtenerPrefabConMasPeso();
-        }
+            bool isLowHealth = _cachedHealthState >= _healthStateThreshold;
+            bool alreadyHasItem = HasAnyItem(_healthItemIDsToCheck);
 
-        // --- Lógica de probabilidad normal ---
-        float pesoTotal = 0f;
-        foreach (var drop in posiblesOrbes)
-        {
-            if (drop.prefab != null && drop.peso > 0)
-                pesoTotal += drop.peso;
-        }
-
-        if (pesoTotal <= 0f)
-        {
-            Debug.LogWarning("Todos los pesos son 0 o nulos. Devolviendo el primer prefab válido.");
-            return posiblesOrbes[0].prefab;
-        }
-
-        float randomValue = Random.Range(0f, pesoTotal);
-        float pesoAcumulado = 0f;
-
-        foreach (var drop in posiblesOrbes)
-        {
-            if (drop.prefab == null || drop.peso <= 0) continue;
-
-            pesoAcumulado += drop.peso;
-            if (randomValue <= pesoAcumulado)
+            if (isLowHealth && !alreadyHasItem && Random.value <= _healthBonusChance)
             {
-                return drop.prefab;
+                SpawnBonusSouls(_healthBonusPrefab, _healthBonusAmountPerSpawn, origin);
+                _healthBonusGiven = true;
+                Debug.Log("[SoulSpawner] Low health bonus granted (one-shot).");
             }
         }
 
-        return posiblesOrbes[0].prefab;
-    }
-
-    // --- NUEVO: Método para encontrar el prefab con el peso más alto ---
-    private SoulEnergyMovement ObtenerPrefabConMasPeso()
-    {
-        SoulEnergyMovement mejorPrefab = null;
-        float mayorPeso = -1f;
-
-        foreach (var drop in posiblesOrbes)
+        // --- AMMO ---
+        if (_enableAmmoBonusDrop && !_ammoBonusGiven
+            && _ammoBonusPrefab != null && _ammoBonusAmountPerSpawn > 0)
         {
-            if (drop.prefab != null && drop.peso > mayorPeso)
+            int currentAmmo = Inventory.Instance != null
+                ? Inventory.Instance.GetTotalAmmo()
+                : int.MaxValue;
+
+            bool isLowAmmo = currentAmmo <= _ammoThreshold;
+            bool alreadyHasItem = HasAnyItem(_ammoItemIDsToCheck);
+
+            if (isLowAmmo && !alreadyHasItem && Random.value <= _ammoBonusChance)
             {
-                mayorPeso = drop.peso;
-                mejorPrefab = drop.prefab;
+                SpawnBonusSouls(_ammoBonusPrefab, _ammoBonusAmountPerSpawn, origin);
+                _ammoBonusGiven = true;
+                Debug.Log("[SoulSpawner] Low ammo bonus granted (one-shot).");
             }
         }
-
-        // Si por alguna razón no encontró ninguno válido, devolvemos el primero (aunque sea nulo)
-        if (mejorPrefab == null && posiblesOrbes.Count > 0)
-        {
-            mejorPrefab = posiblesOrbes[0].prefab;
-        }
-
-        return mejorPrefab;
     }
 
-    private void Finalizar()
+    private void SpawnBonusSouls(SoulEnergyMovement prefab, int amount, Vector3 origin)
     {
-        terminado = true;
-        alTerminar?.Invoke();
-
-        if (destruirAlTerminar)
+        for (int i = 0; i < amount; i++)
         {
-            Destroy(gameObject);
-            return;
-        }
+            Vector3 offset = Random.insideUnitSphere * _spawnRadius;
+            offset.y = 0f;
 
-        if (desactivarAlTerminar)
-            enabled = false;
+            SoulEnergyMovement bonus = Instantiate(prefab, origin + offset, Quaternion.identity);
+            bonus.AplicarImpulsoAleatorio(_impulseMin, _impulseMax, _impulseHorizontal);
+            _aliveSouls.Add(bonus);
+        }
     }
 
-    // --- API pública ---
-
-    public void ForzarFin() => Finalizar();
-
-    public void Reiniciar()
+    private bool HasAnyItem(string[] itemIDs)
     {
-        spawnsRealizados = 0;
-        terminado = false;
+        if (itemIDs == null || itemIDs.Length == 0) return false;
+        if (Inventory.Instance == null) return false;
+
+        foreach (var id in itemIDs)
+            if (!string.IsNullOrEmpty(id) && Inventory.Instance.HasItem(id))
+                return true;
+
+        return false;
+    }
+
+    // -------------------- Finish / API --------------------
+
+    private void Finish()
+    {
+        _finished = true;
+        _onFinish?.Invoke();
+
+        if (_destroyOnFinish) { Destroy(gameObject); return; }
+        if (_disableOnFinish) enabled = false;
+    }
+
+    public void ForceFinish() => Finish();
+
+    public void Restart()
+    {
+        _completedSpawns = 0;
+        _finished = false;
+        _healthBonusGiven = false;
+        _ammoBonusGiven = false;
         enabled = true;
-        ProgramarProximoSpawn();
+        ScheduleNextSpawn();
     }
-
-    // --- Debug ---
 
     private void OnDrawGizmosSelected()
     {
-        if (!dibujarGizmos) return;
+        if (!_drawGizmos) return;
 
-        Vector3 origen = puntoSpawn != null ? puntoSpawn.position : transform.position;
+        Vector3 origin = _spawnPoint != null ? _spawnPoint.position : transform.position;
 
         Gizmos.color = new Color(1f, 0.6f, 0f, 0.4f);
-        Gizmos.DrawWireSphere(origen, radioSpawn);
+        Gizmos.DrawWireSphere(origin, _spawnRadius);
 
         Gizmos.color = Color.yellow;
-        const int pasos = 16;
-        for (int i = 0; i < pasos; i++)
+        const int steps = 16;
+        for (int i = 0; i < steps; i++)
         {
-            float ang = i * (360f / pasos) * Mathf.Deg2Rad;
-            Vector3 dir = new Vector3(Mathf.Cos(ang), 0f, Mathf.Sin(ang));
-            Gizmos.DrawRay(origen, dir * 1.2f);
+            float angle = i * (360f / steps) * Mathf.Deg2Rad;
+            Vector3 dir = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle));
+            Gizmos.DrawRay(origin, dir * 1.2f);
         }
     }
 }
