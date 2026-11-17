@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using System;
 
 public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
 {
@@ -40,6 +40,9 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     [SerializeField] private CameraShake _cameraShakeScript;
     [SerializeField] private Player_Damage playerDamageScript;
 
+    public static HealthStates CurrentHealthState { get; private set; } = HealthStates.Amazing_100;
+    public static event Action<HealthStates> OnHealthStateChanged;
+
     // --- INTEGRACIÓN CON EL INVENTARIO (OBSERVER PATTERN) ---
     private void OnEnable()
     {
@@ -74,6 +77,7 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     void Start()
     {
         _currentHealth = _maxHealth;
+        UpdateHealthState();
         SetUIElementsVisibility(false);
 
         if (_deathPanel != null) { _deathPanel.SetActive(false); }
@@ -134,14 +138,19 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     private void UpdateHealthState()
     {
         float percentage = (_currentHealth / _maxHealth) * 100f;
+        HealthStates previous = _healthState;
 
         if (percentage > 80) _healthState = HealthStates.Amazing_100;
         else if (percentage > 50) _healthState = HealthStates.Great_80;
         else if (percentage > 30) _healthState = HealthStates.Regular_50;
         else if (percentage > 20) _healthState = HealthStates.Low_30;
         else _healthState = HealthStates.Critic_20;
-    }
 
+        // NUEVO: sincronizar el estado global y avisar
+        CurrentHealthState = _healthState;
+        if (previous != _healthState)
+            OnHealthStateChanged?.Invoke(_healthState);
+    }
     private void ModifyUI()
     {
         _healthBarUIManager.ChangeHealthBarPercentage(_currentHealth / _maxHealth);
