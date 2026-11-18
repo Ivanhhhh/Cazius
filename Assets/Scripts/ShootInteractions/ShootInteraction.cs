@@ -24,8 +24,8 @@ public class ShootInteraction : MonoBehaviour, IShootable
     {
         if (_animator != null)
         {
-        _animator.keepAnimatorStateOnDisable = true;
-        _animator.writeDefaultValuesOnDisable = false;
+            _animator.keepAnimatorStateOnDisable = true;
+            _animator.writeDefaultValuesOnDisable = false;
         }
 
         if (_impactParticle != null)
@@ -38,11 +38,11 @@ public class ShootInteraction : MonoBehaviour, IShootable
     {
         if (_animator != null && _animTriggerName != null) { _animator.SetTrigger(_animTriggerName); }
 
-        if(_objToEnable != null)
+        if (_objToEnable != null)
         {
             _objToEnable.SetActive(true);
 
-            if (_objSpawnPos != null) { _objToEnable.transform.position = _objSpawnPos.transform.position;}
+            if (_objSpawnPos != null) { _objToEnable.transform.position = _objSpawnPos.transform.position; }
         }
 
         if (_objToDisable != null) { _objToDisable.SetActive(false); }

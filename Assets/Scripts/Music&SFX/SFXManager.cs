@@ -44,6 +44,7 @@ public class SFXManager : MonoBehaviour
         EnemyMeleeAttack,
         CasterAttack,
         DamageVoiceSFX,
+        NoDamageEye,
         // Add Categories here
     }
 

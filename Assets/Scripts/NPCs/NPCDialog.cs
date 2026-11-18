@@ -19,6 +19,7 @@ public class NPCDialog : MonoBehaviour, IEInteractable
 
     [Header("Interaction")]
     [SerializeField] private bool _rotateTowardsPlayer = true;
+    [SerializeField] private bool _playSound = true;
 
     [SerializeField] private Transform _interactionUIPoint;
     public Transform GetInteractionUIPoint()
@@ -28,7 +29,7 @@ public class NPCDialog : MonoBehaviour, IEInteractable
             : transform;
     }
 
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
     private NPCController _npcController;
     private Coroutine _rotateCoroutine;
     private static readonly int _idleVariantHash = Animator.StringToHash("IdleVariant");
@@ -37,7 +38,7 @@ public class NPCDialog : MonoBehaviour, IEInteractable
     {
         // Get components on the parent/root object
         _npcController = GetComponent<NPCController>();
-        _animator = GetComponentInChildren<Animator>();
+        //_animator = GetComponentInChildren<Animator>();
     }
 
     private void OnEnable()
@@ -66,7 +67,7 @@ public class NPCDialog : MonoBehaviour, IEInteractable
         if (_animator != null && !string.IsNullOrEmpty(_wavingTrigger))
             _animator.SetTrigger(_wavingTrigger);
 
-        if (SFXManager.Instance != null)
+        if (SFXManager.Instance != null && _playSound)
             SFXManager.Instance.PlaySFXAtPosition(_interactSFX, transform.position);
 
         DialogUIController.Instance.OpenDialog(

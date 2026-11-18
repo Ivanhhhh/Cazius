@@ -30,7 +30,7 @@ public class OpenTheDoor : MonoBehaviour, IEInteractable
         );
     }
 
-    private void OpenDoor(InputAction.CallbackContext context)
+    public void OpenDoor(InputAction.CallbackContext context)
     {
         if (!playerInside)
             return;
@@ -50,7 +50,7 @@ public class OpenTheDoor : MonoBehaviour, IEInteractable
 
         if (!isOpen)
         {
-             SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.DoorWoodOpenSFX,transform.position);
+            SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.DoorWoodOpenSFX, transform.position);
 
             Vector3 direction = player.position - transform.position;
 
@@ -67,7 +67,7 @@ public class OpenTheDoor : MonoBehaviour, IEInteractable
         }
         else
         {
-            SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.DoorWoodCloseSFX,transform.position);
+            SFXManager.Instance.PlaySFXAtPosition(SFXManager.SFXCategoryType.DoorWoodCloseSFX, transform.position);
 
             targetAngle = initialAngle;
             isOpen = false;
