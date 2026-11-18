@@ -1,80 +1,85 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NPCOneWayWalker : MonoBehaviour
 {
+    private enum RouteStage
+    {
+        MovingToB,
+        MovingToC
+    }
+
     [Header("Waypoints")]
-    [SerializeField] private Transform _pointA;
-    [SerializeField] private Transform _pointB;
+    [SerializeField] private List<Transform> _pointsA = new List<Transform>();
+    [SerializeField] private List<Transform> _pointsB = new List<Transform>();
+    [SerializeField] private List<Transform> _pointsC = new List<Transform>();
 
     [Header("Movement")]
-    [SerializeField] private float _moveSpeed = 2f;
+    [SerializeField] private float _minMoveSpeed = 1.5f;
+    [SerializeField] private float _maxMoveSpeed = 2.5f;
     [SerializeField] private float _turnSpeed = 120f;     // degrees/second
     [SerializeField] private float _acceleration = 4f;    // units/second^2
     [SerializeField] private float _arriveDistance = 0.15f;
-
-    [Header("Respawn Delay at Point B")]
-    [SerializeField] private float _minRespawnDelay = 2f;
-    [SerializeField] private float _maxRespawnDelay = 6f;
 
     [Header("Animation")]
     [SerializeField] private Animator _animator;
 
     private static readonly int _isWalkingHash = Animator.StringToHash("IsWalking");
 
+    private RouteStage _stage;
+    private Transform _currentTarget;
+    private float _currentMoveSpeed;
     private Vector3 _velocity;
-    private bool _isWaitingToRespawn;
-    private Coroutine _respawnCoroutine;
 
     private void Awake()
     {
         if (_animator == null)
             _animator = GetComponentInChildren<Animator>();
 
-        if (_pointA == null || _pointB == null)
-            Debug.LogWarning($"{name}: requires both Point A and Point B assigned.", this);
+        if (!HasValidWaypoints())
+            Debug.LogWarning($"{name}: requires at least 1 valid waypoint in Points A, B, and C.", this);
     }
 
     private void OnEnable()
     {
-        if (_pointA == null || _pointB == null)
+        if (!HasValidWaypoints())
         {
             enabled = false;
             return;
         }
 
-        SpawnAtPointA();
+        SpawnAtRandomA();
     }
 
     private void OnDisable()
     {
-        if (_respawnCoroutine != null)
-        {
-            StopCoroutine(_respawnCoroutine);
-            _respawnCoroutine = null;
-        }
-
-        _isWaitingToRespawn = false;
         _velocity = Vector3.zero;
         SetWalking(false);
     }
 
     private void Update()
     {
-        if (_isWaitingToRespawn) return;
+        if (_currentTarget == null) return;
 
-        Vector3 toTarget = _pointB.position - transform.position;
+        Vector3 toTarget = _currentTarget.position - transform.position;
         toTarget.y = 0f;
 
         if (toTarget.magnitude <= _arriveDistance)
         {
-            _respawnCoroutine = StartCoroutine(WaitAndRespawnRoutine());
+            if (_stage == RouteStage.MovingToB)
+            {
+                _stage = RouteStage.MovingToC;
+                _currentTarget = GetRandomPoint(_pointsC);
+            }
+            else
+            {
+                SpawnAtRandomA();
+            }
             return;
         }
 
         Vector3 desiredDir = toTarget.normalized;
 
-        // Smooth rotation toward Point B
         if (desiredDir != Vector3.zero)
         {
             Quaternion targetRot = Quaternion.LookRotation(desiredDir);
@@ -85,38 +90,53 @@ public class NPCOneWayWalker : MonoBehaviour
             );
         }
 
-        // Smooth acceleration forward
-        Vector3 desiredVelocity = transform.forward * _moveSpeed;
+        Vector3 desiredVelocity = transform.forward * _currentMoveSpeed;
         _velocity = Vector3.MoveTowards(_velocity, desiredVelocity, _acceleration * Time.deltaTime);
         transform.position += _velocity * Time.deltaTime;
     }
 
-    private IEnumerator WaitAndRespawnRoutine()
+    private void SpawnAtRandomA()
     {
-        _isWaitingToRespawn = true;
+        Transform pointA = GetRandomPoint(_pointsA);
+        Transform pointB = GetRandomPoint(_pointsB);
+
+        if (pointA == null || pointB == null) return;
+
+        _stage = RouteStage.MovingToB;
+        _currentTarget = pointB;
         _velocity = Vector3.zero;
-        SetWalking(false);
+        _currentMoveSpeed = Random.Range(_minMoveSpeed, Mathf.Max(_minMoveSpeed, _maxMoveSpeed));
 
-        float delay = Random.Range(_minRespawnDelay, Mathf.Max(_minRespawnDelay, _maxRespawnDelay));
-        yield return new WaitForSeconds(delay);
+        transform.position = pointA.position;
 
-        SpawnAtPointA();
-        _respawnCoroutine = null;
-    }
-
-    private void SpawnAtPointA()
-    {
-        _isWaitingToRespawn = false;
-        _velocity = Vector3.zero;
-
-        transform.position = _pointA.position;
-
-        Vector3 initialDir = _pointB.position - _pointA.position;
+        Vector3 initialDir = pointB.position - pointA.position;
         initialDir.y = 0f;
         if (initialDir != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(initialDir);
 
         SetWalking(true);
+    }
+
+    private Transform GetRandomPoint(List<Transform> points)
+    {
+        if (points == null || points.Count == 0) return null;
+
+        int startIndex = Random.Range(0, points.Count);
+        for (int i = 0; i < points.Count; i++)
+        {
+            Transform candidate = points[(startIndex + i) % points.Count];
+            if (candidate != null)
+                return candidate;
+        }
+
+        return null;
+    }
+
+    private bool HasValidWaypoints()
+    {
+        return GetRandomPoint(_pointsA) != null
+            && GetRandomPoint(_pointsB) != null
+            && GetRandomPoint(_pointsC) != null;
     }
 
     private void SetWalking(bool isWalking)
