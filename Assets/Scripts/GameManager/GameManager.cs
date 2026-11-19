@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
 
     public InventoryUI inventoryUI;
 
+    public UISensitivityManager sensitivityManager;
+
     public bool gunActive = false;
 
     private void Awake()
