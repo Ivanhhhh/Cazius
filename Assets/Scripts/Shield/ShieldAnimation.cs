@@ -21,6 +21,24 @@ public class ShieldAnimation : MonoBehaviour
 
     private bool isEnable = false;
 
+    private void Awake()
+    {
+        animatior.keepAnimatorStateOnDisable = true;
+        animatior.writeDefaultValuesOnDisable = false;
+    }
+
+    private void OnEnable()
+    {
+        if (BossFightManager.Instance != null)
+            BossFightManager.Instance.SwapPhase += OnSwapPhase;
+    }
+
+    private void OnDisable()
+    {
+        if (BossFightManager.Instance != null)
+            BossFightManager.Instance.SwapPhase -= OnSwapPhase;
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (isEnable) return;
@@ -36,7 +54,11 @@ public class ShieldAnimation : MonoBehaviour
             animatior.SetTrigger("Enable");
         }
     }
-
+    private void OnSwapPhase()
+    {
+        if (animatior != null)
+            animatior.SetTrigger("Disable");
+    }
 
 
     IEnumerator waitEffects()
