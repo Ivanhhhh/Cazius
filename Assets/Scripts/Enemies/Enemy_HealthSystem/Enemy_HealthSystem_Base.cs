@@ -98,6 +98,7 @@ public class Enemy_HealthSystem_Base : MonoBehaviour, Enemy_Interface_Damage
  
     private IEnumerator FinalizeDeathRoutine()
     {
+        BossFightManager.Instance.TriggerDie();
         _ThroneBossVisuals.Despawn();
         _soulSpawner.SetActive(true);
         if (_deathDelay > 0f)
