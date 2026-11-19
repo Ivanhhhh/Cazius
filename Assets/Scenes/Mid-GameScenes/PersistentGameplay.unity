@@ -17069,6 +17069,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 686788152}
   m_Mesh: {fileID: 1273371391728916064, guid: b5e59165a8cfa12419904784a1f9bc94, type: 3}
+--- !u!114 &688456327 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7476170225939602253, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+  m_PrefabInstance: {fileID: 9174304713106157729}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9174304713106157733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b898d3dce7eca0648b1bb61461b3fb76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteract
 --- !u!1 &692575326
 GameObject:
   m_ObjectHideFlags: 0
@@ -51960,6 +51971,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!114 &4688503463126037731 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5564336783836771240, guid: 257ce3dca2d2bae439954723c92af1b5, type: 3}
+  m_PrefabInstance: {fileID: 4688503463126037727}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &4688503463126037732 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5419535052027768598, guid: 257ce3dca2d2bae439954723c92af1b5, type: 3}
+  m_PrefabInstance: {fileID: 4688503463126037727}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!114 &4688503463126037733 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1566110719695748441, guid: 257ce3dca2d2bae439954723c92af1b5, type: 3}
+  m_PrefabInstance: {fileID: 4688503463126037727}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &4833458099931756981
 GameObject:
   m_ObjectHideFlags: 0
@@ -54384,6 +54428,18 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _camera
+      value: 
+      objectReference: {fileID: 9174304713106157731}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _animator
+      value: 
+      objectReference: {fileID: 372027585}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _cameraTilt
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: _deathPanel
       value: 
       objectReference: {fileID: 1600558141}
@@ -54403,6 +54459,42 @@ PrefabInstance:
       propertyPath: playerDamageScript
       value: 
       objectReference: {fileID: 1881007046}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _deathTmpTexts.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: '_deathTmpTexts.Array.data[0]'
+      value: 
+      objectReference: {fileID: 4688503463126037731}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: '_deathTmpTexts.Array.data[1]'
+      value: 
+      objectReference: {fileID: 4688503463126037733}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _scriptsToDisable.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: _deathCanvasImages.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: '_scriptsToDisable.Array.data[0]'
+      value: 
+      objectReference: {fileID: 688456327}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: '_scriptsToDisable.Array.data[1]'
+      value: 
+      objectReference: {fileID: 9174304713106157754}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: '_scriptsToDisable.Array.data[2]'
+      value: 
+      objectReference: {fileID: 9174304713106157753}
+    - target: {fileID: 1222896182196848814, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
+      propertyPath: '_deathCanvasImages.Array.data[0]'
+      value: 
+      objectReference: {fileID: 4688503463126037732}
     - target: {fileID: 1302669518402502756, guid: 9c4c56f54ee934c42b6e373ed4aa0e70, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1

@@ -30,6 +30,8 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     [SerializeField] private string _sceneToLoadAfterDeath = "MainMenu";
     [SerializeField] private GameObject _deathPanel;
     [SerializeField] private Image _deathFadeImage;
+    [SerializeField] private TMP_Text[] _deathTmpTexts;
+    [SerializeField] private Image[] _deathCanvasImages;
     [SerializeField] private float _fadeDuration = 2.0f;
     [SerializeField] private float _delayBeforeLoad = 2000.0f;
 
@@ -39,6 +41,14 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     private Coroutine _hideUICoroutine;
     [SerializeField] private CameraShake _cameraShakeScript;
     [SerializeField] private Player_Damage playerDamageScript;
+
+    [Header("Death Visuals")]
+    [SerializeField] private Animator _animator;
+    [SerializeField] private MonoBehaviour[] _scriptsToDisable;
+    [SerializeField] private Camera _camera;
+    [SerializeField] private float _cameraTilt;
+
+    private bool _deathHappened = false;
 
     public static HealthStates CurrentHealthState { get; private set; } = HealthStates.Amazing_100;
     public static event Action<HealthStates> OnHealthStateChanged;
@@ -193,11 +203,20 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
     {
         this.enabled = false;
         if (_deathPanel != null) { _deathPanel.SetActive(true); }
+        if (_deathHappened) { return; }
+        GameInputManager.Instance.Controls.Player.Disable();
         StartCoroutine(DeathSequenceRoutine());
+        _animator.SetBool("Die", true);
+        foreach (MonoBehaviour script in _scriptsToDisable)
+        {
+            script.enabled = false;
+        }
     }
 
     private IEnumerator DeathSequenceRoutine()
     {
+        _deathHappened = true;
+
         float elapsedTime = 0f;
 
         if (_deathFadeImage != null)
@@ -208,11 +227,30 @@ public class Player_HealthSystem : MonoBehaviour, IPlayerHitable
             float startAlpha = 0f;
             float endAlpha = 1f;
 
+            float camOriginRotation = _camera.transform.rotation.x;
+            float camFinalRotation = camOriginRotation + _cameraTilt;
+            //Quaternion camTarget = Quaternion.Euler(camFinalRotation, _camera.transform.rotation.y, _camera.transform.rotation.z);
+            Quaternion camTarget = Quaternion.Euler(camFinalRotation, -camFinalRotation, _camera.transform.rotation.z);
+
+            Transform camOriginPos = _camera.GetComponent<Transform>();
+
             while (elapsedTime < _fadeDuration)
             {
+                GameInputManager.Instance.Controls.Player.Disable();
                 elapsedTime += Time.deltaTime;
                 float newAlpha = Mathf.Lerp(startAlpha, endAlpha, elapsedTime / _fadeDuration);
                 _deathFadeImage.color = new Color(initialColor.r, initialColor.g, initialColor.b, newAlpha);
+
+                foreach (var img in _deathCanvasImages)
+                {
+                    img.color = new Color(img.color.r, img.color.g, img.color.b, newAlpha);
+                }
+                foreach (var txt in _deathTmpTexts)
+                {
+                    txt.alpha = newAlpha;
+                }
+
+                _camera.transform.rotation = Quaternion.Slerp(_camera.transform.rotation, camTarget, Time.deltaTime * 0.2f);
                 yield return null;
             }
             _deathFadeImage.color = new Color(initialColor.r, initialColor.g, initialColor.b, endAlpha);
