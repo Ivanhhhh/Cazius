@@ -79,13 +79,10 @@ public class Enemy_OrbitEnemyAngelPhaseAttackBehaviour : Enemy_OrbitEnemyAngelPh
     // --- AQUÍ ESTÁ EL CAMBIO: Ejecución secuencial directa ---
     protected override void OnSecondWaitEntered()
     {
-        // 1. Cambiamos el modelo
         SwapModels();
 
-        // 2. Spawneamos el trono
         SpawnThrone();
 
-        // 3. Activamos el láser
         PlayLaser();
     }
 
@@ -104,6 +101,7 @@ public class Enemy_OrbitEnemyAngelPhaseAttackBehaviour : Enemy_OrbitEnemyAngelPh
     private void SpawnThrone()
     {
         if (_orbitData.ThroneVisuals != null) _orbitData.ThroneVisuals.Spawn();
+        BossFightManager.Instance.TriggerSwapPhase();
     }
 
     private void PlayLaser()
