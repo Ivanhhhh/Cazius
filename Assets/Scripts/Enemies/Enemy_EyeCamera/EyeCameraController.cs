@@ -109,8 +109,14 @@ public class EyeCameraController : MonoBehaviour, IShootable
             _shieldRoutine = null;
         }
 
-        if (_shield != null)
-            _shield.SetActive(false);
+        if (_shieldMaterial != null)
+            _shieldMaterial.SetFloat(DepthOffsetID, DefaultDepthOffset);
+
+    }
+    private void OnDestroy()
+    {
+        if (_shieldMaterial != null)
+            Destroy(_shieldMaterial);
     }
 
 
@@ -414,30 +420,91 @@ public class EyeCameraController : MonoBehaviour, IShootable
     }
 
     [Header("Shield")]
-    [SerializeField] private GameObject _shield;
+    [SerializeField] private Renderer _shieldRenderer;
     [SerializeField] private float _shieldDuration = 3f;
+    [SerializeField] private float _shieldFadeInDuration = 0.15f;
+    [SerializeField] private float _shieldFadeOutDuration = 0.85f;
+    [SerializeField] private float _shieldActiveOffset = 0.33f;
 
+    private const float DefaultDepthOffset = 1f;
+    private static readonly int DepthOffsetID = Shader.PropertyToID("_Depth_Offset");
+
+    private Material _shieldMaterial;
     private Coroutine _shieldRoutine;
+
+    private void Awake()
+    {
+        if (_shieldRenderer == null)
+            return;
+
+        _shieldMaterial = _shieldRenderer.material;
+
+        _shieldMaterial.SetFloat(DepthOffsetID, DefaultDepthOffset);
+    }
+
     public void TakeDamage(float amount)
     {
-        if (_shield == null)
+        if (_shieldMaterial == null)
             return;
 
         if (_shieldRoutine != null)
-            StopCoroutine(_shieldRoutine);
+            return;
 
         _shieldRoutine = StartCoroutine(ShieldRoutine());
     }
 
     private IEnumerator ShieldRoutine()
     {
-        _shield.SetActive(true);
+        SFXManager.Instance?.PlaySFXAtPosition(
+            SFXManager.SFXCategoryType.NoDamageEye,
+            transform.position
+        );
 
-        SFXManager.Instance?.PlaySFXAtPosition(SFXManager.SFXCategoryType.NoDamageEye, transform.position);
+        float holdDuration = Mathf.Max(
+            0f,
+            _shieldDuration - _shieldFadeInDuration - _shieldFadeOutDuration
+        );
 
-        yield return new WaitForSeconds(_shieldDuration);
+        float startOffset = _shieldMaterial.GetFloat(DepthOffsetID);
+        float elapsed = 0f;
 
-        _shield.SetActive(false);
+        while (elapsed < _shieldFadeInDuration)
+        {
+            elapsed += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapsed / _shieldFadeInDuration);
+
+            _shieldMaterial.SetFloat(
+                DepthOffsetID,
+                Mathf.Lerp(startOffset, _shieldActiveOffset, t)
+            );
+
+            yield return null;
+        }
+
+        _shieldMaterial.SetFloat(DepthOffsetID, _shieldActiveOffset);
+
+        yield return new WaitForSeconds(holdDuration);
+
+        elapsed = 0f;
+
+        while (elapsed < _shieldFadeOutDuration)
+        {
+            elapsed += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapsed / _shieldFadeOutDuration);
+
+            _shieldMaterial.SetFloat(
+                DepthOffsetID,
+                Mathf.Lerp(_shieldActiveOffset, DefaultDepthOffset, t)
+            );
+
+            yield return null;
+        }
+
+        _shieldMaterial.SetFloat(DepthOffsetID, DefaultDepthOffset);
+
         _shieldRoutine = null;
     }
+
 }
