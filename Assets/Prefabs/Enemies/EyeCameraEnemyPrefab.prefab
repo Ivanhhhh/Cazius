@@ -72,8 +72,11 @@ MonoBehaviour:
   _damageAmount: 10
   _damageInterval: 1.5
   _visuals: {fileID: 4413823998581024142}
-  _shield: {fileID: 3245446252433067127}
+  _shieldRenderer: {fileID: 2058482497147609162}
   _shieldDuration: 3
+  _shieldFadeInDuration: 0.3
+  _shieldFadeOutDuration: 0.85
+  _shieldActiveOffset: 0.33
 --- !u!114 &4413823998581024142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,14 +204,13 @@ GameObject:
   - component: {fileID: 580645336013463869}
   - component: {fileID: 3262502067864853363}
   - component: {fileID: 2058482497147609162}
-  - component: {fileID: 6551435860571847769}
   m_Layer: 12
   m_Name: Forceshield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &580645336013463869
 Transform:
   m_ObjectHideFlags: 0
@@ -281,27 +283,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &6551435860571847769
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3245446252433067127}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3850161571186984559
 GameObject:
   m_ObjectHideFlags: 0
