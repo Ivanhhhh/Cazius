@@ -58,7 +58,7 @@ public class SetQuality : MonoBehaviour,IQualitySetter
         int savedQuality = _loadConfig.Load();
         QualitySettings.SetQualityLevel(savedQuality, true);
     }
-
+    
     public void QualitySetter(int index)
     {
         if (index < 0 || index >= QualitySettings.names.Length) return;

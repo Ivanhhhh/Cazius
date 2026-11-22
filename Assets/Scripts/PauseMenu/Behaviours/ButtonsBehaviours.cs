@@ -7,10 +7,12 @@ public class ButtonsBehaviours : MonoBehaviour
     [SerializeField] GameObject RebindPanel;
     [SerializeField] PauseInputHandler _PauseInputHandler;
     [SerializeField] GameObject SoundConfigPanel;
+    [SerializeField] GameObject GameplayConfigPanel;
     [SerializeField] GameObject ConfirmPopPanel;
 
     [SerializeField] Button _ResumeButton;
     [SerializeField] Button _SoundConfigfButton;
+    [SerializeField] Button _GameplayConfigButton;
     [SerializeField] Button _QuitGameButton;
     [SerializeField] Button _RebindButton;
     [SerializeField] Button _ConfirmPopButtonYES;
@@ -22,6 +24,7 @@ public class ButtonsBehaviours : MonoBehaviour
         _SoundConfigfButton.onClick.AddListener(SoundConfig);
         _QuitGameButton.onClick.AddListener(ShowConfirmationPopup);
         _RebindButton.onClick.AddListener(RebindPanelMethod);
+        _GameplayConfigButton.onClick.AddListener(GameplayConfig);
 
         _ConfirmPopButtonYES.onClick.AddListener(QuitGame);
         _ConfirmPopButtonNO.onClick.AddListener(CloseConfirmationPopup);
@@ -45,14 +48,25 @@ public class ButtonsBehaviours : MonoBehaviour
     {
         RebindPanel.SetActive(false);
         ConfirmPopPanel.SetActive(false);
+        GameplayConfigPanel.SetActive(false);
 
         SoundConfigPanel.SetActive(!SoundConfigPanel.activeSelf);
+    }
+
+    public void GameplayConfig()
+    {
+        RebindPanel.SetActive(false);
+        ConfirmPopPanel.SetActive(false);
+        SoundConfigPanel.SetActive(false);
+
+        GameplayConfigPanel.SetActive(!GameplayConfigPanel.activeSelf);
     }
 
     public void RebindPanelMethod()
     {
         SoundConfigPanel.SetActive(false);
         ConfirmPopPanel.SetActive(false);
+        GameplayConfigPanel.SetActive(false);
 
         RebindPanel.SetActive(!RebindPanel.activeSelf);
     }
@@ -61,6 +75,7 @@ public class ButtonsBehaviours : MonoBehaviour
     {
         RebindPanel.SetActive(false);
         SoundConfigPanel.SetActive(false);
+        GameplayConfigPanel.SetActive(false);
 
         ConfirmPopPanel.SetActive(true);
     }
@@ -75,6 +90,7 @@ public class ButtonsBehaviours : MonoBehaviour
         RebindPanel.SetActive(false);
         SoundConfigPanel.SetActive(false);
         ConfirmPopPanel.SetActive(false);
+        GameplayConfigPanel.SetActive(false);
     }
 
     public void QuitGame()

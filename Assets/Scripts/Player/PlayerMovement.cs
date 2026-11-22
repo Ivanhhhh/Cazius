@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask _cameraCollisionMask;
     [SerializeField] private float _mouseSensitivityY = 0.15f;
     [SerializeField] private float _mouseSensitivityX = 0.75f;
+    private float _sensMult = 1.0f;
     [SerializeField] private float _minPitch = -40f;
     [SerializeField] private float _maxPitch = 40f;
     [SerializeField] private float _cameraVerticalTilt = 0.3f;
@@ -166,6 +167,7 @@ public class PlayerMovement : MonoBehaviour
         // Liberar la petición de visibilidad para no dejar la UI colgada
         if (_ammoUI != null)
             _ammoUI.RequestHide(this);
+        UISensitivityManager.OnSensitivityChanged -= UpdateSensMult;
     }
 
     private void Update()
@@ -271,14 +273,24 @@ public class PlayerMovement : MonoBehaviour
 
         HandleVisualAimRotation();
     }
+    private void OnEnable()
+    {
+        _sensMult = UISensitivityManager.GetSensitivityMult();
+
+        UISensitivityManager.OnSensitivityChanged += UpdateSensMult;
+    }
+    private void UpdateSensMult(float mult)
+    {
+        _sensMult = mult;
+    }
 
     void HandleLook()
     {
         if (_inventoryCameraLocked)
             return;
 
-        float mouseX = _lookInput.x * _mouseSensitivityX;
-        float mouseY = _lookInput.y * _mouseSensitivityY;
+        float mouseX = _lookInput.x * (_mouseSensitivityX * _sensMult);
+        float mouseY = _lookInput.y * (_mouseSensitivityY * _sensMult);
 
         _yaw += mouseX;
 
