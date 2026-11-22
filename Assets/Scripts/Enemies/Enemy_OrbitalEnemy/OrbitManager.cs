@@ -22,14 +22,19 @@ public class OrbitManager : MonoBehaviour
     [SerializeField] private float _originalSharedSpeed;
     [SerializeField] private Coroutine _speedBoostCoroutine;
 
-    public bool HasProjectiles => _orbitingObjects.Count > 0;
+    public bool HasProjectiles
+    {
+        get
+        {
+            if (RemoveDestroyed()) RearrangeOrbit();
+            return _orbitingObjects.Count > 0;
+        }
+    }
 
     void Start()
     {
-        // Si olvidaste asignarlo en el Inspector, usa su propio Transform
         if (_centerPoint == null) _centerPoint = transform;
 
-        // Le damos inclinación a cualquier objeto que hayas puesto manualmente antes de darle a Play
         foreach (var obj in _orbitingObjects)
         {
             ApplyRandomTilt(obj);
@@ -40,7 +45,22 @@ public class OrbitManager : MonoBehaviour
 
     public OrbitMovement GetNextProjectile()
     {
-        return HasProjectiles ? _orbitingObjects[0] : null;
+        if (RemoveDestroyed()) RearrangeOrbit();
+        return _orbitingObjects.Count > 0 ? _orbitingObjects[0] : null;
+    }
+
+    private bool RemoveDestroyed()
+    {
+        bool removed = false;
+        for (int i = _orbitingObjects.Count - 1; i >= 0; i--)
+        {
+            if (_orbitingObjects[i] == null)
+            {
+                _orbitingObjects.RemoveAt(i);
+                removed = true;
+            }
+        }
+        return removed;
     }
 
     public void AddProjectileToOrbit(OrbitMovement newObj)
@@ -64,6 +84,7 @@ public class OrbitManager : MonoBehaviour
 
     public void RearrangeOrbit()
     {
+        RemoveDestroyed();
         int totalObjects = _orbitingObjects.Count;
 
         for (int i = 0; i < totalObjects; i++)
@@ -80,9 +101,7 @@ public class OrbitManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Genera un Vector3 aleatorio entre los mínimos y máximos y se lo aplica a la bala.
-    /// </summary>
+
     private void ApplyRandomTilt(OrbitMovement obj)
     {
         if (_randomizeTilt && obj != null)
@@ -128,6 +147,7 @@ public class OrbitManager : MonoBehaviour
     }
     public void FireAllAsBullets(Vector3 targetPosition, float bulletSpeed)
     {
+        RemoveDestroyed();
         if (_orbitingObjects.Count == 0) return;
 
         // Copia para no romper el foreach cuando cada uno se remueva de la lista.

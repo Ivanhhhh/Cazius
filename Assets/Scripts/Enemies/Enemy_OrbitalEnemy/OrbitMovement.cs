@@ -55,9 +55,6 @@ public class OrbitMovement : MonoBehaviour
         _propBlock = new MaterialPropertyBlock();
     }
 
-    // =========================================================
-    // INICIALIZACIÓN (al crear o sacar del pool)
-    // =========================================================
     public void InitializeOrbit(float startingAngle, OrbitManager manager)
     {
         _currentAngle = startingAngle;
@@ -67,10 +64,8 @@ public class OrbitMovement : MonoBehaviour
         _isCharging = false;
         _rb.isKinematic = true;
 
-        // Shader al valor inicial (1)
         SetSliderValue(_sliderStartValue);
 
-        // VFX detenido y reseteado (no emite nada)
         if (_chargeVFX != null)
         {
             _chargeVFX.SetActive(false);
@@ -108,9 +103,11 @@ public class OrbitMovement : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(directionToCenter);
     }
 
-    // =========================================================
-    // FIRE: activa VFX + anima shader + dispara al terminar
-    // =========================================================
+    private void OnDestroy()
+    {
+        if (_manager != null)
+            _manager.RemoveFromOrbit(this);
+    }
     public void FireAsBullet(Vector3 targetPosition, float bulletSpeed)
     {
         if (_isBullet || _isCharging) return;
