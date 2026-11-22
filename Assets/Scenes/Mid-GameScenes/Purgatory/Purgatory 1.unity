@@ -364697,6 +364697,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 416188592123036318, guid: 57b25d1ad12e4d343bd522a1f7408449, type: 3}
   m_PrefabInstance: {fileID: 641176366}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &641291044 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8852716708499081554, guid: 71860956af479144bb1eb339204c65ee, type: 3}
+  m_PrefabInstance: {fileID: 1242308987}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &641298479
 GameObject:
   m_ObjectHideFlags: 0
@@ -697349,6 +697354,14 @@ PrefabInstance:
       propertyPath: m_RenderingLayerMask
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 8852716708499081554, guid: 71860956af479144bb1eb339204c65ee, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852716708499081554, guid: 71860956af479144bb1eb339204c65ee, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f3e1122d9d84bd0419f212244802b658, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -697359,6 +697372,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7019505121102830356, guid: 71860956af479144bb1eb339204c65ee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1242308991}
+    - targetCorrespondingSourceObject: {fileID: 7019505121102830356, guid: 71860956af479144bb1eb339204c65ee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1242308993}
   m_SourcePrefab: {fileID: 100100000, guid: 71860956af479144bb1eb339204c65ee, type: 3}
 --- !u!4 &1242308988 stripped
 Transform:
@@ -697413,6 +697429,22 @@ MonoBehaviour:
   _interactText: F
   sfxType: 9
   _interactionUIPoint: {fileID: 1242308989}
+--- !u!114 &1242308993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242308990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00e290506cd951408e5b0f39b78388b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemOverlayScan
+  _renderers:
+  - renderer: {fileID: 641291044}
+    materialIndex: 1
+  _transitionDuration: 0.5
 --- !u!1001 &1242363715
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1235044,6 +1235076,10 @@ PrefabInstance:
     - target: {fileID: 3798134806079373871, guid: 09313064161564a4a856937a86e237dc, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.40681118
+      objectReference: {fileID: 0}
+    - target: {fileID: 3798134806079373871, guid: 09313064161564a4a856937a86e237dc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -40.351
       objectReference: {fileID: 0}
     - target: {fileID: 6091665117743246349, guid: 09313064161564a4a856937a86e237dc, type: 3}
       propertyPath: m_LocalPosition.x

@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 7845306406324477464}
   - component: {fileID: 8421862742040150490}
   - component: {fileID: -567879384670150042}
+  - component: {fileID: 3842151239242107775}
   m_Layer: 0
   m_Name: Ammo
   m_TagString: Untagged
@@ -257,6 +258,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3842151239242107775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4311794889909782809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00e290506cd951408e5b0f39b78388b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemOverlayScan
+  _renderers:
+  - renderer: {fileID: 798996425569491995}
+    materialIndex: 4
+  _transitionDuration: 0.5
 --- !u!1 &4488081150453549073
 GameObject:
   m_ObjectHideFlags: 0
@@ -525,11 +542,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: AmmoBox
       objectReference: {fileID: 0}
+    - target: {fileID: 4837419525713787210, guid: 18dd3c35792bc48449196db5b6f95310, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4837419525713787210, guid: 18dd3c35792bc48449196db5b6f95310, type: 3}
+      propertyPath: 'm_Materials.Array.data[4]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f3e1122d9d84bd0419f212244802b658, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18dd3c35792bc48449196db5b6f95310, type: 3}
+--- !u!23 &798996425569491995 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4837419525713787210, guid: 18dd3c35792bc48449196db5b6f95310, type: 3}
+  m_PrefabInstance: {fileID: 5203747095920846161}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5745982984690352826 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 18dd3c35792bc48449196db5b6f95310, type: 3}

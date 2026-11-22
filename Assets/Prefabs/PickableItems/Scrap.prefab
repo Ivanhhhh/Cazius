@@ -99,6 +99,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 74096789eefd68d478934901fd36e09b, type: 2}
+  - {fileID: 2100000, guid: f3e1122d9d84bd0419f212244802b658, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -183,9 +184,17 @@ PrefabInstance:
       value: 45.423004
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 67832057b8c3bb149bc017779c7e0ad6, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 67832057b8c3bb149bc017779c7e0ad6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: aec1b9f7ca3b3644aa379c108f1029c8, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 67832057b8c3bb149bc017779c7e0ad6, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f3e1122d9d84bd0419f212244802b658, type: 2}
     - target: {fileID: 919132149155446097, guid: 67832057b8c3bb149bc017779c7e0ad6, type: 3}
       propertyPath: m_Name
       value: Scrap
@@ -209,7 +218,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 67832057b8c3bb149bc017779c7e0ad6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3028497558686740632}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 67832057b8c3bb149bc017779c7e0ad6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2138716228434803271}
   m_SourcePrefab: {fileID: 100100000, guid: 67832057b8c3bb149bc017779c7e0ad6, type: 3}
+--- !u!23 &4652716490091428935 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 67832057b8c3bb149bc017779c7e0ad6, type: 3}
+  m_PrefabInstance: {fileID: 6291618147667730627}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5826224307337922344 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 67832057b8c3bb149bc017779c7e0ad6, type: 3}
@@ -233,6 +250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickableItem
   _itemScriptableObject: {fileID: 11400000, guid: 33d5c6a2c4a26c645b85e9080f8eea8c, type: 2}
+  _quantityOverride: -1
   _interactText: F to Pick Scrap
   sfxType: 9
   _interactionUIPoint: {fileID: 0}
@@ -305,3 +323,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.20057984, y: 0.18004827, z: 0.04917775}
   m_Center: {x: -0.017571803, y: -0.0046061464, z: 0.0067418264}
+--- !u!114 &2138716228434803271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6598117116278201746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00e290506cd951408e5b0f39b78388b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemOverlayScan
+  _renderers:
+  - renderer: {fileID: 4652716490091428935}
+    materialIndex: 1
+  - renderer: {fileID: 8708470419720464732}
+    materialIndex: 1
+  _transitionDuration: 0.5
