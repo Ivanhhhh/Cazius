@@ -342,6 +342,7 @@ GameObject:
   - component: {fileID: 8684394394383095781}
   - component: {fileID: 7565854074509952173}
   - component: {fileID: 2637666841625034061}
+  - component: {fileID: 5689750538997955337}
   m_Layer: 12
   m_Name: Enemy_FlyingCasterEnemy
   m_TagString: Untagged
@@ -615,6 +616,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_ShakeDamage
   preset: {fileID: 7565854074509952173}
+--- !u!114 &5689750538997955337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6014290536835819705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00e290506cd951408e5b0f39b78388b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemOverlayScan
+  _renderers:
+  - renderer: {fileID: 6029004024301784738}
+    materialIndex: 1
+  _transitionDuration: 0.5
 --- !u!1001 &64490185409464641
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -635,6 +652,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 2ed3f055fb7d02d458970a75c97a17b8, type: 2}
+    - target: {fileID: 6002821445703174115, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6002821445703174115, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f3e1122d9d84bd0419f212244802b658, type: 2}
     - target: {fileID: 7072619123669147002, guid: e3afa791b004cfc4a977ea7289127859, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 

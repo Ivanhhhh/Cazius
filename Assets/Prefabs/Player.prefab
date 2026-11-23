@@ -1083,6 +1083,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraShakeManager
   _shakePivot: {fileID: 7908029334560162940}
+  _rotationMultiplier: 12
+  _pitchAmount: 0.15
+  _yawAmount: 0.15
+  _rollAmount: 1
+  _noiseSpeed: 20
+  _continuousFadeSpeed: 3
 --- !u!1 &2571330640586742583
 GameObject:
   m_ObjectHideFlags: 0
@@ -3071,11 +3077,17 @@ MonoBehaviour:
   _sceneToLoadAfterDeath: MainMenu
   _deathPanel: {fileID: 0}
   _deathFadeImage: {fileID: 0}
+  _deathTmpTexts: []
+  _deathCanvasImages: []
   _fadeDuration: 4
   _delayBeforeLoad: 2000
   _parryScript: {fileID: 2201994483692894092}
   _cameraShakeScript: {fileID: 3064759768836522971}
   playerDamageScript: {fileID: 0}
+  _animator: {fileID: 0}
+  _scriptsToDisable: []
+  _camera: {fileID: 0}
+  _cameraTilt: 0
 --- !u!114 &5220773759243473399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7381,7 +7393,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3132319194499212287, guid: 7951a8f7385c1e8498e1506506bd2b62, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 10.654283
+      value: 0.0005987205
       objectReference: {fileID: 0}
     - target: {fileID: 3147176165316493351, guid: 7951a8f7385c1e8498e1506506bd2b62, type: 3}
       propertyPath: m_Layer
@@ -7597,7 +7609,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6920110668500615365, guid: 7951a8f7385c1e8498e1506506bd2b62, type: 3}
       propertyPath: m_Size
-      value: 0.9741024
+      value: 0.99976724
       objectReference: {fileID: 0}
     - target: {fileID: 6934563271249733059, guid: 7951a8f7385c1e8498e1506506bd2b62, type: 3}
       propertyPath: m_Layer

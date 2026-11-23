@@ -9454,6 +9454,7 @@ GameObject:
   - component: {fileID: 758454031172152826}
   - component: {fileID: 8827346932092847336}
   - component: {fileID: 3050494715488608739}
+  - component: {fileID: 1641712667757872607}
   m_Layer: 12
   m_Name: Enemy_MeleeEnemy(WIthSpawn)
   m_TagString: Untagged
@@ -9887,6 +9888,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba5516fb75484ab4b8bc83a7ff592f60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DestroyOnEdenSwap
+--- !u!114 &1641712667757872607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3884849601280153241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00e290506cd951408e5b0f39b78388b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemOverlayScan
+  _renderers:
+  - renderer: {fileID: 1701815164904643761}
+    materialIndex: 2
+  _transitionDuration: 0.5
 --- !u!1 &3928488622556137293
 GameObject:
   m_ObjectHideFlags: 0
@@ -16910,7 +16927,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1630794972795428178, guid: 6f85c9d1f276ace47909a398650affb8, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1630794972795428178, guid: 6f85c9d1f276ace47909a398650affb8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -16920,6 +16937,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
       objectReference: {fileID: 2100000, guid: 5eb1ef9cdd4dcac48b05f939e4573937, type: 2}
+    - target: {fileID: 1630794972795428178, guid: 6f85c9d1f276ace47909a398650affb8, type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 95e3648bd90e68e4eb2d2ee2e6c374e6, type: 2}
     - target: {fileID: 1720703483675409477, guid: 6f85c9d1f276ace47909a398650affb8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 9.112719

@@ -859,6 +859,7 @@ GameObject:
   - component: {fileID: 2404139404534545585}
   - component: {fileID: 4497616198131087430}
   - component: {fileID: 1869195219250182621}
+  - component: {fileID: 136647023701817727}
   m_Layer: 12
   m_Name: EyeInside (1)
   m_TagString: Untagged
@@ -915,6 +916,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 730bbfcdf02d97e44bd32975e07e04e0, type: 2}
+  - {fileID: 2100000, guid: f3e1122d9d84bd0419f212244802b658, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -938,6 +940,22 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &136647023701817727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6927776656680542704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00e290506cd951408e5b0f39b78388b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemOverlayScan
+  _renderers:
+  - renderer: {fileID: 1869195219250182621}
+    materialIndex: 1
+  _transitionDuration: 0.5
 --- !u!1 &7230605312929208231
 GameObject:
   m_ObjectHideFlags: 0
@@ -1187,6 +1205,7 @@ GameObject:
   - component: {fileID: 757626033282356482}
   - component: {fileID: 1381689434915270645}
   - component: {fileID: 7032974074409838492}
+  - component: {fileID: 1894933917014536318}
   m_Layer: 0
   m_Name: EyeInside (1)
   m_TagString: Untagged
@@ -1243,6 +1262,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: cd2f74dd84d9a3f4685f833c283df425, type: 2}
+  - {fileID: 2100000, guid: f3e1122d9d84bd0419f212244802b658, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1266,6 +1286,22 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1894933917014536318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7831956444908411691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00e290506cd951408e5b0f39b78388b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemOverlayScan
+  _renderers:
+  - renderer: {fileID: 7032974074409838492}
+    materialIndex: 1
+  _transitionDuration: 0.5
 --- !u!1 &7896231117780104954
 GameObject:
   m_ObjectHideFlags: 0
