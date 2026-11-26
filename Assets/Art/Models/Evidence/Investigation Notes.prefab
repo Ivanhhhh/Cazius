@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 680569047890111550}
   - component: {fileID: 7856782521448460210}
   - component: {fileID: 7272443906288712055}
+  - component: {fileID: 7440567036623097309}
   m_Layer: 4
   m_Name: Investigation Notes
   m_TagString: Pickable Objects
@@ -72,6 +73,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: b5b434128ee40c5478c7862786a30a55, type: 2}
+  - {fileID: 2100000, guid: f3e1122d9d84bd0419f212244802b658, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -129,6 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickableItem
   _itemScriptableObject: {fileID: 11400000, guid: 4825eb68dc6bc6a449a6dfb645ffd22f, type: 2}
+  _quantityOverride: -1
   _interactText: F to Take Notepad
   sfxType: 5
   _interactionUIPoint: {fileID: 0}
@@ -172,6 +175,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7440567036623097309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8874111990314100869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00e290506cd951408e5b0f39b78388b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemOverlayScan
+  _renderers:
+  - renderer: {fileID: 6928737065733146960}
+    materialIndex: 1
+  _transitionDuration: 0.5
 --- !u!1001 &8153970574714584757
 PrefabInstance:
   m_ObjectHideFlags: 0
